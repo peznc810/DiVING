@@ -1,0 +1,32 @@
+// 全域樣式變數＝＝＝＝＝＝＝＝＝＝＝＝
+
+// //  global color
+// $primary: #013c64;
+// $secondary: #265475;
+
+// // 按鈕圓角
+// $button-radius: 50%;
+// $button-radius-md: 6px;
+// $button-radius-sm: 4px;
+
+// // 卡片/圖片圓角
+// $radius: 10px;
+// $radius-md: 6px;
+// $radius-sm: 4px;
+
+// 樣式
+$link-decoration: none;
+
+// 導入bootstrap
+@import '~bootstrap/scss/bootstrap';
+@import '~bootstrap-icons/font/bootstrap-icons';
+// 導入字體
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Noto+Serif+TC:wght@600;700&display=swap');
+
+body {
+  letter-spacing: 1px;
+  box-sizing: border-box;
+}
+ul {
+  list-style: none;
+}
