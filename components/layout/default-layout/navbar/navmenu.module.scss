@@ -68,6 +68,8 @@ $super-light-gray: #f5f5f5;
 
 .cart {
   color: #fff;
+  background-color: transparent;
+  border: 0;
 }
 .cart:hover {
   color: $orange;
@@ -109,7 +111,12 @@ $super-light-gray: #f5f5f5;
   }
   .loginIcon {
     display: block;
+    color: #fff;
     line-height: 30px;
     text-align: center;
+  }
+  .loginIcon:hover {
+    color: $orange;
+    transition: 0.3s ease-in-out;
   }
 }

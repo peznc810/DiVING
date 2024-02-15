@@ -7,6 +7,8 @@ $super-light-gray: #f5f5f5;
 
 .sideNav {
   background-color: $primary;
+  width: 85%;
+
   .xIcon {
     width: 30px;
     height: 30px;
@@ -16,11 +18,12 @@ $super-light-gray: #f5f5f5;
   .menuTitle {
     color: #fff;
   }
-  .menuTitle:hover {
+  .menuTitle:hover,
+  .menuTitleFocus {
     font-size: 18px;
     color: $orange;
     border-bottom: 2px solid $orange;
-    transition: 0.4s ease-in-out;
+    transition: 0.5s ease-in-out;
   }
   .menuSub {
     color: #fff;
@@ -29,6 +32,32 @@ $super-light-gray: #f5f5f5;
     color: #fff;
     background-color: $orange;
     border-radius: 4px;
-    transition: 0.4s ease-in-out;
+    transition: 0.5s ease-in-out;
+  }
+  .active {
+    display: block;
+    animation: navBlockAni 1s linear;
+  }
+  .inactive {
+    display: none;
+    animation: navNoneAni 1s linear;
+  }
+}
+
+@keyframes navBlockAni {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes navNoneAni {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
   }
 }

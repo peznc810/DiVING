@@ -9,9 +9,10 @@ $super-light-gray: #f5f5f5;
   background-color: $primary;
   padding-block: 10px;
   padding-inline: 20px;
-  .list {
+  .listIcon {
     display: none;
-    background-color: none;
+    color: #fff;
+    background-color: transparent; //移除button顏色
     border: 0;
   }
 }
@@ -29,24 +30,27 @@ $super-light-gray: #f5f5f5;
       h1 {
         margin-left: 15px;
       }
-      .list {
+      .listIcon {
         display: block;
+      }
+      .listIcon:hover {
+        color: $orange;
       }
     }
     .navRwd {
       display: block;
       position: absolute;
-      width: 80%;
+      width: 100%;
+
       top: 0;
       left: 0;
-      z-index: 10;
+      z-index: 30;
+      .blackBlock {
+        width: 100%;
+        background-color: #000;
+      }
     }
-    .navRwd::after {
-      content: '';
-      display: block;
-      width: 100%;
-      background-color: #000;
-    }
+
     .active {
       display: block;
     }

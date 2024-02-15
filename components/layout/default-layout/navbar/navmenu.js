@@ -57,7 +57,7 @@ export default function NavMenu() {
                         className={` d-flex justify-content-between align-items-center`}
                       >
                         <p className="m-0">{v2.label}</p>
-                        <i class="bi bi-chevron-right "></i>
+                        <i className="bi bi-chevron-right "></i>
                       </Link>
                     </li>
                   )
@@ -75,16 +75,16 @@ export default function NavMenu() {
           </Link>
         </li>
         {/* 登入註冊icon */}
-        <li className="">
+        <li>
           <Link href="/login" className={`p-2 ${styles.loginIcon}`}>
-            <i class="bi bi-person-fill text-light fs-3"></i>
+            <i className="bi bi-person-fill fs-3"></i>
           </Link>
         </li>
         {/* cart */}
         <li>
-          <div className={`p-2 ${styles.cart}`}>
+          <button type="button" className={`p-2 ${styles.cart}`}>
             <i className={`bi bi-bag-fill fs-5 `}></i>
-          </div>
+          </button>
         </li>
       </ul>
     </>
