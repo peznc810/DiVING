@@ -29,12 +29,12 @@ const footerItem = [
 export default function Footer() {
   return (
     <>
-      <footer className={`${styles.footerContent}`}>
+      <footer className={`${styles.footerContent} py-2`}>
         <div
           className={`container-fluid d-flex justify-content-between ${styles.footerTop}`}
         >
           <h2 className="fw-bolder m-0 text-light">DiVING</h2>
-          <div className="d-flex">
+          <div className="d-flex flex-wrap">
             {footerItem.map((v) => {
               return (
                 <ul key={v.id}>

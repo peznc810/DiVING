@@ -5,6 +5,50 @@ $gray: #858585;
 $light-gray: #d9d9d9;
 $super-light-gray: #f5f5f5;
 
-.navbar {
+.navWeb {
   background-color: $primary;
+  padding-block: 10px;
+  padding-inline: 20px;
+  .list {
+    display: none;
+    background-color: none;
+    border: 0;
+  }
+}
+
+.navRwd {
+  display: none;
+}
+
+@media screen and (max-width: 768px) {
+  .navBar {
+    position: relative;
+    .navWeb {
+      padding-block: 0px;
+      padding-inline: 0px;
+      h1 {
+        margin-left: 15px;
+      }
+      .list {
+        display: block;
+      }
+    }
+    .navRwd {
+      display: block;
+      position: absolute;
+      width: 80%;
+      top: 0;
+      left: 0;
+      z-index: 10;
+    }
+    .navRwd::after {
+      content: '';
+      display: block;
+      width: 100%;
+      background-color: #000;
+    }
+    .active {
+      display: block;
+    }
+  }
 }
