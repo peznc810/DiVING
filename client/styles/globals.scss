@@ -1,0 +1,16 @@
+// 樣式
+$link-decoration: none;
+
+// 導入bootstrap
+@import '~bootstrap/scss/bootstrap';
+@import '~bootstrap-icons/font/bootstrap-icons';
+// 導入字體
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Noto+Serif+TC:wght@600;700&display=swap');
+
+body {
+  // letter-spacing: 1px;
+  box-sizing: border-box;
+}
+ul {
+  list-style: none;
+}
