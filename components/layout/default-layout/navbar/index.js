@@ -27,7 +27,7 @@ export default function Navbar() {
             <NavMenu />
           </div>
         </div>
-        {/* nav-rwd */}
+        {/* RWD-nav*/}
         {/* 展開後有透明黑底，高跟視窗一樣 */}
         <div className={`${styles.navRwd} ${sideNav ? styles.active : ''}`}>
           <NavRwd />

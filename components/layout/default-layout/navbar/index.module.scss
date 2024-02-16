@@ -41,14 +41,10 @@ $super-light-gray: #f5f5f5;
       display: block;
       position: absolute;
       width: 100%;
-
+      height: 100vh;
       top: 0;
       left: 0;
       z-index: 30;
-      .blackBlock {
-        width: 100%;
-        background-color: #000;
-      }
     }
 
     .active {
