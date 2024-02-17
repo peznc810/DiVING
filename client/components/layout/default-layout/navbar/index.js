@@ -1,10 +1,11 @@
 import { useState } from 'react'
 import NavMenu from './navmenu'
 import NavRwd from './navRwd'
+import SideCart from './sideCart'
 import styles from './index.module.scss'
 
 export default function Navbar() {
-  const [sideNav, setSideNav] = useState(false)
+  
   return (
     <>
       <nav className={`${styles.navBar}`}>
@@ -13,11 +14,11 @@ export default function Navbar() {
         >
           {/* 點擊展開側邊欄功能 */}
           <button
-            className={`p-2 fs-2 ${styles.listIcon}`}
+            className={` fs-2 ${styles.listIcon}`} 
             type="button"
-            onClick={() => {
-              setSideNav(!sideNav)
-            }}
+            data-bs-toggle="offcanvas"
+            data-bs-target="#offcanvasWithBackdrop" 
+            aria-controls="offcanvasWithBackdrop"
           >
             <i className="bi bi-list"></i>
           </button>
@@ -27,12 +28,11 @@ export default function Navbar() {
             <NavMenu />
           </div>
         </div>
+        
         {/* RWD-nav*/}
-        {/* 展開後有透明黑底，高跟視窗一樣 */}
-        <div className={`${styles.navRwd} ${sideNav ? styles.active : ''}`}>
-          <NavRwd />
-          <div className={`${styles.blackBlock}`}></div>
-        </div>
+         <NavRwd />
+         <SideCart/>
+        
       </nav>
     </>
   )

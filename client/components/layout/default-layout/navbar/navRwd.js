@@ -4,17 +4,32 @@ import styles from './navRwd.module.scss'
 import { menuItems } from '@/config/nav-menu'
 
 export default function NavRwd() {
+  // 打開下拉選單
   const [openIndex, setOpenIndex] = useState(false)
+
   return (
     <>
-      <div className={`${styles.sideNav} p-4`}>
-        <div className="d-flex justify-content-between">
-          <h2 className="fw-bolder text-light py-5">DiVING</h2>
-          <div className={` ${styles.xIcon}`}>
-            <i className="bi bi-x-lg text-light fs-4"></i>
-          </div>
+      <div
+        className={`offcanvas offcanvas-start ${styles.sideNav} p-4 `}
+        id="offcanvasWithBackdrop"
+        tabindex="-1"
+      >
+        <div className={`offcanvas-header p-0 d-flex flex-column ${styles.offcanvasHeader}`}>
+          {/* 關掉側邊按鈕 */}
+          <button
+            type="button"
+            className={`p-0`}
+            data-bs-dismiss="offcanvas"
+            aria-label="Close"
+          >
+            <i className="bi bi-x-lg fs-4"></i>
+          </button>
+
+          <h2 className="fw-bolder text-light ">DiVING</h2>
         </div>
-        <ul className={`p-0`}>
+
+        {/* nav列表 */}
+        <ul className={`offcanvas-body p-0 ${styles.offcanvasBody}`}>
           {menuItems.map((v, i) => {
             if (!v.children) {
               return (
@@ -52,7 +67,7 @@ export default function NavRwd() {
                 </Link>
                 {/* 下拉選單 */}
                 <ul
-                  className={`mt-2 ${
+                  className={`mt-3 ${
                     openIndex === i ? styles.active : styles.inactive
                   }`}
                 >

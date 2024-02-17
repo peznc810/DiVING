@@ -1,0 +1,19 @@
+@import '../client/styles/variable.scss';
+
+.myProduct{
+
+    .productImg{
+        width: 90px;
+        height: 90px;
+        background-color: #ccc;
+        img{
+            width: 100%;
+        }
+    }
+
+    .btnGroup{
+        .btn{
+            background-color: $super-light-gray;
+        }
+    }
+}
