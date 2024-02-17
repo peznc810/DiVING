@@ -1,0 +1,44 @@
+@import '../client/styles/variable.scss';
+
+.sideCart {
+  background-color: #fff;
+
+  .title {
+    background-color: $super-light-gray;
+    color: $primary;
+    p {
+      line-height: 30px;
+    }
+    button {
+      background-color: transparent;
+      border: 0;
+    }
+    button:hover {
+      color: $orange;
+    }
+  }
+
+  .myProducts {
+    .text {
+      color: $gray;
+      text-align: center;
+    }
+  }
+
+  .cartLink {
+    display: block;
+    width: 100px;
+    padding-block: 4px;
+    padding-inline: 16px;
+    color: $orange;
+    border: 2px solid $orange;
+    border-radius: 25px;
+    margin: auto;
+    margin-block: 50px;
+  }
+
+  .cartLink:hover {
+    color: #fff;
+    background-color: $orange;
+  }
+}
