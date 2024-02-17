@@ -1,0 +1,28 @@
+@import '../client/styles/variable.scss';
+
+.homeHeader {
+  background-image: url('../../../public/images/home/header.png');
+  background-size: cover;
+  background-position: center;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  letter-spacing: 2px;
+  .homeContainer {
+    padding-top: 170px;
+    padding-left: calc(100% - 90%);
+  }
+
+  h2 {
+    color: $orange;
+    font-family: Noto Serif TC;
+    font-weight: bold;
+    font-size: 110px;
+  }
+  h4 {
+    margin-top: 30px;
+    color: #fff;
+  }
+}
