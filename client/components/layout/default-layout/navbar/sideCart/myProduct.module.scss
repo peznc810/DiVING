@@ -1,19 +1,51 @@
 @import '../client/styles/variable.scss';
 
-.myProduct{
-
-    .productImg{
-        width: 90px;
-        height: 90px;
-        background-color: #ccc;
-        img{
-            width: 100%;
-        }
+.myProduct {
+  .productImg {
+    width: 70px;
+    height: 70px;
+    border-radius: 4px;
+    background-color: #ccc;
+    img {
+      width: 100%;
     }
+  }
 
-    .btnGroup{
-        .btn{
-            background-color: $super-light-gray;
-        }
+  .info {
+    span {
+      font-size: 14px;
+      color: $gray;
     }
+    .specialPrice {
+      color: $red;
+      font-size: 18px;
+    }
+    .originalPrice {
+      color: $gray;
+    }
+  }
+}
+
+.btns {
+  .btnGroup {
+    button {
+      background-color: $super-light-gray;
+      border: 0;
+      padding-block: 2px;
+      padding-inline: 6px;
+    }
+    button:hover {
+      background-color: $orange;
+      color: #fff;
+    }
+  }
+  .delete {
+    background-color: transparent;
+    font-size: 14px;
+    color: $gray;
+    text-decoration: underline;
+  }
+  .delete:hover {
+    color: $orange;
+  }
 }

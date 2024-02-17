@@ -17,7 +17,7 @@ export default function NavMenu() {
           if (!v.children) {
             return (
               <li key={v.id} className={`mx-3 ${styles.navMenu}`}>
-                <Link className={` py-2 ${styles.linkText}`} href={v.href}>
+                <Link className={`py-2 ${styles.linkText}`} href={v.href}>
                   {v.label}
                 </Link>
               </li>
@@ -80,9 +80,15 @@ export default function NavMenu() {
             <i className="bi bi-person-fill fs-3"></i>
           </Link>
         </li>
-        {/* cart */}
+        {/* cart按鈕 */}
         <li>
-          <button type="button" className={`p-2 ${styles.cart}`}>
+          <button
+            type="button"
+            className={`p-2 ${styles.cart}`}
+            data-bs-toggle="offcanvas"
+            data-bs-target="#offcanvasCart"
+            aria-controls="offcanvasWithBackdrop"
+          >
             <i className={`bi bi-bag-fill fs-5 `}></i>
           </button>
         </li>

@@ -5,7 +5,6 @@ import SideCart from './sideCart'
 import styles from './index.module.scss'
 
 export default function Navbar() {
-  
   return (
     <>
       <nav className={`${styles.navBar}`}>
@@ -14,10 +13,10 @@ export default function Navbar() {
         >
           {/* 點擊展開側邊欄功能 */}
           <button
-            className={` fs-2 ${styles.listIcon}`} 
+            className={` fs-2 ${styles.listIcon}`}
             type="button"
             data-bs-toggle="offcanvas"
-            data-bs-target="#offcanvasWithBackdrop" 
+            data-bs-target="#offcanvasWithBackdrop"
             aria-controls="offcanvasWithBackdrop"
           >
             <i className="bi bi-list"></i>
@@ -28,11 +27,10 @@ export default function Navbar() {
             <NavMenu />
           </div>
         </div>
-        
+
         {/* RWD-nav*/}
-         <NavRwd />
-         <SideCart/>
-        
+        <NavRwd />
+        <SideCart />
       </nav>
     </>
   )

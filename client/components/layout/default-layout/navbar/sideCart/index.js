@@ -6,11 +6,14 @@ import MyProduct from './myProduct'
 export default function SideCart() {
   return (
     <>
-      <div className={`${styles.sideCart}`}>
+      <div
+        className={`offcanvas offcanvas-end ${styles.sideCart}`}
+        id="offcanvasCart"
+      >
         <div className={`offcanvas-header ${styles.title} py-2 px-3`}>
           <div className={`d-flex justify-content-center`}>
             <i className={`bi bi-bag-fill fs-5 me-2`}></i>
-            <p className='m-0 fw-bolder'>購物車</p>
+            <p className="m-0 fw-bolder">購物車</p>
           </div>
           {/* 關掉按鈕 */}
           <button
@@ -25,12 +28,17 @@ export default function SideCart() {
 
         {/* 購買商品列表 */}
         <div className={`${styles.myProducts}`}>
-          <p>你的購物車是空的</p>
-          <MyProduct/>
+          {/* 加入商品後會消失 */}
+          <p className={`${styles.text}`}>你的購物車是空的</p>
+          <MyProduct />
+          <MyProduct />
         </div>
 
         {/* 前往購物車按鈕 */}
-        <Link href={'./cart'} className={`${styles.cartLink}`}>開始購物</Link>
+        {/* 加入商品後會變成立即結帳 */}
+        <Link href={'./cart'} className={`${styles.cartLink}`}>
+          開始購物
+        </Link>
       </div>
     </>
   )
