@@ -66,7 +66,7 @@ export default function NavMenu() {
             </li>
           )
         })}
-        <li className={`me-3`}>
+        <li className={`mx-3`}>
           <Link
             href="/login"
             className={`px-2 py-2 ${styles.login} ${styles.linkText}`}

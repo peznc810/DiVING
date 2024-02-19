@@ -1,0 +1,31 @@
+@import '@/styles/variable.scss';
+
+.news {
+  margin-bottom: 100px;
+  .content {
+    padding-inline: 100px;
+  }
+  .title {
+    border-bottom: 1px solid #fff;
+    h3 {
+      font-family: Noto Serif TC;
+      font-size: 36px;
+      color: #fff;
+    }
+    .moreBtn {
+      display: block;
+      height: 35px;
+      padding-inline: 12px;
+      font-size: 14px;
+      background-color: #ffffff7e;
+      color: #fff;
+      border-radius: 25px;
+      text-align: center;
+      line-height: 35px;
+    }
+    .moreBtn:hover {
+      background-color: #fff;
+      color: $secondary;
+    }
+  }
+}

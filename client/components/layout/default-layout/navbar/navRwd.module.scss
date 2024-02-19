@@ -1,11 +1,9 @@
-
-@import '../client/styles/variable.scss';
-
+@import '@/styles/variable.scss';
 
 .sideNav {
   background-color: $primary;
 
-  .offcanvasHeader{
+  .offcanvasHeader {
     position: relative;
     button {
       color: #fff;
@@ -19,10 +17,10 @@
       right: 0;
       top: 0;
     }
-    button:hover{
-      color: $orange;
+    button:hover {
+      color: $secondary;
     }
-    h2{
+    h2 {
       font-size: 30px;
       position: absolute;
       left: 0;
@@ -31,21 +29,22 @@
     }
   }
 
-  .offcanvasBody{
+  .offcanvasBody {
     margin-top: 180px;
-    .menuTitle,.menuSub{
+    .menuTitle,
+    .menuSub {
       color: #fff;
     }
     .menuTitle:hover,
     .menuTitleFocus {
       font-size: 18px;
-      color: $orange;
-      border-bottom: 2px solid $orange;
+      color: $secondary;
+      border-bottom: 2px solid $secondary;
       transition: 0.5s ease-in-out;
     }
     .menuSub:hover {
       color: #fff;
-      background-color: $orange;
+      background-color: $secondary;
       border-radius: 4px;
       transition: 0.5s ease-in-out;
     }
@@ -55,10 +54,8 @@
     }
     .inactive {
       display: none;
-     
     }
   }
-  
 }
 
 @keyframes navBlockAni {
@@ -69,5 +66,3 @@
     opacity: 1;
   }
 }
-
-

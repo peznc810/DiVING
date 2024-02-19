@@ -1,10 +1,10 @@
-@import '../client/styles/variable.scss';
+@import '@/styles/variable.scss';
 
 .navBar {
   position: absolute;
   top: 0;
   left: 0;
-  width: 100vw;
+  width: 100%;
   z-index: 99;
   .navWeb {
     padding-block: 12px;
@@ -35,7 +35,7 @@
         display: block;
       }
       .listIcon:hover {
-        color: $orange;
+        color: $secondary;
       }
     }
     .active {

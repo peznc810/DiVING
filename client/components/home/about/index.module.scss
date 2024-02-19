@@ -1,0 +1,49 @@
+@import '@/styles/variable.scss';
+
+.about {
+  letter-spacing: 1px;
+  .aboutItem {
+    // width: 580px;
+    border-radius: 6px;
+    overflow: hidden;
+    .img {
+      position: relative;
+      border-radius: 6px;
+      overflow: hidden;
+      .imgBtn {
+        position: absolute;
+        display: inline-block;
+        padding-inline: 16px;
+        padding-block: 8px;
+        top: calc(50% - 28px);
+        left: calc(50% - 49px);
+        font-size: 18px;
+        border: 1px solid #fff;
+        border-radius: 25px;
+        color: #fff;
+        background-color: #ffffff4b;
+      }
+      .imgWrapper {
+        width: 270px;
+        height: 400px;
+      }
+    }
+    .content {
+      background-color: $info;
+      display: none;
+      // visibility: hidden;
+      // display: block;
+      // position: absolute;
+      // top: 100%; /* 將 .content 移動到 .environmental 的底部 */
+      // left: 0;
+      padding: 24px;
+      h4 {
+        color: $secondary;
+      }
+      p {
+        color: #fff;
+        margin-top: 16px;
+      }
+    }
+  }
+}

@@ -1,28 +1,55 @@
-@import '../client/styles/variable.scss';
+@import '@/styles/variable.scss';
 
 .homeHeader {
   background-image: url('../../../public/images/home/header.png');
   background-size: cover;
   background-position: center;
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100vw;
+  width: 100%;
   height: 100vh;
   letter-spacing: 2px;
+
   .homeContainer {
     padding-top: 170px;
-    padding-left: calc(100% - 90%);
+    padding-left: 10%;
+    h2 {
+      color: $secondary;
+      font-family: Noto Serif TC;
+      font-weight: bold;
+      font-size: 110px;
+    }
+    h4 {
+      margin-top: 30px;
+      padding-left: 10px;
+      color: #fff;
+    }
   }
+}
 
-  h2 {
-    color: $orange;
-    font-family: Noto Serif TC;
-    font-weight: bold;
-    font-size: 110px;
+@media screen and (max-width: 768px) {
+  .homeHeader {
+    background-image: url('../../../public/images/home/header-rwd.png');
+    .homeContainer {
+      // padding-left: 10%;
+      padding-top: 150px;
+    }
   }
-  h4 {
-    margin-top: 30px;
-    color: #fff;
+}
+
+@media screen and (max-width: 390px) {
+  .homeHeader {
+    background-image: url('../../../public/images/home/herder-rwd390.png');
+    .homeContainer {
+      padding-top: 120px;
+      padding-inline: 0;
+      h2 {
+        font-size: 60px;
+        text-align: center;
+      }
+      h4 {
+        font-size: 18px;
+        margin-top: 20px;
+        text-align: center;
+      }
+    }
   }
 }

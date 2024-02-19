@@ -1,4 +1,4 @@
-@import '../client/styles/variable.scss';
+@import '@/styles/variable.scss';
 
 .footerContent {
   background-color: $primary;
@@ -21,7 +21,7 @@
     text-wrap: nowrap;
   }
   .linkTxt:hover {
-    color: $orange;
+    color: $secondary;
   }
 
   span {
@@ -44,7 +44,7 @@
         }
       }
       a:hover {
-        color: $orange;
+        color: $secondary;
       }
     }
   }
