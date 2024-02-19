@@ -1,0 +1,156 @@
+/* 預設樣式 */
+.fs-12 {
+  font-size: 12px;
+}
+
+/* 之後套版要刪掉 */
+.header {
+  width: 100vw;
+  height: 79px;
+  background-color: #013c64;
+}
+.footer {
+  width: 100vw;
+  height: 385px;
+  background-color: #013c64;
+}
+/* ↑↑ 刪除以上 ↑↑ */
+
+/* 主視覺 */
+.main-layout {
+  width: 100vw;
+  padding-block: 5vw;
+}
+
+.main-style {
+  background-image: url(/images/users/bg.png);
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.main-style * {
+  color: #fff;
+}
+
+.main-style a {
+  display: inline-block;
+  text-decoration: none;
+}
+
+.main-style a:hover {
+  color: #ff9720;
+  text-decoration: underline;
+}
+
+/* 高度要再視情況調整 */
+.card-layout {
+  max-width: 440px;
+  width: 100%;
+  padding: 40px;
+}
+
+.card-style {
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: linear-gradient(
+    141deg,
+    rgba(255, 255, 255, 0.7) -104.67%,
+    rgba(91, 123, 144, 0.7) 40.5%,
+    rgba(255, 255, 255, 0.7) 206.99%
+  );
+  backdrop-filter: blur(2px);
+}
+
+.card-style form {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+/* input的相關設定 */
+.input-style {
+  position: relative;
+}
+
+.input-style input {
+  width: 100%;
+  border: 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.6);
+  background-color: transparent;
+  outline: none;
+}
+
+.input-style input:-webkit-auto-fill {
+  background-color: transparent;
+}
+
+/* 沒有轉透明的話，focus時文字會保留在上方，看起來怪怪的 */
+.input-style input::placeholder {
+  color: transparent;
+}
+
+.input-style label {
+  position: absolute;
+  bottom: 8px;
+  left: 0;
+  transition: transform 0.1s ease-in-out;
+}
+
+/* 使用者"focus"以及"輸入完文字並within focus"時的label都要套用的樣式 */
+.input-style input:focus ~ label,
+.input-style input:not(:placeholder-shown) ~ label {
+  color: rgba(255, 255, 255, 0.6);
+  transform: scale(0.85) translateY(-1.2em) translateX(-0.3rem);
+}
+
+/* 忘記密碼欄位 */
+.space {
+  margin-top: -24px;
+}
+
+/* 按鈕樣式 */
+.btn {
+  text-align: center;
+  padding: 4px 8px;
+  border: 1px solid rgba(217, 217, 217, 0.1);
+  border-radius: 6px;
+  background: rgba(217, 217, 217, 0.2);
+  backdrop-filter: blur(2px);
+  transition: background-color 0.2s ease-in-out;
+}
+
+.btn:hover {
+  cursor: pointer;
+  background-color: #ff9720;
+}
+.btn:active {
+  /* background-color: #e5881e; */
+  box-shadow: 0 0 10px 6px #f49120 inset;
+}
+
+/* social */
+.title::before,
+.title::after {
+  content: '';
+  flex-grow: 1;
+  background-color: #fff;
+  height: 1px;
+  margin: 0px 8px;
+}
+
+.otp {
+  position: absolute;
+  top: -10px;
+  right: 0;
+}
+
+@media screen and (max-width: 440px) {
+  .main-layout {
+    padding-block: 0px;
+  }
+
+  .card-style {
+    border-radius: 0px;
+  }
+}

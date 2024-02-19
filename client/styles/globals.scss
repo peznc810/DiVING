@@ -1,0 +1,23 @@
+// 覆蓋bootstrap樣式
+$link-decoration: none;
+$primary: #013c64;
+$secondary: #ff9720;
+
+$form-check-input-bg: rgba(217, 217, 217, 0.2);
+$form-check-input-border: 1px solid rgba(217, 217, 217, 0.2);
+$form-check-input-focus-border: 1px solid rgba(217, 217, 217, 0);
+$form-check-input-checked-bg-color: $secondary;
+$form-check-input-focus-box-shadow: none;
+// 導入bootstrap
+@import '~bootstrap/scss/bootstrap';
+@import '~bootstrap-icons/font/bootstrap-icons';
+// 導入字體
+@import 'https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Noto+Serif+TC:wght@700&family=Noto+Serif:wght@700&display=swap';
+
+body {
+  // letter-spacing: 1px;
+  box-sizing: border-box;
+}
+ul {
+  list-style: none;
+}

@@ -16,5 +16,10 @@
   },
   "emmet.syntaxProfiles": {
     "javascript": "jsx"
+  },
+  "workbench.colorCustomizations": {
+    "activityBar.background": "#a99559",
+    "titleBar.activeBackground": "#a99559",
+    "titleBar.activeForeground": "#F2FDEE"
   }
 }
