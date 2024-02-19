@@ -44,7 +44,7 @@ export default function Home() {
                 <button type="button" className="btn btn-light">
                   +
                 </button>
-                <input type="text" className="w-25" />
+                <input type="text" className="w-25 text-center" value={1} />
                 <button type="button" className="btn btn-light">
                   -
                 </button>
@@ -57,8 +57,8 @@ export default function Home() {
           </tbody>
         </table>
       </div>
-      <div className="row mt-5">
-        <div className="col-sm-7 pay-section container">
+      <div className="row mt-5 container justify-content-between order-detail">
+        <div className="col-sm-7 pay-section">
           <h5 className="mb-3 section-name span">選擇送貨及付款方式</h5>
           <div className="container">
             <p className="select-dec">送貨地點</p>
@@ -81,7 +81,7 @@ export default function Home() {
             </select>
           </div>
         </div>
-        <div className="col-sm-4 order-section container">
+        <div className="col-sm-4 order-section">
           <h5 className="mb-3 section-name span">訂單資訊</h5>
           <div className="container">
             <div className="d-flex justify-content-between spacing">
@@ -109,6 +109,20 @@ export default function Home() {
         </div>
       </div>
       <style jsx>{`
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6,
+        p {
+          margin: 0;
+        }
+
+        .order-detail {
+          margin-inline: 0;
+        }
+
         .spacing {
           margin-top: 1rem;
           margin-bottom: 1rem;
@@ -174,6 +188,16 @@ export default function Home() {
           padding-top: 1rem;
           padding-bottom: 1rem;
           text-align: center;
+        }
+
+        @media (max-width: 576px) {
+          .order-section {
+            margin-top: 1rem;
+          }
+
+          .btn-light {
+            padding: 6px;
+          }
         }
       `}</style>
     </div>

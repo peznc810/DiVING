@@ -97,24 +97,38 @@ export default function Home() {
         </div>
         <textarea className="form-control spacing" rows="5"></textarea>
       </div>
-      <div className="container">
+      <div className="container credit-card-section">
         <div className="w-100 section-name text-center mb-3">
           <h5 className="span">信用卡付款資訊</h5>
         </div>
         <h6 className="span my-3">※ 信用卡交易資訊 Credit Card Information</h6>
         <div className="row justify-content-between my-3">
-          <p className="col-2 fw-bold">信用卡卡號</p>
-          <input type="text" className="col-2" />
-          <input type="text" className="col-2" />
-          <input type="text" className="col-2" />
-          <input type="text" className="col-2" />
+          <p className="col-sm-2 col-3 fw-bold">信用卡卡號</p>
+          <div className="col-2">
+            <input type="text" className="form-control" />
+          </div>
+          <div className="col-2">
+            <input type="text" className="form-control" />
+          </div>
+          <div className="col-2">
+            <input type="text" className="form-control" />
+          </div>
+          <div className="col-2">
+            <input type="text" className="form-control" />
+          </div>
         </div>
         <div className="row justify-content-between my-3">
-          <p className="col-2 fw-bold">有效期限</p>
-          <input type="text" className="col-2" />
-          <input type="text" className="col-2" />
+          <p className="col-sm-2 col-3 fw-bold">有效期限</p>
+          <div className="col-2">
+            <input type="text" className="form-control" />
+          </div>
+          <div className="col-2">
+            <input type="text" className="form-control" />
+          </div>
           <p className="col-2 fw-bold">安全碼</p>
-          <input type="text" className="col-2" />
+          <div className="col-2">
+            <input type="text" className="form-control" />
+          </div>{' '}
         </div>
         <h6 className="span my-3">※ 持卡人資料 Cardholder Information </h6>
         <div className="d-flex my-3">
@@ -138,6 +152,16 @@ export default function Home() {
         </div>
       </div>
       <style jsx>{`
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6,
+        p {
+          margin: 0;
+        }
+
         .span {
           color: #013c64;
           font-weight: bold;
@@ -180,6 +204,13 @@ export default function Home() {
           padding-top: 1rem;
           padding-bottom: 1rem;
           text-align: center;
+        }
+
+        @media (max-width: 576px) {
+          .credit-card-section {
+            p {
+            }
+          }
         }
       `}</style>
     </div>

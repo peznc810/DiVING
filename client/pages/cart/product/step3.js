@@ -12,32 +12,32 @@ export default function Home() {
         </div>
         <div className="row">
           <p className="col fw-bold">訂單編號</p>
-          <p className="col-2">XXXXXXXXXX</p>
+          <p className="col text-end">XXXXXXXXXX</p>
         </div>
         <div className="row fw-bold">
-          <p className="col">商品明細</p>
-          <p className="col-2">數量</p>
-          <p className="col-2">小計</p>
+          <p className="col-6">商品明細</p>
+          <p className="col">數量</p>
+          <p className="col  text-end">小計</p>
         </div>
         <div className="row">
-          <p className="col fw-bold">AB123 防寒衣 黑 / 女S</p>
-          <p className="col-2">2</p>
-          <p className="col-2">NT$24000</p>
+          <p className="col-6 fw-bold">AB123 防寒衣 黑 / 女S</p>
+          <p className="col">2</p>
+          <p className="col text-end">NT$24000</p>
         </div>
         <div className="row">
-          <p className="col fw-bold">AB123 防寒衣 黑 / 女S</p>
-          <p className="col-2">1</p>
-          <p className="col-2">NT$12000</p>
+          <p className="col-6 fw-bold">AB123 防寒衣 黑 / 女S</p>
+          <p className="col">1</p>
+          <p className="col text-end">NT$12000</p>
         </div>
         <div className="row">
-          <p className="col fw-bold">AB123 防寒衣 黑 / 女S</p>
-          <p className="col-2">1</p>
-          <p className="col-2">NT$12000</p>
+          <p className="col-6 fw-bold">AB123 防寒衣 黑 / 女S</p>
+          <p className="col">1</p>
+          <p className="col text-end">NT$12000</p>
         </div>
         <hr />
         <div className="row">
           <p className="col fw-bold">合計</p>
-          <p className="col-2 fw-bold">NT$12000</p>
+          <p className="col fw-bold text-end">NT$48000</p>
         </div>
         <div className="text-end my-3">
           <button type="button" className="btn next-step-btn text-white px-5">
@@ -46,6 +46,16 @@ export default function Home() {
         </div>
       </div>
       <style jsx>{`
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6,
+        p {
+          margin: 0;
+        }
+
         .span {
           color: #013c64;
           font-weight: bold;
