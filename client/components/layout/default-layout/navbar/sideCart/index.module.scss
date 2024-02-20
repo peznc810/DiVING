@@ -27,7 +27,7 @@
 
   .cartLink {
     display: block;
-    width: 100px;
+    text-wrap: nowrap;
     padding-block: 4px;
     padding-inline: 16px;
     color: $secondary;

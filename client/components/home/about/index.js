@@ -28,43 +28,27 @@ export default function About() {
   return (
     <>
       <article className={`${styles.about}`}>
-        <div className="container d-flex justify-content-center">
+        <h3>ABOUT</h3>
+
+        <div className="container d-flex justify-content-around">
           {newsContent.map((v) => {
             return (
-              <>
-                <div key={v.id} className={`d-flex ${styles.aboutItem}`}>
-                  <div className={`${styles.img}`}>
-                    <div className={`${styles.imgBtn}`}>{v.title}</div>
-                    <div className={`${styles.imgWrapper}`}>
-                      <Image
-                        src={v.img}
-                        alt={v.title}
-                        layout="fill"
-                        objectFit="cover"
-                      />
-                    </div>
-                  </div>
-                  <div className={`${styles.content}`}>
-                    <h4>{v.title}</h4>
-                    <p>{v.info}</p>
+              <div key={v.id} className={`d-flex ${styles.aboutItem}`}>
+                <div className={`${styles.imgWrapper}`}>
+                  <div className={`${styles.imgTxt}`}>{v.title}</div>
+                  <div className={`${styles.imgDiv}`}>
+                    <Image src={v.img} alt={v.title} fill object-fit="cover" />
                   </div>
                 </div>
-              </>
+                <div className={`${styles.content}`}>
+                  <h4>{v.title}</h4>
+                  <p>{v.info}</p>
+                </div>
+              </div>
             )
           })}
         </div>
       </article>
-    </>
-  )
-}
-
-function AboutItemHover() {
-  return (
-    <>
-      <div className={`${styles.content}`}>
-        <h4>海洋環保</h4>
-        <p></p>
-      </div>
     </>
   )
 }

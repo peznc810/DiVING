@@ -6,7 +6,7 @@ import NewsCarousel from './news-carousel'
 export default function News() {
   return (
     <>
-      <section className={`${styles.news} my-5`}>
+      <section className={`${styles.news}`}>
         <div className={`container-fluid ${styles.content}`}>
           {/* 標題 */}
           <div
@@ -14,14 +14,12 @@ export default function News() {
           >
             <h3>NEWS</h3>
             <Link href={'./news'} className={`${styles.moreBtn}`}>
-              more<i class="bi bi-caret-right-fill"></i>
+              more<i className="bi bi-caret-right-fill"></i>
             </Link>
           </div>
 
           {/* news輪播 */}
-          <div className={`${styles.newsCarousel} mt-5 px-4 d-flex`}>
-            <NewsCarousel />
-          </div>
+          <NewsCarousel />
         </div>
       </section>
     </>

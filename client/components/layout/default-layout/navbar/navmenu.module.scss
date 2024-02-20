@@ -98,6 +98,9 @@
 }
 
 @media screen and (max-width: 768px) {
+  .nav {
+    min-width: 100px;
+  }
   .navMenu,
   .subMenu {
     display: none;

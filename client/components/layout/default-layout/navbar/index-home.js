@@ -7,7 +7,7 @@ import styles from './index-home.module.scss'
 export default function Navbar2() {
   return (
     <>
-      <nav className={`${styles.navBar}`}>
+      <nav className={`${styles.navBar} d-flex`}>
         <div
           className={`container-fluid d-flex justify-content-between align-items-center ${styles.navWeb}`}
         >

@@ -8,7 +8,7 @@ export default function NavMenu() {
 
   return (
     <>
-      <ul className={`d-flex m-0 p-0`}>
+      <ul className={`d-flex m-0 p-0 ${styles.nav}`}>
         {/* 遍歷列出nav選單 */}
         {menuItems.map((v, i) => {
           {
@@ -76,7 +76,7 @@ export default function NavMenu() {
         </li>
         {/* 登入註冊icon */}
         <li>
-          <Link href="/login" className={`p-2 ${styles.loginIcon}`}>
+          <Link href="/login" className={`p-2  ${styles.loginIcon}`}>
             <i className="bi bi-person-fill fs-3"></i>
           </Link>
         </li>

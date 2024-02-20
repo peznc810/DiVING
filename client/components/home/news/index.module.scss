@@ -1,12 +1,15 @@
 @import '@/styles/variable.scss';
 
 .news {
+  width: 85%;
+  margin: auto;
   margin-bottom: 100px;
   .content {
     padding-inline: 100px;
   }
   .title {
     border-bottom: 1px solid #fff;
+    margin-bottom: 40px;
     h3 {
       font-family: Noto Serif TC;
       font-size: 36px;
@@ -14,14 +17,15 @@
     }
     .moreBtn {
       display: block;
-      height: 35px;
+      height: 30px;
       padding-inline: 12px;
       font-size: 14px;
-      background-color: #ffffff7e;
+      border: 1px solid $light-gray;
+      // background-color: #ffffff7e;
       color: #fff;
       border-radius: 25px;
       text-align: center;
-      line-height: 35px;
+      line-height: 28px;
     }
     .moreBtn:hover {
       background-color: #fff;

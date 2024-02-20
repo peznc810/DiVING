@@ -2,40 +2,47 @@
 
 .about {
   letter-spacing: 1px;
+  padding-block: 80px;
+  background-image: url('../../../public/images/home/about-bg.png');
+  background-size: cover;
+  background-position: center;
+
+  h3 {
+    font-family: Noto Serif TC;
+    font-size: 36px;
+    color: #fff;
+    text-align: center;
+    margin-bottom: 60px;
+  }
   .aboutItem {
-    // width: 580px;
-    border-radius: 6px;
+    border-radius: 4px;
     overflow: hidden;
-    .img {
+    margin-inline: 10px;
+    .imgWrapper {
       position: relative;
       border-radius: 6px;
-      overflow: hidden;
-      .imgBtn {
+
+      .imgTxt {
         position: absolute;
-        display: inline-block;
-        padding-inline: 16px;
-        padding-block: 8px;
-        top: calc(50% - 28px);
-        left: calc(50% - 49px);
-        font-size: 18px;
-        border: 1px solid #fff;
-        border-radius: 25px;
+        top: 0;
+        left: 0;
+        z-index: 20;
         color: #fff;
-        background-color: #ffffff4b;
+        border: 1px solid #fff;
       }
-      .imgWrapper {
+
+      .imgDiv {
+        //讓Image可以定位在img裡
+        position: relative;
         width: 270px;
-        height: 400px;
+        height: 380px;
+        // filter: blur(3px);
       }
     }
+
     .content {
       background-color: $info;
       display: none;
-      // visibility: hidden;
-      // display: block;
-      // position: absolute;
-      // top: 100%; /* 將 .content 移動到 .environmental 的底部 */
-      // left: 0;
       padding: 24px;
       h4 {
         color: $secondary;

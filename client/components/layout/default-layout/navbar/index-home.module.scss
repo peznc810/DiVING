@@ -24,7 +24,6 @@
 
 @media screen and (max-width: 768px) {
   .navBar {
-    position: relative;
     .navWeb {
       padding-block: 0px;
       padding-inline: 0px;
@@ -33,6 +32,10 @@
       }
       .listIcon {
         display: block;
+        min-width: 100px;
+        i {
+          margin-right: 85px;
+        }
       }
       .listIcon:hover {
         color: $secondary;

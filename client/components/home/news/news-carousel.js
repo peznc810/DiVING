@@ -1,18 +1,22 @@
 import React from 'react'
 import NewsItem from './news-item'
+import styles from './news-carousel.module.scss'
 
 export default function NewsCarousel() {
   return (
     <>
       <div
         id="newsCarousel"
-        classNameName={`carousel slide`}
+        className={`carousel slide `}
         data-bs-ride="carousel"
       >
-        <div classNameName={`carousel-inner`}>
+        <div className={`carousel-inner d-flex overflow-hidden`}>
+          <NewsItem />
+          <NewsItem />
           <NewsItem />
         </div>
-        <div className="carousel-indicators">
+        {/* 輪播點 */}
+        <div className={`${styles.carouselDot} d-flex justify-content-center`}>
           <button
             type="button"
             data-bs-target="#newsCarousel"

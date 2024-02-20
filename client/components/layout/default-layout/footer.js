@@ -89,17 +89,17 @@ export default function Footer() {
           <ul className={`d-flex m-0 justify-content-center`}>
             <li>
               <a href="#">
-                <i class="bi bi-facebook"></i>
+                <i className="bi bi-facebook"></i>
               </a>
             </li>
             <li>
               <a href="#">
-                <i class="bi bi-instagram"></i>
+                <i className="bi bi-instagram"></i>
               </a>
             </li>
             <li>
               <a href="#">
-                <i class="bi bi-line"></i>
+                <i className="bi bi-line"></i>
               </a>
             </li>
           </ul>

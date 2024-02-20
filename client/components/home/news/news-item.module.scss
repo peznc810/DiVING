@@ -1,13 +1,21 @@
 @import '@/styles/variable.scss';
 
 .newsItem {
-  width: 350px;
-  margin-left: 20px;
+  width: 300px;
+  margin-right: 20px;
+  margin-block: 10px;
   letter-spacing: 1px;
+  padding: 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  .date {
+    font-size: 12px;
+    color: $light-gray;
+  }
   .newsImg {
-    height: 240px;
+    height: 200px;
     background-color: #ccc;
-    border-radius: 8px;
+    border-radius: 4px;
     img {
       width: 100%;
     }
@@ -25,10 +33,22 @@
     }
     .title {
       color: $secondary;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
-    .date {
-      font-size: 12px;
-      color: $light-gray;
+    .info {
+      font-size: 14px;
+      color: $gray;
+      overflow: hidden;
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
     }
   }
+}
+
+.newsItem:hover {
+  box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.27);
+  translate: scale;
 }
