@@ -4,7 +4,6 @@ import Stars from '@/components/product/star/star'
 import Carousel from '@/components/product/carousel'
 import ProductRecommond from '@/components/product/product-recommond'
 
-
 export default function Detail() {
   const [isSwitchOn, setIsSwitchOn] = useState(false)
 
@@ -253,18 +252,20 @@ export default function Detail() {
                 <p className="text-center my-3 font-weight-light">
                   鞋面採用車縫皮革裝飾片，全面提升經典指標性、耐久性和支撐力。
                 </p>
-                <img
-                  className="w-50 p-2 my-3"
-                  src="./public/images/product/test/20/20-detail1.jpg"
-                />
-                <img
-                  className="w-50 p-2 my-3"
-                  src="./public/images/product/test/20/20-detail1.jpg"
-                />
-                <img
-                  className="w-100 h-50 mb-1"
-                  src="/images/product/detail/info-2.webp"
-                />
+                <div>
+                  <div className="p-2 my-3 custom-image-container">
+                    <img src="/images/product/test/20/20-detail1.jpg" />
+                    {/* `${}` */}
+                  </div>
+                  <div className="p-2 my-3 custom-image-container">
+                    <img src="/images/product/test/20/20-detail1.jpg" />
+                    {/* `${}` */}
+                  </div>
+                  <div className="p-2 my-3 custom-image-container">
+                    <img src="/images/product/test/20/20-detail1.jpg" />
+                    {/* `${}` */}
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -273,55 +274,22 @@ export default function Detail() {
 
       <style jsx>{`
         .container-1200 {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0;
-          }
-          @media screen and (max-width: 576px) {
-            .width-1200 {
+          max-width: 1200px;
+          margin: 0 auto;
+          padding: 0;
+        }
+        @media screen and (max-width: 576px) {
+          .width-1200 {
             width: 380px;
-        }}
-        
-        {/* 商品細節 */}
-        {/* h1 {
-        font-size: 36px;
-        }
-        h2 {
-        font-size: 32px;
-        }
-        h3 {
-        font-size: 28px;
-        }
-        h4 {
-        font-size: 24px;
-        }
-        h5 {
-        font-size: 20px;
-        }
-        h6 {
-        font-size: 18px;
-        }
-        p {
-        font-size: 16px;
-        }
-        span {
-        font-size: 16px;
-        } */}
-        .note-text {
-        color: var(--red, #dc5151);
-        }
-        .type-text {
-        color: var(--gray, #858585);
-        font-weight: normal;
+          }
         }
 
-        
-        {/* hover */}
         .btn-md:hover,
         .btn-outline-primary:hover,
         .btn-circle:hover {
           background-color: #265475;
           color: #fff;
+          border: none;
         }
         .btn-comment {
           background-color: #265475;
@@ -347,84 +315,16 @@ export default function Detail() {
           display: flex;
           align-items: center;
         }
-
-        {/* 推薦商品 */}
-        .container-with-button {
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          
-        .btn-arrow-circle {
-          margin: 0 20px;
-          width: 40px;
-          height: 40px;
-          border-radius: 50%;
-          background-color: #f5f5f5;
-          font-size: 16px;
+        .custom-image-container {
+          margin: 0 auto;
+          width: 600px;
+          height: 480px;
         }
-        .btn-left {
-          margin-right: 10px;
-        }
-        .card-container {
-          display: flex;
-          justify-content: space-between;
-        }
-        .wrap-card {
-          position: relative;
-        }
-
-        .tag {
-          position: absolute;
-          top: 20;
-          left: 20;
-          background-color: var(--red, #dc5151);
-          color: white; 
-          padding: 5px 10px; 
-          border-radius: 5px; 
-        }
-        .img {
-          aspect-ratio: 1;
-          object-fit: auto;
-          object-position: center;
-          width: 30px;
-          box-shadow: 2px 4px 6.1px 0px rgba(20, 35, 56, 0.4);
-        }
-        .card-bottom {
-          display: flex;
+        .custom-image-container img {
           width: 100%;
-          flex-direction: column;
-          padding: 12px;
+          height: 100%;
+          object-fit: cover;
         }
-        .card-title {
-          color: var(--neutral-07100, #141718);
-          text-align: center;
-          font-feature-settings: 'clig' off, 'liga' off;
-          letter-spacing: 0.8px;
-          font: 500 16px Inter, sans-serif;
-        }
-        .discount-price-wrap {
-          justify-content: center;
-          align-self: center;
-          display: flex;
-          margin-top: 12px;
-          gap: 12px;
-          white-space: nowrap;
-        }
-        .discount-price {
-          color: var(--red, #dc5151);
-          font-feature-settings: 'clig' off, 'liga' off;
-          flex-grow: 1;
-          font: 500 16px Inter, sans-serif;
-        }
-        .o-price {
-          justify-content: center;
-          color: var(--gray, #858585);
-          margin: auto 0;
-          padding: 2px 8px 2px 3px;
-          font: 400 14px Arial, sans-serif;
-        }
-        
-       
       `}</style>
     </>
   )

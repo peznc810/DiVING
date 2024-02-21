@@ -1,7 +1,8 @@
 import { useEffect } from 'react'
 
 import Stars from '@/components/product/star/star'
-// import Pagination from 'react-bootstrap/Pagination'
+import OrderProduct from '/components/product/order'
+import Search from '@/components/product/search'
 import Pagination from '@/components/product/pagination'
 
 export default function List() {
@@ -33,6 +34,15 @@ export default function List() {
 
   return (
     <>
+      {/* 標題圖片
+      <header className="header">
+        <img
+          src="../images/product/list/diving-adventure.jpg"
+          alt="Header"
+          className="header-image"
+        />
+      </header> */}
+
       <div className="container-1200">
         {/* 麵包屑 */}
         <div className="my-3 d-flex">
@@ -48,43 +58,11 @@ export default function List() {
         </div>
 
         <div className="row mt-2 mb-3">
-          <h5 className="card-text d-flex justify-content-between align-items-center">
-            <span className="ps-3">當前的分類名稱</span>
-            <div className="d-flex p-2 justify-content-end align-items-center">
-              <div className="toolbar">
-                <button className="btn" id="sidebarToggle">
-                  隱藏篩選條件 <i className="bi bi-toggles"></i>
-                </button>
-              </div>
-              <div className="dropdown">
-                <button
-                  className="btn dropdown-toggle"
-                  type="button"
-                  data-bs-toggle="dropdown"
-                  aria-expanded="false"
-                >
-                  商品排序
-                </button>
-                <ul className="dropdown-menu">
-                  <li>
-                    <a className="dropdown-item" href="#">
-                      最新上架商品
-                    </a>
-                  </li>
-                  <li>
-                    <a className="dropdown-item" href="#">
-                      價格：由高至低
-                    </a>
-                  </li>
-                  <li>
-                    <a className="dropdown-item" href="#">
-                      價格：由低至高
-                    </a>
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </h5>
+          <div className="card-text d-flex justify-content-between align-items-center">
+            <h6 className="ps-3 my-1">當前的分類名稱</h6>
+            {/* 排序 */}
+            <OrderProduct />
+          </div>
         </div>
 
         <div className="row text-center">
@@ -93,14 +71,11 @@ export default function List() {
               <div className="bg-white me-3" id="sidebar-wrapper">
                 <div className="scroll">
                   <div className="cats">
+                    {/* 搜尋 */}
+                    <Search />
                     <div>
                       <button type="button" className="btn">
                         所有商品
-                      </button>
-                    </div>
-                    <div>
-                      <button type="button" className="btn">
-                        促銷
                       </button>
                     </div>
 
@@ -339,7 +314,7 @@ export default function List() {
                     <div className="col">
                       <div className="card w-350 border-radius f-16">
                         <img
-                          src="/images/product/list/1-1.webp"
+                          src="./public/images/product/test/20/20-detail1.jpg"
                           className="card-img-top"
                           alt="..."
                         />
@@ -614,7 +589,6 @@ export default function List() {
         </div>
       </div>
 
-
       <style jsx>{`
         .container-1200 {
           max-width: 1200px;
@@ -626,6 +600,15 @@ export default function List() {
             width: 380px;
           }
         }
+
+        header {
+          background-size: cover;
+          background-position: center;
+          width: 100%;
+          height: 600px;
+          letter-spacing: 2px;
+        }
+
         .bi-icon {
           font-size: 20px;
         }
