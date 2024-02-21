@@ -1,10 +1,46 @@
-import React from 'react'
+import React, { useState } from 'react'
 // import Navbar from '@/components/layout/navbar'
 import { FaShoppingCart } from 'react-icons/fa'
 import { FaRegTrashAlt } from 'react-icons/fa'
 import CartStep from '@/components/cart/cart-step'
 
+import cartData from '@/data/cart/cart.json'
+import productData from '@/data/cart/product.json'
+import lessontData from '@/data/cart/lesson.json'
+
+console.log(cartData)
+
+let data = cartData.map((a, i) => {
+  for (let i = 0; i < lessontData.length; i++) {
+    if (a.lesson_id === lessontData[i].id) {
+      a = {
+        ...a,
+        lessonName: lessontData[i].name,
+        lessonPrice: lessontData[i].price,
+      }
+    }
+  }
+  for (let i = 0; i < productData.length; i++) {
+    if (a.product_id === productData[i].id) {
+      a = {
+        ...a,
+        productName: productData[i].name,
+        productPrice: productData[i].price,
+      }
+    }
+  }
+  return a
+})
+
+console.log(data)
+
+let [data2] = productData
+
+console.log(data2)
+
 export default function Home() {
+  const [num, setNum] = useState(1)
+
   return (
     <div className="container">
       <CartStep />
@@ -24,7 +60,60 @@ export default function Home() {
             </tr>
           </thead>
           <tbody>
-            <tr>
+            {data.map((v, i) => {
+              const {
+                lessonName,
+                lessonPrice,
+                lesson_id,
+                lesson_num,
+                productName,
+                productPrice,
+                product_id,
+                product_num,
+              } = v
+              console.log(product_num)
+              return (
+                <tr key={i}>
+                  <td>
+                    <div className="row">
+                      <img />
+                      <div>
+                        <h5 className="fw-bold text-start">
+                          {productName || lessonName}
+                        </h5>
+                        <p className="imperceptible text-start">商品細節</p>
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <h5 className="fw-bold discounted">打折後</h5>
+                    <p className="imperceptible text-decoration-line-through">
+                      {productPrice || lessonPrice}
+                    </p>
+                  </td>
+                  <td>
+                    <button type="button" className="btn btn-light">
+                      +
+                    </button>
+                    <input
+                      type="text"
+                      className="w-25 text-center"
+                      defaultValue={product_num || lesson_num}
+                    />
+                    <button type="button" className="btn btn-light">
+                      -
+                    </button>
+                  </td>
+                  <td>
+                    NT${productPrice * product_num || lessonPrice * lesson_num}
+                  </td>
+                  <td>
+                    <FaRegTrashAlt size={22} />
+                  </td>
+                </tr>
+              )
+            })}
+            {/* <tr>
               <td>
                 <div className="row">
                   <img />
@@ -44,7 +133,11 @@ export default function Home() {
                 <button type="button" className="btn btn-light">
                   +
                 </button>
-                <input type="text" className="w-25 text-center" value={1} />
+                <input
+                  type="text"
+                  className="w-25 text-center"
+                  placeholder="1"
+                />
                 <button type="button" className="btn btn-light">
                   -
                 </button>
@@ -53,7 +146,7 @@ export default function Home() {
               <td>
                 <FaRegTrashAlt size={22} />
               </td>
-            </tr>
+            </tr> */}
           </tbody>
         </table>
       </div>
