@@ -1,7 +1,5 @@
 import React from 'react'
-// import Navbar from '@/components/layout/navbar'
-import { DatePicker } from 'rsuite'
-import 'rsuite/dist/rsuite-no-reset.min.css'
+import DatePicker from '@/components/cart/date-picker'
 
 export default function Home() {
   return (
@@ -27,11 +25,14 @@ export default function Home() {
               <div className="col-sm-6 time-section">
                 <h5>X月XX日 星期X</h5>
                 <div className="d-flex mt-3">
-                  <button type="button" className="btn am-btn w-75">
+                  <button
+                    type="button"
+                    className="btn time-period-btn w-75 active"
+                  >
                     <h5 className="fw-bold py-1">上午 X:XX</h5>
                   </button>
                   <div className="w-25"></div>
-                  <button type="button" className="btn pm-btn w-75">
+                  <button type="button" className="btn time-period-btn w-75">
                     <h5 className="fw-bold py-1">下午 XX:XX</h5>
                   </button>
                 </div>
@@ -70,12 +71,16 @@ export default function Home() {
           size: 14px;
         }
 
-        .am-btn {
+        .time-period-btn {
           border: 1px solid #ff9720;
           color: #ff9720;
         }
 
-        .pm-btn,
+        .time-period-btn.active {
+          background-color: #ff9720;
+          color: white;
+        }
+
         .cart-btn {
           background-color: #ff9720;
           color: white;
