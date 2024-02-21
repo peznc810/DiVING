@@ -22,7 +22,7 @@ export default function Navbar2() {
             <i className="bi bi-list"></i>
           </button>
 
-          <h1 className="fw-bolder mb-0 text-light">DiVING</h1>
+          <h1 className="fw-bolder m-0 text-light">DiVING</h1>
           <div>
             <NavMenu />
           </div>

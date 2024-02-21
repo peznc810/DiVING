@@ -1,12 +1,14 @@
 import React from 'react'
 import styles from './index.module.scss'
-import Navbar2 from '@/components/layout/default-layout/navbar/index-home'
+// import Navbar2 from '@/components/layout/default-layout/navbar/index-home'
+import Navbar from '@/components/layout/default-layout/navbar'
 
 export default function HomeHeader() {
   return (
     <>
       <header className={` ${styles.homeHeader}`}>
-        <Navbar2 />
+        {/* <Navbar2 /> */}
+        <Navbar />
         <div className={`${styles.homeContainer}`}>
           <h2>
             Go

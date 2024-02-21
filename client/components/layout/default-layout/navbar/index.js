@@ -13,7 +13,7 @@ export default function Navbar() {
         >
           {/* 點擊展開側邊欄功能 */}
           <button
-            className={` fs-2 ${styles.listIcon} d-flex`}
+            className={` fs-2 ${styles.listIcon} `}
             type="button"
             data-bs-toggle="offcanvas"
             data-bs-target="#offcanvasWithBackdrop"
