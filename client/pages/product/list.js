@@ -4,9 +4,6 @@ import Stars from '@/components/product/star/star'
 // import Pagination from 'react-bootstrap/Pagination'
 import Pagination from '@/components/product/pagination'
 
-import NavBar from '@/components/layout/default-layout/navbar/'
-import Footer from '@/components/layout/default-layout/footer'
-
 export default function List() {
   // Toggle the side navigation
   useEffect(() => {
@@ -36,7 +33,6 @@ export default function List() {
 
   return (
     <>
-      <NavBar />
       <div className="container-1200">
         {/* 麵包屑 */}
         <div className="my-3 d-flex">
@@ -618,7 +614,6 @@ export default function List() {
         </div>
       </div>
 
-      <Footer />
 
       <style jsx>{`
         .container-1200 {

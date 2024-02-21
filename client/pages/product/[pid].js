@@ -4,8 +4,6 @@ import Stars from '@/components/product/star/star'
 import Carousel from '@/components/product/carousel'
 import ProductRecommond from '@/components/product/product-recommond'
 
-import NavBar from '@/components/layout/default-layout/navbar/'
-import Footer from '@/components/layout/default-layout/footer'
 
 export default function Detail() {
   const [isSwitchOn, setIsSwitchOn] = useState(false)
@@ -21,7 +19,6 @@ export default function Detail() {
   // })
   return (
     <>
-      <NavBar />
       <div className="container-1200">
         {/* 麵包屑 */}
         <div className="my-3 d-flex">
@@ -273,7 +270,6 @@ export default function Detail() {
           </div>
         )}
       </div>
-      <Footer />
 
       <style jsx>{`
         .container-1200 {
