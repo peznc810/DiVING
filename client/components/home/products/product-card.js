@@ -12,7 +12,7 @@ export default function ProductCard() {
             src={'/images/home/test/pro1.png'}
             alt=""
             fill
-            objectFit="cover"
+            object-fit="cover"
           />
         </div>
 
