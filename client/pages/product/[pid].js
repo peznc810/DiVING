@@ -13,6 +13,12 @@ export default function Detail() {
   const handleSwitchToggle = () => {
     setIsSwitchOn(!isSwitchOn)
   }
+
+  // const colorBtn = document.querySelector('.color-btn')
+
+  // colorBtn.addEventListener('click', (e) => {
+  //   e.currentTarget.classList.add('active')
+  // })
   return (
     <>
       <NavBar />
@@ -53,13 +59,13 @@ export default function Detail() {
 
             {/* 顏色 button */}
             <span className="btn-color p-2">顏色</span>
-            <button type="button" className="btn btn-md">
+            <button type="button" className="btn btn-md color-btn">
               紅
             </button>
-            <button type="button" className="btn btn-md">
+            <button type="button" className="btn btn-md color-btn">
               藍
             </button>
-            <button type="button" className="btn btn-md">
+            <button type="button" className="btn btn-md color-btn">
               綠
             </button>
             <br />
@@ -278,7 +284,7 @@ export default function Detail() {
           @media screen and (max-width: 576px) {
             .width-1200 {
             width: 380px;
-        }
+        }}
         
         {/* 商品細節 */}
         {/* h1 {
@@ -341,7 +347,6 @@ export default function Detail() {
           background-color: #f5f5f5;
           font-size: 16px;
         }
-
         .circle-container {
           display: flex;
           align-items: center;
@@ -381,24 +386,6 @@ export default function Detail() {
           padding: 5px 10px; 
           border-radius: 5px; 
         }
-        {/* .wrap {
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          margin: 0 15px;
-        }
-        
-        .tag {
-          font-feature-settings: 'clig' off, 'liga' off;
-          font-family: Inter, sans-serif;
-          justify-content: center;
-          border-radius: 4px;
-          background-color: #cf4242;
-          aspect-ratio: 3.09;
-          color: #fff;
-          letter-spacing: 0.8px;
-          padding: 2px 10px;
-        } */}
         .img {
           aspect-ratio: 1;
           object-fit: auto;
@@ -440,7 +427,7 @@ export default function Detail() {
           padding: 2px 8px 2px 3px;
           font: 400 14px Arial, sans-serif;
         }
-        {/* 你可能會喜歡的商品 */}
+        
        
       `}</style>
     </>

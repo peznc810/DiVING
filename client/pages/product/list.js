@@ -1,7 +1,8 @@
 import { useEffect } from 'react'
 
 import Stars from '@/components/product/star/star'
-import Pagination from 'react-bootstrap/Pagination'
+// import Pagination from 'react-bootstrap/Pagination'
+import Pagination from '@/components/product/pagination'
 
 import NavBar from '@/components/layout/default-layout/navbar/'
 import Footer from '@/components/layout/default-layout/footer'
@@ -37,6 +38,19 @@ export default function List() {
     <>
       <NavBar />
       <div className="container-1200">
+        {/* 麵包屑 */}
+        <div className="my-3 d-flex">
+          <div className="d-flex align-items-center">
+            <div className="p-2">
+              <i class="bi bi-droplet-half p-1"></i>品牌
+            </div>
+            <div className="p-1">&gt;</div>
+            <div className="p-2">
+              <i className="bi bi-droplet p-1"></i>商品種類
+            </div>
+          </div>
+        </div>
+
         <div className="row mt-2 mb-3">
           <h5 className="card-text d-flex justify-content-between align-items-center">
             <span className="ps-3">當前的分類名稱</span>
@@ -595,40 +609,7 @@ export default function List() {
                       </div>
                     </div>
                     {/* 9結束 */}
-                    {/* 分頁 */}
-                    <nav aria-label="Page navigation example mx-auto">
-                      <ul className="pagination">
-                        <li className="page-item">
-                          <a
-                            className="page-link"
-                            href="#"
-                            aria-label="Previous"
-                          >
-                            <span aria-hidden="true">&laquo;</span>
-                          </a>
-                        </li>
-                        <li className="page-item">
-                          <a className="page-link" href="#">
-                            1
-                          </a>
-                        </li>
-                        <li className="page-item">
-                          <a className="page-link" href="#">
-                            2
-                          </a>
-                        </li>
-                        <li className="page-item">
-                          <a className="page-link" href="#">
-                            3
-                          </a>
-                        </li>
-                        <li className="page-item">
-                          <a className="page-link" href="#" aria-label="Next">
-                            <span aria-hidden="true">&raquo;</span>
-                          </a>
-                        </li>
-                      </ul>
-                    </nav>
+                    <Pagination />
                   </div>
                 </div>
               </div>
@@ -636,18 +617,19 @@ export default function List() {
           </div>
         </div>
       </div>
-      <Pagination />
+
       <Footer />
 
       <style jsx>{`
         .container-1200 {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0;
-          }
-          @media screen and (max-width: 576px) {
-            .width-1200 {
+          max-width: 1200px;
+          margin: 0 auto;
+          padding: 0;
+        }
+        @media screen and (max-width: 576px) {
+          .width-1200 {
             width: 380px;
+          }
         }
         .bi-icon {
           font-size: 20px;
@@ -655,6 +637,243 @@ export default function List() {
         .navigation {
           display: flex;
           justify-content: flex-end;
+        }
+
+         {
+          /* move */
+        }
+        #wrapper {
+          overflow-x: hidden;
+        }
+
+        #sidebar-wrapper {
+          min-height: 100vh;
+          margin-left: -17rem;
+          -webkit-transition: margin 0.25s ease-out;
+          -moz-transition: margin 0.25s ease-out;
+          -o-transition: margin 0.25s ease-out;
+          transition: margin 0.25s ease-out;
+        }
+
+        // #sidebar-wrapper .sidebar-heading {
+        //   padding: 0.875rem 1.25rem;
+        //   font-size: 1.2rem;
+        // }
+
+        #sidebar-wrapper {
+          width: 17rem;
+        }
+
+        #page-content-wrapper {
+          min-width: 100vw;
+        }
+
+        body.sb-sidenav-toggled #wrapper #sidebar-wrapper {
+          margin-left: -18rem;
+        }
+
+        @media (min-width: 768px) {
+          #sidebar-wrapper {
+            margin-left: 0;
+          }
+
+          #page-content-wrapper {
+            min-width: 0;
+            width: 100%;
+          }
+
+          body.sb-sidenav-toggled #wrapper #sidebar-wrapper {
+            margin-left: -18rem;
+          }
+        }
+
+        // 圓型按鈕 btn-circle
+        .btn-circle.btn-xl {
+          width: 70px;
+          height: 70px;
+          padding: 10px 16px;
+          border-radius: 35px;
+          font-size: 24px;
+          line-height: 1.33;
+        }
+
+        .btn-circle {
+          width: 30px;
+          height: 30px;
+          padding: 6px 0px;
+          border-radius: 15px;
+          text-align: center;
+          font-size: 12px;
+          line-height: 1.42857;
+        }
+
+        .w-350 {
+          // width: 360px;
+          width: 100%;
+        }
+
+        .w-350 img {
+          width: 100%;
+        }
+
+        .card-text {
+          font-weight: 500;
+          margin-bottom: 0.15rem;
+        }
+
+        .note-text {
+          color: var(--red, #dc5151);
+        }
+
+        .type-text {
+          color: var(--gray, #858585);
+          font-weight: normal;
+        }
+
+        /* override by css variable */
+        .no-border {
+          --bs-border-width: 0;
+        }
+
+        /*  card-body override */
+        .no-space-x {
+          padding: var(--bs-card-spacer-y) 0;
+        }
+
+        .origin-p {
+          margin-bottom: 0;
+        }
+
+        /* grid list */
+        .toolbar {
+          font-size: 16px;
+          font-weight: normal;
+          margin-right: 10px;
+        }
+
+        .toolbar i {
+          font-size: 18px;
+        }
+
+        /* sidebar */
+        div.scroll {
+          width: 100%;
+          height: 80vh;
+          overflow-x: hidden;
+          overflow-y: scroll;
+          text-align: left;
+          padding: 10px;
+        }
+
+        .cats {
+          border-bottom: 0.05rem solid gray;
+          min-height: 200px;
+        }
+
+        .color-f {
+          font-size: 10px;
+          text-align: center;
+        }
+
+        /* always show scrollbars */
+
+        ::-webkit-scrollbar {
+          -webkit-appearance: none;
+          width: 7px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+          border-radius: 4px;
+          background-color: rgba(0, 0, 0, 0.5);
+          box-shadow: 0 0 1px rgba(255, 255, 255, 0.5);
+        }
+
+        .h-now {
+          font-size: 16px;
+          color: rgb(17, 17, 17);
+          font-weight: 400;
+        }
+
+        .f-12 {
+          font-size: 16px;
+          font-weight: 700;
+        }
+
+        .product-img {
+          width: 520px;
+          height: auto;
+        }
+
+        .product-desc {
+          line-height: 30px;
+          font-size: 18px;
+        }
+
+        .swiper {
+          width: 100%;
+          height: 300px;
+          margin-left: auto;
+          margin-right: auto;
+        }
+
+        .swiper-slide {
+          background-size: cover;
+          background-position: center;
+        }
+
+        .mySwiper2 {
+          height: 80%;
+          width: 100%;
+        }
+
+        .mySwiper {
+          height: 20%;
+          box-sizing: border-box;
+          padding: 10px 0;
+          margin: 10px 0;
+        }
+
+        .mySwiper .swiper-slide {
+          width: 25%;
+          height: 100%;
+          opacity: 0.4;
+        }
+
+        .mySwiper .swiper-slide-thumb-active {
+          opacity: 1;
+        }
+
+        .swiper-slide img {
+          display: block;
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        }
+
+        // font-size
+        h1 {
+          font-size: 36px;
+        }
+        h2 {
+          font-size: 32px;
+        }
+        h3 {
+          font-size: 28px;
+        }
+        h4 {
+          font-size: 24px;
+        }
+        h5 {
+          font-size: 20px;
+        }
+        h6 {
+          font-size: 18px;
+        }
+        p {
+          font-size: 16px;
+        }
+        span {
+          font-size: 16px;
         }
       `}</style>
     </>
