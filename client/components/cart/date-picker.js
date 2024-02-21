@@ -5,12 +5,10 @@ import { GoChevronRight } from 'react-icons/go'
 export default function DatePicker() {
   useEffect(() => {
     const divMonth = document.querySelector('.month')
-    const divCalendarContainer = document.querySelector('.calendarContainer')
     const btnLeft = document.querySelector('.leftBtn')
     const btnRight = document.querySelector('.rightBtn')
     const divDates = document.querySelector('.dates')
-    const divDatePicker = document.querySelector('.datepicker')
-    const inputDate = document.querySelector('.datepicker input')
+    let selectDate
 
     const wHeight = 60
 
@@ -20,9 +18,11 @@ export default function DatePicker() {
 
     btnLeft.addEventListener('click', () => {
       currentDate.setMonth(currentDate.getMonth() - 1)
+      randerCalendar()
     })
     btnRight.addEventListener('click', () => {
       currentDate.setMonth(currentDate.getMonth() + 1)
+      randerCalendar()
     })
 
     randerCalendar()
@@ -34,7 +34,6 @@ export default function DatePicker() {
         currentDate.getFullYear(),
         currentDate.getMonth()
       )
-      console.log(totalWeeks)
       let dateHeight = Math.floor((wHeight - 60 - 30) / totalWeeks)
 
       document.documentElement.style.setProperty(
@@ -72,7 +71,7 @@ export default function DatePicker() {
         const mm = (currentDate.getMonth() + 1).toString().padStart(2, '0')
         const yy = currentDate.getFullYear()
 
-        node.innerHTML = `<div class="date" y="${yy}" m="${mm}" d="${dd}">${i}</div>`
+        node.innerHTML = `<div class="jsx-6d5b15dfcc792ec0 date" y="${yy}" m="${mm}" d="${dd}">${i}</div>`
 
         if (
           i === new Date().getDate() &&
@@ -100,6 +99,22 @@ export default function DatePicker() {
 
         divDates.append(node.children[0])
       }
+
+      const divDate = document.querySelectorAll('.date')
+
+      for (let i = 0; i < divDate.length; i++) {
+        divDate[i].addEventListener('click', () => {
+          let selectY = divDate[i].getAttribute('y')
+          let selectM = divDate[i].getAttribute('m')
+          let selectD = divDate[i].getAttribute('d')
+          selectDate = `${selectY}-${selectM}-${selectD}`
+          const divCurrentDate = document.querySelector('.currentDate')
+          if (divCurrentDate) {
+            divCurrentDate.classList.remove('currentDate')
+          }
+          divDate[i].classList.add('currentDate')
+        })
+      }
     }
 
     function weeksInMonth(year, month) {
@@ -118,68 +133,58 @@ export default function DatePicker() {
   return (
     <>
       <div className="d-flex"></div>
-      <div class="calendarContainer">
-        <div class="calendar">
+      <div className="calendarContainer">
+        <div className="calendar">
           <div className="nav d-flex align-items-center justify-content-between">
             <GoChevronLeft className="leftBtn" />
-            <div class="month">2024-02</div>
+            <div className="month">2024-02</div>
             <GoChevronRight className="rightBtn" />
           </div>
-          <div class="week unit1">
-            <div class="weekday">S</div>
-            <div class="weekday">M</div>
-            <div class="weekday">T</div>
-            <div class="weekday">W</div>
-            <div class="weekday">T</div>
-            <div class="weekday">F</div>
-            <div class="weekday">S</div>
+          <div className="week unit1">
+            <div className="weekday">S</div>
+            <div className="weekday">M</div>
+            <div className="weekday">T</div>
+            <div className="weekday">W</div>
+            <div className="weekday">T</div>
+            <div className="weekday">F</div>
+            <div className="weekday">S</div>
           </div>
-          <div class="dates unit1"></div>
+          <div className="dates unit1"></div>
         </div>
       </div>
       <style jsx>{`
         .calendarContainer {
-          position: fixed;
-          left: 0;
-          top: 0;
-          width: 100%;
-          height: 100%;
-          background-color: #515151;
-          z-index: 1;
           display: flex;
           justify-content: center;
           .calendar {
-            background-color: #ea78b9;
             width: calc(100% - 20px);
-            height: fit-content;
             .nav {
-              height: var(--nav-height);
               display: flex;
               justify-content: space-between;
             }
             .week {
-              height: var(--week-height);
               font-weight: bold;
             }
             .dates {
               .date {
-                height: var(--date-height);
+                display: flex;
+                justify-content: center;
+                align-items: center;
                 user-select: none;
                 cursor: pointer;
+                height: 3rem;
                 &:hover {
-                  background-color: #e671a2;
+                  background-color: orange;
                 }
               }
               .disabled {
-                color: #909090;
-                background-color: #909090;
+                color: white;
+                background-color: #d9d9d9;
                 cursor: not-allowed;
-                &:hover {
-                  background-color: #909090;
-                }
               }
               .currentDate {
-                background-color: #fb229d;
+                background-color: orange;
+                color: white;
               }
             }
             .unit1 {

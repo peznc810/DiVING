@@ -1,9 +1,10 @@
 import React from 'react'
+import Home from './home'
 
-export default function Home() {
+export default function Index() {
   return (
     <>
-      <h1>Hello Word!</h1>
+      <Home />
     </>
   )
 }
