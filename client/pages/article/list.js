@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import styles from '@/styles/loader/loader_ripple.module.css'
-import post from '@/data/forum/post.json'
+import post from '@/data/article/post.json'
 import {
   Container,
   Dropdown,
@@ -53,7 +53,7 @@ export default function List() {
 
   const display = (
     <ul>
-      {postList.map((v, i) => {
+      {postList.map((v) => {
         return (
           <div key={v.id}>
             <>
@@ -63,7 +63,7 @@ export default function List() {
                     <Col key={idx}>
                       <Card>
                         <Link
-                          href={`/forum/${v.id}`}
+                          href={`/article/${v.id}`}
                           style={{ textDecoration: 'none' }}
                         >
                           <Card.Img

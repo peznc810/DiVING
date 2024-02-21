@@ -4,30 +4,9 @@ import { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
 import styles from '@/styles/loader/loader_ripple.module.css'
-import postData from '@/data/forum/post.json'
+import postData from '@/data/article/post.json'
 
-import {
-  Container,
-  Dropdown,
-  Card,
-  Col,
-  Row,
-  Button,
-  Stack,
-} from 'react-bootstrap'
-
-const demoItem = [
-  {
-    id: '1',
-    author: 'Marijn Haverbeke',
-    published: '2018-12-04T00:00:00.000Z',
-    image: 'post.jpg',
-    title: 'Eloquent JavaScript, Third Edition',
-    content:
-      'JavaScript lies at the heart of almost every modern web application, from social apps like Twitter to browser-based game frameworks like Phaser and Babylon. Though simple for beginners to pick up and play with, JavaScript is a flexible, complex language that you can use to build full-scale applications.',
-    tags: 'tag1,tag2',
-  },
-]
+import { Container, Card, Col, Row, Button } from 'react-bootstrap'
 
 export default function Detail() {
   const router = useRouter()
@@ -79,7 +58,7 @@ export default function Detail() {
 
       getPost(pid)
     }
-  }, [router.isReady]) //just警告
+  }, [router.isReady]) //Addy說just警告
 
   console.log('render')
 
