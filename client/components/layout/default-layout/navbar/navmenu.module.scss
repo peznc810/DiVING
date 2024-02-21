@@ -1,4 +1,4 @@
-@import '../client/styles/variable.scss';
+@import '@/styles/variable.scss';
 
 .subMenu {
   position: relative;
@@ -24,7 +24,7 @@
     }
     a:hover {
       background-color: #fff;
-      color: $orange;
+      color: $secondary;
       animation-name: aAni;
       animation-duration: 0.5s;
       animation-timing-function: linear;
@@ -43,17 +43,18 @@
 }
 .linkText:hover,
 .linkFocus {
-  color: $orange;
-  border-bottom: 2px solid $orange;
+  color: $secondary;
+  border-bottom: 2px solid $secondary;
 }
 
 .login {
   background-color: #fff;
-  color: $orange;
+  color: $secondary;
   border-radius: 50px;
+  text-align: center;
 }
 .login:hover {
-  background-color: $orange;
+  background-color: $secondary;
   color: #fff;
 }
 
@@ -67,7 +68,7 @@
   border: 0;
 }
 .cart:hover {
-  color: $orange;
+  color: $secondary;
 }
 
 .linkText:hover,
@@ -97,6 +98,9 @@
 }
 
 @media screen and (max-width: 768px) {
+  .nav {
+    min-width: 100px;
+  }
   .navMenu,
   .subMenu {
     display: none;
@@ -111,7 +115,7 @@
     text-align: center;
   }
   .loginIcon:hover {
-    color: $orange;
+    color: $secondary;
     transition: 0.3s ease-in-out;
   }
 }

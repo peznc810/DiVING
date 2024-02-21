@@ -13,7 +13,7 @@ export default function Navbar() {
         >
           {/* 點擊展開側邊欄功能 */}
           <button
-            className={` fs-2 ${styles.listIcon}`}
+            className={` fs-2 ${styles.listIcon} d-flex`}
             type="button"
             data-bs-toggle="offcanvas"
             data-bs-target="#offcanvasWithBackdrop"
@@ -22,7 +22,7 @@ export default function Navbar() {
             <i className="bi bi-list"></i>
           </button>
 
-          <h1 className="fw-bolder mb-0 text-light">DiVING</h1>
+          <h1 className="fw-bolder m-0 text-light">DiVING</h1>
           <div>
             <NavMenu />
           </div>

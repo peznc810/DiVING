@@ -1,0 +1,19 @@
+@import '@/styles/variable.scss';
+
+.carouselDot {
+  text-align: center;
+  margin-top: 15px;
+  button {
+    border: 0;
+    padding: 0;
+    margin-inline: 5px;
+    width: 17px;
+    height: 5px;
+    border-radius: 4px;
+  }
+  button:focus {
+    background-color: $secondary;
+    width: 24px;
+    height: 7px;
+  }
+}
