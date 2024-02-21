@@ -14,7 +14,9 @@ export default function NavRwd() {
         id="offcanvasWithBackdrop"
         tabindex="-1"
       >
-        <div className={`offcanvas-header p-0 d-flex flex-column ${styles.offcanvasHeader}`}>
+        <div
+          className={`offcanvas-header p-0 d-flex flex-column ${styles.offcanvasHeader}`}
+        >
           {/* 關掉側邊按鈕 */}
           <button
             type="button"
