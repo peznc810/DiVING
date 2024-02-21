@@ -1,4 +1,4 @@
-@import '../client/styles/variable.scss';
+@import '@/styles/variable.scss';
 
 .sideCart {
   background-color: #fff;
@@ -14,7 +14,7 @@
       border: 0;
     }
     button:hover {
-      color: $orange;
+      color: $secondary;
     }
   }
 
@@ -27,11 +27,11 @@
 
   .cartLink {
     display: block;
-    width: 100px;
+    text-wrap: nowrap;
     padding-block: 4px;
     padding-inline: 16px;
-    color: $orange;
-    border: 2px solid $orange;
+    color: $secondary;
+    border: 2px solid $secondary;
     border-radius: 25px;
     margin: auto;
     margin-block: 50px;
@@ -39,6 +39,6 @@
 
   .cartLink:hover {
     color: #fff;
-    background-color: $orange;
+    background-color: $secondary;
   }
 }

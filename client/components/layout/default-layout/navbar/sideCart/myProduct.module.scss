@@ -1,4 +1,4 @@
-@import '../client/styles/variable.scss';
+@import '@/styles/variable.scss';
 
 .myProduct {
   .productImg {
@@ -17,7 +17,7 @@
       color: $gray;
     }
     .specialPrice {
-      color: $red;
+      color: $danger;
       font-size: 18px;
     }
     .originalPrice {
@@ -35,7 +35,7 @@
       padding-inline: 6px;
     }
     button:hover {
-      background-color: $orange;
+      background-color: $secondary;
       color: #fff;
     }
   }
@@ -46,6 +46,6 @@
     text-decoration: underline;
   }
   .delete:hover {
-    color: $orange;
+    color: $secondary;
   }
 }
