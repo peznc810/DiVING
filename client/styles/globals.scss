@@ -1,12 +1,22 @@
+// 引用顏色樣式
 @import './variable.scss';
-// 覆蓋bootstrap樣式
-$link-decoration: none;
 
+// 覆蓋bootstrap樣式
+// 取消連結的下底線
+$link-decoration: none;
+// checkbox 樣式
 $form-check-input-bg: rgba(217, 217, 217, 0.2);
 $form-check-input-border: 1px solid rgba(217, 217, 217, 0.2);
 $form-check-input-focus-border: 1px solid rgba(217, 217, 217, 0);
 $form-check-input-checked-bg-color: $secondary;
 $form-check-input-focus-box-shadow: none;
+// accordion 樣式
+$accordion-button-active-bg: transparent;
+$accordion-button-focus-box-shadow: none;
+// form control 樣式
+$input-focus-border-color: $secondary; // 考慮要primary還是secondary
+$input-focus-box-shadow: none;
+
 // 導入bootstrap
 @import '~bootstrap/scss/bootstrap';
 @import '~bootstrap-icons/font/bootstrap-icons';
@@ -16,6 +26,7 @@ $form-check-input-focus-box-shadow: none;
 body {
   // letter-spacing: 1px;
   box-sizing: border-box;
+  margin-top: 80px; // 這個要記得拿掉
 }
 ul {
   list-style: none;

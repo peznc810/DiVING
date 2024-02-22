@@ -1,6 +1,6 @@
 import React from 'react'
 import Link from 'next/link'
-import styles from './styles.module.css'
+import styles from './styles.module.scss'
 
 export default function SignUp() {
   return (
@@ -11,7 +11,16 @@ export default function SignUp() {
           <div className={`${styles['card-style']} ${styles['card-layout']}`}>
             {/* chrome會有一個自動填入的input功能，但無法修改其樣式，之後還是選用唇色做背景較合適 */}
             <form action="" method="post" autoComplete="off">
-              <h2 className="text-center">註冊會員</h2>
+              <h2 className="fs-3 mb-4 text-center">註冊會員</h2>
+              <div className={`mb-3 ${styles['input-style']}`}>
+                <input
+                  type="text"
+                  name="userName"
+                  id="userName"
+                  placeholder="姓名"
+                />
+                <label htmlFor="userName">姓名</label>
+              </div>
               <div className={`mb-3 ${styles['input-style']}`}>
                 <input
                   type="email"
@@ -37,14 +46,14 @@ export default function SignUp() {
                   id="repassword"
                   placeholder="確認密碼"
                 />
-                <label htmlFor="password">確認密碼</label>
+                <label htmlFor="repassword">確認密碼</label>
               </div>
               {/* 警示標語 */}
               <p className="fw-medium text-center text-danger mb-0 d-none">
                 帳號或密碼錯誤
               </p>
               {/* END */}
-              <div className={`fs-5 fw-medium ${styles.btn}`}>註冊</div>
+              <div className={`fw-medium ${styles.btn}`}>註冊</div>
               <div className="social">
                 <div
                   className={`d-flex justify-content-center align-items-center ${styles.title}`}
