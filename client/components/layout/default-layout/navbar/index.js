@@ -4,16 +4,16 @@ import NavRwd from './navRwd'
 import SideCart from './sideCart'
 import styles from './index.module.scss'
 
-export default function Navbar() {
+export default function Navbar(background) {
   return (
     <>
-      <nav className={`${styles.navBar}`}>
+      <nav className={`${styles.navBar} d-flex`} style={background}>
         <div
           className={`container-fluid d-flex justify-content-between align-items-center ${styles.navWeb}`}
         >
           {/* 點擊展開側邊欄功能 */}
           <button
-            className={`fs-2 ${styles.listIcon}`}
+            className={` fs-2 ${styles.listIcon}`}
             type="button"
             data-bs-toggle="offcanvas"
             data-bs-target="#offcanvasWithBackdrop"
