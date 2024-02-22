@@ -32,7 +32,6 @@
   text-decoration: underline;
 }
 
-/* 高度要再視情況調整 */
 .card-layout {
   max-width: 390px;
   width: 100%;
@@ -60,44 +59,44 @@
 /* input的相關設定 */
 .input-style {
   position: relative;
-}
+  & input {
+    width: 100%;
+    border: 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.6);
+    background-color: transparent;
+    outline: none;
+    &:-webkit-autofill {
+      transition-property: background-color, color;
+      transition-delay: 10000s;
+    }
+    &:autofill {
+      transition-property: background-color, color;
+      transition-delay: 10000s;
+    }
+    &::placeholder {
+      /* 沒有轉透明的話，focus時文字會保留在上方，看起來怪怪的 */
+      color: transparent;
+    }
+    /* 使用者"focus"以及"輸入完文字並within focus"時的label都要套用的樣式 */
+    &:focus ~ label,
+    &:not(:placeholder-shown) ~ label {
+      color: rgba(255, 255, 255, 0.6);
+      transform: scale(0.85) translateY(-1.2rem);
+    }
+    &[id='email']:focus ~ label,
+    &[id='repassword']:focus ~ label,
+    &[id='email']:not(:placeholder-shown) ~ label,
+    &[id='repassword']:not(:placeholder-shown) ~ label {
+      transform: scale(0.85) translateY(-1.2rem) translateX(-0.2rem);
+    }
+  }
 
-.input-style input {
-  width: 100%;
-  border: 0;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.6);
-  background-color: transparent;
-  outline: none;
-}
-
-.input-style input:-webkit-auto-fill {
-  background-color: transparent;
-}
-
-/* 沒有轉透明的話，focus時文字會保留在上方，看起來怪怪的 */
-.input-style input::placeholder {
-  color: transparent;
-}
-
-.input-style label {
-  position: absolute;
-  bottom: 8px;
-  left: 0;
-  transition: transform 0.1s ease-in-out;
-}
-
-/* 使用者"focus"以及"輸入完文字並within focus"時的label都要套用的樣式 */
-.input-style input:focus ~ label,
-.input-style input:not(:placeholder-shown) ~ label {
-  color: rgba(255, 255, 255, 0.6);
-  transform: scale(0.85) translateY(-1.2rem);
-}
-
-.input-style input[id='email']:focus ~ label,
-.input-style input[id='repassword']:focus ~ label,
-.input-style input[id='email']:not(:placeholder-shown) ~ label,
-.input-style input[id='repassword']:not(:placeholder-shown) ~ label {
-  transform: scale(0.85) translateY(-1.2rem) translateX(-0.2rem);
+  & label {
+    position: absolute;
+    bottom: 8px;
+    left: 0;
+    transition: transform 0.1s ease-in-out;
+  }
 }
 
 /* 忘記密碼欄位 */
