@@ -1,11 +1,22 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 
 import Stars from '@/components/product/star/star'
-import OrderProduct from '/components/product/order'
-import Search from '@/components/product/search'
-import Pagination from '@/components/product/pagination'
+import Order from '@/components/product/list/order'
+import Search from '@/components/product/list/search'
+import Pagination from '@/components/product/list/pagination'
+import Link from 'next/link'
 
 export default function List() {
+  const [isHovered, setIsHovered] = useState(false)
+
+  const handleMouseEnter = () => {
+    setIsHovered(true)
+  }
+
+  const handleMouseLeave = () => {
+    setIsHovered(false)
+  }
+
   // Toggle the side navigation
   useEffect(() => {
     // fix next issue
@@ -34,15 +45,6 @@ export default function List() {
 
   return (
     <>
-      {/* 標題圖片
-      <header className="header">
-        <img
-          src="../images/product/list/diving-adventure.jpg"
-          alt="Header"
-          className="header-image"
-        />
-      </header> */}
-
       <div className="container-1200">
         {/* 麵包屑 */}
         <div className="my-3 d-flex">
@@ -61,7 +63,7 @@ export default function List() {
           <div className="card-text d-flex justify-content-between align-items-center">
             <h6 className="ps-3 my-1">當前的分類名稱</h6>
             {/* 排序 */}
-            <OrderProduct />
+            <Order />
           </div>
         </div>
 
@@ -79,6 +81,7 @@ export default function List() {
                       </button>
                     </div>
 
+                    {/* 篩選 filter */}
                     <div
                       className="accordion accordion-flush"
                       id="accordionFlushExample"
@@ -307,282 +310,500 @@ export default function List() {
                   </div>
                 </div>
               </div>
+
               {/* 卡片 */}
               <div id="page-content-wrapper">
                 <div className="container-fluid">
                   <div className="row row-cols-1 row-cols-md-3 g-4">
-                    <div className="col">
-                      <div className="card w-350 border-radius f-16">
-                        <img
-                          src="./public/images/product/test/20/20-detail1.jpg"
-                          className="card-img-top"
-                          alt="..."
-                        />
+                    <div className="col text-center">
+                      <div
+                        className="card w-350 border-radius"
+                        onMouseEnter={handleMouseEnter}
+                        onMouseLeave={handleMouseLeave}
+                      >
                         <div className="card-body no-space-x">
-                          <Stars />
-                          {/* <p className="card-text text-primary">新品上市</p> */}
-                          <p className="card-text">Helei Wahoo</p>
-                          <p className="card-text type-text h-now">
-                            男士防寒衣
-                          </p>
-                          <span className="h-currency bold note-text">
-                            NT$24,000
-                          </span>
-                          <br />
-                          <p className="h-currency bold  text-decoration-line-through type-text">
-                            NT$28,000
-                          </p>
-                          <div className="bi-icon">
-                            <i className="bi bi-person-heart"></i>
-                            <i className="bi bi-cart-plus-fill"></i>
-                          </div>
+                          <img
+                            src="/images/product/test/20/1-1.webp"
+                            alt="..."
+                            style={{
+                              marginTop: isHovered ? '0' : '-15px',
+                            }}
+                          />
+                          {isHovered ? (
+                            <>
+                              <div className="bi-icon">
+                                <button
+                                  className="btn mouse-add p-2"
+                                  variant="light"
+                                >
+                                  <i className="bi bi-person-heart"></i>
+                                </button>
+                                <button
+                                  className="btn mouse-add p-2"
+                                  variant="light"
+                                >
+                                  <i className="bi bi-cart-plus-fill"></i>
+                                </button>
+                              </div>
+                              <Link href="/product/list">
+                                View more &gt;&gt;
+                              </Link>
+                            </>
+                          ) : (
+                            <>
+                              <Stars />
+                              <p className="card-text">Helei Wahoo</p>
+                              <p className="card-text type-text h-now">
+                                男士防寒衣
+                              </p>
+                              <span className="h-currency bold note-text">
+                                NT$24,000
+                              </span>
+                              <br />
+                              <p className="h-currency bold text-decoration-line-through type-text">
+                                NT$28,000
+                              </p>
+                            </>
+                          )}
                         </div>
                       </div>
                     </div>
 
                     <div className="col">
-                      <div className="card w-350 border-radius f-16">
-                        <img
-                          src="/images/product/list/1-1.webp"
-                          className="card-img-top"
-                          alt="..."
-                        />
+                      <div
+                        className="card w-350 border-radius"
+                        onMouseEnter={handleMouseEnter}
+                        onMouseLeave={handleMouseLeave}
+                      >
                         <div className="card-body no-space-x">
-                          <Stars />
-                          {/* <p className="card-text text-primary">新品上市</p> */}
-                          <p className="card-text">Helei Wahoo</p>
-                          <p className="card-text type-text">男士防寒衣</p>
-                          <span className="h-currency bold note-text">
-                            NT$24,000
-                          </span>
-                          <br />
-                          <p className="h-currency  bold h-now text-decoration-line-through">
-                            NT$28,000
-                          </p>
-                          <div className="bi-icon">
-                            {/* <i className="bi bi-suit-heart"></i> */}
-                            <i className="bi bi-person-heart"></i>
-                            {/* <i className="bi bi-bookmark-heart"></i> */}
-                            {/* <i className="bi bi-cart4"></i> */}
-                            <i className="bi bi-cart-plus-fill"></i>
-                          </div>
+                          <img
+                            src="/images/product/test/20/1-1.webp"
+                            alt="..."
+                            style={{
+                              marginTop: isHovered ? '0' : '-15px',
+                            }}
+                          />
+                          {isHovered ? (
+                            <>
+                              <div className="bi-icon">
+                                <button
+                                  className="btn mouse-add p-2"
+                                  variant="light"
+                                >
+                                  <i className="bi bi-person-heart"></i>
+                                </button>
+                                <button
+                                  className="btn mouse-add p-2"
+                                  variant="light"
+                                >
+                                  <i className="bi bi-cart-plus-fill"></i>
+                                </button>
+                              </div>
+                              <Link href="/product/list">
+                                View more &gt;&gt;
+                              </Link>
+                            </>
+                          ) : (
+                            <>
+                              <Stars />
+                              <p className="card-text">Helei Wahoo</p>
+                              <p className="card-text type-text h-now">
+                                男士防寒衣
+                              </p>
+                              <span className="h-currency bold note-text">
+                                NT$24,000
+                              </span>
+                              <br />
+                              <p className="h-currency bold text-decoration-line-through type-text">
+                                NT$28,000
+                              </p>
+                            </>
+                          )}
                         </div>
                       </div>
                     </div>
 
                     <div className="col">
-                      <div className="card w-350 border-radius f-16">
-                        <img
-                          src="/images/product/list/1-1.webp"
-                          className="card-img-top"
-                          alt="..."
-                        />
+                      <div
+                        className="card w-350 border-radius"
+                        onMouseEnter={handleMouseEnter}
+                        onMouseLeave={handleMouseLeave}
+                      >
                         <div className="card-body no-space-x">
-                          <Stars />
-                          {/* <p className="card-text text-primary">新品上市</p> */}
-                          <p className="card-text">Helei Wahoo</p>
-                          <p className="card-text type-text">男士防寒衣</p>
-                          <span className="h-currency bold note-text">
-                            NT$24,000
-                          </span>
-                          <br />
-                          <p className="h-currency  bold h-now text-decoration-line-through">
-                            NT$28,000
-                          </p>
-                          <div className="bi-icon">
-                            {/* <i className="bi bi-suit-heart"></i> */}
-                            <i className="bi bi-person-heart"></i>
-                            {/* <i className="bi bi-bookmark-heart"></i> */}
-                            {/* <i className="bi bi-cart4"></i> */}
-                            <i className="bi bi-cart-plus-fill"></i>
-                          </div>
+                          <img
+                            src="/images/product/test/20/1-1.webp"
+                            alt="..."
+                            style={{
+                              marginTop: isHovered ? '0' : '-15px',
+                            }}
+                          />
+                          {isHovered ? (
+                            <>
+                              <div className="bi-icon">
+                                <button
+                                  className="btn mouse-add p-2"
+                                  variant="light"
+                                >
+                                  <i className="bi bi-person-heart"></i>
+                                </button>
+                                <button
+                                  className="btn mouse-add p-2"
+                                  variant="light"
+                                >
+                                  <i className="bi bi-cart-plus-fill"></i>
+                                </button>
+                              </div>
+                              <Link href="/product/list">
+                                View more &gt;&gt;
+                              </Link>
+                            </>
+                          ) : (
+                            <>
+                              <Stars />
+                              <p className="card-text">Helei Wahoo</p>
+                              <p className="card-text type-text h-now">
+                                男士防寒衣
+                              </p>
+                              <span className="h-currency bold note-text">
+                                NT$24,000
+                              </span>
+                              <br />
+                              <p className="h-currency bold text-decoration-line-through type-text">
+                                NT$28,000
+                              </p>
+                            </>
+                          )}
                         </div>
                       </div>
                     </div>
 
                     <div className="col">
-                      <div className="card w-350 border-radius f-16">
-                        <img
-                          src="/images/product/list/1-1.webp"
-                          className="card-img-top"
-                          alt="..."
-                        />
+                      <div
+                        className="card w-350 border-radius"
+                        onMouseEnter={handleMouseEnter}
+                        onMouseLeave={handleMouseLeave}
+                      >
                         <div className="card-body no-space-x">
-                          <Stars />
-                          {/* <p className="card-text text-primary">新品上市</p> */}
-                          <p className="card-text">Helei Wahoo</p>
-                          <p className="card-text type-text">男士防寒衣</p>
-                          <span className="h-currency bold note-text">
-                            NT$24,000
-                          </span>
-                          <br />
-                          <p className="h-currency  bold h-now text-decoration-line-through">
-                            NT$28,000
-                          </p>
-                          <div className="bi-icon">
-                            {/* <i className="bi bi-suit-heart"></i> */}
-                            <i className="bi bi-person-heart"></i>
-                            {/* <i className="bi bi-bookmark-heart"></i> */}
-                            {/* <i className="bi bi-cart4"></i> */}
-                            <i className="bi bi-cart-plus-fill"></i>
-                          </div>
+                          <img
+                            src="/images/product/test/20/1-1.webp"
+                            alt="..."
+                            style={{
+                              marginTop: isHovered ? '0' : '-15px',
+                            }}
+                          />
+                          {isHovered ? (
+                            <>
+                              <div className="bi-icon">
+                                <button
+                                  className="btn mouse-add p-2"
+                                  variant="light"
+                                >
+                                  <i className="bi bi-person-heart"></i>
+                                </button>
+                                <button
+                                  className="btn mouse-add p-2"
+                                  variant="light"
+                                >
+                                  <i className="bi bi-cart-plus-fill"></i>
+                                </button>
+                              </div>
+                              <Link href="/product/list">
+                                View more &gt;&gt;
+                              </Link>
+                            </>
+                          ) : (
+                            <>
+                              <Stars />
+                              <p className="card-text">Helei Wahoo</p>
+                              <p className="card-text type-text h-now">
+                                男士防寒衣
+                              </p>
+                              <span className="h-currency bold note-text">
+                                NT$24,000
+                              </span>
+                              <br />
+                              <p className="h-currency bold text-decoration-line-through type-text">
+                                NT$28,000
+                              </p>
+                            </>
+                          )}
                         </div>
                       </div>
                     </div>
 
                     <div className="col">
-                      <div className="card w-350 border-radius f-16">
-                        <img
-                          src="/images/product/list/1-1.webp"
-                          className="card-img-top"
-                          alt="..."
-                        />
+                      <div
+                        className="card w-350 border-radius"
+                        onMouseEnter={handleMouseEnter}
+                        onMouseLeave={handleMouseLeave}
+                      >
                         <div className="card-body no-space-x">
-                          <Stars />
-                          {/* <p className="card-text text-primary">新品上市</p> */}
-                          <p className="card-text">Helei Wahoo</p>
-                          <p className="card-text type-text">男士防寒衣</p>
-                          <span className="h-currency bold note-text">
-                            NT$24,000
-                          </span>
-                          <br />
-                          <p className="h-currency  bold h-now text-decoration-line-through">
-                            NT$28,000
-                          </p>
-                          <div className="bi-icon">
-                            {/* <i className="bi bi-suit-heart"></i> */}
-                            <i className="bi bi-person-heart"></i>
-                            {/* <i className="bi bi-bookmark-heart"></i> */}
-                            {/* <i className="bi bi-cart4"></i> */}
-                            <i className="bi bi-cart-plus-fill"></i>
-                          </div>
+                          <img
+                            src="/images/product/test/20/1-1.webp"
+                            alt="..."
+                            style={{
+                              marginTop: isHovered ? '0' : '-15px',
+                            }}
+                          />
+                          {isHovered ? (
+                            <>
+                              <div className="bi-icon">
+                                <button
+                                  className="btn mouse-add p-2"
+                                  variant="light"
+                                >
+                                  <i className="bi bi-person-heart"></i>
+                                </button>
+                                <button
+                                  className="btn mouse-add p-2"
+                                  variant="light"
+                                >
+                                  <i className="bi bi-cart-plus-fill"></i>
+                                </button>
+                              </div>
+                              <Link href="/product/list">
+                                View more &gt;&gt;
+                              </Link>
+                            </>
+                          ) : (
+                            <>
+                              <Stars />
+                              <p className="card-text">Helei Wahoo</p>
+                              <p className="card-text type-text h-now">
+                                男士防寒衣
+                              </p>
+                              <span className="h-currency bold note-text">
+                                NT$24,000
+                              </span>
+                              <br />
+                              <p className="h-currency bold text-decoration-line-through type-text">
+                                NT$28,000
+                              </p>
+                            </>
+                          )}
                         </div>
                       </div>
                     </div>
 
                     <div className="col">
-                      <div className="card w-350 border-radius f-16">
-                        <img
-                          src="/images/product/list/1-1.webp"
-                          className="card-img-top"
-                          alt="..."
-                        />
+                      <div
+                        className="card w-350 border-radius"
+                        onMouseEnter={handleMouseEnter}
+                        onMouseLeave={handleMouseLeave}
+                      >
                         <div className="card-body no-space-x">
-                          <Stars />
-                          {/* <p className="card-text text-primary">新品上市</p> */}
-                          <p className="card-text">Helei Wahoo</p>
-                          <p className="card-text type-text">男士防寒衣</p>
-                          <span className="h-currency bold note-text">
-                            NT$24,000
-                          </span>
-                          <br />
-                          <p className="h-currency  bold h-now text-decoration-line-through">
-                            NT$28,000
-                          </p>
-                          <div className="bi-icon">
-                            {/* <i className="bi bi-suit-heart"></i> */}
-                            <i className="bi bi-person-heart"></i>
-                            {/* <i className="bi bi-bookmark-heart"></i> */}
-                            {/* <i className="bi bi-cart4"></i> */}
-                            <i className="bi bi-cart-plus-fill"></i>
-                          </div>
+                          <img
+                            src="/images/product/test/20/1-1.webp"
+                            alt="..."
+                            style={{
+                              marginTop: isHovered ? '0' : '-15px',
+                            }}
+                          />
+                          {isHovered ? (
+                            <>
+                              <div className="bi-icon">
+                                <button
+                                  className="btn mouse-add p-2"
+                                  variant="light"
+                                >
+                                  <i className="bi bi-person-heart"></i>
+                                </button>
+                                <button
+                                  className="btn mouse-add p-2"
+                                  variant="light"
+                                >
+                                  <i className="bi bi-cart-plus-fill"></i>
+                                </button>
+                              </div>
+                              <Link href="/product/list">
+                                View more &gt;&gt;
+                              </Link>
+                            </>
+                          ) : (
+                            <>
+                              <Stars />
+                              <p className="card-text">Helei Wahoo</p>
+                              <p className="card-text type-text h-now">
+                                男士防寒衣
+                              </p>
+                              <span className="h-currency bold note-text">
+                                NT$24,000
+                              </span>
+                              <br />
+                              <p className="h-currency bold text-decoration-line-through type-text">
+                                NT$28,000
+                              </p>
+                            </>
+                          )}
                         </div>
                       </div>
                     </div>
 
                     <div className="col">
-                      <div className="card w-350 border-radius f-16">
-                        <img
-                          src="/images/product/list/1-1.webp"
-                          className="card-img-top"
-                          alt="..."
-                        />
+                      <div
+                        className="card w-350 border-radius"
+                        onMouseEnter={handleMouseEnter}
+                        onMouseLeave={handleMouseLeave}
+                      >
                         <div className="card-body no-space-x">
-                          <Stars />
-                          {/* <p className="card-text text-primary">新品上市</p> */}
-                          <p className="card-text">Helei Wahoo</p>
-                          <p className="card-text type-text">男士防寒衣</p>
-                          <span className="h-currency bold note-text">
-                            NT$24,000
-                          </span>
-                          <br />
-                          <p className="h-currency  bold h-now text-decoration-line-through">
-                            NT$28,000
-                          </p>
-                          <div className="bi-icon">
-                            {/* <i className="bi bi-suit-heart"></i> */}
-                            <i className="bi bi-person-heart"></i>
-                            {/* <i className="bi bi-bookmark-heart"></i> */}
-                            {/* <i className="bi bi-cart4"></i> */}
-                            <i className="bi bi-cart-plus-fill"></i>
-                          </div>
+                          <img
+                            src="/images/product/test/20/1-1.webp"
+                            alt="..."
+                            style={{
+                              marginTop: isHovered ? '0' : '-15px',
+                            }}
+                          />
+                          {isHovered ? (
+                            <>
+                              <div className="bi-icon">
+                                <button
+                                  className="btn mouse-add p-2"
+                                  variant="light"
+                                >
+                                  <i className="bi bi-person-heart"></i>
+                                </button>
+                                <button
+                                  className="btn mouse-add p-2"
+                                  variant="light"
+                                >
+                                  <i className="bi bi-cart-plus-fill"></i>
+                                </button>
+                              </div>
+                              <Link href="/product/list">
+                                View more &gt;&gt;
+                              </Link>
+                            </>
+                          ) : (
+                            <>
+                              <Stars />
+                              <p className="card-text">Helei Wahoo</p>
+                              <p className="card-text type-text h-now">
+                                男士防寒衣
+                              </p>
+                              <span className="h-currency bold note-text">
+                                NT$24,000
+                              </span>
+                              <br />
+                              <p className="h-currency bold text-decoration-line-through type-text">
+                                NT$28,000
+                              </p>
+                            </>
+                          )}
                         </div>
                       </div>
                     </div>
 
                     <div className="col">
-                      <div className="card w-350 border-radius f-16">
-                        <img
-                          src="/images/product/list/1-1.webp"
-                          className="card-img-top"
-                          alt="..."
-                        />
+                      <div
+                        className="card w-350 border-radius"
+                        onMouseEnter={handleMouseEnter}
+                        onMouseLeave={handleMouseLeave}
+                      >
                         <div className="card-body no-space-x">
-                          <Stars />
-                          {/* <p className="card-text text-primary">新品上市</p> */}
-                          <p className="card-text">Helei Wahoo</p>
-                          <p className="card-text type-text">男士防寒衣</p>
-                          <span className="h-currency bold note-text">
-                            NT$24,000
-                          </span>
-                          <br />
-                          <p className="h-currency  bold h-now text-decoration-line-through">
-                            NT$28,000
-                          </p>
-                          <div className="bi-icon">
-                            {/* <i className="bi bi-suit-heart"></i> */}
-                            <i className="bi bi-person-heart"></i>
-                            {/* <i className="bi bi-bookmark-heart"></i> */}
-                            {/* <i className="bi bi-cart4"></i> */}
-                            <i className="bi bi-cart-plus-fill"></i>
-                          </div>
+                          <img
+                            src="/images/product/test/20/1-1.webp"
+                            alt="..."
+                            style={{
+                              marginTop: isHovered ? '0' : '-15px',
+                            }}
+                          />
+                          {isHovered ? (
+                            <>
+                              <div className="bi-icon">
+                                <button
+                                  className="btn mouse-add p-2"
+                                  variant="light"
+                                >
+                                  <i className="bi bi-person-heart"></i>
+                                </button>
+                                <button
+                                  className="btn mouse-add p-2"
+                                  variant="light"
+                                >
+                                  <i className="bi bi-cart-plus-fill"></i>
+                                </button>
+                              </div>
+                              <Link href="/product/list">
+                                View more &gt;&gt;
+                              </Link>
+                            </>
+                          ) : (
+                            <>
+                              <Stars />
+                              <p className="card-text">Helei Wahoo</p>
+                              <p className="card-text type-text h-now">
+                                男士防寒衣
+                              </p>
+                              <span className="h-currency bold note-text">
+                                NT$24,000
+                              </span>
+                              <br />
+                              <p className="h-currency bold text-decoration-line-through type-text">
+                                NT$28,000
+                              </p>
+                            </>
+                          )}
                         </div>
                       </div>
                     </div>
 
                     <div className="col">
-                      <div className="card w-350 border-radius f-16">
-                        <img
-                          src="/images/product/list/1-1.webp"
-                          className="card-img-top"
-                          alt="..."
-                        />
+                      <div
+                        className="card w-350 border-radius"
+                        onMouseEnter={handleMouseEnter}
+                        onMouseLeave={handleMouseLeave}
+                      >
                         <div className="card-body no-space-x">
-                          <Stars />
-                          {/* <p className="card-text text-primary">新品上市</p> */}
-                          <p className="card-text">Helei Wahoo</p>
-                          <p className="card-text type-text">男士防寒衣</p>
-                          <span className="h-currency bold note-text">
-                            NT$24,000
-                          </span>
-                          <br />
-                          <p className="h-currency  bold h-now text-decoration-line-through">
-                            NT$28,000
-                          </p>
-                          <div className="bi-icon">
-                            {/* <i className="bi bi-suit-heart"></i> */}
-                            <i className="bi bi-person-heart"></i>
-                            {/* <i className="bi bi-bookmark-heart"></i> */}
-                            {/* <i className="bi bi-cart4"></i> */}
-                            <i className="bi bi-cart-plus-fill"></i>
-                          </div>
+                          <img
+                            src="/images/product/test/20/1-1.webp"
+                            alt="..."
+                            style={{
+                              marginTop: isHovered ? '0' : '-15px',
+                            }}
+                          />
+                          {isHovered ? (
+                            <>
+                              <div className="bi-icon">
+                                <button
+                                  className="btn mouse-add p-2"
+                                  variant="light"
+                                >
+                                  <i className="bi bi-person-heart"></i>
+                                </button>
+                                <button
+                                  className="btn mouse-add p-2"
+                                  variant="light"
+                                >
+                                  <i className="bi bi-cart-plus-fill"></i>
+                                </button>
+                              </div>
+                              <Link href="/product/list">
+                                View more &gt;&gt;
+                              </Link>
+                            </>
+                          ) : (
+                            <>
+                              <Stars />
+                              <p className="card-text">Helei Wahoo</p>
+                              <p className="card-text type-text h-now">
+                                男士防寒衣
+                              </p>
+                              <span className="h-currency bold note-text">
+                                NT$24,000
+                              </span>
+                              <br />
+                              <p className="h-currency bold text-decoration-line-through type-text">
+                                NT$28,000
+                              </p>
+                            </>
+                          )}
                         </div>
                       </div>
                     </div>
-                    {/* 9結束 */}
-                    <Pagination />
                   </div>
                 </div>
+
+                <Pagination />
               </div>
             </div>
           </div>
@@ -601,25 +822,20 @@ export default function List() {
           }
         }
 
-        header {
-          background-size: cover;
-          background-position: center;
-          width: 100%;
-          height: 600px;
-          letter-spacing: 2px;
-        }
-
-        .bi-icon {
+        .mouse-add {
+          margin: 10px 5px;
+          width: 60px;
+          height: 60px;
+          border-radius: 50%;
+          background-color: #f5f5f57f;
           font-size: 20px;
-        }
-        .navigation {
-          display: flex;
-          justify-content: flex-end;
+          &.mouse-add:hover {
+            background-color: #265475;
+            color: #fff;
+            border: none;
+          }
         }
 
-         {
-          /* move */
-        }
         #wrapper {
           overflow-x: hidden;
         }
@@ -686,7 +902,6 @@ export default function List() {
         }
 
         .w-350 {
-          // width: 360px;
           width: 100%;
         }
 
@@ -696,7 +911,7 @@ export default function List() {
 
         .card-text {
           font-weight: 500;
-          margin-bottom: 0.15rem;
+          margin-bottom: 0.1rem;
         }
 
         .note-text {

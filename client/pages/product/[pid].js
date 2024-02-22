@@ -2,7 +2,7 @@ import { useState } from 'react'
 
 import Stars from '@/components/product/star/star'
 import Carousel from '@/components/product/carousel'
-import ProductRecommond from '@/components/product/product-recommond'
+import ProductRecommond from '@/components/product/detail/product-recommond'
 
 export default function Detail() {
   const [isSwitchOn, setIsSwitchOn] = useState(false)
