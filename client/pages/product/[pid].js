@@ -3,6 +3,7 @@ import { useState } from 'react'
 import Stars from '@/components/product/star/star'
 import Carousel from '@/components/product/carousel'
 import ProductRecommond from '@/components/product/detail/product-recommond'
+import Link from 'next/link'
 
 export default function Detail() {
   const [isSwitchOn, setIsSwitchOn] = useState(false)
@@ -22,13 +23,21 @@ export default function Detail() {
         {/* 麵包屑 */}
         <div className="my-3 d-flex">
           <div className="d-flex align-items-center">
-            <div className="p-2">
+            <Link
+              href="/product/list"
+              className="p-2"
+              style={{ color: '#303132' }}
+            >
               <i class="bi bi-droplet-half p-1"></i>品牌
-            </div>
+            </Link>
             <div className="p-1">&gt;</div>
-            <div className="p-2">
+            <Link
+              href="/product/list"
+              className="p-2"
+              style={{ color: '#303132' }}
+            >
               <i className="bi bi-droplet p-1"></i>商品種類
-            </div>
+            </Link>
           </div>
         </div>
 

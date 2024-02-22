@@ -49,13 +49,21 @@ export default function List() {
         {/* 麵包屑 */}
         <div className="my-3 d-flex">
           <div className="d-flex align-items-center">
-            <div className="p-2">
+            <Link
+              href="/product/list"
+              className="p-2"
+              style={{ color: '#303132' }}
+            >
               <i class="bi bi-droplet-half p-1"></i>品牌
-            </div>
+            </Link>
             <div className="p-1">&gt;</div>
-            <div className="p-2">
+            <Link
+              href="/product/list"
+              className="p-2"
+              style={{ color: '#303132' }}
+            >
               <i className="bi bi-droplet p-1"></i>商品種類
-            </div>
+            </Link>
           </div>
         </div>
 
@@ -72,238 +80,290 @@ export default function List() {
             <div className="d-flex" id="wrapper">
               <div className="bg-white me-3" id="sidebar-wrapper">
                 <div className="scroll">
-                  <div className="cats">
-                    {/* 搜尋 */}
-                    <Search />
-                    <div>
-                      <button type="button" className="btn">
-                        所有商品
-                      </button>
-                    </div>
+                  {/* 搜尋 */}
+                  <Search />
 
-                    {/* 篩選 filter */}
-                    <div
-                      className="accordion accordion-flush"
-                      id="accordionFlushExample"
-                    >
-                      <div className="accordion-item">
-                        <h2 className="accordion-header">
-                          <button
-                            className="accordion-button collapsed"
-                            type="button"
-                            data-bs-toggle="collapse"
-                            aria-expanded="false"
-                            data-bs-target="#panelsStayOpen-collapseOne"
-                            aria-controls="panelsStayOpen-collapseOne"
-                          >
-                            性別
-                          </button>
-                        </h2>
-                        <div
-                          id="panelsStayOpen-collapseOne"
-                          className="accordion-collapse collapse"
+                  <div>
+                    <button type="button" className="btn my-1 all-product">
+                      所有商品
+                    </button>
+                  </div>
+
+                  {/* 篩選 filter */}
+                  <div
+                    className="accordion accordion-flush"
+                    id="accordionFlushExample"
+                  >
+                    {/* 品牌 */}
+                    <div className="accordion-item">
+                      <h2 className="accordion-header">
+                        <button
+                          className="accordion-button collapsed"
+                          type="button"
+                          data-bs-toggle="collapse"
+                          aria-expanded="false"
+                          data-bs-target="#panelsStayOpen-collapseOne"
+                          aria-controls="panelsStayOpen-collapseOne"
                         >
-                          <div className="accordion-body px-1">
-                            <div className="form-check">
-                              <input
-                                className="form-check-input"
-                                type="checkbox"
-                                value=""
-                                id="flexCheckDefault"
-                              />
-                              <label
-                                className="form-check-label"
-                                htmlFor="flexCheckDefault"
-                              >
-                                男性
-                              </label>
-                            </div>
-                            <div className="form-check">
-                              <input
-                                className="form-check-input"
-                                type="checkbox"
-                                value=""
-                                id="flexCheckChecked"
-                              />
-                              <label
-                                className="form-check-label"
-                                htmlFor="flexCheckChecked"
-                              >
-                                女性
-                              </label>
-                            </div>
-                            <div className="form-check">
-                              <input
-                                className="form-check-input"
-                                type="checkbox"
-                                value=""
-                                id="flexCheckChecked"
-                              />
-                              <label
-                                className="form-check-label"
-                                htmlFor="flexCheckChecked"
-                              >
-                                中性
-                              </label>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="accordion-item">
-                        <h2 className="accordion-header">
-                          <button
-                            className="accordion-button collapsed"
-                            type="button"
-                            data-bs-toggle="collapse"
-                            data-bs-target="#panelsStayOpen-collapseTwo"
-                            aria-expanded="false"
-                            aria-controls="panelsStayOpen-collapseTwo"
-                          >
-                            顏色
-                          </button>
-                        </h2>
-                        <div
-                          id="panelsStayOpen-collapseTwo"
-                          className="accordion-collapse collapse"
-                        >
-                          <div className="accordion-body px-1">
-                            <div className="d-flex flex-row justify-content-around mb-2">
-                              <div className="p-2">
-                                <div className="d-flex flex-column">
-                                  <div>
-                                    <button
-                                      type="button"
-                                      className="btn btn-primary btn-circle"
-                                    ></button>
-                                  </div>
-                                  <div className="color-f">紫色</div>
-                                </div>
-                              </div>
-                              <div className="p-2">
-                                <div className="d-flex flex-column">
-                                  <div>
-                                    <button
-                                      type="button"
-                                      className="btn btn-primary btn-circle"
-                                    ></button>
-                                  </div>
-                                  <div className="color-f">紫色</div>
-                                </div>
-                              </div>
-                              <div className="p-2">
-                                <div className="d-flex flex-column">
-                                  <div>
-                                    <button
-                                      type="button"
-                                      className="btn btn-primary btn-circle"
-                                    ></button>
-                                  </div>
-                                  <div className="color-f">紫色</div>
-                                </div>
-                              </div>
-                            </div>
-
-                            <div className="d-flex flex-row justify-content-around mb-2">
-                              <div className="p-2">
-                                <div className="d-flex flex-column">
-                                  <div>
-                                    <button
-                                      type="button"
-                                      className="btn btn-primary btn-circle"
-                                    ></button>
-                                  </div>
-                                  <div className="color-f">紫色</div>
-                                </div>
-                              </div>
-                              <div className="p-2">
-                                <div className="d-flex flex-column">
-                                  <div>
-                                    <button
-                                      type="button"
-                                      className="btn btn-primary btn-circle"
-                                    ></button>
-                                  </div>
-                                  <div className="color-f">紫色</div>
-                                </div>
-                              </div>
-                              <div className="p-2">
-                                <div className="d-flex flex-column">
-                                  <div>
-                                    <button
-                                      type="button"
-                                      className="btn btn-primary btn-circle"
-                                    ></button>
-                                  </div>
-                                  <div className="color-f">紫色</div>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className="accordion-item">
-                        <h2 className="accordion-header">
-                          <button
-                            className="accordion-button collapsed"
-                            type="button"
-                            data-bs-toggle="collapse"
-                            data-bs-target="#panelsStayOpen-collapseThree"
-                            aria-expanded="false"
-                            aria-controls="panelsStayOpen-collapseThree"
-                          >
-                            價格範圍
-                          </button>
-                        </h2>
-                      </div>
-
+                          品牌
+                        </button>
+                      </h2>
                       <div
-                        id="panelsStayOpen-collapseThree"
+                        id="panelsStayOpen-collapseOne"
                         className="accordion-collapse collapse"
                       >
                         <div className="accordion-body px-1">
                           <div className="form-check">
-                            <input
-                              className="form-check-input"
-                              type="checkbox"
-                              value=""
-                              id="flexCheckDefault"
-                            />
-                            <label
+                            <Link
+                              href="/product/list"
                               className="form-check-label"
                               htmlFor="flexCheckDefault"
+                              style={{ color: '#303132' }}
                             >
-                              $1,500以下
-                            </label>
+                              HeleiWaho
+                            </Link>
                           </div>
+
                           <div className="form-check">
-                            <input
-                              className="form-check-input"
-                              type="checkbox"
-                              value=""
-                              id="flexCheckChecked"
-                            />
-                            <label
+                            <Link
+                              href="/product/list"
                               className="form-check-label"
-                              htmlFor="flexCheckChecked"
+                              htmlFor="flexCheckDefault"
+                              style={{ color: '#303132' }}
                             >
-                              $1,500 - $3,000
-                            </label>
+                              OceanMax
+                            </Link>
                           </div>
+
                           <div className="form-check">
-                            <input
-                              className="form-check-input"
-                              type="checkbox"
-                              value=""
-                              id="flexCheckChecked"
-                            />
-                            <label
+                            <Link
+                              href="/product/list"
                               className="form-check-label"
-                              htmlFor="flexCheckChecked"
+                              htmlFor="flexCheckDefault"
+                              style={{ color: '#303132' }}
                             >
-                              $3,001 - $5,999
-                            </label>
+                              MYSTIC
+                            </Link>
                           </div>
+
+                          <div className="form-check">
+                            <Link
+                              href="/product/list"
+                              className="form-check-label"
+                              htmlFor="flexCheckDefault"
+                              style={{ color: '#303132' }}
+                            >
+                              ADISI
+                            </Link>
+                          </div>
+
+                          <div className="form-check">
+                            <Link
+                              href="/product/list"
+                              className="form-check-label"
+                              htmlFor="flexCheckDefault"
+                              style={{ color: '#303132' }}
+                            >
+                              AROPEC
+                            </Link>
+                          </div>
+
+                          <div className="form-check">
+                            <Link
+                              href="/product/list"
+                              className="form-check-label"
+                              htmlFor="flexCheckDefault"
+                              style={{ color: '#303132' }}
+                            >
+                              PrincetonTec
+                            </Link>
+                          </div>
+
+                          <div className="form-check">
+                            <Link
+                              href="/product/list"
+                              className="form-check-label"
+                              htmlFor="flexCheckDefault"
+                              style={{ color: '#303132' }}
+                            >
+                              Unidive
+                            </Link>
+                          </div>
+
+                          <div className="form-check">
+                            <Link
+                              href="/product/list"
+                              className="form-check-label"
+                              htmlFor="flexCheckDefault"
+                              style={{ color: '#303132' }}
+                            >
+                              EXQUIS
+                            </Link>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* 商品類別 */}
+                    <div className="accordion-item">
+                      <h2 className="accordion-header">
+                        <button
+                          className="accordion-button collapsed"
+                          type="button"
+                          data-bs-toggle="collapse"
+                          aria-expanded="false"
+                          data-bs-target="#panelsStayOpen-collapseOne"
+                          aria-controls="panelsStayOpen-collapseOne"
+                        >
+                          商品類別
+                        </button>
+                      </h2>
+                      <div
+                        id="panelsStayOpen-collapseOne"
+                        className="accordion-collapse collapse"
+                      >
+                        <div className="accordion-body px-1">
+                          <div className="form-check">
+                            <Link
+                              href="/product/list"
+                              className="form-check-label"
+                              htmlFor="flexCheckDefault"
+                              style={{ color: '#303132' }}
+                            >
+                              防寒衣
+                            </Link>
+                          </div>
+
+                          <div className="form-check">
+                            <Link
+                              href="/product/list"
+                              className="form-check-label"
+                              htmlFor="flexCheckDefault"
+                              style={{ color: '#303132' }}
+                            >
+                              面鏡
+                            </Link>
+                          </div>
+
+                          <div className="form-check">
+                            <Link
+                              href="/product/list"
+                              className="form-check-label"
+                              htmlFor="flexCheckDefault"
+                              style={{ color: '#303132' }}
+                            >
+                              呼吸管
+                            </Link>
+                          </div>
+
+                          <div className="form-check">
+                            <Link
+                              href="/product/list"
+                              className="form-check-label"
+                              htmlFor="flexCheckDefault"
+                              style={{ color: '#303132' }}
+                            >
+                              蛙鞋
+                            </Link>
+                          </div>
+
+                          <div className="form-check">
+                            <Link
+                              href="/product/list"
+                              className="form-check-label"
+                              htmlFor="flexCheckDefault"
+                              style={{ color: '#303132' }}
+                            >
+                              手套&襪套
+                            </Link>
+                          </div>
+
+                          <div className="form-check">
+                            <Link
+                              href="/product/list"
+                              className="form-check-label"
+                              htmlFor="flexCheckDefault"
+                              style={{ color: '#303132' }}
+                            >
+                              配件
+                            </Link>
+                          </div>
+
+                          <div className="form-check">
+                            <Link
+                              href="/product/list"
+                              className="form-check-label"
+                              htmlFor="flexCheckDefault"
+                              style={{ color: '#303132' }}
+                            >
+                              潛水裝備{' '}
+                            </Link>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* 價格篩選 */}
+                    <div className="accordion-item">
+                      <h2 className="accordion-header">
+                        <button
+                          className="accordion-button collapsed"
+                          type="button"
+                          data-bs-toggle="collapse"
+                          data-bs-target="#panelsStayOpen-collapseThree"
+                          aria-expanded="false"
+                          aria-controls="panelsStayOpen-collapseThree"
+                        >
+                          價格篩選
+                        </button>
+                      </h2>
+                    </div>
+                    <div
+                      id="panelsStayOpen-collapseThree"
+                      className="accordion-collapse collapse"
+                    >
+                      <div className="accordion-body px-1">
+                        <div className="form-check">
+                          <input
+                            className="form-check-input"
+                            type="checkbox"
+                            value=""
+                            id="flexCheckDefault"
+                          />
+                          <label
+                            className="form-check-label"
+                            htmlFor="flexCheckDefault"
+                          >
+                            $5,000以下
+                          </label>
+                        </div>
+                        <div className="form-check">
+                          <input
+                            className="form-check-input"
+                            type="checkbox"
+                            value=""
+                            id="flexCheckChecked"
+                          />
+                          <label
+                            className="form-check-label"
+                            htmlFor="flexCheckChecked"
+                          >
+                            $5,001 - $9,999
+                          </label>
+                        </div>
+                        <div className="form-check">
+                          <input
+                            className="form-check-input"
+                            type="checkbox"
+                            value=""
+                            id="flexCheckChecked"
+                          />
+                          <label
+                            className="form-check-label"
+                            htmlFor="flexCheckChecked"
+                          >
+                            $10,000
+                          </label>
                         </div>
                       </div>
                     </div>
@@ -829,6 +889,7 @@ export default function List() {
           border-radius: 50%;
           background-color: #f5f5f57f;
           font-size: 20px;
+          background-color: transparent;
           &.mouse-add:hover {
             background-color: #265475;
             color: #fff;
@@ -916,11 +977,13 @@ export default function List() {
 
         .note-text {
           color: var(--red, #dc5151);
+          font-size: 14.5px;
         }
 
         .type-text {
           color: var(--gray, #858585);
           font-weight: normal;
+          font-size: 12.5px;
         }
 
         /* override by css variable */
@@ -958,11 +1021,6 @@ export default function List() {
           padding: 10px;
         }
 
-        .cats {
-          border-bottom: 0.05rem solid gray;
-          min-height: 200px;
-        }
-
         .color-f {
           font-size: 10px;
           text-align: center;
@@ -981,9 +1039,15 @@ export default function List() {
           box-shadow: 0 0 1px rgba(255, 255, 255, 0.5);
         }
 
+        .all-product:hover {
+          background-color: #ff9720;
+          color: #fff;
+          border: none;
+        }
+
         .h-now {
           font-size: 16px;
-          color: rgb(17, 17, 17);
+          color: #303132;
           font-weight: 400;
         }
 
