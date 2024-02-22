@@ -1,24 +1,29 @@
 @import '@/styles/variable.scss';
 
-.navWeb {
-  background-color: $primary;
-  padding-block: 12px;
-  padding-inline: 40px;
-  .listIcon {
-    display: none;
-    color: #fff;
-    background-color: transparent; //移除button顏色
-    border: 0;
+.navBar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 99;
+  .navWeb {
+    padding-block: 12px;
+    padding-inline: 40px;
+    .listIcon {
+      display: none;
+      color: #fff;
+      background-color: transparent; //移除button顏色
+      border: 0;
+    }
   }
-}
 
-.navRwd {
-  display: none;
+  .navRwd {
+    display: none;
+  }
 }
 
 @media screen and (max-width: 768px) {
   .navBar {
-    position: relative;
     .navWeb {
       padding-block: 0px;
       padding-inline: 0px;

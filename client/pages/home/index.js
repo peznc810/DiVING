@@ -17,7 +17,6 @@ export default function Index() {
       <News />
       <About />
       <Products />
-      <Footer />
     </>
   )
 }

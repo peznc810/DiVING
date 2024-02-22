@@ -7,8 +7,6 @@ export default function HomeHeader() {
   return (
     <>
       <header className={` ${styles.homeHeader}`}>
-        {/* <Navbar2 /> */}
-        <Navbar />
         <div className={`${styles.homeContainer}`}>
           <h2>
             Go
