@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
-// import Navbar from '@/components/layout/navbar'
+import Link from 'next/link'
+
 import CartStep from '@/components/cart/cart-step'
 
 export default function Home() {
@@ -30,18 +31,16 @@ export default function Home() {
             </tr>
           </thead>
           <tbody>
-            {cartData &&
-              cartData.map((v, i) => {
+            {cartData ? (
+              cartData.map((item, i) => {
                 const {
                   lessonName,
                   lessonPrice,
-                  lesson_id,
                   lesson_num,
                   productName,
                   productPrice,
-                  product_id,
                   product_num,
-                } = v
+                } = item
                 let price =
                   productPrice * product_num || lessonPrice * lesson_num
                 totalPrice += price
@@ -70,7 +69,10 @@ export default function Home() {
                     <td>NT${price}</td>
                   </tr>
                 )
-              })}
+              })
+            ) : (
+              <></>
+            )}
             {/* <tr>
               <td>
                 <div className="row">
@@ -195,9 +197,11 @@ export default function Home() {
           </div>
         </div>
         <div className="text-end my-3">
-          <button type="button" className="btn next-step-btn text-white px-5">
-            <h5 className="fw-bold py-1 px-3">提交訂單</h5>
-          </button>
+          <Link href="./step3">
+            <button type="button" className="btn next-step-btn text-white px-5">
+              <h5 className="fw-bold py-1 px-3">提交訂單</h5>
+            </button>
+          </Link>
         </div>
       </div>
       <style jsx>{`

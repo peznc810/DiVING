@@ -1,5 +1,6 @@
 import React from 'react'
-// import Navbar from '@/components/layout/navbar'
+import Link from 'next/link'
+
 import CartStep from '@/components/cart/cart-step'
 
 import orderDetailData from '@/data/cart/order_detail.json'
@@ -32,8 +33,6 @@ let data2 = data.map((item) => {
   return item
 })
 
-console.log(data2)
-
 export default function Home() {
   let totalPrice = 0
   return (
@@ -56,11 +55,9 @@ export default function Home() {
           const {
             lessonName,
             lessonPrice,
-            lesson_id,
             lesson_num,
             productName,
             productPrice,
-            product_id,
             product_num,
           } = item
           let price = productPrice * product_num || lessonPrice * lesson_num
@@ -84,9 +81,11 @@ export default function Home() {
           <p className="col fw-bold text-end">NT$ {totalPrice}</p>
         </div>
         <div className="text-end my-3">
-          <button type="button" className="btn next-step-btn text-white px-5">
-            <h5 className="fw-bold py-1 px-3">返回商場</h5>
-          </button>
+          <Link href="../">
+            <button type="button" className="btn next-step-btn text-white px-5">
+              <h5 className="fw-bold py-1 px-3">返回商場</h5>
+            </button>
+          </Link>
         </div>
       </div>
       <style jsx>{`

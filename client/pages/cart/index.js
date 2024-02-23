@@ -1,44 +1,56 @@
-import React, { useEffect } from 'react'
-// import Navbar from '@/components/layout/navbar'
-import { FaShoppingCart } from 'react-icons/fa'
-import { FaRegTrashAlt } from 'react-icons/fa'
+import React, { useEffect, useState } from 'react'
+import Link from 'next/link'
+
+import { FaShoppingCart, FaRegTrashAlt } from 'react-icons/fa'
 import CartStep from '@/components/cart/cart-step'
 
-import cartData from '@/data/cart/cart.json'
-import productData from '@/data/cart/product.json'
-import lessontData from '@/data/cart/lesson.json'
-
-let data = cartData.map((item) => {
-  for (let i = 0; i < lessontData.length; i++) {
-    if (item.lesson_id === lessontData[i].id) {
-      item = {
-        ...item,
-        lessonName: lessontData[i].name,
-        lessonPrice: lessontData[i].price,
-      }
-    }
-  }
-  for (let i = 0; i < productData.length; i++) {
-    if (item.product_id === productData[i].id) {
-      item = {
-        ...item,
-        productName: productData[i].name,
-        productPrice: productData[i].price,
-      }
-    }
-  }
-  return item
-})
-
-console.log(data)
-
 export default function Home() {
-  let totalPrice = 0
-  let deliveryFee = 50
-  let discount = 0
+  // let totalPrice = 0
+  const [cartData, setCartData] = useState(null)
+  const [totalPrice, setTotalPrice] = useState(0)
+  const [deliveryFee] = useState(50)
+  const [discount] = useState(0)
+
   useEffect(() => {
-    localStorage.setItem('cart', JSON.stringify(data))
-  })
+    const data = JSON.parse(localStorage.getItem('cart'))
+    setCartData(data)
+    calculateTotalPrice(data)
+  }, [])
+
+  const calculateTotalPrice = (data) => {
+    let total = 0
+    data.forEach((item) => {
+      const price =
+        item.productPrice * item.product_num ||
+        item.lessonPrice * item.lesson_num
+      total += price
+    })
+    setTotalPrice(total)
+  }
+
+  const handleIncrement = (index) => {
+    const input = document.querySelector(`.input${index}`)
+    input.value = parseInt(input.value) + 1
+    let price =
+      input.value *
+      (cartData[index].productPrice || cartData[index].lessonPrice)
+    const priceSection = document.querySelector(`.Price${index}`)
+    priceSection.innerHTML = `NT$ ${price}`
+    setTotalPrice(
+      totalPrice +
+        (cartData[index].productPrice || cartData[index].productPrice)
+    )
+  }
+
+  const handleDecrement = (index) => {
+    const input = document.querySelector(`.input${index}`)
+    input.value = parseInt(input.value) + -1
+    setTotalPrice(
+      totalPrice -
+        (cartData[index].productPrice || cartData[index].productPrice)
+    )
+  }
+
   return (
     <div className="container">
       <CartStep step={1} />
@@ -58,58 +70,77 @@ export default function Home() {
             </tr>
           </thead>
           <tbody>
-            {data.map((v, i) => {
-              const {
-                lessonName,
-                lessonPrice,
-                lesson_id,
-                lesson_num,
-                productName,
-                productPrice,
-                product_id,
-                product_num,
-              } = v
-              let price = productPrice * product_num || lessonPrice * lesson_num
-              totalPrice += price
-              return (
-                <tr key={i}>
-                  <td>
-                    <div className="row">
-                      <img />
-                      <div>
-                        <h5 className="fw-bold text-start">
-                          {productName || lessonName}
-                        </h5>
-                        <p className="imperceptible text-start">商品細節</p>
+            {cartData ? (
+              cartData.map((item, i) => {
+                const a = () => {
+                  console.log('aaa')
+                  document.querySelector(`input${i}`).value =
+                    document.querySelector(`input${i}`).value + 1
+                }
+                const {
+                  lessonName,
+                  lessonPrice,
+                  lesson_num,
+                  productName,
+                  productPrice,
+                  product_num,
+                } = item
+
+                let price =
+                  productPrice * product_num || lessonPrice * lesson_num
+                return (
+                  <tr key={i}>
+                    <td>
+                      <div className="row">
+                        <img />
+                        <div>
+                          <h5 className="fw-bold text-start">
+                            {productName || lessonName}
+                          </h5>
+                          <p className="imperceptible text-start">商品細節</p>
+                        </div>
                       </div>
-                    </div>
-                  </td>
-                  <td>
-                    <h5 className="fw-bold discounted">打折後</h5>
-                    <p className="imperceptible text-decoration-line-through">
-                      {productPrice || lessonPrice}
-                    </p>
-                  </td>
-                  <td>
-                    <button type="button" className="btn btn-light">
-                      +
-                    </button>
-                    <input
-                      type="text"
-                      className="w-25 text-center"
-                      defaultValue={product_num || lesson_num}
-                    />
-                    <button type="button" className="btn btn-light">
-                      -
-                    </button>
-                  </td>
-                  <td>NT${price}</td>
-                  <td>
-                    <FaRegTrashAlt size={22} />
-                  </td>
-                </tr>
-              )
-            })}
+                    </td>
+                    <td>
+                      <h5 className="fw-bold discounted">打折後</h5>
+                      <p className="imperceptible text-decoration-line-through">
+                        {productPrice || lessonPrice}
+                      </p>
+                    </td>
+                    <td>
+                      <button
+                        type="button"
+                        className="btn btn-light"
+                        onClick={() => handleIncrement(i)}
+                      >
+                        +
+                      </button>
+                      <input
+                        type="text"
+                        className={`w-25 text-center input${i}`}
+                        defaultValue={product_num || lesson_num}
+                        // defaultValue={numArray[i]}
+                      />
+                      <button
+                        type="button"
+                        className="btn btn-light"
+                        onClick={() => handleDecrement(i)}
+                      >
+                        -
+                      </button>
+                    </td>
+                    <td>
+                      <p className={`Price${i}`}>NT${price}</p>
+                    </td>
+                    <td>
+                      <FaRegTrashAlt size={22} />
+                    </td>
+                  </tr>
+                )
+              })
+            ) : (
+              <></>
+            )}
             {/* <tr>
               <td>
                 <div className="row">
@@ -189,12 +220,14 @@ export default function Home() {
               <p>合計:</p>
               <p>NT$ {totalPrice + deliveryFee - discount}</p>
             </div>
-            <button
-              type="button"
-              className="btn next-step-btn w-100 text-white"
-            >
-              <h5 className="fw-bold py-1">前往結帳</h5>
-            </button>
+            <Link href="./cart/step2">
+              <button
+                type="button"
+                className="btn next-step-btn w-100 text-white"
+              >
+                <h5 className="fw-bold py-1">前往結帳</h5>
+              </button>
+            </Link>
           </div>
         </div>
       </div>
