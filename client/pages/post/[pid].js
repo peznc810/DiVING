@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
 import styles from '@/styles/loader/loader_ripple.module.css'
-import postData from '@/data/article/post.json'
+import postData from '@/data/post/post.json'
 
 import { Container, Card, Col, Row, Button } from 'react-bootstrap'
 
@@ -58,9 +58,7 @@ export default function Detail() {
 
       getPost(pid)
     }
-  }, [router.isReady]) //Addy說just警告
-
-  console.log('render')
+  }, [router.isReady]) //Eddy說just警告
 
   const loader = (
     <>
@@ -97,7 +95,7 @@ export default function Detail() {
   )
   return (
     <>
-      <Link href="/forum/list">回列表頁</Link>
+      <Link href="/post/list">回列表頁</Link>
       {isLoading ? loader : display}
       <hr />
     </>
