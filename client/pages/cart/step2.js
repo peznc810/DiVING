@@ -1,12 +1,20 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 // import Navbar from '@/components/layout/navbar'
 import CartStep from '@/components/cart/cart-step'
 
 export default function Home() {
+  const [cartData, setCartData] = useState(null)
+
+  useEffect(() => {
+    const data = JSON.parse(localStorage.getItem('cart'))
+    setCartData(data)
+  }, [])
+
+  let totalPrice = 0
+
   return (
     <div className="container">
-      <CartStep />
-
+      <CartStep step={2} />
       <div className="container">
         <div className="w-100 text-center section-name">
           <h5 className="span">購物車</h5>
@@ -22,7 +30,48 @@ export default function Home() {
             </tr>
           </thead>
           <tbody>
-            <tr>
+            {cartData &&
+              cartData.map((v, i) => {
+                const {
+                  lessonName,
+                  lessonPrice,
+                  lesson_id,
+                  lesson_num,
+                  productName,
+                  productPrice,
+                  product_id,
+                  product_num,
+                } = v
+                let price =
+                  productPrice * product_num || lessonPrice * lesson_num
+                totalPrice += price
+                return (
+                  <tr key={i}>
+                    <td>
+                      <div className="row">
+                        <img />
+                        <div>
+                          <h5 className="fw-bold text-start">
+                            {productName || lessonName}
+                          </h5>
+                          <p className="imperceptible text-start">商品細節</p>
+                        </div>
+                      </div>
+                    </td>
+                    <td>
+                      <h5 className="fw-bold discounted">打折後</h5>
+                      <p className="imperceptible text-decoration-line-through">
+                        {productPrice || lessonPrice}
+                      </p>
+                    </td>
+                    <td>
+                      <span>{product_num || lesson_num}</span>
+                    </td>
+                    <td>NT${price}</td>
+                  </tr>
+                )
+              })}
+            {/* <tr>
               <td>
                 <div className="row">
                   <img />
@@ -42,10 +91,10 @@ export default function Home() {
                 <span>數量</span>
               </td>
               <td>NT$XXX</td>
-            </tr>
+            </tr> */}
           </tbody>
         </table>
-        <p className="text-end fw-bold my-3">合計: NT$XXX</p>
+        <p className="text-end fw-bold my-3">合計: NT${totalPrice}</p>
       </div>
       <div className="container">
         <div className="w-100 section-name text-center">
@@ -72,17 +121,17 @@ export default function Home() {
             <div className="col-3">
               <select className="form-select">
                 <option selected>縣/市</option>
-                <option value="1">送貨地點1</option>
-                <option value="2">送貨地點2</option>
-                <option value="3">送貨地點3</option>
+                <option defaultValue="1">送貨地點1</option>
+                <option defaultValue="2">送貨地點2</option>
+                <option defaultValue="3">送貨地點3</option>
               </select>
             </div>
             <div className="col-3">
               <select className="form-select">
                 <option selected>區</option>
-                <option value="1">送貨地點1</option>
-                <option value="2">送貨地點2</option>
-                <option value="3">送貨地點3</option>
+                <option defaultValue="1">送貨地點1</option>
+                <option defaultValue="2">送貨地點2</option>
+                <option defaultValue="3">送貨地點3</option>
               </select>
             </div>
             <div className="col-6">

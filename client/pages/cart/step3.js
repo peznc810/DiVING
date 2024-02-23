@@ -2,10 +2,43 @@ import React from 'react'
 // import Navbar from '@/components/layout/navbar'
 import CartStep from '@/components/cart/cart-step'
 
+import orderDetailData from '@/data/cart/order_detail.json'
+import productData from '@/data/cart/product.json'
+import lessontData from '@/data/cart/lesson.json'
+
+let data = orderDetailData.filter((item) => {
+  return item.order_id === '1'
+})
+
+let data2 = data.map((item) => {
+  for (let i = 0; i < lessontData.length; i++) {
+    if (item.lesson_id === lessontData[i].id) {
+      item = {
+        ...item,
+        lessonName: lessontData[i].name,
+        lessonPrice: lessontData[i].price,
+      }
+    }
+  }
+  for (let i = 0; i < productData.length; i++) {
+    if (item.product_id === productData[i].id) {
+      item = {
+        ...item,
+        productName: productData[i].name,
+        productPrice: productData[i].price,
+      }
+    }
+  }
+  return item
+})
+
+console.log(data2)
+
 export default function Home() {
+  let totalPrice = 0
   return (
     <div className="container">
-      <CartStep />
+      <CartStep step={3} />
       <div className="container">
         <div className="w-100 section-name text-center">
           <h5 className="span">訂單資訊</h5>
@@ -19,25 +52,36 @@ export default function Home() {
           <p className="col">數量</p>
           <p className="col  text-end">小計</p>
         </div>
-        <div className="row">
+        {data2.map((item, i) => {
+          const {
+            lessonName,
+            lessonPrice,
+            lesson_id,
+            lesson_num,
+            productName,
+            productPrice,
+            product_id,
+            product_num,
+          } = item
+          let price = productPrice * product_num || lessonPrice * lesson_num
+          totalPrice += price
+          return (
+            <div className="row" key={i}>
+              <p className="col-6 fw-bold">{productName || lessonName}</p>
+              <p className="col">{product_num || lesson_num}</p>
+              <p className="col text-end">NT${price}</p>
+            </div>
+          )
+        })}
+        {/* <div className="row">
           <p className="col-6 fw-bold">AB123 防寒衣 黑 / 女S</p>
           <p className="col">2</p>
           <p className="col text-end">NT$24000</p>
-        </div>
-        <div className="row">
-          <p className="col-6 fw-bold">AB123 防寒衣 黑 / 女S</p>
-          <p className="col">1</p>
-          <p className="col text-end">NT$12000</p>
-        </div>
-        <div className="row">
-          <p className="col-6 fw-bold">AB123 防寒衣 黑 / 女S</p>
-          <p className="col">1</p>
-          <p className="col text-end">NT$12000</p>
-        </div>
+        </div> */}
         <hr />
         <div className="row">
           <p className="col fw-bold">合計</p>
-          <p className="col fw-bold text-end">NT$48000</p>
+          <p className="col fw-bold text-end">NT$ {totalPrice}</p>
         </div>
         <div className="text-end my-3">
           <button type="button" className="btn next-step-btn text-white px-5">

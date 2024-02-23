@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect } from 'react'
 // import Navbar from '@/components/layout/navbar'
 import { FaShoppingCart } from 'react-icons/fa'
 import { FaRegTrashAlt } from 'react-icons/fa'
@@ -8,42 +8,40 @@ import cartData from '@/data/cart/cart.json'
 import productData from '@/data/cart/product.json'
 import lessontData from '@/data/cart/lesson.json'
 
-console.log(cartData)
-
-let data = cartData.map((a, i) => {
+let data = cartData.map((item) => {
   for (let i = 0; i < lessontData.length; i++) {
-    if (a.lesson_id === lessontData[i].id) {
-      a = {
-        ...a,
+    if (item.lesson_id === lessontData[i].id) {
+      item = {
+        ...item,
         lessonName: lessontData[i].name,
         lessonPrice: lessontData[i].price,
       }
     }
   }
   for (let i = 0; i < productData.length; i++) {
-    if (a.product_id === productData[i].id) {
-      a = {
-        ...a,
+    if (item.product_id === productData[i].id) {
+      item = {
+        ...item,
         productName: productData[i].name,
         productPrice: productData[i].price,
       }
     }
   }
-  return a
+  return item
 })
 
 console.log(data)
 
-let [data2] = productData
-
-console.log(data2)
-
 export default function Home() {
-  const [num, setNum] = useState(1)
-
+  let totalPrice = 0
+  let deliveryFee = 50
+  let discount = 0
+  useEffect(() => {
+    localStorage.setItem('cart', JSON.stringify(data))
+  })
   return (
     <div className="container">
-      <CartStep />
+      <CartStep step={1} />
       <div className="container">
         <div className="section-name d-flex">
           <FaShoppingCart size={20} color="#013C64" />
@@ -52,7 +50,7 @@ export default function Home() {
         <table>
           <thead>
             <tr>
-              <th className="col-4 text-start"> </th>
+              <th className="col-4 text-start">商品資料</th>
               <th className="col-2">商品價格</th>
               <th className="col-2">數量</th>
               <th className="col-2">小計</th>
@@ -71,7 +69,8 @@ export default function Home() {
                 product_id,
                 product_num,
               } = v
-              console.log(product_num)
+              let price = productPrice * product_num || lessonPrice * lesson_num
+              totalPrice += price
               return (
                 <tr key={i}>
                   <td>
@@ -104,9 +103,7 @@ export default function Home() {
                       -
                     </button>
                   </td>
-                  <td>
-                    NT${productPrice * product_num || lessonPrice * lesson_num}
-                  </td>
+                  <td>NT${price}</td>
                   <td>
                     <FaRegTrashAlt size={22} />
                   </td>
@@ -179,18 +176,18 @@ export default function Home() {
           <div className="container">
             <div className="d-flex justify-content-between spacing">
               <p className="fw-bold">小計:</p>
-              <p>NT$ XXX</p>
+              <p>NT$ {totalPrice}</p>
             </div>
             <div className="d-flex justify-content-between spacing">
               <p className="fw-bold">運費:</p>
-              <p>NT$ XXX</p>
+              <p>NT$ {deliveryFee}</p>
             </div>
-            <p className="text-end">優惠 -NT$XXX</p>
+            <p className="text-end">優惠 -NT${discount}</p>
             <a>優惠券</a>
             <hr />
             <div className="d-flex justify-content-between spacing fw-bold">
               <p>合計:</p>
-              <p>NT$ XXX</p>
+              <p>NT$ {totalPrice + deliveryFee - discount}</p>
             </div>
             <button
               type="button"
