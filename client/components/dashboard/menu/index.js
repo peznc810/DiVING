@@ -1,5 +1,5 @@
 import React from 'react'
-import styles from './index.module.scss'
+import styles from './styles.module.scss'
 import Link from 'next/link'
 import Image from 'next/image'
 
@@ -21,7 +21,7 @@ export default function Menu() {
         <div className="container mt-4 px-0">
           {/* 大頭照 */}
           {/* 欠：hover 的時候要可以編輯 */}
-          <div className={`m-auto mb-4 d-none ${styles.avatar}`}>
+          <div className={`m-auto mb-4 ${styles.avatar}`}>
             <Image
               src="/images/users/woman.jpg"
               alt="avatar"
@@ -49,13 +49,13 @@ export default function Menu() {
             <li>
               <Link className="ps-4" href="/dashboard/orders">
                 <LuClipboardList />
-                訂單記錄
+                訂單資訊
               </Link>
             </li>
             <li className="">
               <Link className="ps-4" href="/dashboard/coupons">
                 <HiOutlineTicket />
-                <span className="me-3">優惠券</span>
+                優惠券
               </Link>
             </li>
             <li>
@@ -79,7 +79,7 @@ export default function Menu() {
             <li>
               <Link className="ps-4" href="/dashboard/logout">
                 <TbLogout2 />
-                <span className={styles.logout}>登出</span>
+                登出
               </Link>
             </li>
           </ul>

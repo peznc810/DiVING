@@ -1,7 +1,7 @@
 import React from 'react'
-import styles from '../index.module.scss'
+import styles from './styles.module.scss'
 
-export default function Detail() {
+export default function Form() {
   return (
     <>
       <div className={`col-sm-8 p-0 rounded-end ${styles['form-container']}`}>
@@ -11,7 +11,7 @@ export default function Detail() {
               <h2 className="accordion-header">
                 {/* 按鈕需要下一個路徑判斷來顯示橘色背景 */}
                 <button
-                  className="fw-medium accordion-button collapsed"
+                  className="fw-medium fs-5 accordion-button collapsed"
                   type="button"
                   data-bs-toggle="collapse"
                   data-bs-target="#flush-collapseOne"
@@ -28,7 +28,7 @@ export default function Detail() {
               >
                 <form action="">
                   <div className="accordion-body">
-                    <div className="row gy-4">
+                    <div className="row gy-3">
                       <div className="col-sm-6">
                         <label htmlFor="myName" className="form-label">
                           姓名
@@ -98,7 +98,7 @@ export default function Detail() {
             <div className="accordion-item">
               <h2 className="accordion-header">
                 <button
-                  className="fw-medium accordion-button collapsed"
+                  className="fw-medium fs-5 accordion-button collapsed"
                   type="button"
                   data-bs-toggle="collapse"
                   data-bs-target="#flush-collapseTwo"
@@ -115,7 +115,7 @@ export default function Detail() {
               >
                 <form action="">
                   <div className="accordion-body">
-                    <div className="row gy-4">
+                    <div className="row gy-3">
                       <div className="col-6 me-1">
                         <label htmlFor="password" className="form-label">
                           舊密碼

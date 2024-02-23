@@ -15,6 +15,7 @@ export default function App({ Component, pageProps }) {
   }, [])
 
   const getLayout = () => {
+    // 針對會員中心的預設樣式
     if (currentPage.startsWith('/dashboard')) {
       return (
         <DefaultLayout currentPage={currentPage}>
@@ -24,6 +25,7 @@ export default function App({ Component, pageProps }) {
         </DefaultLayout>
       )
     } else {
+      // 其他所有頁面的預設樣式
       return (
         <DefaultLayout currentPage={currentPage}>
           <Component {...pageProps} />

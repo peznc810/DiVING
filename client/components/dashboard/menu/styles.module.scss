@@ -17,7 +17,6 @@
     display: inline-block;
     width: 100%;
     padding-block: 12px;
-    border-radius: 2px;
     color: $white;
     transition: background 0.2s ease-in-out;
     &:hover {
@@ -27,9 +26,6 @@
       vertical-align: middle;
       margin-bottom: 2px;
       margin-inline-end: 10px;
-    }
-    .logout {
-      margin-right: 34px;
     }
   }
 }
