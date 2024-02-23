@@ -1,0 +1,132 @@
+import { useState } from 'react'
+
+import Stars from '@/components/product/star/star'
+import Pagination from '@/components/product/list/pagination'
+import Link from 'next/link'
+
+export default function Card() {
+  const [isHovered, setIsHovered] = useState(false)
+
+  const handleMouseEnter = () => {
+    setIsHovered(true)
+  }
+
+  const handleMouseLeave = () => {
+    setIsHovered(false)
+  }
+  return (
+    <>
+      <div className="row row-cols-1 row-cols-md-3 g-4">
+        <div className="col">
+          <div
+            className="card w-350 border-radius"
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
+          >
+            <div className="card-body no-space-x">
+              <img
+                src="/images/product/test/20/1-1.webp"
+                alt="..."
+                style={{
+                  marginTop: isHovered ? '0' : '-15px',
+                }}
+              />
+              {isHovered ? (
+                <div>
+                  <div className="bi-icon">
+                    <button className="btn mouse-add p-2" variant="light">
+                      <i className="bi bi-person-heart"></i>
+                    </button>
+                    <button className="btn mouse-add p-2" variant="light">
+                      <i className="bi bi-cart-plus-fill"></i>
+                    </button>
+                  </div>
+                  <Link href="/product/list">View more &gt;&gt;</Link>
+                </div>
+              ) : (
+                <div className="p-3 card-text">
+                  <Stars />
+                  <p className="card-text">Helei Wahoo</p>
+                  <p className="card-text type-text h-now">男士防寒衣</p>
+                  <span className="note-text">NT$24,000</span>
+                  <br />
+                  <p className="text-decoration-line-through type-text card-text">
+                    NT$28,000
+                  </p>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <style jsx>{`
+        .container-1200 {
+          max-width: 1200px;
+          margin: 0 auto;
+          padding: 0;
+        }
+        @media screen and (max-width: 576px) {
+          .width-1200 {
+            width: 380px;
+          }
+        }
+
+        .mouse-add {
+          margin: 10px 5px;
+          width: 60px;
+          height: 60px;
+          border-radius: 50%;
+          background-color: #f5f5f57f;
+          font-size: 20px;
+          background-color: transparent;
+          &.mouse-add:hover {
+            background-color: #265475;
+            color: #fff;
+            border: none;
+          }
+        }
+
+        .w-350 {
+          width: 100%;
+        }
+
+        .w-350 img {
+          width: 100%;
+        }
+
+        .card-text {
+          font-weight: 500;
+          margin-bottom: 0.1rem;
+        }
+
+        .note-text {
+          color: var(--red, #dc5151);
+          font-size: 14.5px;
+        }
+
+        .type-text {
+          color: var(--gray, #858585);
+          font-weight: normal;
+          font-size: 12.5px;
+        }
+
+        /* override by css variable */
+        .no-border {
+          --bs-border-width: 0;
+        }
+
+        /*  card-body override */
+        .no-space-x {
+          padding: var(--bs-card-spacer-y) 0;
+        }
+
+        .h-now {
+          font-size: 16px;
+          color: #303132;
+          font-weight: 400;
+        }
+      `}</style>
+    </>
+  )
+}
