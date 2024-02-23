@@ -9,7 +9,7 @@ const lessonItem = [
     name: '自由潛水',
     enName: 'Free Diving',
     img: '/images/home/lesson-free.jpg',
-    content: '',
+    content: '自由潛水自由潛水自由潛水自由潛水自由潛水自由潛水自由潛水',
   },
   {
     id: '2',
@@ -37,22 +37,33 @@ const lessonItem = [
 export default function LessonSection() {
   return (
     <>
-      <section>
-        <div className={`container d-flex`}>
-          <div>
-            <h2>潛水課程</h2>
-            <p>和各種魚兒共舞，感受無限的水下探險樂趣！</p>
-            <Link href="./lesson">立即報名</Link>
+      <section className={`${styles.LessonSection}`}>
+        <div className={`container-fluid ps-5 pe-0 row`}>
+          <div className={`col-3 p-2 ${styles.titleBlock}`}>
+            <h2 className="text-light">潛水課程</h2>
+            <p className="text-light">
+              和各種魚兒共舞，感受無限的水下探險樂趣！
+            </p>
+            <Link
+              href="./lesson"
+              className={`d-inline-block ${styles.lessonBtn}`}
+            >
+              立即報名
+            </Link>
           </div>
-          <div className={`d-flex`}>
+
+          <div className={`d-flex col-9 p-0 ${styles.lessonScroll}`}>
             {lessonItem.map((v) => {
               return (
                 <div
                   key={v.id}
-                  className={`${styles.lessonItem} position-relative`}
+                  className={`${styles.lessonItem} position-relative flex-shrink-0`}
                 >
-                  <Link href={'#'} className={`${styles.lessonLink}`}>
-                    <h5>{v.name}</h5>
+                  <Link href={'#'} className={`${styles.lessonLink} `}>
+                    <div className={`${styles.info} text-center`}>
+                      <h5>{v.name}</h5>
+                      <p>{v.enName}</p>
+                    </div>
                     <Image
                       src={v.img}
                       alt=""
@@ -60,7 +71,9 @@ export default function LessonSection() {
                       object-fit="cover"
                       priority
                     ></Image>
-                    <p>{v.content}</p>
+                    <div className={`${styles.divHover}`}>
+                      <p>{v.content}</p>
+                    </div>
                   </Link>
                 </div>
               )

@@ -37,7 +37,13 @@ export default function About() {
                 <div className={`${styles.imgWrapper}`}>
                   <div className={`${styles.imgTxt}`}>{v.title}</div>
                   <div className={`${styles.imgDiv}`}>
-                    <Image src={v.img} alt={v.title} fill object-fit="cover" />
+                    <Image
+                      src={v.img}
+                      alt={v.title}
+                      fill
+                      object-fit="cover"
+                      priority
+                    />
                   </div>
                 </div>
                 <div className={`${styles.content}`}>
