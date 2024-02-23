@@ -1,5 +1,5 @@
 import React from 'react'
-import styles from './styles.module.css'
+import styles from './styles.module.scss'
 export default function Reset() {
   return (
     <>
@@ -10,7 +10,7 @@ export default function Reset() {
             {/* chrome會有一個自動填入的input功能，但無法修改其樣式，之後還是選用純色做背景較合適 */}
             <form action="" method="post" autoComplete="off">
               <h2 className="text-center">建立新密碼</h2>
-              <p className="text-center">
+              <p className="text-center small">
                 給一些有關新密碼的提示訊息，或須知文字
               </p>
               <div className={`mb-3 ${styles['input-style']}`}>

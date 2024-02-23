@@ -68,7 +68,7 @@ export default function NavMenu() {
         })}
         <li className={`mx-3`}>
           <Link
-            href="/login"
+            href="/users/login"
             className={`px-2 py-2 ${styles.login} ${styles.linkText}`}
           >
             登入 / 註冊
@@ -76,7 +76,7 @@ export default function NavMenu() {
         </li>
         {/* 登入註冊icon */}
         <li>
-          <Link href="/login" className={`p-2 ${styles.loginIcon}`}>
+          <Link href="/users/login" className={`p-2  ${styles.loginIcon}`}>
             <i className="bi bi-person-fill fs-3"></i>
           </Link>
         </li>
