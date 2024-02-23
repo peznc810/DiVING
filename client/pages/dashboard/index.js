@@ -8,7 +8,8 @@ export default function Dashboard() {
       <Head>
         <title>個人資料</title>
       </Head>
-      <main>
+      <main className="mt-5 pt-4">
+        {/* class要拿掉 */}
         <Profile />
       </main>
     </>
