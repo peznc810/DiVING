@@ -2,6 +2,7 @@ import '@/styles/globals.scss'
 import { useEffect } from 'react'
 import { useRouter } from 'next/router'
 import DefaultLayout from '@/components/layout/default-layout'
+import DashboardLayout from '@/components/dashboard'
 
 export default function App({ Component, pageProps }) {
   // 獲取當前頁面路徑
@@ -13,13 +14,23 @@ export default function App({ Component, pageProps }) {
     import('bootstrap/dist/js/bootstrap')
   }, [])
 
-  return (
-    <>
-      {
+  const getLayout = () => {
+    if (currentPage.startsWith('/dashboard')) {
+      return (
+        <DefaultLayout currentPage={currentPage}>
+          <DashboardLayout>
+            <Component {...pageProps} />
+          </DashboardLayout>
+        </DefaultLayout>
+      )
+    } else {
+      return (
         <DefaultLayout currentPage={currentPage}>
           <Component {...pageProps} />
         </DefaultLayout>
-      }
-    </>
-  )
+      )
+    }
+  }
+
+  return <>{getLayout(<Component {...pageProps} />)}</>
 }
