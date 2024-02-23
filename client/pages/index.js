@@ -4,6 +4,7 @@ import Footer from '@/components/layout/default-layout/footer'
 import News from '@/components/home/news'
 import About from '@/components/home/about'
 import Products from '@/components/home/products'
+import LessonSection from '@/components/home/lesson'
 
 export default function Index() {
   // 改變頁面body的顏色
@@ -17,6 +18,7 @@ export default function Index() {
       <News />
       <About />
       <Products />
+      <LessonSection />
     </>
   )
 }
