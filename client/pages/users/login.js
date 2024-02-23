@@ -1,10 +1,14 @@
 import React from 'react'
 import styles from './styles.module.scss'
 import Link from 'next/link'
+import Head from 'next/head'
 
 export default function Login() {
   return (
     <>
+      <Head>
+        <title>會員登入</title>
+      </Head>
       <main className={`${styles['main-style']} ${styles['main-layout']}`}>
         <div className="d-flex justify-content-center">
           <div className={`${styles['card-style']} ${styles['card-layout']}`}>

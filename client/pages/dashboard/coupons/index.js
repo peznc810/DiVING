@@ -10,14 +10,16 @@ export default function Orders() {
       <Head>
         <title>訂單記錄</title>
       </Head>
-      <div className="container-xl my-4">
-        <div
-          className={`row justify-content-center m-auto ${styles['user-container']}`}
-        >
-          <Menu />
-          <Detail />
+      <main className="mt-5 pt-4">
+        <div className="container-xl my-4">
+          <div
+            className={`row justify-content-center m-auto ${styles['user-container']}`}
+          >
+            <Menu />
+            <Detail />
+          </div>
         </div>
-      </div>
+      </main>
     </>
   )
 }

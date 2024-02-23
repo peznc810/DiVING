@@ -8,14 +8,18 @@ export default function App({ Component, pageProps }) {
   const router = useRouter()
   const currentPage = router.pathname
 
-  const getLayout =
-    Component.getLayout ||
-    ((page) => <DefaultLayout currentPage={currentPage}>{page}</DefaultLayout>)
-
   // 導入bootstrap的JS函式庫
   useEffect(() => {
     import('bootstrap/dist/js/bootstrap')
   }, [])
 
-  return <>{getLayout(<Component {...pageProps} />)}</>
+  return (
+    <>
+      {
+        <DefaultLayout currentPage={currentPage}>
+          <Component {...pageProps} />
+        </DefaultLayout>
+      }
+    </>
+  )
 }
