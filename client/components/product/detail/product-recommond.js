@@ -23,10 +23,15 @@ export default function ProductRecommend() {
                   <Card.Body>
                     <Card.Title className="h6">商品名稱 </Card.Title>
                     <div className="d-flex justify-content-between align-items-center mt-3">
-                      <p className="note-text">NT$800</p>
-                      <Button className="color-btn" variant="light">
-                        <i className="bi bi-person-heart"></i>
-                      </Button>
+                      <span className="note-text">NT$800</span>
+                      <div>
+                        <Button className="color-btn" variant="light">
+                          <i className="bi bi-person-heart"></i>
+                        </Button>
+                        <Button className="color-btn" variant="light">
+                          <i className="bi bi-cart-plus-fill"></i>
+                        </Button>
+                      </div>
                     </div>
                   </Card.Body>
                 </Card>
@@ -46,10 +51,15 @@ export default function ProductRecommend() {
                   <Card.Body>
                     <Card.Title className="h6">商品名稱 </Card.Title>
                     <div className="d-flex justify-content-between align-items-center mt-3">
-                      <p className="note-text">NT$800</p>
-                      <Button className="color-btn" variant="light">
-                        <i className="bi bi-person-heart"></i>
-                      </Button>
+                      <span className="note-text">NT$800</span>
+                      <div>
+                        <Button className="color-btn" variant="light">
+                          <i className="bi bi-person-heart"></i>
+                        </Button>
+                        <Button className="color-btn" variant="light">
+                          <i className="bi bi-cart-plus-fill"></i>
+                        </Button>
+                      </div>
                     </div>
                   </Card.Body>
                 </Card>
@@ -69,10 +79,15 @@ export default function ProductRecommend() {
                   <Card.Body>
                     <Card.Title className="h6">商品名稱 </Card.Title>
                     <div className="d-flex justify-content-between align-items-center mt-3">
-                      <p className="note-text">NT$800</p>
-                      <Button className="color-btn" variant="light">
-                        <i className="bi bi-person-heart"></i>
-                      </Button>
+                      <span className="note-text">NT$800</span>
+                      <div>
+                        <Button className="color-btn" variant="light">
+                          <i className="bi bi-person-heart"></i>
+                        </Button>
+                        <Button className="color-btn" variant="light">
+                          <i className="bi bi-cart-plus-fill"></i>
+                        </Button>
+                      </div>
                     </div>
                   </Card.Body>
                 </Card>
@@ -92,10 +107,15 @@ export default function ProductRecommend() {
                   <Card.Body>
                     <Card.Title className="h6">商品名稱 </Card.Title>
                     <div className="d-flex justify-content-between align-items-center mt-3">
-                      <p className="note-text">NT$800</p>
-                      <Button className="color-btn" variant="light">
-                        <i className="bi bi-person-heart"></i>
-                      </Button>
+                      <span className="note-text">NT$800</span>
+                      <div>
+                        <Button className="color-btn" variant="light">
+                          <i className="bi bi-person-heart"></i>
+                        </Button>
+                        <Button className="color-btn" variant="light">
+                          <i className="bi bi-cart-plus-fill"></i>
+                        </Button>
+                      </div>
                     </div>
                   </Card.Body>
                 </Card>
@@ -123,6 +143,14 @@ export default function ProductRecommend() {
           .type-text {
             color: var(--gray, #858585);
             font-weight: normal;
+          }
+          .color-btn {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            border: none;
+            font-size: 18px;
+            background-color: transparent;
           }
           .color-btn:hover {
             background-color: #265475;

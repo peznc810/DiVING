@@ -1107,7 +1107,6 @@ export default function List() {
           object-fit: cover;
         }
 
-        // font-size
         h1 {
           font-size: 36px;
         }

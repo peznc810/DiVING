@@ -64,31 +64,31 @@ export default function Detail() {
 
             {/* 顏色 button */}
             <span className="btn-color p-2">顏色</span>
-            <button type="button" className="btn btn-md color-btn">
+            <button type="button" className="btn btn-circle">
               紅
             </button>
-            <button type="button" className="btn btn-md color-btn">
+            <button type="button" className="btn btn-circle color-btn">
               藍
             </button>
-            <button type="button" className="btn btn-md color-btn">
+            <button type="button" className="btn btn-circle color-btn">
               綠
             </button>
             <br />
             {/* 尺寸 bottom */}
             <span className="btn-size p-2">尺寸</span>
-            <button type="button" className="btn btn-md">
+            <button type="button" className="btn btn-circle">
               F
             </button>
-            <button type="button" className="btn btn-md">
+            <button type="button" className="btn btn-circle">
               S
             </button>
-            <button type="button" className="btn btn-md">
+            <button type="button" className="btn btn-circle">
               M
             </button>
-            <button type="button" className="btn btn-md">
+            <button type="button" className="btn btn-circle">
               L
             </button>
-            <button type="button" className="btn btn-md">
+            <button type="button" className="btn btn-circle">
               XL
             </button>
 
@@ -108,11 +108,11 @@ export default function Detail() {
               className="btn btn-secondary w-100 mb-3 my-3"
               style={{ fontWeight: 'bold', color: 'white' }}
             >
-              加入購物車 <i className="bi bi-cart-plus-fill"></i>
+              <i className="bi bi-person-heart"></i> 加入最愛
             </button>
             {/* 加入最愛 */}
             <button className="btn btn-outline-primary w-100">
-              <i className="bi bi-person-heart"></i> 加入最愛
+              加入購物車 <i className="bi bi-cart-plus-fill"></i>
             </button>
 
             {/* 注意事項 */}
@@ -226,13 +226,21 @@ export default function Detail() {
               </form>
             </div>
             {/* 用戶評價 */}
-            <div className="mt-5 d-flex align-items-center justify-content-center">
+            <div className="containermt-5 d-flex align-items-center justify-content-center">
               <div className="mt-2">
-                <h6>安妮雅 2024/01/01</h6>
-                <Stars />
-                <p>
-                  若沒有潛水的存在，那麼後果可想而知。亦舒曾經說過，人生短短數十載，最要緊的是滿足自己，不是討好他人。這影響了我的價值觀。
-                </p>
+                <div className="d-flex justify-content-between align-items-center mt-3">
+                  <div className="avatar">
+                    <img src="/images/product/test/20/1-1.webp" alt="..." />
+                  </div>
+                  <div className="content">
+                    <h6>安妮雅 2024/01/01</h6>
+                    <Stars />
+                    <p>
+                      若沒有潛水的存在，那麼後果可想而知。亦舒曾經說過，人生短短數十載，最要緊的是滿足自己，不是討好他人。這影響了我的價值觀。
+                    </p>
+                  </div>
+                </div>
+
                 <hr />
                 <button
                   type="submit"
@@ -292,6 +300,16 @@ export default function Detail() {
             width: 380px;
           }
         }
+        .note-text {
+          color: var(--red, #dc5151);
+          font-size: 14.5px;
+        }
+
+        .type-text {
+          color: var(--gray, #858585);
+          font-weight: normal;
+          font-size: 12.5px;
+        }
 
         .btn-md:hover,
         .btn-outline-primary:hover,
@@ -319,6 +337,7 @@ export default function Detail() {
           border-radius: 50%;
           background-color: #f5f5f5;
           font-size: 16px;
+          background-color: transparent;
         }
         .circle-container {
           display: flex;
@@ -333,6 +352,22 @@ export default function Detail() {
           width: 100%;
           height: 100%;
           object-fit: cover;
+        }
+        .content {
+          height: 80px;
+        }
+        .avatar {
+          width: 70px;
+          height: 70px;
+          border-radius: 50%;
+          overflow: hidden;
+          margin: 15px;
+        }
+
+        .avatar img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover; /* 保持图片比例填充整个容器 */
         }
       `}</style>
     </>
