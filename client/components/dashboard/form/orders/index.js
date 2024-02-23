@@ -31,7 +31,7 @@ export default function Form() {
                     <td>
                       <button
                         type="submit"
-                        className="btn btn-secondary text-white"
+                        className="btn btn-secondary btn-sm text-white"
                       >
                         訂單詳情
                       </button>
@@ -45,7 +45,7 @@ export default function Form() {
                     <td>
                       <button
                         type="submit"
-                        className="btn btn-secondary text-white"
+                        className="btn btn-secondary btn-sm text-white"
                       >
                         訂單詳情
                       </button>
@@ -59,7 +59,7 @@ export default function Form() {
                     <td>
                       <button
                         type="submit"
-                        className="btn btn-secondary text-white"
+                        className="btn btn-secondary btn-sm text-white"
                       >
                         訂單詳情
                       </button>
@@ -73,27 +73,28 @@ export default function Form() {
                   role="group"
                   aria-label="First group"
                 >
+                  {/* 要map */}
                   <button
                     type="button"
-                    className={`btn btn-outline-secondary ${styles['hover-style']}`}
+                    className={`btn btn-outline-secondary btn-sm ${styles['hover-style']}`}
                   >
                     1
                   </button>
                   <button
                     type="button"
-                    className={`btn btn-outline-secondary ${styles['hover-style']}`}
+                    className={`btn btn-outline-secondary btn-sm ${styles['hover-style']}`}
                   >
                     2
                   </button>
                   <button
                     type="button"
-                    className={`btn btn-outline-secondary ${styles['hover-style']}`}
+                    className={`btn btn-outline-secondary btn-sm ${styles['hover-style']}`}
                   >
                     3
                   </button>
                   <button
                     type="button"
-                    className={`btn btn-outline-secondary ${styles['hover-style']}`}
+                    className={`btn btn-outline-secondary btn-sm ${styles['hover-style']}`}
                   >
                     4
                   </button>

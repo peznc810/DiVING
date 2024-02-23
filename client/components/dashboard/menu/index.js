@@ -22,13 +22,7 @@ export default function Menu() {
           {/* 大頭照 */}
           {/* 欠：hover 的時候要可以編輯 */}
           <div className={`m-auto mb-4 ${styles.avatar}`}>
-            <Image
-              src="/images/users/woman.jpg"
-              alt="avatar"
-              fill
-              priority
-              className="bg-white"
-            />
+            <Image src="/images/users/woman.jpg" alt="avatar" fill priority />
           </div>
           {/* 顯示優惠券張數 */}
           <div className="text-center py-3 border-top border-bottom d-none">
