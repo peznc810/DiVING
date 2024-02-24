@@ -1,65 +1,59 @@
-import { useState } from 'react'
-
+import {useState} from 'react';
 import Stars from '@/components/product/star/star'
 import Pagination from '@/components/product/list/pagination'
 import Link from 'next/link'
 
-export default function Card() {
-  const [isHovered, setIsHovered] = useState(false)
-
+export default function Card({data}) {  
   const handleMouseEnter = () => {
     setIsHovered(true)
   }
-
   const handleMouseLeave = () => {
     setIsHovered(false)
   }
+  const [isHovered, setIsHovered] = useState(false)
   return (
-    <>
-      <div className="row row-cols-1 row-cols-md-3 g-4">
-        <div className="col">
-          <div
-            className="card w-350 border-radius"
-            onMouseEnter={handleMouseEnter}
-            onMouseLeave={handleMouseLeave}
-          >
-            <div className="card-body no-space-x">
-              <img
-                src="/images/product/test/20/1-1.webp"
-                alt="..."
-                style={{
-                  marginTop: isHovered ? '0' : '-15px',
-                }}
-              />
-              {isHovered ? (
-                <div>
-                  <div className="bi-icon">
-                    <button className="btn mouse-add p-2" variant="light">
-                      <i className="bi bi-person-heart"></i>
-                    </button>
-                    <button className="btn mouse-add p-2" variant="light">
-                      <i className="bi bi-cart-plus-fill"></i>
-                    </button>
-                  </div>
-                  <Link href="/product/list">View more &gt;&gt;</Link>
+    <>          
+      <div className="col">
+        <div
+          className="card w-350 border-radius"
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
+        >
+          <div className="card-body no-space-x">
+            <img
+              src={`/images/product/test/20/${data.id}-1.webp`}
+              alt={`${data.id}`}
+              style={{
+                marginTop: isHovered ? '0' : '-15px',
+              }}
+            />
+            {isHovered ? (
+              <div>
+                <div className="bi-icon">
+                  <button className="btn mouse-add p-2" variant="light">
+                    <i className="bi bi-person-heart"></i>
+                  </button>
+                  <button className="btn mouse-add p-2" variant="light">
+                    <i className="bi bi-cart-plus-fill"></i>
+                  </button>
                 </div>
-              ) : (
-                <div className="p-3 card-text">
-                  <Stars />
-                  <p className="card-text">Helei Wahoo</p>
-                  <p className="card-text type-text h-now">男士防寒衣</p>
-                  <span className="note-text">NT$24,000</span>
-                  <br />
-                  <p className="text-decoration-line-through type-text card-text">
-                    NT$28,000
-                  </p>
-                </div>
-              )}
-            </div>
+                <Link href={`/product/${data.id}`}>View more &gt;&gt;</Link>
+              </div>
+            ) : (
+              <div className="p-3 card-text">
+                <Stars />
+                <p className="card-text">{data.brand}</p>
+                <p className="card-text type-text h-now">{data.name}</p>
+                <span className="note-text">{`NT$ ${data.price.toLocaleString()}`}</span>
+                <br /> 
+                {data.discount ? <p className="text-decoration-line-through type-text card-text">
+                {`NT$ ${data.discount.toLocaleString()}`}
+                </p> : null}
+              </div>
+            )}
           </div>
         </div>
-      </div>
-
+      </div>      
       <style jsx>{`
         .container-1200 {
           max-width: 1200px;

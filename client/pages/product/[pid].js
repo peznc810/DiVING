@@ -1,22 +1,37 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import {useRouter} from 'next/router'
 
 import Stars from '@/components/product/star/star'
 import Carousel from '@/components/product/carousel'
+import Switch from '@/components/product/detail/switch'
 import ProductRecommond from '@/components/product/detail/product-recommond'
 import Link from 'next/link'
 
-export default function Detail() {
-  const [isSwitchOn, setIsSwitchOn] = useState(false)
 
-  const handleSwitchToggle = () => {
-    setIsSwitchOn(!isSwitchOn)
-  }
+
+export default function Detail() {
+  const router = useRouter();
+  const { pid } = router.query;  
+  const [product, setProduct] = useState(null);   
+   
+  const colorOptions = product ? product.color.split(",") : [] 
+  const [selectColor, setSelectColor] = useState(null)
+  
+  useEffect(() => { 
+    if (!pid) return;
+    fetch(`http://localhost:3000/api/product/${pid}`).then((res) => {      
+        return res.json()      
+    }).then((res)=> {      
+      setProduct(res.data)})
+  }, [pid])
+
 
   // const colorBtn = document.querySelector('.color-btn')
 
   // colorBtn.addEventListener('click', (e) => {
   //   e.currentTarget.classList.add('active')
   // })
+  if (!product) return null;
   return (
     <>
       <div className="container-1200">
@@ -41,8 +56,8 @@ export default function Detail() {
           </div>
         </div>
 
-        {/* 輪播 */}
-        <div className="row mt-5 mx-2">
+        {/* 輪播 + 商品規格 */}
+        <div className="row mt-5 mx-2 my-5">
           <div className="col-sm-7">
             <div className="position-sticky" style={{ top: '2rem' }}>
               <Carousel />
@@ -50,29 +65,27 @@ export default function Detail() {
           </div>
 
           <div className="col-sm-5">
-            <h3>男士防寒衣</h3>
+            <h3>{product.name}</h3>
             <Stars />
             <h6>4.0分 | 8則評價</h6>
 
-            <h6 className="note-text">NT$24,000</h6>
-            <p className="text-decoration-line-through type-text">NT$28,000</p>
+            <h6 className="note-text">{`NT$${product.discount.toLocaleString()}`}</h6>
+            <p className="text-decoration-line-through type-text">{`NT$${product.price.toLocaleString()}`}</p>
             <p className="product-desc">
-              穿上 Nike Air Force 1 PLT.AF.ORM. 用經典好穿的 AF1 風格脫穎而出。
-              優雅版型搭配加厚中底，為籃球鞋系列注入傲嬌新風貌。
+              {product.info}
             </p>
             <hr />
 
             {/* 顏色 button */}
             <span className="btn-color p-2">顏色</span>
-            <button type="button" className="btn btn-circle">
-              紅
+            {product.color.split(",").map((color)=>{
+              return <button key={color} onClick={() => setSelectColor(color)} className="btn btn-circle"  style={selectColor === color ? {backgroundColor: '#265475', color: 'white'} : null}>
+              {color}
             </button>
-            <button type="button" className="btn btn-circle color-btn">
-              藍
-            </button>
-            <button type="button" className="btn btn-circle color-btn">
-              綠
-            </button>
+            })}
+            
+            
+          
             <br />
             {/* 尺寸 bottom */}
             <span className="btn-size p-2">尺寸</span>
@@ -116,7 +129,7 @@ export default function Detail() {
             </button>
 
             {/* 注意事項 */}
-            <div className="product-info my-5">
+            <div className="my-4">
               <div
                 className="accordion accordion-flush"
                 id="accordionFlushExample"
@@ -183,110 +196,11 @@ export default function Detail() {
             </div>
           </div>
         </div>
-        <br />
-        <br />
+
         <hr />
-        {/* 轉換按鈕 -- 商品介紹/評價 */}
-        <div className="form-check form-switch d-flex justify-content-end">
-          <input
-            className="form-check-input"
-            type="checkbox"
-            id="flexSwitchCheckDefault"
-            checked={isSwitchOn}
-            onChange={handleSwitchToggle}
-          />
-          <label className="form-check-label" htmlFor="flexSwitchCheckDefault">
-            {isSwitchOn ? '顧客評價' : '商品細節'}
-          </label>
-        </div>
-        {isSwitchOn && (
-          <div>
-            {/* 顯示顧客評價 */}
-            <h3 className="text-center my-2">顧客評價</h3>
-            <div className="container">
-              <form>
-                <div className="form-group">
-                  <label className="mx-2" for="exampleFormControlTextarea1">
-                    來為 --- 評價吧～
-                  </label>
-                  <Stars />
-                  <textarea
-                    className="form-control"
-                    id="exampleFormControlTextarea1"
-                    rows="3"
-                    placeholder="請撰寫評價"
-                  ></textarea>
-                </div>
-                <button
-                  type="submit"
-                  className="btn btn-primary d-flex btn-comment"
-                >
-                  送出評價
-                </button>
-              </form>
-            </div>
-            {/* 用戶評價 */}
-            <div className="containermt-5 d-flex align-items-center justify-content-center">
-              <div className="mt-2">
-                <div className="d-flex justify-content-between align-items-center mt-3">
-                  <div className="avatar">
-                    <img src="/images/product/test/20/1-1.webp" alt="..." />
-                  </div>
-                  <div className="content">
-                    <h6>安妮雅 2024/01/01</h6>
-                    <Stars />
-                    <p>
-                      若沒有潛水的存在，那麼後果可想而知。亦舒曾經說過，人生短短數十載，最要緊的是滿足自己，不是討好他人。這影響了我的價值觀。
-                    </p>
-                  </div>
-                </div>
+        {/* 商品介紹 + 顧客評價 */}
 
-                <hr />
-                <button
-                  type="submit"
-                  className="btn btn-primary d-flex btn-comment"
-                >
-                  更多評價
-                </button>
-              </div>
-            </div>
-
-            {/* 隨機商品 */}
-            <div>
-              <h3 className="text-center my-5">你可能會喜歡的商品⋯</h3>
-              <ProductRecommond />
-            </div>
-          </div>
-        )}
-        {!isSwitchOn && (
-          <div>
-            {/* 顯示商品細節 */}
-            <h3 className="text-center my-2">商品介紹</h3>
-
-            {/* 商品介紹 */}
-            <div className="row mt-2 mx-2">
-              <div className="col-sm-12">
-                <p className="text-center my-3 font-weight-light">
-                  鞋面採用車縫皮革裝飾片，全面提升經典指標性、耐久性和支撐力。
-                </p>
-                <div>
-                  <div className="p-2 my-3 custom-image-container">
-                    <img src="/images/product/test/20/20-detail1.jpg" />
-                    {/* `${}` */}
-                  </div>
-                  <div className="p-2 my-3 custom-image-container">
-                    <img src="/images/product/test/20/20-detail1.jpg" />
-                    {/* `${}` */}
-                  </div>
-                  <div className="p-2 my-3 custom-image-container">
-                    <img src="/images/product/test/20/20-detail1.jpg" />
-                    {/* `${}` */}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
+        <Switch />
       </div>
 
       <style jsx>{`
@@ -317,20 +231,15 @@ export default function Detail() {
           background-color: #265475;
           color: #fff;
           border: none;
-        }
-        .btn-comment {
-          background-color: #265475;
-          margin: 18px auto;
-          border-radius: 100px;
-          padding: 10px 20px;
-        }
+        }        
+
         .btn-color {
           margin: 5px 0;
         }
         .btn-size {
           margin: 5px 0;
         }
-        .btn-circle {
+        .btn-circle {          
           margin: 5px 0;
           width: 40px;
           height: 40px;
@@ -367,7 +276,7 @@ export default function Detail() {
         .avatar img {
           width: 100%;
           height: 100%;
-          object-fit: cover; /* 保持图片比例填充整个容器 */
+          object-fit: cover;
         }
       `}</style>
     </>
