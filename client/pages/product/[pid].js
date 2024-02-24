@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import {useRouter} from 'next/router'
+import { useRouter } from 'next/router'
 
 import Stars from '@/components/product/star/star'
 import Carousel from '@/components/product/carousel'
@@ -7,36 +7,35 @@ import Switch from '@/components/product/detail/switch'
 import ProductRecommond from '@/components/product/detail/product-recommond'
 import Link from 'next/link'
 
-
-
 export default function Detail() {
-  const router = useRouter();
-  const { pid } = router.query;  
-  const [product, setProduct] = useState(null);   
-   
-  const colorOptions = product ? product.color.split(",") : [] 
-  const [selectColor, setSelectColor] = useState(null)
-  
-  useEffect(() => { 
-    if (!pid) return;
-    fetch(`http://localhost:3000/api/product/${pid}`).then((res) => {      
-        return res.json()      
-    }).then((res)=> {      
-      setProduct(res.data)})
-  }, [pid])
+  const router = useRouter()
+  const { pid } = router.query
+  const [product, setProduct] = useState(null)
 
+  const [selectColor, setSelectColor] = useState(null)
+
+  useEffect(() => {
+    if (!pid) return
+    fetch(`http://localhost:3000/api/product/${pid}`)
+      .then((res) => {
+        return res.json()
+      })
+      .then((res) => {
+        setProduct(res.data)
+      })
+  }, [pid])
 
   // const colorBtn = document.querySelector('.color-btn')
 
   // colorBtn.addEventListener('click', (e) => {
   //   e.currentTarget.classList.add('active')
   // })
-  if (!product) return null;
+  if (!product) return null  
   return (
     <>
       <div className="container-1200">
         {/* 麵包屑 */}
-        <div className="my-3 d-flex">
+        <div className="my-3 d-flex mt-5">
           <div className="d-flex align-items-center">
             <Link
               href="/product/list"
@@ -71,21 +70,28 @@ export default function Detail() {
 
             <h6 className="note-text">{`NT$${product.discount.toLocaleString()}`}</h6>
             <p className="text-decoration-line-through type-text">{`NT$${product.price.toLocaleString()}`}</p>
-            <p className="product-desc">
-              {product.info}
-            </p>
+            <p className="product-desc">{product.info}</p>
             <hr />
 
             {/* 顏色 button */}
             <span className="btn-color p-2">顏色</span>
-            {product.color.split(",").map((color)=>{
-              return <button key={color} onClick={() => setSelectColor(color)} className="btn btn-circle"  style={selectColor === color ? {backgroundColor: '#265475', color: 'white'} : null}>
-              {color}
-            </button>
+            {product.color.split(',').map((color) => {
+              return (
+                <button
+                  key={color}
+                  onClick={() => setSelectColor(color)}
+                  className="btn btn-circle"
+                  style={
+                    selectColor === color
+                      ? { backgroundColor: '#265475', color: 'white' }
+                      : null
+                  }
+                >
+                  {color}
+                </button>
+              )
             })}
-            
-            
-          
+
             <br />
             {/* 尺寸 bottom */}
             <span className="btn-size p-2">尺寸</span>
@@ -208,6 +214,7 @@ export default function Detail() {
           max-width: 1200px;
           margin: 0 auto;
           padding: 0;
+          margin-top: 70px;
         }
         @media screen and (max-width: 576px) {
           .width-1200 {
@@ -231,7 +238,7 @@ export default function Detail() {
           background-color: #265475;
           color: #fff;
           border: none;
-        }        
+        }
 
         .btn-color {
           margin: 5px 0;
@@ -239,7 +246,7 @@ export default function Detail() {
         .btn-size {
           margin: 5px 0;
         }
-        .btn-circle {          
+        .btn-circle {
           margin: 5px 0;
           width: 40px;
           height: 40px;

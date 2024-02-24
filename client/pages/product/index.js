@@ -126,6 +126,7 @@ export default function List() {
           max-width: 1200px;
           margin: 0 auto;
           padding: 0;
+          margin-top: 70px;
         }
         @media screen and (max-width: 576px) {
           .width-1200 {
