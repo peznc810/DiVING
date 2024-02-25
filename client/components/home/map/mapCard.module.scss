@@ -1,0 +1,57 @@
+@import '@/styles/variable.scss';
+
+.card {
+  width: 500px;
+  height: 400px;
+  background-color: #fff;
+  border-radius: 8px;
+  padding-top: 20px;
+
+  .cardImg {
+    position: relative;
+    margin: auto;
+    width: 90%;
+    height: 240px;
+    border-radius: 6px;
+    overflow: hidden;
+  }
+
+  .cardBody {
+    .location {
+      border-right: 2px solid $light-gray;
+      margin-right: 15px;
+      h5 {
+        font-size: 24px;
+        color: $secondary;
+      }
+    }
+
+    li {
+      color: $primary;
+      display: flex;
+      align-items: center;
+      i {
+        font-size: 28px;
+        margin-right: 10px;
+      }
+      p {
+        font-size: 17px;
+        line-height: 10px;
+        margin-bottom: 0;
+      }
+    }
+    .content {
+      margin-top: 16px;
+      color: $gray;
+
+      p {
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+        overflow: hidden;
+        margin-bottom: 0;
+        line-height: 24px;
+      }
+    }
+  }
+}

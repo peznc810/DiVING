@@ -38,21 +38,25 @@ export default function LessonSection() {
   return (
     <>
       <section className={`${styles.LessonSection}`}>
-        <div className={`container-fluid ps-5 pe-0 row`}>
-          <div className={`col-3 p-2 ${styles.titleBlock}`}>
-            <h2 className="text-light">潛水課程</h2>
-            <p className="text-light">
-              和各種魚兒共舞，感受無限的水下探險樂趣！
-            </p>
-            <Link
-              href="./lesson"
-              className={`d-inline-block ${styles.lessonBtn}`}
-            >
-              立即報名
-            </Link>
+        <div className={`container-fluid `}>
+          <div className={` ps-5  ${styles.titleBlock}`}>
+            <div className={`ps-4 d-flex align-items-end ${styles.title}`}>
+              <h3 className="me-3 mb-0 text-light">
+                OUR <br /> LESSON
+              </h3>
+              <Link
+                href={'/event'}
+                className={`${styles.moreBtn} me-5 text-center`}
+              >
+                more
+                <i className="bi bi-caret-right-fill ms-1"></i>
+              </Link>
+            </div>
           </div>
 
-          <div className={`d-flex col-9 p-0 ${styles.lessonScroll}`}>
+          <div
+            className={`d-flex justify-content-center p-0 ${styles.lessonScroll}`}
+          >
             {lessonItem.map((v) => {
               return (
                 <div

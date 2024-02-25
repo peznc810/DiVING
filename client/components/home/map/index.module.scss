@@ -1,0 +1,23 @@
+@import '@/styles/variable.scss';
+
+.mapSection {
+  padding-block: 100px;
+  background-image: url('../../../public/images/home/mapbg.png');
+  .title {
+    border-left: 4px solid $secondary;
+    h3 {
+      font-family: Noto Serif TC;
+      letter-spacing: 1px;
+      font-size: 30px;
+      color: #fff;
+    }
+    .moreBtn {
+      font-size: 14px;
+      color: $secondary;
+    }
+    .moreBtn:hover {
+      color: #fff;
+      border-bottom: 1px solid #fff;
+    }
+  }
+}

@@ -6,6 +6,7 @@ import News from '@/components/home/news'
 import Server from '@/components/home/server'
 import Products from '@/components/home/products'
 import LessonSection from '@/components/home/lesson'
+import MapSection from '@/components/home/map'
 
 export default function Index() {
   const router = useRouter()
@@ -22,6 +23,7 @@ export default function Index() {
       <Server />
       <LessonSection />
       <Products />
+      <MapSection />
     </>
   )
 }
