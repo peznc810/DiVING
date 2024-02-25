@@ -1,13 +1,27 @@
 import { Carousel, Image } from 'react-bootstrap'
 import postData from '@/data/post/post.json'
 import styles from '@/pages/post/post-list.module.css'
+import Link from 'next/link'
 
 export default function Caor() {
   return (
-    <Carousel className={styles['carousel']}>
+    <Carousel
+      interval={5000}
+      fade={true}
+      slide={true}
+      className={styles['carousel']}
+    >
       {postData.map((v) => (
         <Carousel.Item key={v.id} className={styles['carousel-item']}>
-          <Image src={`/images/post/${v.image}`} rounded alt="" />
+          <Link href={`/post/${v.id}`} style={{ textDecoration: 'none' }}>
+            <Image
+              rounded
+              variant="top"
+              src={`/images/post/${v.image}`}
+              alt={v.image}
+            />
+          </Link>
+
           <Carousel.Caption>
             <h3>{v.title}</h3>
           </Carousel.Caption>

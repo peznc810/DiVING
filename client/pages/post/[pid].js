@@ -5,8 +5,9 @@ import { useRouter } from 'next/router'
 import Link from 'next/link'
 import styles from '@/styles/loader/loader_ripple.module.css'
 import postData from '@/data/post/post.json'
+import DiButton from '@/components/post/dibutton'
 
-import { Container, Card, Col, Row, Button } from 'react-bootstrap'
+import { Container, Card, Col, Row, Stack } from 'react-bootstrap'
 
 export default function Detail() {
   const router = useRouter()
@@ -70,13 +71,55 @@ export default function Detail() {
     </>
   )
 
+  const getTagsArray = (tagsString) => {
+    return tagsString.split(',')
+  }
+
   const display = (
     <>
       <hr />
       <Container>
         <Row>
-          <Col>
+          <Col lg={3}>
             <h4>相關文章</h4>
+            <Stack>
+              <Row xs={1} className="g-4">
+                {postData.map((v) => (
+                  <Col key={v.id}>
+                    <Card>
+                      <Link
+                        href={`/post/${v.id}`}
+                        style={{ textDecoration: 'none' }}
+                      >
+                        <Card.Img
+                          variant="top"
+                          src={`/images/post/${v.image}`}
+                        />
+                      </Link>
+                      <Card.Body className="bg-light">
+                        <Card.Subtitle className="mb-2 text-primary">
+                          {v.author}
+                        </Card.Subtitle>
+                        <h6>{v.title}</h6>
+                        <Stack direction="horizontal" gap={1}>
+                          <div>
+                            {getTagsArray(v.tags).map((tag, index) => (
+                              <Link
+                                key={index}
+                                href="/post/list"
+                                target="_blank"
+                              >
+                                <DiButton text={`# ${tag}`} />
+                              </Link>
+                            ))}
+                          </div>
+                        </Stack>
+                      </Card.Body>
+                    </Card>
+                  </Col>
+                ))}
+              </Row>
+            </Stack>
           </Col>
           <Col xs={9} className="bg-light">
             <p>{post.published}</p>
@@ -84,7 +127,11 @@ export default function Detail() {
             <p>作者:{post.author}</p>
             <div className="p-2">
               {' '}
-              <Button variant="primary">{post.tags}</Button>{' '}
+              {getTagsArray(post.tags).map((tag, index) => (
+                <Link key={index} href="/post/list" target="_blank">
+                  <DiButton text={`# ${tag}`} />
+                </Link>
+              ))}
             </div>
             <Card.Img variant="top" src={`/images/post/${post.image}`} />
             <p>內文:{post.content}</p>

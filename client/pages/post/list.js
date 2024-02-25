@@ -2,20 +2,18 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import loaderStyles from '@/styles/loader/loader_ripple.module.css'
 import post from '@/data/post/post.json'
-import {
-  Container,
-  Dropdown,
-  Card,
-  Col,
-  Row,
-  Button,
-  Stack,
-} from 'react-bootstrap'
+import { Container, Dropdown, Card, Col, Row, Stack } from 'react-bootstrap'
 import Caor from '@/components/post/caor'
+import DiButton from '@/components/post/dibutton'
 
 export default function List() {
   const [postList, setPostList] = useState([])
   const [isLoading, setIsLoading] = useState(true)
+
+  const getTagsArray = (tagsString) => {
+    return tagsString.split(',')
+  }
+
   const getPost = async () => {
     try {
       // const res = await fetch(
@@ -52,69 +50,59 @@ export default function List() {
   )
 
   const display = (
-    <ul>
-      <div>
-        <>
-          <Container>
-            <Row xs={2} md={2} lg={2} className="g-4">
-              {postList.map((v) => (
-                <Col key={v.id}>
-                  <Card>
-                    <Link
-                      href={`/post/${v.id}`}
-                      style={{ textDecoration: 'none' }}
-                    >
-                      <Card.Img variant="top" src={`/images/post/${v.image}`} />
-                    </Link>
-                    <Card.Body className="bg-light">
-                      <Card.Subtitle className="mb-2 text-primary">
-                        {v.author} ﹡ {v.published}
-                      </Card.Subtitle>
-                      <Card.Title>{v.title}</Card.Title>
-                      <Card.Text className="text-truncate">
-                        {v.content}
-                      </Card.Text>
-                      <Stack direction="horizontal" gap={3}>
-                        <div className="p-2">
-                          {' '}
-                          <Button variant="primary">{v.tags}</Button>{' '}
-                        </div>
-                        <div className="p-2 ms-auto">
-                          {' '}
-                          <Card.Link href="#">more</Card.Link>
-                        </div>
-                      </Stack>
-                    </Card.Body>
-                  </Card>
-                </Col>
-              ))}
-            </Row>
-          </Container>
-        </>
-      </div>
-    </ul>
+    <>
+      <Container className="mb-3">
+        <Row xs={2} md={2} lg={2} className="g-4">
+          {postList.map((v) => (
+            <Col key={v.id}>
+              <Card>
+                <Link href={`/post/${v.id}`} style={{ textDecoration: 'none' }}>
+                  <Card.Img variant="top" src={`/images/post/${v.image}`} />
+                </Link>
+                <Card.Body className="bg-light">
+                  <Card.Subtitle className="mb-2 text-primary">
+                    {v.author} ﹡ {v.published}
+                  </Card.Subtitle>
+                  <Card.Title>{v.title}</Card.Title>
+                  <Card.Text className="text-truncate">{v.content}</Card.Text>
+                  <Stack direction="horizontal" gap={3}>
+                    <div className="p-2">
+                      {getTagsArray(v.tags).map((tag, index) => (
+                        <Link key={index} href="/post/list" target="_blank">
+                          <DiButton text={`# ${tag}`} />
+                        </Link>
+                      ))}
+                    </div>
+                  </Stack>
+                </Card.Body>
+              </Card>
+            </Col>
+          ))}
+        </Row>
+      </Container>
+    </>
   )
 
   return (
     <>
       <Container className=" text-end">
-        <Row>
-          <Col>
-            Hi UUUUUUUUUU
-            <Link href={'/'}>我的文章</Link>
-          </Col>
-        </Row>
+        <div className="my-2">
+          Hi UUUUUUUUUUser
+          <Link className="ms-3" href={'/'}>
+            我的文章
+          </Link>
+        </div>
       </Container>
       <Container>
-        <div className="m-1">
+        <div className="my-1">
           {' '}
           <h4>熱門文章</h4>
-          <Container>
+          <div>
             <Caor />
-          </Container>
+          </div>
         </div>
         <hr />
-        <div className="m-4">
+        <div className="my-4">
           {' '}
           <h4>所有文章</h4>
           <Row className="align-items-center">
