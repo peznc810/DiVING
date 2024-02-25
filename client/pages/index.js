@@ -3,7 +3,7 @@ import { useRouter } from 'next/router'
 import HomeHeader from '@/components/home/header'
 import Footer from '@/components/layout/default-layout/footer'
 import News from '@/components/home/news'
-import About from '@/components/home/about'
+import Server from '@/components/home/server'
 import Products from '@/components/home/products'
 import LessonSection from '@/components/home/lesson'
 
@@ -19,9 +19,9 @@ export default function Index() {
     <>
       <HomeHeader />
       <News />
-      <About />
-      <Products />
+      <Server />
       <LessonSection />
+      <Products />
     </>
   )
 }

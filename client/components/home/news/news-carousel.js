@@ -1,42 +1,33 @@
 import React from 'react'
 import NewsItem from './news-item'
 import styles from './news-carousel.module.scss'
+import { IoIosArrowBack } from 'react-icons/io'
+import { IoIosArrowForward } from 'react-icons/io'
 
 export default function NewsCarousel() {
   return (
     <>
       <div
         id="newsCarousel"
-        className={`carousel slide `}
+        className={`carousel slide position-relation`}
         data-bs-ride="carousel"
       >
-        <div className={`carousel-inner d-flex overflow-hidden`}>
+        <div
+          className={`carousel-inner d-flex align-items-center pt-3 ps-4 ${styles.carouselInner}`}
+        >
+          <NewsItem />
+          <NewsItem />
           <NewsItem />
           <NewsItem />
           <NewsItem />
         </div>
-        {/* 輪播點 */}
-        <div className={`${styles.carouselDot} d-flex justify-content-center`}>
-          <button
-            type="button"
-            data-bs-target="#newsCarousel"
-            data-bs-slide-to="0"
-            className="active"
-            aria-current="true"
-            aria-label="Slide 1"
-          ></button>
-          <button
-            type="button"
-            data-bs-target="#newsCarousel"
-            data-bs-slide-to="1"
-            aria-label="Slide 2"
-          ></button>
-          <button
-            type="button"
-            data-bs-target="#newsCarousel"
-            data-bs-slide-to="2"
-            aria-label="Slide 3"
-          ></button>
+        <div className={`${styles.arrowBtn} me-5 position-absolute`}>
+          <button type="button" className={`me-3`}>
+            <IoIosArrowBack />
+          </button>
+          <button type="button">
+            <IoIosArrowForward />
+          </button>
         </div>
       </div>
     </>

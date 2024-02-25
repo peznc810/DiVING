@@ -2,22 +2,26 @@ import Link from 'next/link'
 import React from 'react'
 import styles from './index.module.scss'
 import NewsCarousel from './news-carousel'
+import { IoMdArrowDropright } from 'react-icons/io'
 
 export default function News() {
   return (
     <>
-      <section className={`${styles.news}`}>
-        <div className={`container-fluid ${styles.content}`}>
+      <section className={`${styles.news} my-5`}>
+        <div className={`container-fluid p-0 ${styles.content}`}>
           {/* 標題 */}
-          <div
-            className={`d-flex justify-content-between align-items-center px-3 pb-2 ${styles.title}`}
-          >
-            <h3>NEWS</h3>
-            <Link href={'./news'} className={`${styles.moreBtn}`}>
-              more<i className="bi bi-caret-right-fill"></i>
-            </Link>
+          <div className={`p-5 `}>
+            <div className={`ps-3 ${styles.title} d-flex align-items-end`}>
+              <h3 className="me-3 mb-0">NEWS</h3>
+              <Link
+                href={'/event'}
+                className={`${styles.moreBtn} me-5 text-center`}
+              >
+                more
+                <i className="bi bi-caret-right-fill ms-1"></i>
+              </Link>
+            </div>
           </div>
-
           {/* news輪播 */}
           <NewsCarousel />
         </div>

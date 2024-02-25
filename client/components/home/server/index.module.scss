@@ -1,0 +1,67 @@
+@import '@/styles/variable.scss';
+
+.server {
+  letter-spacing: 1px;
+  margin-block: 120px;
+  text-align: center;
+  .title {
+    border-left: 4px solid $secondary;
+    border-right: 4px solid $secondary;
+    margin-bottom: 80px;
+    h3 {
+      font-family: Noto Serif TC;
+      font-size: 30px;
+      text-align: center;
+      color: #fff;
+    }
+  }
+
+  .severContent {
+    position: relative;
+    text-align: start;
+    letter-spacing: 1.5px;
+
+    h4 {
+      color: #fff;
+      font-weight: 200;
+      font-size: 28px;
+      line-height: 40px;
+      background-color: $info;
+      display: inline-block;
+      padding: 12px 24px;
+      border-radius: 30px 30px 0 30px;
+    }
+    p {
+      color: #fff;
+      line-height: 35px;
+      margin-top: 30px;
+    }
+  }
+  .sevLesson {
+    padding-inline: 80px;
+    .imgDiv {
+      border-radius: 6px;
+      overflow: hidden;
+    }
+    .content {
+      padding: 100px 60px;
+      width: 60%;
+      height: 420px;
+    }
+  }
+
+  .sevProduct {
+    padding-left: 100px;
+    padding-block: 100px;
+    .imgDiv {
+      border-radius: 6px;
+      overflow: hidden;
+    }
+    .content {
+      padding-top: 70px;
+      padding-right: 80px;
+      width: 60%;
+      height: 420px;
+    }
+  }
+}
