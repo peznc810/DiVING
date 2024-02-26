@@ -3,6 +3,12 @@ import Link from 'next/link'
 
 import CartStep from '@/components/cart/cart-step'
 import AutoTab from '@/components/cart/test'
+import userData from '@/data/cart/user.json'
+
+const user_id = '1'
+const [cUser] = userData.filter((v) => {
+  return v.user_id === user_id
+})
 
 export default function Home() {
   const [cartData, setCartData] = useState(null)
@@ -14,13 +20,17 @@ export default function Home() {
 
   let totalPrice = 0
 
+  const t1Change = () => {
+    // const currentCheckBox = document.querySelector('.t1')
+    // console.log(currentCheckBox)
+    document.querySelector('.user_name').value = cUser.name
+    document.querySelector('.user_phone').value = cUser.phone
+    document.querySelector('.user_address').value = cUser.address
+  }
+
   return (
     <div className="container">
       <CartStep step={2} />
-      <input type="text" className="autotab" />
-      <input type="text" className="autotab" />
-      <input type="text" className="autotab" />
-      <AutoTab className="autotab" maxLength={5} />
       <div className="container">
         <div className="w-100 text-center section-name">
           <h5 className="span">購物車</h5>
@@ -107,40 +117,40 @@ export default function Home() {
         </div>
         <div className="container">
           <div className="d-flex mt-3">
-            <input type="checkbox" className=" " />
+            <input type="checkbox" className="t1" onChange={() => t1Change()} />
             <h6 className="fw-bold">收貨人資料與會員資料相同</h6>
           </div>
 
           <div className="row justify-content-between spacing">
             <div className="col-6">
               <p className="fw-bold">收件人名稱</p>
-              <input type="text" className="w-100 form-control" />
+              <input type="text" className="w-100 form-control user_name" />
             </div>
             <div className="col-6">
               <p className="fw-bold">收件人電話</p>
-              <input type="text" className="w-100 form-control" />
+              <input type="text" className="w-100 form-control user_phone" />
             </div>
           </div>
           <p className="fw-bold">配送地址</p>
           <div className="row justify-content-between mb-3">
             <div className="col-3">
-              <select className="form-select">
-                <option selected>縣/市</option>
-                <option defaultValue="1">送貨地點1</option>
-                <option defaultValue="2">送貨地點2</option>
-                <option defaultValue="3">送貨地點3</option>
+              <select className="form-select user_city" defaultValue={0}>
+                <option value="0">縣/市</option>
+                <option value="1">1市</option>
+                <option value="2">2市</option>
+                <option value="3">3市</option>
               </select>
             </div>
             <div className="col-3">
-              <select className="form-select">
-                <option selected>區</option>
-                <option defaultValue="1">送貨地點1</option>
-                <option defaultValue="2">送貨地點2</option>
-                <option defaultValue="3">送貨地點3</option>
+              <select className="form-select user_section" defaultValue={0}>
+                <option value="0">區</option>
+                <option value="1">1區</option>
+                <option value="2">2區</option>
+                <option value="3">3區</option>
               </select>
             </div>
             <div className="col-6">
-              <input type="text" className="w-100 form-control" />
+              <input type="text" className="w-100 form-control user_address" />
             </div>
           </div>
         </div>
@@ -159,29 +169,45 @@ export default function Home() {
         <div className="row justify-content-between my-3">
           <p className="col-sm-2 col-3 fw-bold">信用卡卡號</p>
           <div className="col-2">
-            <input type="text" className="form-control" />
+            <input
+              type="text"
+              className="form-control autotab-4"
+              maxLength={4}
+            />
           </div>
           <div className="col-2">
-            <input type="text" className="form-control" />
+            <input
+              type="text"
+              className="form-control autotab-4"
+              maxLength={4}
+            />
           </div>
           <div className="col-2">
-            <input type="text" className="form-control" />
+            <input
+              type="text"
+              className="form-control autotab-4"
+              maxLength={4}
+            />
           </div>
           <div className="col-2">
-            <input type="text" className="form-control" />
+            <input
+              type="text"
+              className="form-control autotab-4"
+              maxLength={4}
+            />
           </div>
         </div>
         <div className="row justify-content-between my-3">
           <p className="col-sm-2 col-3 fw-bold">有效期限</p>
           <div className="col-2">
-            <input type="text" className="form-control" />
+            <input type="text" className="form-control" maxLength={2} />
           </div>
           <div className="col-2">
-            <input type="text" className="form-control" />
+            <input type="text" className="form-control" maxLength={2} />
           </div>
           <p className="col-2 fw-bold">安全碼</p>
           <div className="col-2">
-            <input type="text" className="form-control" />
+            <input type="text" className="form-control" maxLength={3} />
           </div>{' '}
         </div>
         <h6 className="span my-3">※ 持卡人資料 Cardholder Information </h6>
@@ -269,6 +295,8 @@ export default function Home() {
           }
         }
       `}</style>
+      {/* <AutoTab className={'autotab-4'} maxLength={4} /> */}
+      <AutoTab className="autotab-4" maxLength={4} />
     </div>
   )
 }
