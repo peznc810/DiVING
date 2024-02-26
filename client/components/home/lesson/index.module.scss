@@ -84,3 +84,11 @@
     opacity: 1;
   }
 }
+
+@media screen and (max-width: 768px) {
+  .LessonSection {
+    .lessonScroll {
+      flex-wrap: wrap;
+    }
+  }
+}

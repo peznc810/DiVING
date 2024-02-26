@@ -2,9 +2,13 @@
 
 .news {
   width: 100%;
+  margin-block: 50px;
   margin-bottom: 100px;
+
   .title {
     border-left: 4px solid $secondary;
+    margin-left: 50px;
+    margin-bottom: 30px;
     h3 {
       font-family: Noto Serif TC;
       letter-spacing: 1px;
@@ -18,6 +22,15 @@
     .moreBtn:hover {
       color: #fff;
       border-bottom: 1px solid #fff;
+    }
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .news {
+    margin-top: 0px;
+    .title {
+      margin-left: 20px;
     }
   }
 }

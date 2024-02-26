@@ -14,6 +14,10 @@ export default function Index() {
   // 改變頁面body的顏色
   useEffect(() => {
     if (currentPage === '/') document.body.style.backgroundColor = '#013c64'
+    // 如果跳轉到其他頁面背景不會改變
+    return () => {
+      document.body.style.backgroundColor = ''
+    }
   }, [currentPage])
 
   return (

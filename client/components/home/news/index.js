@@ -7,10 +7,10 @@ import { IoMdArrowDropright } from 'react-icons/io'
 export default function News() {
   return (
     <>
-      <section className={`${styles.news} my-5`}>
+      <section className={`${styles.news}`}>
         <div className={`container-fluid p-0 ${styles.content}`}>
           {/* 標題 */}
-          <div className={`p-5 `}>
+          <div className={``}>
             <div className={`ps-3 ${styles.title} d-flex align-items-end`}>
               <h3 className="me-3 mb-0">NEWS</h3>
               <Link

@@ -61,7 +61,7 @@ export default function LessonSection() {
               return (
                 <div
                   key={v.id}
-                  className={`${styles.lessonItem} position-relative flex-shrink-0`}
+                  className={`${styles.lessonItem} position-relative `}
                 >
                   <Link href={'#'} className={`${styles.lessonLink} `}>
                     <div className={`${styles.info} text-center`}>

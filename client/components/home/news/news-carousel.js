@@ -13,7 +13,7 @@ export default function NewsCarousel() {
         data-bs-ride="carousel"
       >
         <div
-          className={`carousel-inner d-flex align-items-center pt-3 ps-4 ${styles.carouselInner}`}
+          className={`carousel-inner d-flex align-items-center pt-3  ${styles.carouselInner}`}
         >
           <NewsItem />
           <NewsItem />
@@ -21,7 +21,7 @@ export default function NewsCarousel() {
           <NewsItem />
           <NewsItem />
         </div>
-        <div className={`${styles.arrowBtn} me-5 position-absolute`}>
+        <div className={`${styles.arrowBtn}  position-absolute`}>
           <button type="button" className={`me-3`}>
             <IoIosArrowBack />
           </button>

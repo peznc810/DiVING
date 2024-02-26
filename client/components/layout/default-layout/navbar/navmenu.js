@@ -4,6 +4,7 @@ import styles from './navmenu.module.scss'
 import { menuItems } from '@/config/nav-menu'
 
 export default function NavMenu() {
+  const [hover, setHover] = useState(false)
   const [openIndex, setOpeIndex] = useState(false)
 
   return (
@@ -29,22 +30,27 @@ export default function NavMenu() {
           return (
             <li key={v.id} className={`mx-3 ${styles.subMenu}`}>
               <Link
-                href={'/'}
+                href={'/event'}
                 className={`py-2 ${styles.linkText} ${
                   openIndex === i ? styles.linkFocus : ''
                 } `}
                 role="button"
                 onMouseEnter={() => {
+                  // setOpeIndex(null)
                   setOpeIndex(i)
                 }}
               >
                 {v.label}
               </Link>
               {/* 下拉選單 dropdown-menu */}
+
               <ul
                 className={`${
                   openIndex === i ? styles.active : styles.inactive
                 }`}
+                onMouseEnter={() => {
+                  setOpeIndex(i)
+                }}
                 onMouseLeave={() => {
                   setOpeIndex(false)
                 }}

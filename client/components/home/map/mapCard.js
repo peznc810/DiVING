@@ -10,10 +10,10 @@ export default function MapCard() {
       </div>
       <div className={`${styles.cardBody} p-3`}>
         <div
-          className={`${styles.weather} d-flex flex-nowrap align-items-center justify-content-center`}
+          className={`${styles.weather} d-flex align-items-center justify-content-center`}
         >
           <div className={`${styles.location}`}>
-            <h5 className={`pe-3 mb-0`}>墾丁</h5>
+            <h5 className={` mb-0`}>墾丁</h5>
           </div>
           <ul className={`d-flex align-items-center p-0 m-0`}>
             <li className={`me-4 `}>
