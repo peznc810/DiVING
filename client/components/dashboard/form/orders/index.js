@@ -1,5 +1,6 @@
 import React from 'react'
 import styles from '../styles.module.scss'
+import Link from 'next/link'
 
 export default function Form() {
   return (
@@ -10,7 +11,7 @@ export default function Form() {
             <div className="accordion-header">
               <h2 className="fw-medium fs-5 d-flex py-3 m-0">訂單資訊</h2>
             </div>
-            <div className="accordion-body">
+            <div className="accordion-body overflow-auto">
               <table className="table mb-4">
                 <thead className="fs-6">
                   <tr>
@@ -29,12 +30,12 @@ export default function Form() {
                     <td>Otto</td>
                     <td>@mdo</td>
                     <td>
-                      <button
-                        type="submit"
+                      <Link
+                        href="#"
                         className="btn btn-secondary btn-sm text-white"
                       >
                         訂單詳情
-                      </button>
+                      </Link>
                     </td>
                   </tr>
                   <tr className="align-middle">
@@ -43,12 +44,12 @@ export default function Form() {
                     <td>Thornton</td>
                     <td>@fat</td>
                     <td>
-                      <button
-                        type="submit"
+                      <Link
+                        href="#"
                         className="btn btn-secondary btn-sm text-white"
                       >
                         訂單詳情
-                      </button>
+                      </Link>
                     </td>
                   </tr>
                   <tr className="align-middle">
@@ -57,12 +58,12 @@ export default function Form() {
                     <td>@twitter</td>
                     <td>@twitter</td>
                     <td>
-                      <button
-                        type="submit"
+                      <Link
+                        href="#"
                         className="btn btn-secondary btn-sm text-white"
                       >
                         訂單詳情
-                      </button>
+                      </Link>
                     </td>
                   </tr>
                 </tbody>

@@ -12,14 +12,31 @@ export default function Detail() {
               <h2 className="fw-medium fs-5 d-flex py-3 m-0">優惠券</h2>
             </div>
             <div className="accordion-body">
-              <div className="filter"></div>
+              {/* 篩選＆搜尋，要再調整 */}
+              <div className="d-flex justify-content-between align-items-center mb-3">
+                <div className="d-flex align-items-center">
+                  <button className="btn btn-sm text-secondary">全部</button>|
+                  <button className="btn btn-sm">可使用</button>|
+                  <button className="btn btn-sm">已使用</button>
+                </div>
+                <div className="d-flex justify-content-end">
+                  <input type="text" className="form-control w-50 h-50 me-2" />
+                  <button
+                    className={`btn btn-sm btn-outline-secondary ${styles['hover-style']}`}
+                  >
+                    領取
+                  </button>
+                </div>
+              </div>
               {/* 這裡之後要再跟成List跟Item的component */}
-              <div className="mb-4">
-                <div className={`row g-2 ${styles.card}`}>
+              <div className="mb-5">
+                <div className={`row g-3 ${styles.card}`}>
                   {/* 卡片本體 */}
                   <div className="col-12 col-md-6">
-                    <div className=" d-flex border border-info rounded p-3">
-                      <div className={`${styles.avatar} flex-shrink-0 me-3`}>
+                    <div className=" d-flex border border-info rounded p-3 h-100">
+                      <div
+                        className={`rounded ${styles.avatar} flex-shrink-0 me-3`}
+                      >
                         <Image
                           src="/images/coupons/turtle.jpg"
                           alt="turtle"
@@ -33,8 +50,10 @@ export default function Detail() {
                     </div>
                   </div>
                   <div className="col-12 col-md-6">
-                    <div className=" d-flex border border-info rounded p-3">
-                      <div className={`${styles.avatar} flex-shrink-0 me-3`}>
+                    <div className=" d-flex border border-info rounded p-3 h-100">
+                      <div
+                        className={`rounded ${styles.avatar} flex-shrink-0 me-3`}
+                      >
                         <Image
                           src="/images/coupons/turtle.jpg"
                           alt="turtle"
@@ -50,7 +69,7 @@ export default function Detail() {
                 </div>
               </div>
               {/* 頁數按鈕 */}
-              <div className="d-flex justify-content-end">
+              <div className="d-flex justify-content-center">
                 <div
                   className="btn-group"
                   role="group"

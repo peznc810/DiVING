@@ -35,43 +35,64 @@ export default function Menu() {
           {/* 列表 */}
           <ul className="list-unstyled my-3 px-0">
             <li>
-              <Link className="ps-4" href="/dashboard/profile">
+              <Link
+                className="text-center text-sm-start ps-sm-4"
+                href="/dashboard/profile"
+              >
                 <GoPerson />
                 個人資訊
               </Link>
             </li>
             <li>
-              <Link className="ps-4" href="/dashboard/orders">
+              <Link
+                className="text-center text-sm-start ps-sm-4"
+                href="/dashboard/orders"
+              >
                 <LuClipboardList />
-                訂單資訊
+                訂單記錄
               </Link>
             </li>
             <li className="">
-              <Link className="ps-4" href="/dashboard/coupons">
+              <Link
+                className="text-center text-sm-start ps-sm-4"
+                href="/dashboard/coupons"
+              >
                 <HiOutlineTicket />
                 優惠券
               </Link>
             </li>
             <li>
-              <Link className="ps-4" href="/dashboard/comments">
+              <Link
+                className="text-center text-sm-start ps-sm-4"
+                href="/dashboard/comments"
+              >
                 <TbMessage />
                 我的評論
               </Link>
             </li>
             <li>
-              <Link className="ps-4" href="/dashboard/favorites">
+              <Link
+                className="text-center text-sm-start ps-sm-4"
+                href="/dashboard/favorites"
+              >
                 <FaRegHeart />
                 我的收藏
               </Link>
             </li>
             <li>
-              <Link className="ps-4" href="/dashboard/posts">
+              <Link
+                className="text-center text-sm-start ps-sm-4"
+                href="/dashboard/posts"
+              >
                 <RiFileList2Line />
                 我的文章
               </Link>
             </li>
             <li>
-              <Link className="ps-4" href="/dashboard/logout">
+              <Link
+                className="text-center text-sm-start ps-sm-4"
+                href="/dashboard/logout"
+              >
                 <TbLogout2 />
                 登出
               </Link>

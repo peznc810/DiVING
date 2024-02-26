@@ -28,8 +28,8 @@ export default function Form() {
               >
                 <form action="">
                   <div className="accordion-body">
-                    <div className="row gy-3">
-                      <div className="col-sm-6">
+                    <div className="row gy-4">
+                      <div className="col-12 col-sm-6">
                         <label htmlFor="myName" className="form-label">
                           姓名
                         </label>
@@ -39,7 +39,7 @@ export default function Form() {
                           className="form-control"
                         />
                       </div>
-                      <div className="col-sm-6">
+                      <div className="col-12 col-sm-6">
                         <label htmlFor="myBirth" className="form-label">
                           生日
                         </label>
@@ -50,7 +50,7 @@ export default function Form() {
                         />
                       </div>
                       {/* 改的話要再註冊驗證一次 */}
-                      <div className="col-12">
+                      <div className="col-12 col-sm-6">
                         <label htmlFor="myEmail" className="form-label">
                           電子郵件
                         </label>
@@ -60,7 +60,7 @@ export default function Form() {
                           className="form-control"
                         />
                       </div>
-                      <div className="col-12">
+                      <div className="col-12 col-sm-6">
                         <label htmlFor="myTel" className="form-label">
                           電話號碼
                         </label>
@@ -115,8 +115,8 @@ export default function Form() {
               >
                 <form action="">
                   <div className="accordion-body">
-                    <div className="row gy-3">
-                      <div className="col-6 me-1">
+                    <div className="row gy-1">
+                      <div className="col-6 me-1 pb-4 position-relative">
                         <label htmlFor="password" className="form-label">
                           舊密碼
                         </label>
@@ -125,11 +125,15 @@ export default function Form() {
                           id="password"
                           className="form-control"
                         />
-                        <div id="emailHelp" className="form-text text-danger">
+                        {/* 還是改成紅色border + 叉叉icon？ */}
+                        <div
+                          id="emailHelp"
+                          className="form-text text-danger ps-1 position-absolute bottom-0"
+                        >
                           密碼錯誤
                         </div>
                       </div>
-                      <div className="col-6 me-1">
+                      <div className="col-6 me-1 pb-4">
                         <label htmlFor="newPassword" className="form-label">
                           新密碼
                         </label>
@@ -139,7 +143,7 @@ export default function Form() {
                           className="form-control"
                         />
                       </div>
-                      <div className="col-6 me-1">
+                      <div className="col-6 me-1 pb-4 position-relative">
                         <label htmlFor="rePassword" className="form-label">
                           確認密碼
                         </label>
@@ -148,7 +152,10 @@ export default function Form() {
                           id="rePassword"
                           className="form-control"
                         />
-                        <div id="emailHelp" className="form-text text-danger">
+                        <div
+                          id="emailHelp"
+                          className="form-text text-danger ps-1 position-absolute bottom-0 d-none"
+                        >
                           密碼錯誤
                         </div>
                       </div>

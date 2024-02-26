@@ -21,8 +21,9 @@
   }
 }
 @media screen and (max-width: 576px) {
-  .menu-container {
+  .form-container {
     max-width: 100% !important;
-    border-radius: 0.375rem 0.375rem 0 0 !important;
+    border-radius: 0 0 0.375rem 0.375rem !important;
+    border-top: none;
   }
 }
