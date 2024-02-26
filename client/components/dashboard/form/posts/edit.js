@@ -12,6 +12,23 @@ export default function Form() {
             </div>
             <div className="accordion-body overflow-auto">
               {/* 從這裡加外掛 */}
+              <input
+                type="text"
+                className="form-control mb-4"
+                placeholder="請輸入標題"
+              />
+              <input
+                type="text"
+                className="form-control mb-4"
+                placeholder="新增標籤"
+              />
+              <textarea
+                name=""
+                id=""
+                cols="30"
+                rows="10"
+                className="form-control"
+              ></textarea>
             </div>
           </div>
         </div>
