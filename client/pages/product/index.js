@@ -44,7 +44,6 @@ export default function List() {
         return res.json()
     }).then((data)=> setProduct(data))
   }, [])
-  // const cardsData = Array.from({ length: 9 }, (_, index) => index + 1)
   
   const items = useMemo(() => {
     if (!product) return [];

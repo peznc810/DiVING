@@ -15,6 +15,7 @@ export default function Detail() {
   const [product, setProduct] = useState(null)
 
   const [selectColor, setSelectColor] = useState(null)
+  const [selectSize, setSelectSize] = useState(null)
 
   useEffect(() => {
     if (!pid) return
@@ -90,23 +91,25 @@ export default function Detail() {
             })}
 
             <br />
+
             {/* 尺寸 bottom */}
             <span className="btn-size p-2">尺寸</span>
-            <button type="button" className="btn btn-circle">
-              F
-            </button>
-            <button type="button" className="btn btn-circle">
-              S
-            </button>
-            <button type="button" className="btn btn-circle">
-              M
-            </button>
-            <button type="button" className="btn btn-circle">
-              L
-            </button>
-            <button type="button" className="btn btn-circle">
-              XL
-            </button>
+            {product.size.split(',').map((size) => {
+              return (
+              <button 
+              key={size}
+              onClick={()=> setSelectSize(size)}
+              className="btn btn-circle"
+              style={
+                selectSize === size 
+                ? { backgroundColor: '#265475', color: 'white' }
+                : null
+              }
+              >
+                {size}
+              </button>
+              )
+            })}
 
             {/* 選擇數量 */}
             <div>
@@ -126,6 +129,7 @@ export default function Detail() {
             >
               <i className="bi bi-person-heart"></i> 加入最愛
             </button>
+            
             {/* 加入最愛 */}
             <button className="btn btn-outline-primary w-100">
               加入購物車 <i className="bi bi-cart-plus-fill"></i>
@@ -157,7 +161,7 @@ export default function Detail() {
                     <div className="accordion-body px-1">
                       <ul>
                         <li>版型較大，建議訂購小半號</li>
-                        <li>尺寸：尺寸指南</li>
+                        <li>尺寸：可參考商品細節之尺寸指南</li>
                       </ul>
                     </div>
                   </div>
@@ -173,7 +177,7 @@ export default function Detail() {
                       aria-expanded="false"
                       aria-controls="panelsStayOpen-collapseTwo"
                     >
-                      免費寄送及退貨
+                      免運及退貨
                     </button>
                   </h2>
                   <div
