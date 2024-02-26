@@ -6,6 +6,7 @@
   border-left: 0;
   & h2 {
     padding-inline: 20px;
+    // 標題前面的線條
     &::before {
       content: '';
       width: 4px;
@@ -14,17 +15,29 @@
       margin-inline-end: 10px;
     }
   }
+  // 讓文字、圖片都置中
   & table * {
     text-align: center;
+    & th {
+      font-weight: 500;
+    }
+    & button:hover,
+    & a:hover {
+      color: $secondary;
+      transition: color 0.2s ease-in-out;
+    }
   }
-  & th {
-    font-weight: 500;
-  }
-  & button:active {
+  // 預設會有黑色border，改為透明才不會亂動
+  & button[type='button']:active {
     border-color: transparent !important;
   }
+  // outline btn需要
   .hover-style:hover {
     color: $white;
+  }
+  // 文章標題的超連結
+  .text-hover:hover {
+    text-decoration: underline;
   }
   .avatar {
     position: relative;

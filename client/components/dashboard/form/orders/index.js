@@ -9,17 +9,17 @@ export default function Form() {
         <div className="container my-4">
           <div className="accordion">
             <div className="accordion-header">
-              <h2 className="fw-medium fs-5 d-flex py-3 m-0">訂單資訊</h2>
+              <h2 className="fw-medium fs-5 d-flex py-3 m-0">訂單記錄</h2>
             </div>
             <div className="accordion-body overflow-auto">
-              <table className="table mb-4">
+              <table className="table mb-5">
                 <thead className="fs-6">
                   <tr>
                     <th scope="col">訂單編號</th>
                     <th scope="col">訂單日期</th>
                     <th scope="col">合計</th>
                     <th scope="col">訂單狀態</th>
-                    <th scope="col">訂單詳情</th>
+                    <th scope="col"></th>
                   </tr>
                 </thead>
                 <tbody>
@@ -31,7 +31,7 @@ export default function Form() {
                     <td>@mdo</td>
                     <td>
                       <Link
-                        href="#"
+                        href="/dashboard/orders/order"
                         className="btn btn-secondary btn-sm text-white"
                       >
                         訂單詳情
@@ -39,13 +39,13 @@ export default function Form() {
                     </td>
                   </tr>
                   <tr className="align-middle">
-                    <td>20240102</td>
-                    <td>Jacob</td>
-                    <td>Thornton</td>
-                    <td>@fat</td>
+                    <td>20240101</td>
+                    <td>Mark</td>
+                    <td>Otto</td>
+                    <td>@mdo</td>
                     <td>
                       <Link
-                        href="#"
+                        href="/dashboard/orders/order"
                         className="btn btn-secondary btn-sm text-white"
                       >
                         訂單詳情
@@ -53,13 +53,13 @@ export default function Form() {
                     </td>
                   </tr>
                   <tr className="align-middle">
-                    <td>20240103</td>
-                    <td>Larry the Bird</td>
-                    <td>@twitter</td>
-                    <td>@twitter</td>
+                    <td>20240101</td>
+                    <td>Mark</td>
+                    <td>Otto</td>
+                    <td>@mdo</td>
                     <td>
                       <Link
-                        href="#"
+                        href="/dashboard/orders/order"
                         className="btn btn-secondary btn-sm text-white"
                       >
                         訂單詳情
@@ -68,7 +68,7 @@ export default function Form() {
                   </tr>
                 </tbody>
               </table>
-              <div className="d-flex justify-content-end">
+              <div className="d-flex justify-content-center">
                 <div
                   className="btn-group"
                   role="group"

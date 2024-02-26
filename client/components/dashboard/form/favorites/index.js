@@ -6,7 +6,7 @@ import Image from 'next/image'
 // React icon
 import { FaTrashCan } from 'react-icons/fa6'
 
-export default function Detail() {
+export default function Form() {
   return (
     <>
       <div className={`col-sm-8 p-0 rounded-end ${styles['form-container']}`}>
@@ -19,9 +19,17 @@ export default function Detail() {
               {/* 篩選＆搜尋，要再調整 */}
               <div className="d-flex justify-content-between align-items-center mb-3">
                 <div className="d-flex align-items-center">
-                  <button className="btn btn-sm text-secondary">全部</button>|
-                  <button className="btn btn-sm">商品</button>|
-                  <button className="btn btn-sm">課程</button>
+                  <button type="button" className="btn btn-sm text-secondary">
+                    全部
+                  </button>
+                  |
+                  <button type="button" className="btn btn-sm">
+                    商品
+                  </button>
+                  |
+                  <button type="button" className="btn btn-sm">
+                    課程
+                  </button>
                 </div>
               </div>
               <table className="table mb-5">
@@ -59,34 +67,7 @@ export default function Detail() {
                       </Link>
                     </td>
                     <td>
-                      <button className="btn">
-                        <FaTrashCan />
-                      </button>
-                    </td>
-                  </tr>
-                  <tr className="align-middle">
-                    <td className="d-flex justify-content-center">
-                      <div className={`rounded ${styles.avatar} flex-shrink-0`}>
-                        <Image
-                          src="/images/coupons/turtle.jpg"
-                          alt="turtle"
-                          fill
-                        />
-                      </div>
-                    </td>
-                    <td>Mark</td>
-                    <td>Otto</td>
-                    <td>@mdo</td>
-                    <td>
-                      <Link
-                        href="#"
-                        className="btn btn-secondary btn-sm text-white"
-                      >
-                        商品詳情
-                      </Link>
-                    </td>
-                    <td>
-                      <button className="btn">
+                      <button type="button" className="btn">
                         <FaTrashCan />
                       </button>
                     </td>

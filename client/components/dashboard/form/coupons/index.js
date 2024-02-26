@@ -2,7 +2,7 @@ import React from 'react'
 import styles from '../styles.module.scss'
 import Image from 'next/image'
 
-export default function Detail() {
+export default function Form() {
   return (
     <>
       <div className={`col-sm-8 p-0 rounded-end ${styles['form-container']}`}>
@@ -15,9 +15,13 @@ export default function Detail() {
               {/* 篩選＆搜尋，要再調整 */}
               <div className="d-flex justify-content-between align-items-center mb-3">
                 <div className="d-flex align-items-center">
-                  <button className="btn btn-sm text-secondary">全部</button>|
-                  <button className="btn btn-sm">可使用</button>|
-                  <button className="btn btn-sm">已使用</button>
+                  <button type="button" className="btn btn-sm text-secondary">
+                    可使用
+                  </button>
+                  |
+                  <button type="button" className="btn btn-sm">
+                    已失效
+                  </button>
                 </div>
                 <div className="d-flex justify-content-end">
                   <input type="text" className="form-control w-50 h-50 me-2" />

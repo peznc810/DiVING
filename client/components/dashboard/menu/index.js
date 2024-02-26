@@ -25,7 +25,7 @@ export default function Menu() {
             <Image src="/images/users/woman.jpg" alt="avatar" fill priority />
           </div>
           {/* 顯示優惠券張數 */}
-          <div className="text-center py-3 border-top border-bottom d-none">
+          <div className="text-center py-3 border-top border-bottom ">
             {/* 欠： hover的動畫 */}
             <Link href="/dashboard/coupons" className=" text-secondary">
               1
