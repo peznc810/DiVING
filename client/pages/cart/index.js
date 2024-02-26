@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import Link from 'next/link'
+import Swal from 'sweetalert2'
+import withReactContent from 'sweetalert2-react-content'
+const MySwal = withReactContent(Swal)
 
 import { FaShoppingCart, FaRegTrashAlt } from 'react-icons/fa'
 import CartStep from '@/components/cart/cart-step'
 
 export default function Home() {
-  // let totalPrice = 0
-  const [cartData, setCartData] = useState(null)
+  const [cartData, setCartData] = useState([])
   const [totalPrice, setTotalPrice] = useState(0)
   const [deliveryFee] = useState(50)
   const [discount] = useState(0)
@@ -17,38 +19,69 @@ export default function Home() {
     calculateTotalPrice(data)
   }, [])
 
+  const notifySA = (productName, i) => {
+    MySwal.fire({
+      icon: 'question',
+      title: <>{`確認要刪除${productName}嗎?`}</>,
+      showConfirmButton: true,
+      confirmButtonText: '確認',
+      showDenyButton: true,
+      denyButtonText: `取消`,
+    }).then((result) => {
+      if (result.isConfirmed) {
+        MySwal.fire({
+          title: '已成功刪除!',
+          icon: 'success',
+        })
+        handleDeleteItem(i)
+      }
+    })
+  }
+
   const calculateTotalPrice = (data) => {
     let total = 0
     data.forEach((item) => {
-      const price =
-        item.productPrice * item.product_num ||
-        item.lessonPrice * item.lesson_num
+      const price = (item.productPrice || item.lessonPrice) * item.num
       total += price
     })
     setTotalPrice(total)
   }
 
   const handleIncrement = (index) => {
-    const input = document.querySelector(`.input${index}`)
-    input.value = parseInt(input.value) + 1
-    let price =
-      input.value *
-      (cartData[index].productPrice || cartData[index].lessonPrice)
-    const priceSection = document.querySelector(`.Price${index}`)
-    priceSection.innerHTML = `NT$ ${price}`
-    setTotalPrice(
-      totalPrice +
-        (cartData[index].productPrice || cartData[index].productPrice)
-    )
+    const updatedCartData = [...cartData]
+    updatedCartData[index].num += 1
+    setCartData(updatedCartData)
+    localStorage.setItem('cart', JSON.stringify(updatedCartData))
+    calculateTotalPrice(updatedCartData)
   }
 
   const handleDecrement = (index) => {
-    const input = document.querySelector(`.input${index}`)
-    input.value = parseInt(input.value) + -1
-    setTotalPrice(
-      totalPrice -
-        (cartData[index].productPrice || cartData[index].productPrice)
-    )
+    const updatedCartData = [...cartData]
+    if (updatedCartData[index].num > 1) {
+      updatedCartData[index].num -= 1
+      setCartData(updatedCartData)
+      localStorage.setItem('cart', JSON.stringify(updatedCartData))
+      calculateTotalPrice(updatedCartData)
+    }
+  }
+
+  const handleInputChange = (index, event) => {
+    const updatedCartData = [...cartData]
+    const newValue = parseInt(event.target.value)
+    if (!isNaN(newValue) && newValue > 0) {
+      updatedCartData[index].num = newValue
+      setCartData(updatedCartData)
+      localStorage.setItem('cart', JSON.stringify(updatedCartData))
+      calculateTotalPrice(updatedCartData)
+    }
+  }
+
+  const handleDeleteItem = (index) => {
+    const updatedCartData = [...cartData]
+    updatedCartData.splice(index, 1)
+    setCartData(updatedCartData)
+    localStorage.setItem('cart', JSON.stringify(updatedCartData))
+    calculateTotalPrice(updatedCartData)
   }
 
   return (
@@ -72,22 +105,15 @@ export default function Home() {
           <tbody>
             {cartData ? (
               cartData.map((item, i) => {
-                const a = () => {
-                  console.log('aaa')
-                  document.querySelector(`input${i}`).value =
-                    document.querySelector(`input${i}`).value + 1
-                }
                 const {
                   lessonName,
                   lessonPrice,
-                  lesson_num,
+                  num,
                   productName,
                   productPrice,
-                  product_num,
                 } = item
-
-                let price =
-                  productPrice * product_num || lessonPrice * lesson_num
+                console.log(num)
+                let price = (productPrice || lessonPrice) * num
                 return (
                   <tr key={i}>
                     <td>
@@ -118,8 +144,8 @@ export default function Home() {
                       <input
                         type="text"
                         className={`w-25 text-center input${i}`}
-                        defaultValue={product_num || lesson_num}
-                        // defaultValue={numArray[i]}
+                        value={num}
+                        onChange={(event) => handleInputChange(i, event)}
                       />
                       <button
                         type="button"
@@ -133,7 +159,11 @@ export default function Home() {
                       <p className={`Price${i}`}>NT${price}</p>
                     </td>
                     <td>
-                      <FaRegTrashAlt size={22} />
+                      <FaRegTrashAlt
+                        size={22}
+                        onClick={() => notifySA(productName || lessonName, i)}
+                        style={{ cursor: 'pointer' }}
+                      />
                     </td>
                   </tr>
                 )

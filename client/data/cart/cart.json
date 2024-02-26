@@ -1,15 +1,15 @@
 [
     {
         "product_id":"1",
-        "product_num":2
+        "num":2
     },
     {
 
         "lesson_id":"2",
-        "lesson_num":3
+        "num":3
     },
     {
         "product_id":"2",
-        "product_num":2
+        "num":2
     }
 ]

@@ -52,20 +52,14 @@ export default function Home() {
           <p className="col  text-end">小計</p>
         </div>
         {data2.map((item, i) => {
-          const {
-            lessonName,
-            lessonPrice,
-            lesson_num,
-            productName,
-            productPrice,
-            product_num,
-          } = item
-          let price = productPrice * product_num || lessonPrice * lesson_num
+          const { lessonName, lessonPrice, num, productName, productPrice } =
+            item
+          let price = productPrice || lessonPrice * num
           totalPrice += price
           return (
             <div className="row" key={i}>
               <p className="col-6 fw-bold">{productName || lessonName}</p>
-              <p className="col">{product_num || lesson_num}</p>
+              <p className="col">{num}</p>
               <p className="col text-end">NT${price}</p>
             </div>
           )

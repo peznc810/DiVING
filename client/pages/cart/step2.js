@@ -36,13 +36,11 @@ export default function Home() {
                 const {
                   lessonName,
                   lessonPrice,
-                  lesson_num,
+                  num,
                   productName,
                   productPrice,
-                  product_num,
                 } = item
-                let price =
-                  productPrice * product_num || lessonPrice * lesson_num
+                let price = (productPrice || lessonPrice) * num
                 totalPrice += price
                 return (
                   <tr key={i}>
@@ -64,7 +62,7 @@ export default function Home() {
                       </p>
                     </td>
                     <td>
-                      <span>{product_num || lesson_num}</span>
+                      <span>{num}</span>
                     </td>
                     <td>NT${price}</td>
                   </tr>
