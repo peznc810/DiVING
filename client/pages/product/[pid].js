@@ -7,6 +7,8 @@ import Switch from '@/components/product/detail/switch'
 import ProductRecommond from '@/components/product/detail/product-recommond'
 import Link from 'next/link'
 
+import styles from './product.module.scss'
+
 export default function Detail() {
   const router = useRouter()
   const { pid } = router.query
@@ -25,11 +27,6 @@ export default function Detail() {
       })
   }, [pid])
 
-  // const colorBtn = document.querySelector('.color-btn')
-
-  // colorBtn.addEventListener('click', (e) => {
-  //   e.currentTarget.classList.add('active')
-  // })
   if (!product) return null  
   return (
     <>
@@ -59,7 +56,7 @@ export default function Detail() {
         <div className="row mt-5 mx-2 my-5">
           <div className="col-sm-7">
             <div className="position-sticky" style={{ top: '2rem' }}>
-              <Carousel />
+              <Carousel imgFileNames={product.img.split(',')} id={product.id} category={product.category} />
             </div>
           </div>
 

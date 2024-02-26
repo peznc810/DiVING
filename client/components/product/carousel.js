@@ -1,28 +1,24 @@
 import { useState } from 'react'
-// Import Swiper React components
+
 import { Swiper, SwiperSlide } from 'swiper/react'
 
-// Import Swiper styles
 import 'swiper/css'
 import 'swiper/css/free-mode'
 import 'swiper/css/navigation'
 import 'swiper/css/thumbs'
 
-// import required modules
 import { Autoplay, FreeMode, Navigation, Thumbs } from 'swiper/modules'
 
-// 範例出處
-// https://swiperjs.com/demos#thumbs-gallery
-// https://codesandbox.io/s/k3cyyc
-export default function Carousel() {
-  const [thumbsSwiper, setThumbsSwiper] = useState(null)
 
+export default function Carousel({imgFileNames, id, category}) {
+  const [thumbsSwiper, setThumbsSwiper] = useState(null)
+  console.log('category', category)
   return (
     <>
-      <Swiper
+    <Swiper
         style={{
-          '--swiper-navigation-color': '#fff',
-          '--swiper-pagination-color': '#fff',
+          '--swiper-navigation-color': '#265475',
+          '--swiper-pagination-color': '#265475',
         }}
         autoplay={{
           delay: 2500,
@@ -34,21 +30,13 @@ export default function Carousel() {
         modules={[Autoplay, FreeMode, Navigation, Thumbs]}
         className="mySwiper2"
       >
-        <SwiperSlide>
-          <img src="/images/product/slide/t1.jpg" />
+      {imgFileNames.map((imgFileName) => {
+        return <SwiperSlide key={imgFileName}>
+        <div className="img-container">
+          <img src={`/images/product/images/${category}/${id}/${imgFileName}.jpeg`} />
+        </div>
         </SwiperSlide>
-        <SwiperSlide>
-          <img src="/images/product/slide/t2.jpg" />
-        </SwiperSlide>
-        <SwiperSlide>
-          <img src="/images/product/slide/t3.jpg" />
-        </SwiperSlide>
-        <SwiperSlide>
-          <img src="/images/product/slide/t4.jpg" />
-        </SwiperSlide>
-        <SwiperSlide>
-          <img src="/images/product/slide/t5.jpg" />
-        </SwiperSlide>
+      })}
       </Swiper>
       <Swiper
         onSwiper={setThumbsSwiper}
@@ -59,22 +47,73 @@ export default function Carousel() {
         modules={[FreeMode, Navigation, Thumbs]}
         className="mySwiper"
       >
-        <SwiperSlide>
-          <img src="/images/product/slide/t1.jpg" />
+      {imgFileNames.map((imgFileName) => {
+       return <SwiperSlide key={imgFileName}>
+          <div className="img-bottom">
+            <img src={`/images/product/images/${category}/${id}/${imgFileName}.jpeg`} />
+          </div>
         </SwiperSlide>
-        <SwiperSlide>
-          <img src="/images/product/slide/t2.jpg" />
-        </SwiperSlide>
-        <SwiperSlide>
-          <img src="/images/product/slide/t3.jpg" />
-        </SwiperSlide>
-        <SwiperSlide>
-          <img src="/images/product/slide/t4.jpg" />
-        </SwiperSlide>
-        <SwiperSlide>
-          <img src="/images/product/slide/t5.jpg" />
-        </SwiperSlide>
+      })}
       </Swiper>
+      
+      <style jsx>{`
+          {/* .mySwiper2 {
+          height: 80%;
+          width: 100%;
+        }
+
+        .mySwiper {
+          height: 20%;
+          box-sizing: border-box;
+          padding: 10px 0;
+          margin: 10px 0;
+        } */}
+
+      .img-container {
+          display: flex; 
+          justify-content: center;
+          align-items: center; 
+          width: 660px;
+          height: 480px;
+          overflow: hidden;
+      }
+
+      .img-container img {
+          width: 100%;
+          height: 100%;
+          object-fit: contain;
+      }
+      
+      .img-bottom {
+          width: 100px; 
+          height: 100px; 
+          margin: 15px auto;
+      }
+
+      .img-bottom img {
+          max-width: 100%;
+          max-height: 100%; 
+          display: block; 
+          margin: auto; 
+      }
+      @media max-width: 390px {
+      .img-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%; 
+        height: auto; 
+      }
+
+      .img-container img {
+        margin: auto;
+        max-width: 100%; 
+        max-height: 100%; 
+        object-fit: contain; 
+      }
+    }
+      `}
+      </style>
     </>
   )
 }

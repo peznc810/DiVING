@@ -8,6 +8,8 @@ import Filter from '@/components/product/list/filter'
 import Pagination from '@/components/product/list/pagination'
 import Link from 'next/link'
 
+import styles from './product.module.scss'
+
 export default function List() {
   // Toggle the side navigation
   useEffect(() => {

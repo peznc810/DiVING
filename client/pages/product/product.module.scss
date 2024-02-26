@@ -1,3 +1,5 @@
+/* // sidebar toggle
+// https://github.com/StartBootstrap/startbootstrap-simple-sidebar */
 #wrapper {
   overflow-x: hidden;
 }
@@ -10,6 +12,11 @@
   -o-transition: margin 0.25s ease-out;
   transition: margin 0.25s ease-out;
 }
+
+/* // #sidebar-wrapper .sidebar-heading {
+//   padding: 0.875rem 1.25rem;
+//   font-size: 1.2rem;
+// } */
 
 #sidebar-wrapper {
   width: 17rem;
@@ -38,7 +45,7 @@ body.sb-sidenav-toggled #wrapper #sidebar-wrapper {
   }
 }
 
-/* // 圓型按鈕 btn-circle */
+// 圓型按鈕 btn-circle
 .btn-circle.btn-xl {
   width: 70px;
   height: 70px;
@@ -59,7 +66,7 @@ body.sb-sidenav-toggled #wrapper #sidebar-wrapper {
 }
 
 .w-350 {
-  width: 360px;
+  /* // width: 360px; */
   width: 100%;
 }
 
@@ -128,16 +135,16 @@ div.scroll {
 
 /* always show scrollbars */
 
-/* ::-webkit-scrollbar {
-  -webkit-appearance: none;
-  width: 7px;
-} */
+// ::-webkit-scrollbar {
+//   -webkit-appearance: none;
+//   width: 7px;
+// }
 
-/* ::-webkit-scrollbar-thumb {
-  border-radius: 4px;
-  background-color: rgba(0, 0, 0, 0.5);
-  box-shadow: 0 0 1px rgba(255, 255, 255, 0.5);
-} */
+// ::-webkit-scrollbar-thumb {
+//   border-radius: 4px;
+//   background-color: rgba(0, 0, 0, 0.5);
+//   box-shadow: 0 0 1px rgba(255, 255, 255, 0.5);
+// }
 
 .h-now {
   font-size: 16px;
@@ -200,3 +207,5 @@ div.scroll {
   height: 100%;
   object-fit: cover;
 }
+
+
