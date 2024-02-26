@@ -1,13 +1,13 @@
 import React from 'react'
 import Head from 'next/head'
 import Menu from '@/components/dashboard/menu'
-import Form from '@/components/dashboard/form/favorites'
+import Form from '@/components/dashboard/form/posts/edit'
 
-export default function Orders() {
+export default function Edit() {
   return (
     <>
       <Head>
-        <title>訂單記錄</title>
+        <title>編輯文章</title>
       </Head>
       <Menu />
       <Form />
