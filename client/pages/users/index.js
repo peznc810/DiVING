@@ -1,15 +1,12 @@
-import React from 'react'
-import Head from 'next/head'
-import Login from './login'
+import { useRouter } from 'next/router'
 
-export default function Users() {
-  return (
-    <>
-      {/* 登入頁面 */}
-      <Head>
-        <title>會員登入</title>
-      </Head>
-      <Login />
-    </>
-  )
+// only redirect to member/login
+export default function UsersIndex() {
+  const router = useRouter()
+  // Make sure we're in the browser
+  if (typeof window !== 'undefined') {
+    router.push('/users/login')
+  }
+
+  return <></>
 }

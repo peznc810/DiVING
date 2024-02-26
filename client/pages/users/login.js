@@ -1,14 +1,17 @@
 import React from 'react'
 import styles from './styles.module.scss'
 import Link from 'next/link'
+import Head from 'next/head'
 
 export default function Login() {
   return (
     <>
+      <Head>
+        <title>會員登入</title>
+      </Head>
       <main className={`${styles['main-style']} ${styles['main-layout']}`}>
-        <div className="d-flex justify-content-center">
+        <div className="d-flex justify-content-center mt-5">
           <div className={`${styles['card-style']} ${styles['card-layout']}`}>
-            {/* chrome會有一個自動填入的input功能，但無法修改其樣式，之後還是選用唇色做背景較合適 */}
             <form action="" method="post">
               <h2 className="fs-3 mb-4 text-center">會員登入</h2>
               <div className={`mb-3 ${styles['input-style']}`}>
