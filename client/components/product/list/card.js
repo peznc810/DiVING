@@ -3,7 +3,7 @@ import Stars from '@/components/product/star/star'
 import Pagination from '@/components/product/list/pagination'
 import Link from 'next/link'
 
-export default function Card({data}) {  
+export default function Card({data, addItem = () => {}}) {  
   const handleMouseEnter = () => {
     setIsHovered(true)
   }
@@ -21,7 +21,7 @@ export default function Card({data}) {
         >
           <div className="card-body no-space-x">
             <img
-              src={`/images/product/test/20/${data.id}-1.webp`}
+              src={`/images/product/images/${data.category}/${data.id}/${data.img}.jpeg`}
               alt={`${data.id}`}
               style={{
                 marginTop: isHovered ? '0' : '-15px',
@@ -33,7 +33,13 @@ export default function Card({data}) {
                   <button className="btn mouse-add p-2" variant="light">
                     <i className="bi bi-person-heart"></i>
                   </button>
-                  <button className="btn mouse-add p-2" variant="light">
+                  <button 
+                  className="btn mouse-add p-2" 
+                  variant="light"
+                  onClick={()=>{
+                    addItem(data)
+                  }}
+                  >
                     <i className="bi bi-cart-plus-fill"></i>
                   </button>
                 </div>
@@ -44,11 +50,12 @@ export default function Card({data}) {
                 <Stars />
                 <p className="card-text">{data.brand}</p>
                 <p className="card-text type-text h-now">{data.name}</p>
-                <span className="note-text">{`NT$ ${data.price.toLocaleString()}`}</span>
-                <br /> 
-                {data.discount ? <p className="text-decoration-line-through type-text card-text">
-                {`NT$ ${data.discount.toLocaleString()}`}
-                </p> : null}
+                {data.discount ?
+                <span className="note-text">{`NT$${data.discount.toLocaleString()}`}</span> : null}
+                <p className="text-decoration-line-through type-text card-text">
+                {`NT$${data.price.toLocaleString()}`}
+                </p> 
+                
               </div>
             )}
           </div>

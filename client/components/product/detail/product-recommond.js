@@ -1,8 +1,12 @@
-import React from 'react'
+import react from 'react'
+
 import Card from 'react-bootstrap/Card'
 import Button from 'react-bootstrap/Button'
 
-export default function ProductRecommend() {
+
+export default function ProductRecommend({}) {
+
+
   return (
     <>
       <div className="container width-1200">
@@ -21,7 +25,7 @@ export default function ProductRecommend() {
                     }}
                   />
                   <Card.Body>
-                    <Card.Title className="h6">商品名稱 </Card.Title>
+                    <Card.Title className="h6">商品名稱</Card.Title>
                     <div className="d-flex justify-content-between align-items-center mt-3">
                       <span className="note-text">NT$800</span>
                       <div>

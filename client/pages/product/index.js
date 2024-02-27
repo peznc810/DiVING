@@ -8,7 +8,7 @@ import Filter from '@/components/product/list/filter'
 import Pagination from '@/components/product/list/pagination'
 import Link from 'next/link'
 
-import styles from './product.module.scss'
+import styles from '@/components/product/product.module.css'
 
 export default function List() {
   // Toggle the side navigation
@@ -44,12 +44,27 @@ export default function List() {
         return res.json()
     }).then((data)=> setProduct(data))
   }, [])
-  
+
   const items = useMemo(() => {
     if (!product) return [];
     return product.data
   }, [product])
  
+
+  //在購物車中，增加數量
+
+
+   // 加入到購物車中的項目
+   const [addCart, setAddCart] = useState([])
+
+   const addItem = (item) => {
+    //先擴充屬性多一個aty:1
+    const newItem = { ...item, qty:1 }
+    //1 2
+    const newItems = [...items, item]
+    //3
+    setAddCart(newItems)
+  }
 
   return (
     <>
@@ -110,8 +125,8 @@ export default function List() {
               <div id="page-content-wrapper">
                 <div className="container-fluid">
                 <div className="row row-cols-1 row-cols-md-3 g-4">
-                {items.map((data, i) => 
-                  <Card key={i} data={data} />
+                {items.map((data) => 
+                  <Card key={data} data={data} addItem={addItem} />
                 )}                  
                 </div>
                 </div>

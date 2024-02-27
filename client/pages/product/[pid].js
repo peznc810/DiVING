@@ -7,7 +7,7 @@ import Switch from '@/components/product/detail/switch'
 import ProductRecommond from '@/components/product/detail/product-recommond'
 import Link from 'next/link'
 
-import styles from './product.module.scss'
+import styles from '@/components/product/product.module.css'
 
 export default function Detail() {
   const router = useRouter()
@@ -28,6 +28,22 @@ export default function Detail() {
       })
   }, [pid])
 
+  // 增加數量，回傳新的陣列，符合id的商品數量+1
+  const increment = (products, id) => {
+    return product.map((v, i) => {
+      if (v.id === id) return { ...v, count: v.count + 1 }
+      else return v
+    })
+  }
+
+  // 減少數量，回傳新的陣列，符合id的商品數量-1
+  const decrement = (products, id) => {
+    return product.map((v, i) => {
+      if (v.id === id) return { ...v, count: v.count - 1 }
+      else return v
+    })
+  }
+
   if (!product) return null  
   return (
     <>
@@ -40,7 +56,7 @@ export default function Detail() {
               className="p-2"
               style={{ color: '#303132' }}
             >
-              <i class="bi bi-droplet-half p-1"></i>品牌
+              <i class="bi bi-droplet-half p-1"></i> 品牌
             </Link>
             <div className="p-1">&gt;</div>
             <Link
@@ -68,7 +84,8 @@ export default function Detail() {
 
             <h6 className="note-text">{`NT$${product.discount.toLocaleString()}`}</h6>
             <p className="text-decoration-line-through type-text">{`NT$${product.price.toLocaleString()}`}</p>
-            <p className="product-desc">{product.info}</p>
+            <p dangerouslySetInnerHTML={{ __html: product.info.replace(/\n/g, '<br>') }}></p>
+
             <hr />
 
             {/* 顏色 button */}
