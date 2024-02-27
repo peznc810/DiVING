@@ -4,7 +4,7 @@ import styles from './navmenu.module.scss'
 import { menuItems } from '@/config/nav-menu'
 
 export default function NavMenu() {
-  const [hover, setHover] = useState(false)
+  // const [hover, setHover] = useState(false)
   const [openIndex, setOpeIndex] = useState(false)
 
   return (

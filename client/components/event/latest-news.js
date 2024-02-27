@@ -5,7 +5,7 @@ import styles from './latest-news.module.scss'
 import EventCard from './event-card'
 import EventFilter from './event-filter'
 
-export default function LatestNews() {
+export default function LatestNews({ eventList }) {
   return (
     <>
       <section className={`py-5 container`}>
@@ -69,18 +69,7 @@ export default function LatestNews() {
         </div>
         <EventFilter />
         <div className={`p-4 d-flex flex-wrap justify-content-center`}>
-          <EventCard />
-          <EventCard />
-          <EventCard />
-          <EventCard />
-          <EventCard />
-          <EventCard />
-          <EventCard />
-          <EventCard />
-          <EventCard />
-          <EventCard />
-          <EventCard />
-          <EventCard />
+          <EventCard eventList={eventList} />
         </div>
 
         {/* 分頁 */}
