@@ -1,5 +1,5 @@
 import React from 'react'
-import styles from '@/pages/dashboard/index.module.scss'
+import styles from './styles.module.scss'
 import Link from 'next/link'
 import Image from 'next/image'
 
@@ -16,70 +16,85 @@ export default function Menu() {
   return (
     <>
       <div
-        className={`col-sm-4 rounded-start text-white ${styles['menu-container']}`}
+        className={`col-sm-4 rounded-start text-white px-0 ${styles['menu-container']}`}
       >
-        <div className="container my-4 py-2">
+        <div className="container mt-4 px-0">
           {/* 大頭照 */}
-          {/* hover 的時候要可以編輯 */}
-          <div className={`${styles.avatar}`}>
-            <Image
-              src="/images/users/woman.jpg"
-              alt="avatar"
-              fill
-              priority
-              className="bg-white"
-            />
+          {/* 欠：hover 的時候要可以編輯 */}
+          <div className={`m-auto mb-4 ${styles.avatar}`}>
+            <Image src="/images/users/woman.jpg" alt="avatar" fill priority />
           </div>
           {/* 顯示優惠券張數 */}
           <div className="text-center py-3 border-top border-bottom ">
-            {/* 這裡還欠hover的動畫 */}
+            {/* 欠： hover的動畫 */}
             <Link href="/dashboard/coupons" className=" text-secondary">
               1
             </Link>
             <div className="">可用優惠券</div>
           </div>
           {/* 列表 */}
-          <ul className="list-unstyled py-3">
+          <ul className="list-unstyled my-3 px-0">
             <li>
-              <Link className="text-center" href="/dashboard/profile">
+              <Link
+                className="text-center text-sm-start ps-sm-4"
+                href="/dashboard/profile"
+              >
                 <GoPerson />
                 個人資訊
               </Link>
             </li>
             <li>
-              <Link className="text-center" href="/dashboard/orders">
+              <Link
+                className="text-center text-sm-start ps-sm-4"
+                href="/dashboard/orders"
+              >
                 <LuClipboardList />
                 訂單記錄
               </Link>
             </li>
             <li className="">
-              <Link className="text-center" href="/dashboard/coupons">
+              <Link
+                className="text-center text-sm-start ps-sm-4"
+                href="/dashboard/coupons"
+              >
                 <HiOutlineTicket />
-                <span className="me-3">優惠券</span>
+                優惠券
               </Link>
             </li>
             <li>
-              <Link className="text-center" href="/dashboard/comments">
+              <Link
+                className="text-center text-sm-start ps-sm-4"
+                href="/dashboard/comments"
+              >
                 <TbMessage />
                 我的評論
               </Link>
             </li>
             <li>
-              <Link className="text-center" href="/dashboard/favorites">
+              <Link
+                className="text-center text-sm-start ps-sm-4"
+                href="/dashboard/favorites"
+              >
                 <FaRegHeart />
                 我的收藏
               </Link>
             </li>
             <li>
-              <Link className="text-center" href="/dashboard/posts">
+              <Link
+                className="text-center text-sm-start ps-sm-4"
+                href="/dashboard/posts"
+              >
                 <RiFileList2Line />
                 我的文章
               </Link>
             </li>
             <li>
-              <Link className="text-center" href="/dashboard/logout">
+              <Link
+                className="text-center text-sm-start ps-sm-4"
+                href="/dashboard/logout"
+              >
                 <TbLogout2 />
-                <span className={styles.logout}>登出</span>
+                登出
               </Link>
             </li>
           </ul>
