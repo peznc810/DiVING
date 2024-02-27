@@ -1,6 +1,6 @@
 import express from 'express';
 import moment from 'moment';
-import db from '../db2.mjs';
+import db from '../db.mjs';
 import multer from 'multer';
 
 const router = express.Router();

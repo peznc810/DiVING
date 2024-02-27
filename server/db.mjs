@@ -11,3 +11,5 @@ const db = await mysql.createPool({
 	connectionLimit: 5,
 	queueLimit: 0
 });
+
+export default db
