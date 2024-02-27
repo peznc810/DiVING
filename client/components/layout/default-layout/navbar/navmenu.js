@@ -30,7 +30,7 @@ export default function NavMenu() {
           return (
             <li key={v.id} className={`mx-3 ${styles.subMenu}`}>
               <Link
-                href={'/event'}
+                href={v.href}
                 className={`py-2 ${styles.linkText} ${
                   openIndex === i ? styles.linkFocus : ''
                 } `}
