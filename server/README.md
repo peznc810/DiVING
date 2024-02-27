@@ -29,12 +29,7 @@ waitForConnections: true<br/>
 connectionLimit: 5<br/>
 queueLimit: 0<br/>
 
-#### ES-eslint
-
-以 XO 風格做編輯
-
 ##### 注意事項
 
- 1.檔案上傳,必須要更新最新的版本,在做上傳<br/> 2.檔案要上傳,比須告知其他成員,避免版本上會有衝突<br/>
-
+ 1.檔案上傳,必須要更新最新的版本,在做上傳<br/> 2.檔案要上傳,比須告知其他成員,避免版本上會有衝突<br/>3.所有有關server的設定都放在.env檔案內routes檔案內有一個template檔案，是連接database並操作新增、刪除、修改的範例。
 

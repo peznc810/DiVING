@@ -1,0 +1,326 @@
+[
+    {
+     "id": 1,
+     "map_id": 1,
+     "name": "石珠",
+     "image": "kt_1.jpg"
+    },
+    {
+     "id": 2,
+     "map_id": 1,
+     "name": "萬里桐-海扇區",
+     "image": "kt_2.jpg"
+    },
+    {
+     "id": 3,
+     "map_id": 1,
+     "name": "山海-赤筆仔礁",
+     "image": "kt_3.jpg"
+    },
+    {
+     "id": 4,
+     "map_id": 1,
+     "name": "紅柴坑",
+     "image": "kt_4.jpg"
+    },
+    {
+     "id": 5,
+     "map_id": 1,
+     "name": "合界-沈船",
+     "image": "kt_5.jpg"
+    },
+    {
+     "id": 6,
+     "map_id": 1,
+     "name": "頂白沙",
+     "image": "kt_6.jpg"
+    },
+    {
+     "id": 7,
+     "map_id": 1,
+     "name": "貓鼻頭-南海洞",
+     "image": "kt_7.jpg"
+    },
+    {
+     "id": 8,
+     "map_id": 1,
+     "name": "雷打石",
+     "image": "kt_8.jpg"
+    },
+    {
+     "id": 9,
+     "map_id": 1,
+     "name": "一線天",
+     "image": "kt_9.jpg"
+    },
+    {
+     "id": 10,
+     "map_id": 1,
+     "name": "出水口",
+     "image": "kt_10.jpg"
+    },
+    {
+     "id": 11,
+     "map_id": 1,
+     "name": "後壁湖-軟珊瑚區",
+     "image": "kt_11.jpg"
+    },
+    {
+     "id": 12,
+     "map_id": 1,
+     "name": "後壁湖-雀屏珊瑚區",
+     "image": "kt_12.jpg"
+    },
+    {
+     "id": 13,
+     "map_id": 1,
+     "name": "眺石",
+     "image": "kt_13.jpg"
+    },
+    {
+     "id": 14,
+     "map_id": 1,
+     "name": "南灣 三腳町",
+     "image": "kt_14.jpg"
+    },
+    {
+     "id": 15,
+     "map_id": 1,
+     "name": "獨立礁",
+     "image": "kt_15.jpg"
+    },
+    {
+     "id": 16,
+     "map_id": 1,
+     "name": "大咾咕-斜坡",
+     "image": "kt_16.jpg"
+    },
+    {
+     "id": 17,
+     "map_id": 1,
+     "name": "小咾咕-斷層",
+     "image": "kt_17.jpg"
+    },
+    {
+     "id": 18,
+     "map_id": 1,
+     "name": "雙峰藍洞",
+     "image": "kt_18.jpg"
+    },
+    {
+     "id": 19,
+     "map_id": 1,
+     "name": "香蕉灣",
+     "image": "kt_19.jpg"
+    },
+    {
+     "id": 20,
+     "map_id": 1,
+     "name": "沙島",
+     "image": "kt_20.jpg"
+    },
+    {
+     "id": 21,
+     "map_id": 2,
+     "name": "大香菇",
+     "image": "gi_1.jpg"
+    },
+    {
+     "id": 22,
+     "map_id": 2,
+     "name": "電桿礁",
+     "image": "gi_2.jpg"
+    },
+    {
+     "id": 23,
+     "map_id": 2,
+     "name": "六米礁",
+     "image": "gi_3.jpg"
+    },
+    {
+     "id": 24,
+     "map_id": 2,
+     "name": "龜灣鼻_白鞭林",
+     "image": "gi_4.jpg"
+    },
+    {
+     "id": 25,
+     "map_id": 2,
+     "name": "雞仔礁",
+     "image": "gi_5.jpg"
+    },
+    {
+     "id": 26,
+     "map_id": 3,
+     "name": "八代灣沈船",
+     "image": "oi_1.jpg"
+    },
+    {
+     "id": 27,
+     "map_id": 3,
+     "name": "機場外礁",
+     "image": "oi_2.jpg"
+    },
+    {
+     "id": 28,
+     "map_id": 3,
+     "name": "椰油斷層",
+     "image": "oi_3.jpg"
+    },
+    {
+     "id": 29,
+     "map_id": 3,
+     "name": "開元港園鰻區",
+     "image": "oi_4.jpg"
+    },
+    {
+     "id": 30,
+     "map_id": 3,
+     "name": "藍洞",
+     "image": "oi_5.jpg"
+    },
+    {
+     "id": 31,
+     "map_id": 4,
+     "name": "杉原北側",
+     "image": "ec_1.jpg"
+    },
+    {
+     "id": 32,
+     "map_id": 4,
+     "name": "基翬港北側",
+     "image": "ec_2.jpg"
+    },
+    {
+     "id": 33,
+     "map_id": 4,
+     "name": "基翬港南側",
+     "image": "ec_3.jpg"
+    },
+    {
+     "id": 34,
+     "map_id": 4,
+     "name": "新蘭港南側",
+     "image": "ec_4.jpg"
+    },
+    {
+     "id": 35,
+     "map_id": 4,
+     "name": "石梯坪",
+     "image": "ec_5.jpg"
+    },
+    {
+     "id": 36,
+     "map_id": 5,
+     "name": "員貝淺礁區",
+     "image": "ph_1.jpg,ph_1_1.jpg"
+    },
+    {
+     "id": 37,
+     "map_id": 5,
+     "name": "姑婆嶼",
+     "image": "ph_2.jpg,ph_2_1.jpg"
+    },
+    {
+     "id": 38,
+     "map_id": 5,
+     "name": "山水",
+     "image": "ph_3.jpg"
+    },
+    {
+     "id": 39,
+     "map_id": 5,
+     "name": "青灣",
+     "image": "ph_4.jpg"
+    },
+    {
+     "id": 40,
+     "map_id": 5,
+     "name": "風櫃內灣",
+     "image": "ph_5.jpg"
+    },
+    {
+     "id": 41,
+     "map_id": 6,
+     "name": "珊瑚城堡",
+     "image": "da_1.jpg"
+    },
+    {
+     "id": 42,
+     "map_id": 6,
+     "name": "沙丘海草床",
+     "image": "da_2.jpg"
+    },
+    {
+     "id": 43,
+     "map_id": 6,
+     "name": "檸檬鯊淺礁區",
+     "image": "da_3.jpg"
+    },
+    {
+     "id": 44,
+     "map_id": 6,
+     "name": "淺海石城區",
+     "image": "da_4.jpg"
+    },
+    {
+     "id": 45,
+     "map_id": 6,
+     "name": "膜形盤珊瑚區",
+     "image": "da_5.jpg"
+    },
+    {
+     "id": 46,
+     "map_id": 7,
+     "name": "和美國小",
+     "image": "nc_1.jpg"
+    },
+    {
+     "id": 47,
+     "map_id": 7,
+     "name": "82.5K",
+     "image": "nc_2.jpg"
+    },
+    {
+     "id": 48,
+     "map_id": 7,
+     "name": "水晶宮",
+     "image": "nc_3.jpg"
+    },
+    {
+     "id": 49,
+     "map_id": 7,
+     "name": "海建號 ",
+     "image": "nc_4.jpg"
+    },
+    {
+     "id": 50,
+     "map_id": 8,
+     "name": "大福西",
+     "image": "lk_1.jpg"
+    },
+    {
+     "id": 51,
+     "map_id": 8,
+     "name": "龍蝦洞",
+     "image": "lk_2.jpg"
+    },
+    {
+     "id": 52,
+     "map_id": 8,
+     "name": "破沈船",
+     "image": "lk_3.jpg"
+    },
+    {
+     "id": 53,
+     "map_id": 8,
+     "name": "電桿礁",
+     "image": "lk_4.jpg"
+    },
+    {
+     "id": 54,
+     "map_id": 8,
+     "name": "花瓶岩",
+     "image": "lk_5.png"
+    }
+   ]

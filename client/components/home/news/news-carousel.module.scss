@@ -1,19 +1,35 @@
 @import '@/styles/variable.scss';
 
-.carouselDot {
-  text-align: center;
-  margin-top: 15px;
+.carouselInner {
+  padding-bottom: 70px;
+  padding-left: 40px;
+  overflow-x: scroll;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: thin; /* "auto" or "thin" */
+  scrollbar-color: transparent transparent; /* scroll thumb and track */
+}
+
+.arrowBtn {
+  right: 50px;
+  bottom: 0;
   button {
-    border: 0;
-    padding: 0;
-    margin-inline: 5px;
-    width: 17px;
-    height: 5px;
-    border-radius: 4px;
+    background-color: transparent;
+    border: 1px solid #fff;
+    color: #fff;
+    font-size: 20px;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    text-align: center;
+    // line-height: 50px;
   }
-  button:focus {
-    background-color: $secondary;
-    width: 24px;
-    height: 7px;
+}
+
+@media screen and (max-width: 768px) {
+  .carouselInner {
+    padding-left: 0px;
+  }
+  .arrowBtn {
+    right: 20px;
   }
 }

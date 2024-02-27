@@ -1,0 +1,33 @@
+@import '@/styles/variable.scss';
+
+.filterBar {
+  letter-spacing: 1px;
+  //   margin-left: 40%;
+  li {
+    margin-right: 20px;
+  }
+  .filterMenu {
+    button {
+      border: 0;
+      background-color: transparent;
+      color: $gray;
+      padding: 8px 4px;
+    }
+    button:focus {
+      border-bottom: 2px solid $secondary;
+      color: $secondary;
+    }
+  }
+
+  .search {
+    width: 20%;
+
+    .input:focus {
+      border: 1px solid $info;
+    }
+    button {
+      background-color: $info;
+      color: #fff;
+    }
+  }
+}
