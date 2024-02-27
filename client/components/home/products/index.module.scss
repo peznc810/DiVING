@@ -3,6 +3,18 @@
 .proMainBlock {
   margin-block: 80px;
   letter-spacing: 1px;
+  text-align: center;
+  .title {
+    border-left: 4px solid $secondary;
+    border-right: 4px solid $secondary;
+    margin-bottom: 80px;
+    h3 {
+      font-family: Noto Serif TC;
+      letter-spacing: 1px;
+      font-size: 30px;
+      color: #fff;
+    }
+  }
   a {
     padding: 8px 24px;
     color: #fff;

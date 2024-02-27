@@ -3,7 +3,8 @@
 .cardItem {
   width: 200px;
   position: relative;
-
+  margin-inline: 30px;
+  margin-bottom: 20px;
   .tag {
     background-color: $danger;
     color: #fff;
@@ -32,6 +33,19 @@
 
     p {
       color: $danger;
+    }
+  }
+}
+
+@media screen and (max-width: 390px) {
+  .cardItem {
+    width: 160px;
+    position: relative;
+    margin-inline: 10px;
+    margin-bottom: 20px;
+    .imgDiv {
+      width: 100%;
+      height: 200px;
     }
   }
 }

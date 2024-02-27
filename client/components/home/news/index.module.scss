@@ -1,35 +1,36 @@
 @import '@/styles/variable.scss';
 
 .news {
-  width: 85%;
-  margin: auto;
+  width: 100%;
+  margin-block: 50px;
   margin-bottom: 100px;
-  .content {
-    padding-inline: 100px;
-  }
+
   .title {
-    border-bottom: 1px solid #fff;
-    margin-bottom: 40px;
+    border-left: 4px solid $secondary;
+    margin-left: 50px;
+    margin-bottom: 30px;
     h3 {
       font-family: Noto Serif TC;
-      font-size: 36px;
+      letter-spacing: 1px;
+      font-size: 30px;
       color: #fff;
     }
     .moreBtn {
-      display: block;
-      height: 30px;
-      padding-inline: 12px;
       font-size: 14px;
-      border: 1px solid $light-gray;
-      // background-color: #ffffff7e;
-      color: #fff;
-      border-radius: 25px;
-      text-align: center;
-      line-height: 28px;
+      color: $secondary;
     }
     .moreBtn:hover {
-      background-color: #fff;
-      color: $secondary;
+      color: #fff;
+      border-bottom: 1px solid #fff;
+    }
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .news {
+    margin-top: 0px;
+    .title {
+      margin-left: 20px;
     }
   }
 }

@@ -39,6 +39,9 @@ export default function NavRwd() {
                   <Link
                     href={v.href}
                     className={`py-2 d-inline-block ${styles.menuTitle}`}
+                    onMouseEnter={() => {
+                      setOpenIndex(i)
+                    }}
                   >
                     {v.label}
                   </Link>
