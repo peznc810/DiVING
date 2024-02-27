@@ -3,7 +3,8 @@
         "id":"1",
         "name":"商品1",
         "img": "p1.jpg",
-        "price": 250
+        "price": 250,
+        "discount": 200
     },
     {
         "id":"2",

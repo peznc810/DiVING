@@ -54,7 +54,7 @@ export default function Home() {
         {data2.map((item, i) => {
           const { lessonName, lessonPrice, num, productName, productPrice } =
             item
-          let price = productPrice || lessonPrice * num
+          let price = (productPrice || lessonPrice) * num
           totalPrice += price
           return (
             <div className="row" key={i}>

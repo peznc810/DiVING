@@ -41,7 +41,10 @@ export default function Home() {
   const calculateTotalPrice = (data) => {
     let total = 0
     data.forEach((item) => {
-      const price = (item.productPrice || item.lessonPrice) * item.num
+      const { productDiscount, num, productPrice, lessonPrice } = item
+      const price = productDiscount
+        ? productDiscount * num
+        : (productPrice || lessonPrice) * num
       total += price
     })
     setTotalPrice(total)
@@ -111,9 +114,14 @@ export default function Home() {
                   num,
                   productName,
                   productPrice,
+                  productDiscount,
                 } = item
-                console.log(num)
-                let price = (productPrice || lessonPrice) * num
+                let price = 0
+                if (productDiscount) {
+                  price = productDiscount * num
+                } else {
+                  price = (productPrice || lessonPrice) * num
+                }
                 return (
                   <tr key={i}>
                     <td>
@@ -128,10 +136,26 @@ export default function Home() {
                       </div>
                     </td>
                     <td>
-                      <h5 className="fw-bold discounted">打折後</h5>
+                      {productDiscount ? (
+                        <>
+                          <h5 className="fw-bold discounted">
+                            NT${productDiscount}
+                          </h5>
+                          <p className="imperceptible text-decoration-line-through">
+                            NT${productPrice || lessonPrice}
+                          </p>
+                        </>
+                      ) : (
+                        <>
+                          <h5 className="fw-bold">
+                            NT${productPrice || lessonPrice}
+                          </h5>
+                        </>
+                      )}
+                      {/* <h5 className="fw-bold discounted">打折後</h5>
                       <p className="imperceptible text-decoration-line-through">
                         {productPrice || lessonPrice}
-                      </p>
+                      </p> */}
                     </td>
                     <td>
                       <button

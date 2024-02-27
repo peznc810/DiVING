@@ -19,6 +19,7 @@ let data = cartData.map((item) => {
         ...item,
         productName: productData[i].name,
         productPrice: productData[i].price,
+        productDiscount: productData[i].discount,
       }
     }
   }
@@ -32,6 +33,7 @@ export default function Home() {
 
   const consoleLS = () => {
     console.log(localStorage.getItem('cart'))
+    console.log(JSON.parse(localStorage.getItem('cart')))
   }
 
   const clearLS = () => {

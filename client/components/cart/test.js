@@ -23,11 +23,13 @@ export default function AutoTab({ className, maxLength }) {
     }
 
     const focusNextInput = (currentInput) => {
-      const nextDiv = currentInput.closest('div').nextElementSibling
-      if (nextDiv) {
-        const nextInput = nextDiv.querySelector(`.${className}`)
-        if (nextInput) {
-          nextInput.focus()
+      if (currentInput.className.includes(`${className}`)) {
+        const nextDiv = currentInput.closest('div').nextElementSibling
+        if (nextDiv) {
+          const nextInput = nextDiv.querySelector(`.${className}`)
+          if (nextInput) {
+            nextInput.focus()
+          }
         }
       }
     }
