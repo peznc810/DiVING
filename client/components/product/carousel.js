@@ -33,7 +33,7 @@ export default function Carousel({imgFileNames, id, category}) {
       {imgFileNames.map((imgFileName) => {
         return <SwiperSlide key={imgFileName}>
         <div className="img-container">
-          <img src={`/images/product/images/${category}/${id}/${imgFileName}.jpeg`} />
+          <img src={`/images/product/images/${category}/${id}/${imgFileName}`} />
         </div>
         </SwiperSlide>
       })}
@@ -50,7 +50,7 @@ export default function Carousel({imgFileNames, id, category}) {
       {imgFileNames.map((imgFileName) => {
        return <SwiperSlide key={imgFileName}>
           <div className="img-bottom">
-            <img src={`/images/product/images/${category}/${id}/${imgFileName}.jpeg`} />
+            <img src={`/images/product/images/${category}/${id}/${imgFileName}`} />
           </div>
         </SwiperSlide>
       })}

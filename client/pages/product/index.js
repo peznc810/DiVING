@@ -8,6 +8,9 @@ import Filter from '@/components/product/list/filter'
 import Pagination from '@/components/product/list/pagination'
 import Link from 'next/link'
 
+import { MdScubaDiving } from "react-icons/md";
+import { GoHeartFill } from "react-icons/go";
+import { FaCartPlus } from "react-icons/fa";
 import styles from '@/components/product/product.module.css'
 
 export default function List() {
@@ -70,14 +73,14 @@ export default function List() {
     <>
       <div className="container-1200">
         {/* 麵包屑 */}
-        <div className="my-3 d-flex">
+        <div className="my-3 d-flex mt-5">
           <div className="d-flex align-items-center">
             <Link
               href="/product/list"
               className="p-2"
               style={{ color: '#303132' }}
             >
-              <i class="bi bi-droplet-half p-1"></i>品牌
+              <MdScubaDiving />品牌
             </Link>
             <div className="p-1">&gt;</div>
             <Link
@@ -85,7 +88,7 @@ export default function List() {
               className="p-2"
               style={{ color: '#303132' }}
             >
-              <i className="bi bi-droplet p-1"></i>商品種類
+              商品種類
             </Link>
           </div>
         </div>

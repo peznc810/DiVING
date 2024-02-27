@@ -3,6 +3,10 @@ import Stars from '@/components/product/star/star'
 import Pagination from '@/components/product/list/pagination'
 import Link from 'next/link'
 
+import { GoHeartFill } from "react-icons/go";
+import { FaCartPlus } from "react-icons/fa";
+
+
 export default function Card({data, addItem = () => {}}) {  
   const handleMouseEnter = () => {
     setIsHovered(true)
@@ -21,7 +25,7 @@ export default function Card({data, addItem = () => {}}) {
         >
           <div className="card-body no-space-x">
             <img
-              src={`/images/product/images/${data.category}/${data.id}/${data.img}.jpeg`}
+              src={`/images/product/images/${data.category}/${data.id}/${data.img_top}`}
               alt={`${data.id}`}
               style={{
                 marginTop: isHovered ? '0' : '-15px',
@@ -31,7 +35,7 @@ export default function Card({data, addItem = () => {}}) {
               <div>
                 <div className="bi-icon">
                   <button className="btn mouse-add p-2" variant="light">
-                    <i className="bi bi-person-heart"></i>
+                  <GoHeartFill />
                   </button>
                   <button 
                   className="btn mouse-add p-2" 
@@ -40,7 +44,7 @@ export default function Card({data, addItem = () => {}}) {
                     addItem(data)
                   }}
                   >
-                    <i className="bi bi-cart-plus-fill"></i>
+                    <FaCartPlus />
                   </button>
                 </div>
                 <Link href={`/product/${data.id}`}>View more &gt;&gt;</Link>
@@ -51,11 +55,17 @@ export default function Card({data, addItem = () => {}}) {
                 <p className="card-text">{data.brand}</p>
                 <p className="card-text type-text h-now">{data.name}</p>
                 {data.discount ?
-                <span className="note-text">{`NT$${data.discount.toLocaleString()}`}</span> : null}
+                <>
+                <span className="note-text">{`NT$${data.discount.toLocaleString()}`}</span> 
                 <p className="text-decoration-line-through type-text card-text">
                 {`NT$${data.price.toLocaleString()}`}
                 </p> 
-                
+                </>
+                : <>
+                <p className="my-2 type-text card-text">
+                {`NT$${data.price.toLocaleString()}`}
+                </p> 
+                </>}
               </div>
             )}
           </div>

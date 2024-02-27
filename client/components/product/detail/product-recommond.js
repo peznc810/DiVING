@@ -3,6 +3,9 @@ import react from 'react'
 import Card from 'react-bootstrap/Card'
 import Button from 'react-bootstrap/Button'
 
+import { GoHeartFill } from "react-icons/go";
+import { FaCartPlus } from "react-icons/fa";
+
 
 export default function ProductRecommend({}) {
 
@@ -30,38 +33,10 @@ export default function ProductRecommend({}) {
                       <span className="note-text">NT$800</span>
                       <div>
                         <Button className="color-btn" variant="light">
-                          <i className="bi bi-person-heart"></i>
+                          <GoHeartFill />
                         </Button>
                         <Button className="color-btn" variant="light">
-                          <i className="bi bi-cart-plus-fill"></i>
-                        </Button>
-                      </div>
-                    </div>
-                  </Card.Body>
-                </Card>
-              </div>
-
-              <div className="col-sm-3 col-12">
-                <Card className="custom-card bg-bg-gray">
-                  <Card.Img
-                    variant="top"
-                    src="/images/product/test/20/20-1.jpeg"
-                    style={{
-                      objectFit: 'cover',
-                      width: '100%',
-                      height: '100%',
-                    }}
-                  />
-                  <Card.Body>
-                    <Card.Title className="h6">商品名稱 </Card.Title>
-                    <div className="d-flex justify-content-between align-items-center mt-3">
-                      <span className="note-text">NT$800</span>
-                      <div>
-                        <Button className="color-btn" variant="light">
-                          <i className="bi bi-person-heart"></i>
-                        </Button>
-                        <Button className="color-btn" variant="light">
-                          <i className="bi bi-cart-plus-fill"></i>
+                          <FaCartPlus />
                         </Button>
                       </div>
                     </div>
@@ -81,15 +56,15 @@ export default function ProductRecommend({}) {
                     }}
                   />
                   <Card.Body>
-                    <Card.Title className="h6">商品名稱 </Card.Title>
+                    <Card.Title className="h6">商品名稱</Card.Title>
                     <div className="d-flex justify-content-between align-items-center mt-3">
                       <span className="note-text">NT$800</span>
                       <div>
                         <Button className="color-btn" variant="light">
-                          <i className="bi bi-person-heart"></i>
+                          <GoHeartFill />
                         </Button>
                         <Button className="color-btn" variant="light">
-                          <i className="bi bi-cart-plus-fill"></i>
+                          <FaCartPlus />
                         </Button>
                       </div>
                     </div>
@@ -109,15 +84,43 @@ export default function ProductRecommend({}) {
                     }}
                   />
                   <Card.Body>
-                    <Card.Title className="h6">商品名稱 </Card.Title>
+                    <Card.Title className="h6">商品名稱</Card.Title>
                     <div className="d-flex justify-content-between align-items-center mt-3">
                       <span className="note-text">NT$800</span>
                       <div>
                         <Button className="color-btn" variant="light">
-                          <i className="bi bi-person-heart"></i>
+                          <GoHeartFill />
                         </Button>
                         <Button className="color-btn" variant="light">
-                          <i className="bi bi-cart-plus-fill"></i>
+                          <FaCartPlus />
+                        </Button>
+                      </div>
+                    </div>
+                  </Card.Body>
+                </Card>
+              </div>
+
+              <div className="col-sm-3 col-12">
+                <Card className="custom-card bg-bg-gray">
+                  <Card.Img
+                    variant="top"
+                    src="/images/product/test/20/20-1.jpeg"
+                    style={{
+                      objectFit: 'cover',
+                      width: '100%',
+                      height: '100%',
+                    }}
+                  />
+                  <Card.Body>
+                    <Card.Title className="h6">商品名稱</Card.Title>
+                    <div className="d-flex justify-content-between align-items-center mt-3">
+                      <span className="note-text">NT$800</span>
+                      <div>
+                        <Button className="color-btn" variant="light">
+                          <GoHeartFill />
+                        </Button>
+                        <Button className="color-btn" variant="light">
+                          <FaCartPlus />
                         </Button>
                       </div>
                     </div>

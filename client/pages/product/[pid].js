@@ -7,6 +7,9 @@ import Switch from '@/components/product/detail/switch'
 import ProductRecommond from '@/components/product/detail/product-recommond'
 import Link from 'next/link'
 
+import { MdScubaDiving } from "react-icons/md";
+import { GoHeartFill } from "react-icons/go";
+import { FaCartPlus } from "react-icons/fa";
 import styles from '@/components/product/product.module.css'
 
 export default function Detail() {
@@ -56,7 +59,7 @@ export default function Detail() {
               className="p-2"
               style={{ color: '#303132' }}
             >
-              <i class="bi bi-droplet-half p-1"></i> 品牌
+              <MdScubaDiving />品牌
             </Link>
             <div className="p-1">&gt;</div>
             <Link
@@ -64,7 +67,7 @@ export default function Detail() {
               className="p-2"
               style={{ color: '#303132' }}
             >
-              <i className="bi bi-droplet p-1"></i>商品種類
+              商品種類
             </Link>
           </div>
         </div>
@@ -82,8 +85,23 @@ export default function Detail() {
             <Stars />
             <h6>4.0分 | 8則評價</h6>
 
-            <h6 className="note-text">{`NT$${product.discount.toLocaleString()}`}</h6>
-            <p className="text-decoration-line-through type-text">{`NT$${product.price.toLocaleString()}`}</p>
+            {/* <h6 className="note-text">{`NT$${product.discount.toLocaleString()}`}</h6>
+            <p className="text-decoration-line-through type-text">{`NT$${product.price.toLocaleString()}`}</p> */}
+
+            {product.discount ?
+                <>
+                <span className="note-text">{`NT$${product.discount.toLocaleString()}`}</span> 
+                <p className="text-decoration-line-through type-text">
+                {`NT$${product.price.toLocaleString()}`}
+                </p> 
+                </>
+                : <>
+                <p>
+                {`NT$${product.price.toLocaleString()}`}
+                </p> 
+                </>
+                }
+
             <p dangerouslySetInnerHTML={{ __html: product.info.replace(/\n/g, '<br>') }}></p>
 
             <hr />
@@ -144,12 +162,12 @@ export default function Detail() {
               className="btn btn-secondary w-100 mb-3 my-3"
               style={{ fontWeight: 'bold', color: 'white' }}
             >
-              <i className="bi bi-person-heart"></i> 加入最愛
+              <GoHeartFill className='m-0 p-0' /> 加入最愛
             </button>
             
             {/* 加入最愛 */}
             <button className="btn btn-outline-primary w-100">
-              加入購物車 <i className="bi bi-cart-plus-fill"></i>
+              加入購物車 <FaCartPlus />
             </button>
 
             {/* 注意事項 */}
