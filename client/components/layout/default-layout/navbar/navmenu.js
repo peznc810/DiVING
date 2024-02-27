@@ -18,7 +18,13 @@ export default function NavMenu() {
           if (!v.children) {
             return (
               <li key={v.id} className={`mx-3 ${styles.navMenu}`}>
-                <Link className={`py-2 ${styles.linkText}`} href={v.href}>
+                <Link
+                  className={`py-2 ${styles.linkText}`}
+                  href={v.href}
+                  onMouseEnter={() => {
+                    setOpeIndex(null)
+                  }}
+                >
                   {v.label}
                 </Link>
               </li>
