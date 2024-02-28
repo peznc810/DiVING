@@ -62,11 +62,11 @@
     outline: none;
     &:-webkit-autofill {
       transition-property: background-color, color;
-      transition-delay: 10000s;
+      transition-delay: 86400s;
     }
     &:autofill {
       transition-property: background-color, color;
-      transition-delay: 10000s;
+      transition-delay: 86400s;
     }
     &::placeholder {
       /* 沒有轉透明的話，focus時文字會保留在上方，看起來怪怪的 */
@@ -78,9 +78,9 @@
       color: rgba(255, 255, 255, 0.6);
       transform: scale(0.85) translateY(-1.2rem);
     }
-    &[id='email']:focus ~ label,
+    &[id='userEmail']:focus ~ label,
     &[id='repassword']:focus ~ label,
-    &[id='email']:not(:placeholder-shown) ~ label,
+    &[id='userEmail']:not(:placeholder-shown) ~ label,
     &[id='repassword']:not(:placeholder-shown) ~ label {
       transform: scale(0.85) translateY(-1.2rem) translateX(-0.2rem);
     }
@@ -99,13 +99,18 @@
   margin-top: -16px;
 }
 
+// 警號訊息
+.notify {
+  height: 1.5rem;
+}
+
 /* 按鈕樣式 */
 .btn {
   text-align: center;
   padding: 4px 8px;
   border: 1px solid rgba(217, 217, 217, 0.1);
   border-radius: 6px;
-  background: rgba(217, 217, 217, 0.2);
+  background: rgba(217, 217, 217, 0.3);
   backdrop-filter: blur(2px);
   transition: background-color 0.2s ease-in-out;
 }

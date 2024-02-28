@@ -2,6 +2,7 @@ import React from 'react'
 import styles from './styles.module.scss'
 import Link from 'next/link'
 import Image from 'next/image'
+import { useRouter } from 'next/router'
 
 // React icon
 import { GoPerson } from 'react-icons/go'
@@ -13,6 +14,9 @@ import { HiOutlineTicket } from 'react-icons/hi'
 import { TbLogout2 } from 'react-icons/tb'
 
 export default function Menu() {
+  const router = useRouter()
+  const path = router.pathname
+  console.log(path)
   return (
     <>
       <div
@@ -25,7 +29,7 @@ export default function Menu() {
             <Image src="/images/users/woman.jpg" alt="avatar" fill priority />
           </div>
           {/* 顯示優惠券張數 */}
-          <div className="text-center py-3 border-top border-bottom ">
+          <div className="text-center py-3 border-top border-bottom d-none">
             {/* 欠： hover的動畫 */}
             <Link href="/dashboard/coupons" className=" text-secondary">
               1
@@ -36,7 +40,9 @@ export default function Menu() {
           <ul className="list-unstyled my-3 px-0">
             <li>
               <Link
-                className="text-center text-sm-start ps-sm-4"
+                className={`text-center text-sm-start ps-sm-4 ${
+                  path.includes('profile') ? 'bg-secondary' : ''
+                }`}
                 href="/dashboard/profile"
               >
                 <GoPerson />
@@ -45,7 +51,9 @@ export default function Menu() {
             </li>
             <li>
               <Link
-                className="text-center text-sm-start ps-sm-4"
+                className={`text-center text-sm-start ps-sm-4 ${
+                  path.includes('orders') ? 'bg-secondary' : ''
+                }`}
                 href="/dashboard/orders"
               >
                 <LuClipboardList />
@@ -54,7 +62,9 @@ export default function Menu() {
             </li>
             <li className="">
               <Link
-                className="text-center text-sm-start ps-sm-4"
+                className={`text-center text-sm-start ps-sm-4 ${
+                  path.includes('coupons') ? 'bg-secondary' : ''
+                }`}
                 href="/dashboard/coupons"
               >
                 <HiOutlineTicket />
@@ -63,7 +73,9 @@ export default function Menu() {
             </li>
             <li>
               <Link
-                className="text-center text-sm-start ps-sm-4"
+                className={`text-center text-sm-start ps-sm-4 ${
+                  path.includes('comments') ? 'bg-secondary' : ''
+                }`}
                 href="/dashboard/comments"
               >
                 <TbMessage />
@@ -72,7 +84,9 @@ export default function Menu() {
             </li>
             <li>
               <Link
-                className="text-center text-sm-start ps-sm-4"
+                className={`text-center text-sm-start ps-sm-4 ${
+                  path.includes('favorites') ? 'bg-secondary' : ''
+                }`}
                 href="/dashboard/favorites"
               >
                 <FaRegHeart />
@@ -81,7 +95,9 @@ export default function Menu() {
             </li>
             <li>
               <Link
-                className="text-center text-sm-start ps-sm-4"
+                className={`text-center text-sm-start ps-sm-4 ${
+                  path.includes('posts') ? 'bg-secondary' : ''
+                }`}
                 href="/dashboard/posts"
               >
                 <RiFileList2Line />

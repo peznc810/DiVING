@@ -1,62 +1,41 @@
 import express from 'express';
 import multer from 'multer';
-import cors from 'cors';
 import db from '../db.mjs';
+import jwt from "jsonwebtoken";
 const router = express.Router();
 
 // 引入.env檔
 import 'dotenv/config.js'
 const secretKey = process.env.SECRET_KEY;
 
-// 許可進入的網址
-const whitelist = [
-	'http://127.0.0.1:5500',
-  'http://localhost:3005',
-  'http://localhost:3000',
-  'http://127.0.0.1:5500/views/user.html',
-	undefined,
-];
-const corsOptions = {
-	credentials: true,
-	origin(origin, callback) {
-		if (whitelist.includes(origin)) {
-			callback(null, true);
-		} else {
-			callback(new Error('不允許傳遞資料'));
-		}
-	},
-};
-
-
 const app = express();
 const upload = multer();
-app.use(cors(corsOptions));
 app.use(express.json());
-app.use(express.urlencoded({extended: true}));
+app.use(express.urlencoded({ extended: true }));
 
 // 登入
 router.post('/login', upload.none(), async (req, res) => {
-  // 接收client的require
-  const { email, password } = req.body;
-  console.log(email, password);
-  // 比對db資料
-  const [results] = await db.execute(
-    'SELECT * FROM `users` WHERE `email` = ? AND `password` = ?',
-    [email, password],
-  );
-  console.log(results)
-
-  // const [result, felids] = await db.execute(
-  // 	"SELECT * FROM `users`"
-  // ).catch(err => {
-  // 	console.log(err);
-  // 	return [[], []];
-  // });
-
-  // console.log(result);
-
-  res.json({msg:'Login Success'});
-
+  let user, error
+  // 把成功和失敗的物件放入全域物件
+  await userLogin(req).then(result => {
+    user = result;
+  }).catch(err => {
+    error = err
+  })
+  if (error) {
+    res.status(400).json(error)
+  }
+  if (user) {
+    // 寫入session
+    // req.session.user = user;
+    // 寫入token
+    const token = jwt.sign({
+      email: user.email,
+      name: user.name,
+      tel: user.phone
+    }, secretKey, { expiresIn: '30m' })
+    res.status(200).json({ msg: '登入成功', token })
+  }
 })
 
 // 登出
@@ -75,16 +54,26 @@ router.get('/', (req, res) => {
 })
 
 
+
 // 登入用
 function userLogin(req) {
-  return new Promise((resolve, reject) => {
-    const { account, password } = req.body;
-    // let result = db.data.user.find(u => u.account === account && u.password === password);
-    // if (result) {
-    //   resolve(result)
-    // } else {
-    //   reject({ status: "error", msg: "Invalid username or password" })
-    // }
-  });
+  return new Promise(async (resolve, reject) => {
+    // 接收client的require
+    const { userEmail, userPWD } = req.body;
+    // console.log(email, password);
+    // 比對db資料
+    // 如果比對成功回傳資料，如果失敗則回傳錯誤訊息
+    const [[result]] = await db.execute(
+      'SELECT * FROM `users` WHERE `email` = ?',
+      [userEmail]
+    );
+    if (result.password === userPWD) {
+      const { password, ...user } = result
+      resolve(user)
+    } else {
+      reject({ status: "error", msg: "帳號密碼錯誤" })
+    }
+  })
 }
+
 export default router;

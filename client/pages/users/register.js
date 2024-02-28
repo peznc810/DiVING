@@ -2,6 +2,9 @@ import React from 'react'
 import Link from 'next/link'
 import styles from './styles.module.scss'
 
+// React icon
+import { FcGoogle } from 'react-icons/fc'
+
 export default function SignUp() {
   return (
     <>
@@ -61,11 +64,9 @@ export default function SignUp() {
                   社群帳號註冊
                 </div>
                 <div className="d-flex justify-content-center align-items-center mt-3">
-                  <div className={`small ${styles.btn}`}>
-                    <i class="bi bi-google me-2"></i>Google
-                  </div>
-                  <div className={`ms-3 small ${styles.btn}`}>
-                    <i class="bi bi-facebook me-2"></i>Facebook
+                  <div className={`small ${styles.btn} w-100`}>
+                    <FcGoogle className="me-2" />
+                    Google
                   </div>
                 </div>
               </div>
