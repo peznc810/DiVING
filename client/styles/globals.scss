@@ -1,10 +1,14 @@
 // 引用顏色樣式
 @import './variable.scss';
-
 // 覆蓋bootstrap樣式
 // 取消連結的下底線
 $link-decoration: none;
-// checkbox 樣式
+
+// 改購物車上的紅點
+$badge-font-weight: 500;
+$badge-padding-y: 0.3em;
+$badge-padding-x: 0.4em;
+
 $form-check-input-bg: rgba(217, 217, 217, 0.2);
 $form-check-input-border: 1px solid rgba(217, 217, 217, 0.2);
 $form-check-input-focus-border: 1px solid rgba(217, 217, 217, 0);
