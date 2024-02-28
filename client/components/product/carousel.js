@@ -12,7 +12,8 @@ import { Autoplay, FreeMode, Navigation, Thumbs } from 'swiper/modules'
 
 export default function Carousel({imgFileNames, id, category}) {
   const [thumbsSwiper, setThumbsSwiper] = useState(null)
-  console.log('category', category)
+  // console.log('category', category)
+
   return (
     <>
     <Swiper

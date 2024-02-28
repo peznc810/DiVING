@@ -4,7 +4,7 @@ import Stars from '@/components/product/star/star'
 import ProductRecommond from '@/components/product/detail/product-recommond'
 import Link from 'next/link'
 
-export default function Switch() {
+export default function Switch({imgDetails, id, category, detail}) {
   const [isSwitchOn, setIsSwitchOn] = useState(false)
 
   const handleSwitchToggle = () => {
@@ -94,27 +94,25 @@ export default function Switch() {
           <div className="row mt-2 mx-2">
             <div className="col-sm-12">
               <p className="text-center my-3 font-weight-light">
-                鞋面採用車縫皮革裝飾片，全面提升經典指標性、耐久性和支撐力。
+                <p className="p-3" dangerouslySetInnerHTML={{ __html: detail.replace(/\n/g, '<br>') }}></p>
               </p>
-              <div>
-                <div className="p-2 my-3 custom-image-container">
-                  <img src="/images/product/test/20/20-detail1.jpg" />
-                  {/* `${}` */}
-                </div>
-                <div className="p-2 my-3 custom-image-container">
-                  <img src="/images/product/test/20/20-detail1.jpg" />
-                  {/* `${}` */}
-                </div>
-                <div className="p-2 my-3 custom-image-container">
-                  <img src="/images/product/test/20/20-detail1.jpg" />
-                  {/* `${}` */}
-                </div>
+              <div className="img-container">
+                {imgDetails.map((imgDetail) => {
+                  return (
+                    <div key={imgDetail}>
+                      <div className="p-2 my-3 custom-image-container">
+                        <img src={`/images/product/images/${category}/${id}/${imgDetail}`} />
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
             </div>
           </div>
         </div>
       )}
-      <style>{`
+      <br /><br />
+      <style>{`    
       .form-check-input{
         width: 40px;
         height:20px;
@@ -133,7 +131,7 @@ export default function Switch() {
         .custom-image-container img {
           width: 100%;
           height: 100%;
-          object-fit: cover;
+          object-fit: contain;
         }
         .content {
           height: 80px;
