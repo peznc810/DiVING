@@ -8,8 +8,12 @@ export default function Products() {
     <>
       <main className={`${styles.proMainBlock}`}>
         <div className={`container`}>
-          <h3 className="text-light text-center mb-5">熱門商品</h3>
+          <div className={`d-inline-block ${styles.title}`}>
+            <h3 className="text-light text-center m-0 px-3">HOT PRODUCTS</h3>
+          </div>
+
           <div className={`d-flex flex-wrap justify-content-center`}>
+            <ProductCard />
             <ProductCard />
             <ProductCard />
             <ProductCard />

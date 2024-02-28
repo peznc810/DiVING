@@ -1,0 +1,29 @@
+[
+    {
+      "id": "1",
+      "author": "Marijn Haverbeke",
+      "published": "2018-12-04 14:00",
+      "image":"post.jpg",
+      "title": "自由潛水不只是一項運動，更是認識自我的心靈旅程",
+      "content": "四面環海的寶島台灣，有著世界級的海底世界美景，蘭嶼豐富的珊瑚礁、綠島清澈的海底、小琉球熱情的海龜…不過我們從小就被灌輸遠離海邊的觀念，就是因為不夠了解，所以造成內心的恐懼或視為危險的象徵，對這片神秘的藍色大海敬而遠之。幸運的是，近幾年越來越多人開始注重海底生態，也更願意親身探索這塊美麗的海域，其中一項運動就是 – 自由潛水（ Free Diving）。<br>自由潛水是早期沿海居民賴以為生的捕魚技能，之後這項古老的技巧慢慢以不同形式傳到全世界，不像水肺潛水需要攜帶氧氣瓶與複雜的裝備，而是透過面鏡跟蛙鞋並且配合長時間的閉氣，學會抑制自己呼吸的渴望。這個過程中你會打開未曾發掘過的感官，在海洋的靜謐無重力世界裡穿梭，享受最純粹的寧靜和快樂。在台灣相對而言是很新的運動，近幾年由年輕一代的職人逐漸帶起，由於水下照片有夢境般唯美，容易吸引許多年輕族群嘗試學習，現在幾乎全台靠海的地方都可以找到相關的課程。https://flipermag.com/2019/03/18/freediveing-sour/ 有圖有影片",
+      "tags": "潛水入門,海底生態"
+    },
+    {
+        "id": "2",
+        "title": "Eloquent JavaScript, Third Edition",
+        "author": "Marijn Haverbeke",
+        "published": "2018-12-04",
+        "image":"dive.jpg",
+        "content": "JavaScript lies at the heart of almost every modern web application, from social apps like Twitter to browser-based game frameworks like Phaser and Babylon. Though simple for beginners to pick up and play with, JavaScript is a flexible, complex language that you can use to build full-scale applications.",
+        "tags": "潛水技巧,社群活動"
+      },
+      {
+          "id": "3",
+          "title": "學習潛水的第一步：區分「水肺潛水」和「自由潛水」",
+          "author": "Marijn Haverbeke",
+          "published": "2018-12-04",
+          "image":"people.jpg",
+          "content": "JavaScript lies at the heart of almost every modern web application, from social apps like Twitter to browser-based game frameworks like Phaser and Babylon. Though simple for beginners to pick up and play with, JavaScript is a flexible, complex language that you can use to build full-scale applications.",
+          "tags": "tag1,tag2"
+        }
+  ]

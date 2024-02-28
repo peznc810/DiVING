@@ -7,7 +7,7 @@ export const menuItems = [
   {
     id: '2',
     label: '活動資訊',
-    href: '/active',
+    href: '/event',
   },
   {
     id: '3',

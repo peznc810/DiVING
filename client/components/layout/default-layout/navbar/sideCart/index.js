@@ -18,7 +18,9 @@ export default function SideCart() {
         id="offcanvasCart"
         data-bs-scroll={true}
       >
-        <div className={`offcanvas-header ${styles.title} py-2 px-3`}>
+        <div
+          className={`offcanvas-header ${styles.title} py-2 px-3 d-flex justify-content-between`}
+        >
           <div className={`d-flex justify-content-center`}>
             <i className={`bi bi-bag-fill fs-5 me-2`}></i>
             <p className="m-0 fw-bolder">購物車</p>

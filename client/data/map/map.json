@@ -1,0 +1,42 @@
+[
+    {
+     "id": 1,
+     "name": "墾丁",
+     "image": "kt.jpg"
+    },
+    {
+     "id": 2,
+     "name": "綠島",
+     "image": "gi.jpg"
+    },
+    {
+     "id": 3,
+     "name": "蘭嶼",
+     "image": "oi.jpg"
+    },
+    {
+     "id": 4,
+     "name": "東部海岸",
+     "image": "ec.jpg"
+    },
+    {
+     "id": 5,
+     "name": "澎湖海域",
+     "image": "ph1.jpg,ph2.jpg,ph3.jpg"
+    },
+    {
+     "id": 6,
+     "name": "東沙環礁",
+     "image": "da.jpg"
+    },
+    {
+     "id": 7,
+     "name": "東北角",
+     "image": "nc.jpg"
+    },
+    {
+     "id": 8,
+     "name": "小琉球",
+     "image": "lk.jpeg"
+    }
+   ]

@@ -1,14 +1,15 @@
 import mysql from 'mysql2/promise';
+import 'dotenv/config.js'
 
-const connection = await mysql.createPool({
-	host: '127.0.0.1',
-	port: 3306,
-	user: 'admin',
-	password: '12345',
-	database: 'diving',
+const db = await mysql.createPool({
+	host: process.env.DB_HOST,
+	port: process.env.DB_PORT,
+	user: process.env.DB_USERNAME,
+	password: process.env.DB_PASSWORD,
+	database: process.env.DB_DATABASE,
 	waitForConnections: true,
 	connectionLimit: 5,
-	queueLimit: 0,
+	queueLimit: 0
 });
 
-export default connection;
+export default db

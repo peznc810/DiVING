@@ -4,11 +4,12 @@ import styles from './navmenu.module.scss'
 import { menuItems } from '@/config/nav-menu'
 
 export default function NavMenu() {
+  // const [hover, setHover] = useState(false)
   const [openIndex, setOpeIndex] = useState(false)
 
   return (
     <>
-      <ul className={`d-flex m-0 p-0 ${styles.nav}`}>
+      <ul className={`d-flex m-0 p-0 ${styles.nav} align-items-center`}>
         {/* 遍歷列出nav選單 */}
         {menuItems.map((v, i) => {
           {
@@ -17,7 +18,13 @@ export default function NavMenu() {
           if (!v.children) {
             return (
               <li key={v.id} className={`mx-3 ${styles.navMenu}`}>
-                <Link className={`py-2 ${styles.linkText}`} href={v.href}>
+                <Link
+                  className={`py-2 ${styles.linkText}`}
+                  href={v.href}
+                  onMouseEnter={() => {
+                    setOpeIndex(null)
+                  }}
+                >
                   {v.label}
                 </Link>
               </li>
@@ -29,22 +36,27 @@ export default function NavMenu() {
           return (
             <li key={v.id} className={`mx-3 ${styles.subMenu}`}>
               <Link
-                href={'/'}
+                href={v.href}
                 className={`py-2 ${styles.linkText} ${
                   openIndex === i ? styles.linkFocus : ''
                 } `}
                 role="button"
                 onMouseEnter={() => {
+                  // setOpeIndex(null)
                   setOpeIndex(i)
                 }}
               >
                 {v.label}
               </Link>
               {/* 下拉選單 dropdown-menu */}
+
               <ul
                 className={`${
                   openIndex === i ? styles.active : styles.inactive
                 }`}
+                onMouseEnter={() => {
+                  setOpeIndex(i)
+                }}
                 onMouseLeave={() => {
                   setOpeIndex(false)
                 }}
@@ -68,7 +80,7 @@ export default function NavMenu() {
         })}
         <li className={`mx-3`}>
           <Link
-            href="/login"
+            href="/users/login"
             className={`px-2 py-2 ${styles.login} ${styles.linkText}`}
           >
             登入 / 註冊
@@ -76,7 +88,7 @@ export default function NavMenu() {
         </li>
         {/* 登入註冊icon */}
         <li>
-          <Link href="/login" className={`p-2  ${styles.loginIcon}`}>
+          <Link href="/users/login" className={`p-2  ${styles.loginIcon}`}>
             <i className="bi bi-person-fill fs-3"></i>
           </Link>
         </li>
@@ -84,12 +96,17 @@ export default function NavMenu() {
         <li>
           <button
             type="button"
-            className={`p-2 ${styles.cart}`}
+            className={`p-2 ${styles.cart} position-relative`}
             data-bs-toggle="offcanvas"
             data-bs-target="#offcanvasCart"
             aria-controls="offcanvasWithBackdrop"
           >
-            <i className={`bi bi-bag-fill fs-5 `}></i>
+            <i className={`bi bi-bag-fill `}></i>
+            <span
+              className={`${styles.cartDot} position-absolute translate-middle badge rounded-pill bg-danger`}
+            >
+              5
+            </span>
           </button>
         </li>
       </ul>

@@ -5,7 +5,7 @@ import styles from './product-card.module.scss'
 export default function ProductCard() {
   return (
     <>
-      <div className={`${styles.cardItem} m-3`}>
+      <div className={`${styles.cardItem} `}>
         <span className={`${styles.tag}`}>HOT</span>
         <div className={`${styles.imgDiv}`}>
           <Image

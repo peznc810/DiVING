@@ -7,20 +7,20 @@
     position: absolute;
     width: 200px;
     padding-left: 0;
-    background-color: #ffffff82;
-    border-radius: 4px;
+    background-color: $super-light-gray;
+    border-radius: 2px;
     right: calc(50% - 100px);
-    top: 57px;
+    top: 53px;
     animation-name: subMenuAni;
     animation-duration: 0.5s;
     animation-timing-function: linear;
 
     a {
       display: block;
-      color: $primary;
+      color: $info;
       padding-inline: 12px;
       padding-block: 12px;
-      border-radius: 4px;
+      border-radius: 2px;
     }
     a:hover {
       background-color: #fff;
@@ -66,6 +66,14 @@
   color: #fff;
   background-color: transparent;
   border: 0;
+  i {
+    font-size: 22px;
+  }
+  .cartDot {
+    border: 0.5px solid #fff;
+    top: 17px;
+    left: 28px;
+  }
 }
 .cart:hover {
   color: $secondary;

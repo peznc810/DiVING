@@ -1,22 +1,26 @@
 import React from 'react'
-import styles from './styles.module.css'
+import styles from './styles.module.scss'
 import Link from 'next/link'
+import Head from 'next/head'
 
 export default function Login() {
   return (
     <>
+      <Head>
+        <title>會員登入</title>
+      </Head>
       <main className={`${styles['main-style']} ${styles['main-layout']}`}>
-        <div className="d-flex justify-content-center">
+        <div className="d-flex justify-content-center mt-5">
           <div className={`${styles['card-style']} ${styles['card-layout']}`}>
-            {/* chrome會有一個自動填入的input功能，但無法修改其樣式，之後還是選用唇色做背景較合適 */}
-            <form action="" method="post" autoComplete="off">
-              <h2 className="text-center">會員登入</h2>
+            <form action="" method="post">
+              <h2 className="fs-3 mb-4 text-center">會員登入</h2>
               <div className={`mb-3 ${styles['input-style']}`}>
                 <input
                   type="email"
                   name="email"
                   id="email"
                   placeholder="電子郵件"
+                  autoComplete="email"
                 />
                 <label htmlFor="email">電子郵件</label>
               </div>
@@ -30,7 +34,9 @@ export default function Login() {
                 <label htmlFor="password">密碼</label>
               </div>
               {/* 記住我＆忘記密碼 */}
-              <div className={`d-flex justify-content-between ${styles.space}`}>
+              <div
+                className={`d-flex justify-content-between small ${styles.space}`}
+              >
                 <div className="form-check">
                   <input
                     type="checkbox"
@@ -50,23 +56,23 @@ export default function Login() {
                 帳號或密碼錯誤
               </p>
               {/* END */}
-              <div className={`fs-5 fw-medium ${styles.btn}`}>登入</div>
+              <div className={`fw-medium ${styles.btn}`}>登入</div>
               <div className="social">
                 <div
-                  className={`d-flex justify-content-center align-items-center ${styles.title}`}
+                  className={`d-flex justify-content-center align-items-center mt-2 small ${styles.title}`}
                 >
                   社群帳號登入
                 </div>
                 <div className="d-flex justify-content-center align-items-center mt-3">
                   <div className={`small ${styles.btn}`}>
-                    <i class="bi bi-google me-2"></i>Google
+                    <i className="bi bi-google me-2"></i>Google
                   </div>
                   <div className={`ms-3 small ${styles.btn}`}>
-                    <i class="bi bi-facebook me-2"></i>Facebook
+                    <i className="bi bi-facebook me-2"></i>Facebook
                   </div>
                 </div>
               </div>
-              <p className="text-center mb-0">
+              <p className="text-center mb-0 small">
                 還沒有帳號嗎?
                 <Link
                   href="/users/register"
