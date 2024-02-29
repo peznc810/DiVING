@@ -12,33 +12,13 @@ import { FaRegHeart } from 'react-icons/fa'
 import { LuClipboardList } from 'react-icons/lu'
 import { HiOutlineTicket } from 'react-icons/hi'
 import { TbLogout2 } from 'react-icons/tb'
+import { useAuth } from '@/hooks/auth'
 
 export default function Menu() {
   const router = useRouter()
   const path = router.pathname
   // console.log(path)
-  // 登出按鈕的功能
-  const handleLogout = () => {
-    let url = 'http://localhost:3005/api/users/logout'
-    let token = localStorage.getItem('token')
-    fetch(url, {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-      credentials: 'include',
-    })
-      .then((response) => response.json())
-      .then((result) => {
-        // 把狀態中的user資料清除
-        token = null
-        localStorage.removeItem('token')
-        console.log(result) /* 登入成功 */
-      })
-      .catch((err) => {
-        console.log(err)
-      })
-  }
+  const { logout } = useAuth()
   return (
     <>
       <div
@@ -129,7 +109,7 @@ export default function Menu() {
               <Link
                 className="text-center text-sm-start ps-sm-4"
                 href="/"
-                onClick={handleLogout}
+                onClick={logout}
               >
                 <TbLogout2 />
                 登出

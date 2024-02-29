@@ -87,8 +87,29 @@ router.post('/status', checkToken, (req, res) => {
 })
 
 // 註冊
-router.get('/', (req, res) => {
-  res.send('會員login')
+router.post('/register', upload.none(), async (req, res) => {
+  const { userName, userEmail, userPWD, rePWD } = req.body
+  const [[userData]] = await db.execute(
+    'SELECT * FROM `users` WHERE `email` = ?',
+    [userEmail]
+  )
+  if (userData) {
+    res.status(409).json({
+      status: 'error',
+      msg: 'Email已註冊'
+    })
+    return false
+  }
+  await db.execute(
+    "INSERT INTO `users` (`email`, `password`, `name`) VALUES (?, ?, ?);", [userEmail, userPWD, userName]
+  )
+    .then(() => {
+      res.status(200).json({ msg: '註冊成功' })
+    })
+    .catch(err => {
+      console.log(err);
+      res.status(500).json({ status: 'error', msg: '註冊失敗，請再試一次' })
+    })
 })
 
 

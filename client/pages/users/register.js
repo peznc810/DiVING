@@ -4,8 +4,10 @@ import styles from './styles.module.scss'
 
 // React icon
 import { FcGoogle } from 'react-icons/fc'
+import { useAuth } from '@/hooks/auth'
 
 export default function SignUp() {
+  const { signUp, error } = useAuth()
   return (
     <>
       <header className={styles.header}></header>
@@ -13,7 +15,7 @@ export default function SignUp() {
         <div className="d-flex justify-content-center">
           <div className={`${styles['card-style']} ${styles['card-layout']}`}>
             {/* chrome會有一個自動填入的input功能，但無法修改其樣式，之後還是選用唇色做背景較合適 */}
-            <form action="" method="post" autoComplete="off">
+            <form onSubmit={signUp}>
               <h2 className="fs-3 mb-4 text-center">註冊會員</h2>
               <div className={`mb-3 ${styles['input-style']}`}>
                 <input
@@ -27,44 +29,48 @@ export default function SignUp() {
               <div className={`mb-3 ${styles['input-style']}`}>
                 <input
                   type="email"
-                  name="email"
-                  id="email"
+                  name="userEmail"
+                  id="userEmail"
                   placeholder="電子郵件"
                 />
-                <label htmlFor="email">電子郵件</label>
+                <label htmlFor="userEmail">電子郵件</label>
               </div>
               <div className={`mb-3 ${styles['input-style']}`}>
                 <input
                   type="password"
-                  name="password"
-                  id="password"
+                  name="userPWD"
+                  id="userPWD"
                   placeholder="密碼"
                 />
-                <label htmlFor="password">密碼</label>
+                <label htmlFor="userPWD">密碼</label>
               </div>
               <div className={styles['input-style']}>
                 <input
                   type="password"
-                  name="repassword"
-                  id="repassword"
+                  name="rePWD"
+                  id="rePWD"
                   placeholder="確認密碼"
                 />
-                <label htmlFor="repassword">確認密碼</label>
+                <label htmlFor="rePWD">確認密碼</label>
               </div>
               {/* 警示標語 */}
-              <p className="fw-medium text-center text-danger mb-0 d-none">
-                帳號或密碼錯誤
+              <p
+                className={`fw-medium small text-center text-danger mb-0 ${styles.notify}`}
+              >
+                {error.fillErr ? error.fillErr : ''}
               </p>
               {/* END */}
-              <div className={`fw-medium ${styles.btn}`}>註冊</div>
-              <div className="social">
-                <div
-                  className={`d-flex justify-content-center align-items-center ${styles.title}`}
-                >
-                  社群帳號註冊
+              <button className={`fw-medium ${styles.btn}`}>註冊</button>
+              <div className="row justify-content-center align-items-center">
+                <div className="col-10">
+                  <div
+                    className={`d-flex justify-content-center align-items-center mt-2 small ${styles.title}`}
+                  >
+                    或
+                  </div>
                 </div>
-                <div className="d-flex justify-content-center align-items-center mt-3">
-                  <div className={`small ${styles.btn} w-100`}>
+                <div className="col-6 mt-3">
+                  <div className={`small ${styles.btn}`}>
                     <FcGoogle className="me-2" />
                     Google
                   </div>
