@@ -3,7 +3,7 @@ import Link from 'next/link'
 import loaderStyles from '@/styles/loader/loader_ripple.module.css'
 import post from '@/data/post/post.json'
 import { Container, Dropdown, Card, Col, Row, Stack } from 'react-bootstrap'
-import Caor from '@/components/post/caor'
+import Caro from '@/components/post/caro'
 import DiButton from '@/components/post/dibutton'
 
 export default function List() {
@@ -98,7 +98,7 @@ export default function List() {
           {' '}
           <h4>熱門文章</h4>
           <div>
-            <Caor />
+            <Caro />
           </div>
         </div>
         <hr />

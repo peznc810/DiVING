@@ -3,7 +3,7 @@ import postData from '@/data/post/post.json'
 import styles from '@/pages/post/post-list.module.css'
 import Link from 'next/link'
 
-export default function Caor() {
+export default function Caro() {
   return (
     <Carousel
       interval={5000}

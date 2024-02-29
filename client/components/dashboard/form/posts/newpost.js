@@ -1,7 +1,13 @@
-import React from 'react'
+import { useEffect, useState } from 'react'
 import styles from '../styles.module.scss'
+import Ckeditor from '@/components/post/ckeditor'
 
 export default function Form() {
+  const [editorLoaded, setEditorLoaded] = useState(false)
+  const [data, setData] = useState('')
+  useEffect(() => {
+    setEditorLoaded(true)
+  }, [])
   return (
     <>
       <div className={`col-sm-8 p-0 rounded-end ${styles['form-container']}`}>
@@ -12,6 +18,17 @@ export default function Form() {
             </div>
             <div className="accordion-body overflow-auto">
               {/* 從這裡加外掛 */}
+              <input type="text" />
+              <div>
+                <Ckeditor
+                  name="description"
+                  onChange={(data) => {
+                    setData(data)
+                  }}
+                  editorLoaded={editorLoaded}
+                />{' '}
+                {JSON.stringify(data)}{' '}
+              </div>
             </div>
           </div>
         </div>

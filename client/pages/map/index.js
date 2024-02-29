@@ -8,7 +8,7 @@ import { TiWeatherCloudy } from 'react-icons/ti'
 import { LuWaves } from 'react-icons/lu'
 import { BsFillSunsetFill } from 'react-icons/bs'
 import ImageViewModal from '@/components/map/imageViewModal'
-import styles from './svg.module.css'
+import styles from './svg.module.scss'
 
 export default function Map() {
   const [selectedMap, setSelectedMap] = useState(null) //存被選的區的id

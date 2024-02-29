@@ -1,5 +1,6 @@
 import React from 'react'
 import styles from '../styles.module.scss'
+import Ckeditor from '@/components/post/ckeditor'
 
 export default function Form() {
   return (
@@ -11,7 +12,6 @@ export default function Form() {
               <h2 className="fw-medium fs-5 d-flex py-3 m-0">編輯文章</h2>
             </div>
             <div className="accordion-body overflow-auto">
-              {/* 從這裡加外掛 */}
               <input
                 type="text"
                 className="form-control mb-4"
@@ -22,13 +22,14 @@ export default function Form() {
                 className="form-control mb-4"
                 placeholder="新增標籤"
               />
-              <textarea
+              <Ckeditor />
+              {/* <textarea
                 name=""
                 id=""
                 cols="30"
                 rows="10"
                 className="form-control"
-              ></textarea>
+              ></textarea> */}
             </div>
           </div>
         </div>
