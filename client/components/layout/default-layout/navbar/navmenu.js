@@ -2,10 +2,13 @@ import { useState } from 'react'
 import Link from 'next/link'
 import styles from './navmenu.module.scss'
 import { menuItems } from '@/config/nav-menu'
+import Image from 'next/image'
 
 export default function NavMenu() {
   // const [hover, setHover] = useState(false)
   const [openIndex, setOpeIndex] = useState(false)
+  // 待調整
+  const [token, setToken] = useState('')
 
   return (
     <>
@@ -79,12 +82,25 @@ export default function NavMenu() {
           )
         })}
         <li className={`mx-3`}>
-          <Link
-            href="/users/login"
-            className={`px-2 py-2 ${styles.login} ${styles.linkText}`}
-          >
-            登入 / 註冊
-          </Link>
+          {token ? (
+            <div className={styles.avatar}>
+              <Link href="/dashboard">
+                <Image
+                  src="/images/users/woman.jpg"
+                  alt="avatar"
+                  fill
+                  priority
+                />
+              </Link>
+            </div>
+          ) : (
+            <Link
+              href="/users/login"
+              className={`px-2 py-2 ${styles.login} ${styles.linkText}`}
+            >
+              登入 / 註冊
+            </Link>
+          )}
         </li>
         {/* 登入註冊icon */}
         <li>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import styles from './styles.module.scss'
 import Link from 'next/link'
 import Head from 'next/head'
@@ -16,13 +16,18 @@ export default function Login() {
     // Fill Error Message
     fillErr: '',
   })
-  // 解譯token
+
+  // 使用者的狀態
+  const [user, setUser] = useState({})
+
+  // 解譯token的方法，要做成hook
   const parseJwt = (token) => {
     const base64Payload = token.split('.')[1]
     const payload = Buffer.from(base64Payload, 'base64')
     return JSON.parse(payload.toString())
   }
 
+  // 登入
   const handleSubmit = (e) => {
     e.preventDefault()
     // 建立自定義表單，並把form的資料格式放入
@@ -30,7 +35,7 @@ export default function Login() {
     // console.log(e.target)
 
     // FormData本身不具可迭代性
-    //因此需要透過entries()這個迭代器協助取出資料檢查
+    // 因此需要透過entries()這個迭代器協助取出資料檢查
     // for (let [key, value] of formData.entries()) {
     //   console.log(`${key}: ${value}`)
     // }
@@ -42,6 +47,7 @@ export default function Login() {
       // Fill Error Message
       fillErr: '',
     }
+    // 把表單資料傳給後台
     let url = 'http://localhost:3005/api/users/login'
     fetch(url, {
       method: 'POST',
@@ -50,21 +56,29 @@ export default function Login() {
     })
       .then((response) => response.json())
       .then((result) => {
-        console.log(result)
+        // console.log(result)
         if (result.status === 'error') {
           newError.fillErr = result.msg
           hasError = true
         } else {
           // 登入成功要做的事
-          const token = result.token
+          let token = result.token
+          console.log(token)
+          // 解譯token並放入全域變數中，讓jsx可以使用
           const userData = parseJwt(token)
-          const { exp, iat, ...user } = userData
-          for (let [key, value] of Object.entries(user)) {
-            // console.log(`${key}: ${value}`)
-            localStorage.setItem(key, value)
-          }
+          // 把會員的資料放到狀態中，之後可以共享到其他頁面
+          setUser(userData)
+          // 把token存入localStorage
+          // 後續要重新抓登入狀態時會需要
+          localStorage.setItem('token', token)
+
+          // 檢查解譯出來的data
+          // for (let [key, value] of Object.entries(user)) {
+          //   console.log(`${key}: ${value}`)
+          // }
           hasError = false
-          Router.push('/dashboard')
+          // **成功要導向首頁還是會員頁？
+          Router.push('/')
         }
 
         if (hasError) {
@@ -74,9 +88,35 @@ export default function Login() {
       })
       .catch((err) => {
         console.log(err)
-      }) /* 如果帳號或密碼錯誤這邊的err會多寫說undefine無法讀取split */
+      })
   }
 
+  // **進入網頁需要執行登入狀態確認，好像可以用Effect? 要確認幾次？
+  // 失敗中..sever用useEffect會回傳好幾次資料
+  const initUser = () => {
+    let token = localStorage.getItem('token')
+    let url = 'http://localhost:3005/api/users/status'
+    fetch(url, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      credentials: 'include',
+    })
+      .then((response) => response.json())
+      .then((result) => {
+        // 刷新頁面後，後台會給予新的token
+        token = result.token
+        console.log(token)
+        // 將新的token解譯出來，取出資料放入狀態
+        const userData = parseJwt(token)
+        setUser(userData)
+        // 要設定新的token進localStorage
+        localStorage.setItem('token', token)
+      })
+      .catch((err) => console.log(err))
+    // 要把userData的資料傳給其他頁面使用，這段最後得改寫到父母元件
+  }
   return (
     <>
       <Head>
@@ -118,18 +158,23 @@ export default function Login() {
                       id="remember"
                       className="form-check-input"
                     />
-                    <label htmlFor="remember" className="form-check-label">
+                    <label
+                      htmlFor="remember"
+                      className="form-check-label small"
+                    >
                       記住我
                     </label>
                   </div>
                 </div>
                 <div className="col-auto">
-                  <Link href="/users/forget-password">忘記密碼?</Link>
+                  <Link href="/users/forget-password" className="small">
+                    忘記密碼?
+                  </Link>
                 </div>
                 {/* 警示標語 */}
                 <div className="col-12">
                   <p
-                    className={`fw-medium text-center text-danger mb-0 ${styles.notify}`}
+                    className={`fw-medium small text-center text-danger mb-0 ${styles.notify}`}
                   >
                     {error.fillErr ? error.fillErr : ''}
                   </p>
