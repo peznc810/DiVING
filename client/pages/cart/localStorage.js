@@ -42,9 +42,15 @@ export default function Home() {
 
   return (
     <>
-      <button onClick={setLS}>set LS</button>
-      <button onClick={consoleLS}>console.log LS</button>
-      <button onClick={clearLS}>clear LS</button>
+      <button onClick={setLS} style={{ height: '500px' }}>
+        set LS
+      </button>
+      <button onClick={consoleLS} style={{ height: '500px' }}>
+        console.log LS
+      </button>
+      <button onClick={clearLS} style={{ height: '500px' }}>
+        clear LS
+      </button>
     </>
   )
 }

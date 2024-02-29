@@ -13,23 +13,39 @@ export default function MyProduct({
 }) {
   const [cartData, setCartData] = useState(null)
   const [isShown, setIsShown] = useState(true)
+  const [newNum, setNewNum] = useState(num)
 
   useEffect(() => {
     const data = JSON.parse(localStorage.getItem('cart'))
     setCartData(data)
   }, [])
 
-  console.log(cartData)
+  const handleIncrement = (index) => {
+    const updatedCartData = [...cartData]
+    updatedCartData[index].num += 1
+    setCartData(updatedCartData)
+    localStorage.setItem('cart', JSON.stringify(updatedCartData))
+    setNewNum(updatedCartData[index].num)
+  }
+
+  const handleDecrement = (index) => {
+    const updatedCartData = [...cartData]
+    if (updatedCartData[index].num > 1) {
+      updatedCartData[index].num -= 1
+      setCartData(updatedCartData)
+      localStorage.setItem('cart', JSON.stringify(updatedCartData))
+      setNewNum(updatedCartData[index].num)
+    }
+  }
 
   const removeBtn = () => {
-    console.log('按下了移除按鈕')
     setIsShown(false)
 
-    const a = cartData.filter((item) => {
+    const newCartData = cartData.filter((item) => {
       return cartData.indexOf(item) !== index
     })
 
-    localStorage.setItem('cart', JSON.stringify(a))
+    localStorage.setItem('cart', JSON.stringify(newCartData))
   }
 
   return (
@@ -43,14 +59,22 @@ export default function MyProduct({
             <h6 className="m-0">{name}</h6>
             <span>{detail}</span>
             <div className={`d-flex my-2 align-items-center`}>
-              <p className={`m-0 me-2 ${styles.specialPrice}`}>
-                NT${discountPrice}
-              </p>
-              <p
-                className={`m-0 text-decoration-line-through ${styles.originalPrice}`}
-              >
-                NT${price}
-              </p>
+              {discountPrice ? (
+                <>
+                  <p className={`m-0 me-2 ${styles.specialPrice}`}>
+                    NT${discountPrice}
+                  </p>
+                  <p
+                    className={`m-0 text-decoration-line-through ${styles.originalPrice}`}
+                  >
+                    NT${price}
+                  </p>
+                </>
+              ) : (
+                <>
+                  <p className={`m-0 ${styles.originalPrice}`}>NT${price}</p>
+                </>
+              )}
             </div>
 
             <div className={`${styles.btns}`}>
@@ -59,13 +83,21 @@ export default function MyProduct({
                 role="group"
                 aria-label="Second group"
               >
-                <button type="button" className="btn ">
+                <button
+                  type="button"
+                  className="btn"
+                  onClick={() => handleDecrement(index)}
+                >
                   <i className="bi bi-dash-lg"></i>
                 </button>
                 <button type="button" className="btn" disabled>
-                  {num}
+                  {newNum}
                 </button>
-                <button type="button" className="btn ">
+                <button
+                  type="button"
+                  className="btn"
+                  onClick={() => handleIncrement(index)}
+                >
                   <i className="bi bi-plus-lg"></i>
                 </button>
               </div>

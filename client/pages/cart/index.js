@@ -161,9 +161,9 @@ export default function Home() {
                       <button
                         type="button"
                         className="btn btn-light"
-                        onClick={() => handleIncrement(i)}
+                        onClick={() => handleDecrement(i)}
                       >
-                        +
+                        <i className="bi bi-dash-lg"></i>
                       </button>
                       <input
                         type="text"
@@ -174,9 +174,9 @@ export default function Home() {
                       <button
                         type="button"
                         className="btn btn-light"
-                        onClick={() => handleDecrement(i)}
+                        onClick={() => handleIncrement(i)}
                       >
-                        -
+                        <i className="bi bi-plus-lg"></i>
                       </button>
                     </td>
                     <td>
@@ -316,6 +316,7 @@ export default function Home() {
 
         input {
           background-color: #f8f9fa;
+          border: 0;
         }
 
         .discounted {
@@ -365,6 +366,11 @@ export default function Home() {
           padding-top: 1rem;
           padding-bottom: 1rem;
           text-align: center;
+        }
+
+        .btn-light {
+          padding-block: 2px;
+          padding-inline: 6px;
         }
 
         @media (max-width: 576px) {

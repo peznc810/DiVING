@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react'
-import Link from 'next/link'
+import toast, { Toaster } from 'react-hot-toast'
 
 import CartStep from '@/components/cart/cart-step'
 import AutoTab from '@/components/cart/test'
 import userData from '@/data/cart/user.json'
+
+import { useRouter } from 'next/router'
 
 const user_id = '1'
 const [cUser] = userData.filter((v) => {
@@ -11,6 +13,8 @@ const [cUser] = userData.filter((v) => {
 })
 
 export default function Home() {
+  const router = useRouter()
+
   const [cartData, setCartData] = useState(null)
   const [userInputs, setUserInputs] = useState({
     user_name: '',
@@ -22,6 +26,8 @@ export default function Home() {
     cCard_address: '',
     order_note: '',
   })
+
+  let totalPrice = 0
 
   useEffect(() => {
     const data = JSON.parse(localStorage.getItem('cart'))
@@ -49,8 +55,6 @@ export default function Home() {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target
-    console.log(name)
-    console.log(value)
     setUserInputs((prevState) => ({
       ...prevState,
       [name]: value,
@@ -58,38 +62,62 @@ export default function Home() {
   }
 
   const checkFormat = () => {
-    // if (true) {
-    //   return true
-    // } else {
-    //   return false
-    // }
+    const phone = document.querySelector('.user_phone').value
+    const user_name = document.querySelector('.user_name').value
+    const cCard_name = document.querySelector('.cCard_name').value
+
+    let emptyInput
+
+    const phoneRegex = /^09\d{8}$/
+    const chineseRegex = /^[\u4e00-\u9fa5]+$/
+
+    const inputs = document.querySelectorAll('input[type=text]')
+
+    inputs.forEach((input) => {
+      if (!input.value) {
+        emptyInput = '有地方尚未填寫'
+      }
+    })
+
+    if (emptyInput) {
+      notify(emptyInput)
+      return false
+    }
+
+    function checkCorr(value, regex, errMsg) {
+      if (!regex.test(value)) {
+        notify(errMsg)
+        return false
+      }
+      return true
+    }
+
+    if (!checkCorr(phone, phoneRegex, '收件人電話 格式錯誤')) {
+      return false
+    }
+
+    if (!checkCorr(user_name, chineseRegex, '收件人名稱 格式錯誤')) {
+      return false
+    }
+
+    if (!checkCorr(cCard_name, chineseRegex, '持卡人姓名 格式錯誤')) {
+      return false
+    }
+
+    return true
   }
 
-  let totalPrice = 0
-
-  const handleBtnSubmit = (e) => {
-    const now = new Date()
-    const created_at = `${now.getFullYear()}-${
-      now.getMonth() + 1
-    }-${now.getDate()} ${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`
-    const order = {
-      id: 1,
-      total: totalPrice,
-      user_id: cUser.user_id,
-      address: `${userInputs.user_city}${userInputs.user_section}${userInputs.user_road}`,
-      created_at: created_at,
-      status: '訂單成立',
-      phone: cUser.phone,
-      recipient: userInputs.cCard_name,
-      bill_address: userInputs.cCard_address,
-      order_note: userInputs.order_note,
-    }
+  const handleSub = (e) => {
     e.preventDefault()
     if (checkFormat()) {
-      console.log('true')
-    } else if (!checkFormat()) {
-      console.log('false')
+      router.push('./step3')
     }
+  }
+
+  const notify = (msg) => {
+    const msgBox = <p style={{ margin: 0 }}>{msg}</p>
+
+    toast.error(msgBox)
   }
 
   return (
@@ -193,198 +221,203 @@ export default function Home() {
         </table>
         <p className="text-end fw-bold my-3">合計: NT${totalPrice}</p>
       </div>
-      <div className="container">
-        <div className="w-100 section-name text-center">
-          <h5 className="span">送貨資料</h5>
+      <form onSubmit={handleSub}>
+        <div className="container">
+          <div className="w-100 section-name text-center">
+            <h5 className="span">送貨資料</h5>
+          </div>
+          <div className="container">
+            <div className="d-flex mt-3">
+              <input
+                type="checkbox"
+                className="deliver_cb"
+                onClick={() => t1Change()}
+              />
+              <h6 className="fw-bold">收貨人資料與會員資料相同</h6>
+            </div>
+
+            <div className="row justify-content-between spacing">
+              <div className="col-6">
+                <p className="fw-bold">收件人名稱</p>
+                <input
+                  type="text"
+                  className="w-100 form-control user_name"
+                  name="user_name"
+                  defaultValue={userInputs.user_name}
+                />
+              </div>
+              <div className="col-6">
+                <p className="fw-bold">收件人電話</p>
+                <input
+                  type="text"
+                  className="w-100 form-control user_phone"
+                  name="user_phone"
+                  defaultValue={userInputs.user_phone}
+                />
+              </div>
+            </div>
+            <p className="fw-bold">配送地址</p>
+            <div className="row justify-content-between mb-3">
+              <div className="col-3">
+                <select
+                  className="form-select user_city"
+                  value={userInputs.user_city}
+                  onChange={handleInputChange}
+                  name="user_city"
+                >
+                  <option value="0" disabled>
+                    縣/市
+                  </option>
+                  <option value="1市">1市</option>
+                  <option value="2市">2市</option>
+                  <option value="3市">3市</option>
+                </select>
+              </div>
+              <div className="col-3">
+                <select
+                  className="form-select user_section"
+                  value={userInputs.user_section}
+                  onChange={() => {}}
+                  name="user_section"
+                >
+                  <option value="0" disabled>
+                    區
+                  </option>
+                  <option value="1區">1區</option>
+                  <option value="2區">2區</option>
+                  <option value="3區">3區</option>
+                </select>
+              </div>
+              <div className="col-6">
+                <input
+                  type="text"
+                  className="w-100 form-control user_road"
+                  name="user_road"
+                  value={userInputs.user_road}
+                  onChange={handleInputChange}
+                />
+              </div>
+            </div>
+          </div>
         </div>
         <div className="container">
-          <div className="d-flex mt-3">
+          <div className="w-100 section-name text-center">
+            <h5 className="span">訂單備註</h5>
+          </div>
+          <textarea
+            className="form-control spacing"
+            rows="5"
+            maxLength={50}
+          ></textarea>
+        </div>
+        <div className="container credit-card-section">
+          <div className="w-100 section-name text-center mb-3">
+            <h5 className="span">信用卡付款資訊</h5>
+          </div>
+          <h6 className="span my-3">
+            ※ 信用卡交易資訊 Credit Card Information
+          </h6>
+          <div className="row justify-content-between my-3">
+            <p className="col-sm-2 col-3 fw-bold">信用卡卡號</p>
+            <div className="col-2">
+              <input
+                type="text"
+                className="form-control autotab-4"
+                maxLength={4}
+              />
+            </div>
+            <div className="col-2">
+              <input
+                type="text"
+                className="form-control autotab-4"
+                maxLength={4}
+              />
+            </div>
+            <div className="col-2">
+              <input
+                type="text"
+                className="form-control autotab-4"
+                maxLength={4}
+              />
+            </div>
+            <div className="col-2">
+              <input
+                type="text"
+                className="form-control autotab-4"
+                maxLength={4}
+              />
+            </div>
+          </div>
+          <div className="row justify-content-between my-3">
+            <p className="col-sm-2 col-3 fw-bold">有效期限</p>
+            <div className="col-2">
+              <input
+                type="text"
+                className="form-control"
+                maxLength={2}
+                placeholder="MM"
+              />
+            </div>
+            <div className="col-2">
+              <input
+                type="text"
+                className="form-control"
+                maxLength={2}
+                placeholder="YY"
+              />
+            </div>
+            <p className="col-2 fw-bold">安全碼</p>
+            <div className="col-2">
+              <input type="text" className="form-control" maxLength={3} />
+            </div>{' '}
+          </div>
+          <h6 className="span my-3">※ 持卡人資料 Cardholder Information </h6>
+          <div className="d-flex my-3">
             <input
               type="checkbox"
-              className="deliver_cb"
-              onClick={() => t1Change()}
+              className="credit_cb"
+              onClick={() => t2Change()}
             />
-            <h6 className="fw-bold">收貨人資料與會員資料相同</h6>
+            <h6 className="fw-bold">持卡人資料與會員資料相同</h6>
           </div>
-
-          <div className="row justify-content-between spacing">
+          <div className="row justify-content-between">
             <div className="col-6">
-              <p className="fw-bold">收件人名稱</p>
+              <p className="fw-bold">持卡人姓名</p>
               <input
                 type="text"
-                className="w-100 form-control user_name"
-                name="user_name"
-                value={userInputs.user_name}
-                onChange={handleInputChange}
+                className="w-100 form-control cCard_name"
+                name="cCard_name"
+                defaultValue={userInputs.cCard_name}
               />
             </div>
             <div className="col-6">
-              <p className="fw-bold">收件人電話</p>
+              <p className="fw-bold">帳單地址</p>
               <input
                 type="text"
-                className="w-100 form-control user_phone"
-                name="user_phone"
-                value={userInputs.user_phone}
-                pattern="/^09\d{8}$/"
-                onChange={handleInputChange}
-                // onBlur={checkFormat}
+                className="w-100 form-control cCard_address"
+                name="cCard_address"
+                defaultValue={userInputs.cCard_address}
               />
             </div>
           </div>
-          <p className="fw-bold">配送地址</p>
-          <div className="row justify-content-between mb-3">
-            <div className="col-3">
-              <select
-                className="form-select user_city"
-                value={userInputs.user_city}
-                onChange={handleInputChange}
-                name="user_city"
+          <div className="text-end my-3">
+            {/* <Link href="./step3">
+              <button
+                type="submit"
+                className="btn next-step-btn text-white px-5"
+                onClick={(e) => {
+                  handleBtnSubmit(e)
+                }}
               >
-                <option value="0">縣/市</option>
-                <option value="1市">1市</option>
-                <option value="2市">2市</option>
-                <option value="3市">3市</option>
-              </select>
-            </div>
-            <div className="col-3">
-              <select
-                className="form-select user_section"
-                value={userInputs.user_section}
-                onChange={() => {}}
-                name="user_section"
-              >
-                <option value="0">區</option>
-                <option value="1區">1區</option>
-                <option value="2區">2區</option>
-                <option value="3區">3區</option>
-              </select>
-            </div>
-            <div className="col-6">
-              <input
-                type="text"
-                className="w-100 form-control user_road"
-                name="user_road"
-                value={userInputs.user_road}
-                onChange={handleInputChange}
-              />
-            </div>
-          </div>
-        </div>
-      </div>
-      <div className="container">
-        <div className="w-100 section-name text-center">
-          <h5 className="span">訂單備註</h5>
-        </div>
-        <textarea
-          className="form-control spacing"
-          rows="5"
-          maxLength={50}
-        ></textarea>
-      </div>
-      <div className="container credit-card-section">
-        <div className="w-100 section-name text-center mb-3">
-          <h5 className="span">信用卡付款資訊</h5>
-        </div>
-        <h6 className="span my-3">※ 信用卡交易資訊 Credit Card Information</h6>
-        <div className="row justify-content-between my-3">
-          <p className="col-sm-2 col-3 fw-bold">信用卡卡號</p>
-          <div className="col-2">
-            <input
-              type="text"
-              className="form-control autotab-4"
-              maxLength={4}
-            />
-          </div>
-          <div className="col-2">
-            <input
-              type="text"
-              className="form-control autotab-4"
-              maxLength={4}
-            />
-          </div>
-          <div className="col-2">
-            <input
-              type="text"
-              className="form-control autotab-4"
-              maxLength={4}
-            />
-          </div>
-          <div className="col-2">
-            <input
-              type="text"
-              className="form-control autotab-4"
-              maxLength={4}
-            />
-          </div>
-        </div>
-        <div className="row justify-content-between my-3">
-          <p className="col-sm-2 col-3 fw-bold">有效期限</p>
-          <div className="col-2">
-            <input
-              type="text"
-              className="form-control"
-              maxLength={2}
-              placeholder="MM"
-            />
-          </div>
-          <div className="col-2">
-            <input
-              type="text"
-              className="form-control"
-              maxLength={2}
-              placeholder="YY"
-            />
-          </div>
-          <p className="col-2 fw-bold">安全碼</p>
-          <div className="col-2">
-            <input type="text" className="form-control" maxLength={3} />
-          </div>{' '}
-        </div>
-        <h6 className="span my-3">※ 持卡人資料 Cardholder Information </h6>
-        <div className="d-flex my-3">
-          <input
-            type="checkbox"
-            className="credit_cb"
-            onClick={() => t2Change()}
-          />
-          <h6 className="fw-bold">持卡人資料與會員資料相同</h6>
-        </div>
-        <div className="row justify-content-between">
-          <div className="col-6">
-            <p className="fw-bold">持卡人姓名</p>
-            <input
-              type="text"
-              className="w-100 form-control cCard_name"
-              name="cCard_name"
-              value={userInputs.cCard_name}
-              onChange={handleInputChange}
-            />
-          </div>
-          <div className="col-6">
-            <p className="fw-bold">帳單地址</p>
-            <input
-              type="text"
-              className="w-100 form-control cCard_address"
-              name="cCard_address"
-              value={userInputs.cCard_address}
-              onChange={handleInputChange}
-            />
-          </div>
-        </div>
-        <div className="text-end my-3">
-          <Link href="./step3" passHref>
-            <button
-              type="button"
-              className="btn next-step-btn text-white px-5"
-              onClick={(e) => {
-                handleBtnSubmit(e)
-              }}
-            >
+                <h5 className="fw-bold py-1 px-3">提交訂單</h5>
+              </button>
+            </Link> */}
+            <button className="btn next-step-btn text-white px-5">
               <h5 className="fw-bold py-1 px-3">提交訂單</h5>
             </button>
-          </Link>
+          </div>
         </div>
-      </div>
+      </form>
       <style jsx>{`
         h1,
         h2,
@@ -446,6 +479,7 @@ export default function Home() {
         }
       `}</style>
       <AutoTab className="autotab-4" maxLength={4} />
+      <Toaster position="bottom-center" />
     </div>
   )
 }

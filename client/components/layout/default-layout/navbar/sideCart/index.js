@@ -45,12 +45,10 @@ export default function SideCart() {
               const {
                 lessonName,
                 lessonPrice,
-                lesson_id,
-                lesson_num,
+                num,
                 productName,
                 productPrice,
-                product_id,
-                product_num,
+                productDiscount,
               } = v
               return (
                 <MyProduct
@@ -58,8 +56,8 @@ export default function SideCart() {
                   name={lessonName || productName}
                   detail={'detail'}
                   price={lessonPrice || productPrice}
-                  discountPrice={123}
-                  num={lesson_num || product_num}
+                  discountPrice={productDiscount}
+                  num={num}
                   index={i}
                 />
               )
