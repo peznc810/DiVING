@@ -1,13 +1,12 @@
 @import '@/styles/variable.scss';
 
 .filterBar {
-  letter-spacing: 1px;
-  //   margin-left: 40%;
   li {
     margin-right: 20px;
   }
   .filterMenu {
     button {
+      letter-spacing: 1px;
       border: 0;
       background-color: transparent;
       color: $gray;
@@ -17,17 +16,23 @@
       border-bottom: 2px solid $secondary;
       color: $secondary;
     }
+    .filterFocus {
+      border-bottom: 2px solid $secondary;
+      color: $secondary;
+    }
   }
 
   .search {
     width: 20%;
 
-    .input:focus {
-      border: 1px solid $info;
-    }
     button {
       background-color: $info;
       color: #fff;
+      padding: 0;
+      font-size: 24px;
+      line-height: 24px;
+      text-align: center;
+      padding-inline: 6px;
     }
   }
 }
