@@ -56,7 +56,7 @@ export default function Switch({imgDetails, id, category, detail}) {
           <div className="containermt-5 d-flex align-items-center justify-content-center">
             <div className="mt-2">
               <div className="d-flex justify-content-between align-items-center mt-3">
-                <div className="avatar">
+                <div className="avatar d-none d-sm-block">
                   <img src="/images/product/test/20/1-1.webp" alt="..." />
                 </div>
                 <div className="content">
@@ -78,11 +78,7 @@ export default function Switch({imgDetails, id, category, detail}) {
             </div>
           </div>
 
-          {/* 隨機商品 */}
-          <div>
-            <h3 className="text-center my-5">你可能會喜歡的商品⋯</h3>
-            <ProductRecommond />
-          </div>
+          
         </div>
       )}
       {!isSwitchOn && (
@@ -91,7 +87,7 @@ export default function Switch({imgDetails, id, category, detail}) {
           <h3 className="text-center my-2">商品介紹</h3>
 
           {/* 商品介紹 */}
-          <div className="row mt-2 mx-2">
+          <div className="row mt-2 mx-2 my-5">
             <div className="col-sm-12">
               <p className="text-center my-3 font-weight-light">
                 <p className="p-3" dangerouslySetInnerHTML={{ __html: detail.replace(/\n/g, '<br>') }}></p>
@@ -125,8 +121,8 @@ export default function Switch({imgDetails, id, category, detail}) {
         }
       .custom-image-container {
           margin: 0 auto;
-          width: 600px;
-          height: 480px;
+          max-width: 600px;
+          max-height: 480px;
         }
         .custom-image-container img {
           width: 100%;

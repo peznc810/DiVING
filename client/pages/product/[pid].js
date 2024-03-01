@@ -16,6 +16,7 @@ export default function Detail() {
   const router = useRouter()
   const { pid } = router.query
   const [product, setProduct] = useState(null)
+  const [items, setItems] = useState([])   // 加入到購物車中的項目
 
   const [selectColor, setSelectColor] = useState(null)
   const [selectSize, setSelectSize] = useState(null)
@@ -31,21 +32,30 @@ export default function Detail() {
       })
   }, [pid])
 
-  // 增加數量，回傳新的陣列，符合id的商品數量+1
-  const increment = (products, id) => {
-    return product.map((v, i) => {
-      if (v.id === id) return { ...v, count: v.count + 1 }
-      else return v
-    })
-  }
+// 在購物車中，遞增某商品id數量
+const increment = (id) => {
+  setItems(prevItems => {
+    return prevItems.map(item => {
+      if (item.id === id) {
+        return { ...item, qty: item.qty + 1 };
+      }
+      return item;
+    });
+  });
+}
 
-  // 減少數量，回傳新的陣列，符合id的商品數量-1
-  const decrement = (products, id) => {
-    return product.map((v, i) => {
-      if (v.id === id) return { ...v, count: v.count - 1 }
-      else return v
-    })
-  }
+// 在購物車中，遞減某商品id數量
+const decrement = (id) => {
+  setItems(prevItems => {
+    return prevItems.map(item => {
+      if (item.id === id && item.qty > 0) {
+        return { ...item, qty: item.qty - 1 };
+      }
+      return item;
+    });
+  });
+}
+
 
   if (!product) return null  
   return (
@@ -85,9 +95,6 @@ export default function Detail() {
             <Stars />
             <h6>4.0分 | 8則評價</h6>
 
-            {/* <h6 className="note-text">{`NT$${product.discount.toLocaleString()}`}</h6>
-            <p className="text-decoration-line-through type-text">{`NT$${product.price.toLocaleString()}`}</p> */}
-
             {product.discount ?
                 <>
                 <span className="note-text">{`NT$${product.discount.toLocaleString()}`}</span> 
@@ -103,7 +110,6 @@ export default function Detail() {
                 }
 
             <p dangerouslySetInnerHTML={{ __html: product.info.replace(/\n/g, '<br>') }}></p>
-
             <hr />
 
             {/* 顏色 button */}
@@ -124,7 +130,6 @@ export default function Detail() {
                 </button>
               )
             })}
-
             <br />
 
             {/* 尺寸 bottom */}
@@ -148,11 +153,21 @@ export default function Detail() {
 
             {/* 選擇數量 */}
             <div>
-              <button type="button" className="btn btn-circle">
+              <button 
+                className="btn btn-circle"
+                onClick={() => {
+                    decrement(product.id)
+                  }}
+              >
                 -
               </button>
-              <span className="mx-3">數量</span>
-              <button type="button" className="btn btn-circle">
+              <span className="mx-3">{items.find(item => item.id === product.id)?.qty || 1}</span>
+              <button 
+                className="btn btn-circle"
+                onClick={() => {
+                    increment(product.id)
+                  }}
+              >
                 +
               </button>
             </div>
@@ -240,6 +255,11 @@ export default function Detail() {
         {/* 商品介紹 + 顧客評價 */}
         <Switch imgDetails={product.img_detail.split(',')}  id={product.id} category={product.category} detail={product.detail}/>
       </div>
+      <br /><br />
+      <div>
+            <h3 className="text-center my-5">你可能會喜歡的商品⋯</h3>
+            <ProductRecommond />
+          </div>
 
       <style jsx>{`
         .container-1200 {

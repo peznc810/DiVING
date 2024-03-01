@@ -24,6 +24,7 @@ export default function Card({data, addItem = () => {}}) {
           onMouseLeave={handleMouseLeave}
         >
           <div className="card-body no-space-x">
+          <div className="img-wrap">
             <img
               src={`/images/product/images/${data.category}/${data.id}/${data.img_top}`}
               alt={`${data.id}`}
@@ -31,6 +32,7 @@ export default function Card({data, addItem = () => {}}) {
                 marginTop: isHovered ? '0' : '-15px',
               }}
             />
+            </div>
             {isHovered ? (
               <div>
                 <div className="bi-icon">
@@ -130,8 +132,17 @@ export default function Card({data, addItem = () => {}}) {
         /*  card-body override */
         .no-space-x {
           padding: var(--bs-card-spacer-y) 0;
+          
         }
-
+        {/* .img-wrap{
+          width: 298px;
+          height: 298px;
+        }
+        .img-wrap img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        } */}
         .h-now {
           font-size: 16px;
           color: #303132;
