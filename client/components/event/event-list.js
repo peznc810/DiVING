@@ -25,11 +25,31 @@ export default function EventList({ eventList }) {
     if (currentPage > 1) setCurrentPage(currentPage - 1)
   }
 
-  // 篩選
-  //(子女)要傳篩選、收尋結果的狀態
-  const handleFilter = (filterItems) => {
-    setCurrentPage(1) //篩選時當前頁數重置第一頁
-    setFilterItems(filterItems)
+  // 篩選 & 收尋
+  //(子女)要傳進篩選、收尋結果的狀態
+  const onFilter = (filterSort) => {
+    // 篩選活動
+    const filtered =
+      filterSort === 'all'
+        ? eventList
+        : eventList.filter((event) => filterSort === event.sort)
+
+    // 渲染更新的活動列表
+    setCurrentPage(1) //前頁數重置第一頁
+    setFilterItems(filtered)
+  }
+
+  const onSearch = (keyWord, filterSort) => {
+    // 收尋活動
+    const filtered =
+      filterSort === 'all'
+        ? eventList
+        : eventList.filter((event) => filterSort === event.sort)
+    const searched = filtered.filter((event) =>
+      event.title.toUpperCase().includes(keyWord.toUpperCase())
+    )
+
+    setFilterItems(searched)
   }
 
   return (
@@ -42,7 +62,11 @@ export default function EventList({ eventList }) {
           </div>
         </div>
         {/* 篩選＆收尋 */}
-        <EventFilter eventList={eventList} onFilter={handleFilter} />
+        <EventFilter
+          eventList={eventList}
+          onFilter={onFilter}
+          onSearch={onSearch}
+        />
         {/* 活動項目 */}
         <EventCard eventList={currentItems} />
 

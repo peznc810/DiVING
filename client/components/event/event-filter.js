@@ -2,24 +2,20 @@ import React, { useState } from 'react'
 import styles from './event-filter.module.scss'
 import { IoSearch } from 'react-icons/io5'
 
-export default function EventFilter({ eventList, onFilter = () => {} }) {
-  const [filterItem, setFilterItem] = useState(eventList)
+export default function EventFilter({
+  onFilter = () => {},
+  onSearch = () => {},
+}) {
   const [activeFilter, setActiveFilter] = useState('all')
+  const [filter, setFilter] = useState('all')
+  const [searchKeyword, setSearchKeyword] = useState('')
 
-  // 篩選
-  const handleFilter = (filterType) => {
-    if (filterType === 'all') {
-      setFilterItem(eventList)
-      onFilter(eventList)
-    } else {
-      const filtered = eventList.filter((item) => item.sort === filterType)
-      setFilterItem(filtered)
-      onFilter(filtered)
-      // console.log(filtered)
-    }
-    setActiveFilter(filterType)
+  const handleFilter = (filterSort) => {
+    setFilter(filterSort) // 重新更新篩選
+    onFilter(filterSort)
+    setActiveFilter(filterSort) //設定篩選按鈕的點擊狀態
+    console.log(filterSort)
   }
-
   return (
     <>
       <div className={`${styles.filterBar} px-5`}>
@@ -78,13 +74,21 @@ export default function EventFilter({ eventList, onFilter = () => {} }) {
               </button>
             </li>
           </ul>
+          {/* 收尋 */}
           <div className={`input-group ${styles.search} `}>
             <input
               className={`form-control`}
               type="text"
               placeholder="Search..."
+              onChange={(e) => setSearchKeyword(e.target.value)}
             />
-            <button type="submit" className={`btn `}>
+            <button
+              type="submit"
+              className={`btn `}
+              onClick={() => {
+                onSearch(searchKeyword, filter)
+              }}
+            >
               <IoSearch />
             </button>
           </div>
