@@ -1,35 +1,90 @@
 .box {
   //背景淺藍部分
-  background-color: #a6e9ff;
-  border-radius: 2%;
-  height: 100vh;
-  width: 100%;
-  svg {
-    //全部svg
+  // background-image: url(/images/post/test.jpeg);
+  position: relative;
+  border-radius: 1%;
+  .bg {
     width: 100%;
     height: 100%;
-    fill: #909090;
-    g {
-      //各區塊
-      :hover {
-        // fill: #013c64;
-        transition: fill 0.8s linear;
-      }
+    object-fit: cover;
+    opacity: 0.5;
+  }
+  svg {
+    //全部svg
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    fill: var(--bs-secondary);
+    circle {
+      overflow: hidden;
+      stroke: antiquewhite;
+    }
+    path {
+      width: 100%;
+      height: 100%;
+    }
+    rect {
+      fill: none;
+      stroke: var(--bs-gray);
+    }
+  }
+}
+
+.same {
+  fill: rgb(47, 172, 47);
+  //想要同時選取的部分 圓形+區
+  &:hover {
+    fill: #ff0707;
+    .diveSvg {
+      //潛水伕
+      fill: black;
+      animation-name: cloudAni;
+      animation-duration: 2s;
+      animation-iteration-count: infinite;
+      animation-timing-function: linear;
+    }
+  }
+}
+
+.district {
+  //8大區域
+
+  cursor: pointer;
+  path {
+    //各個區
+    &:hover {
+      // fill: rgb(47, 172, 47);
+      transition: fill 0.8s linear;
     }
   }
 }
 
 .ctaSvg {
-  fill: #951d85;
-  &:hover {
-    cursor: pointer;
-    fill: aqua;
-    transition: fill 0.8s linear;
+  background-color: aqua;
+  //圓形裡面所有東西
+  cursor: pointer;
+  // &:hover {
+  //   //滑鼠移到圓形
+  //   fill: rgb(247, 249, 219);
+  //   transition: fill 0.8s linear;
+  //   circle {
+  //     //單純圓形
+  //     stroke: #909090;
+  //     fill: #edd5ea1b;
+  //   }
+  // }
+  .diveSvg {
+    fill: black;
   }
 }
-.district {
-  cursor: pointer;
-  &:hover {
-    fill: aqua;
+@keyframes cloudAni {
+  0% {
+    transform: translateX(10%);
+  }
+  /*可加50%給他loop*/
+  100% {
+    transform: translateX(-10%); /*最左邊*/
   }
 }
