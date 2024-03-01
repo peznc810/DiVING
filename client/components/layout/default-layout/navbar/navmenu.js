@@ -3,12 +3,15 @@ import Link from 'next/link'
 import styles from './navmenu.module.scss'
 import { menuItems } from '@/config/nav-menu'
 import Image from 'next/image'
+// 會員狀態的hook
+import { useAuth } from '@/hooks/auth'
 
 export default function NavMenu() {
   // const [hover, setHover] = useState(false)
   const [openIndex, setOpeIndex] = useState(false)
-  // 待調整
-  const [token, setToken] = useState('')
+  // 會員登入狀態專用
+  const { user } = useAuth()
+  console.log(user)
 
   return (
     <>
@@ -82,8 +85,8 @@ export default function NavMenu() {
           )
         })}
         <li className={`mx-3`}>
-          {token ? (
-            <div className={styles.avatar}>
+          {user.valid ? (
+            <div className={`d-none d-md-block p-2 ${styles.avatar}`}>
               <Link href="/dashboard">
                 <Image
                   src="/images/users/woman.jpg"
@@ -96,7 +99,7 @@ export default function NavMenu() {
           ) : (
             <Link
               href="/users/login"
-              className={`px-2 py-2 ${styles.login} ${styles.linkText}`}
+              className={`p-2 ${styles.login} ${styles.linkText}`}
             >
               登入 / 註冊
             </Link>
@@ -104,9 +107,22 @@ export default function NavMenu() {
         </li>
         {/* 登入註冊icon */}
         <li>
-          <Link href="/users/login" className={`p-2  ${styles.loginIcon}`}>
-            <i className="bi bi-person-fill fs-3"></i>
-          </Link>
+          {user.valid ? (
+            <div className={`d-md-none d-block p-2 ${styles.avatar}`}>
+              <Link href="/dashboard">
+                <Image
+                  src="/images/users/woman.jpg"
+                  alt="avatar"
+                  fill
+                  priority
+                />
+              </Link>
+            </div>
+          ) : (
+            <Link href="/users/login" className={`p-2  ${styles.loginIcon}`}>
+              <i className="bi bi-person-fill fs-3"></i>
+            </Link>
+          )}
         </li>
         {/* cart按鈕 */}
         <li>

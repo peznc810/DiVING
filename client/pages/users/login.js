@@ -8,16 +8,16 @@ import { FcGoogle } from 'react-icons/fc'
 import { useAuth } from '@/hooks/auth'
 
 export default function Login() {
-  const { login, error, user } = useAuth()
+  const { login, error } = useAuth()
   // console.log(user)
   return (
     <>
       <Head>
         <title>會員登入</title>
       </Head>
-      <main className={`${styles['main-style']} ${styles['main-layout']}`}>
+      <main className={`${styles['main-style']}`}>
         <div className="d-flex justify-content-center mt-5">
-          <div className={`${styles['card-style']} ${styles['card-layout']}`}>
+          <div className={`${styles['card-style']}`}>
             <form onSubmit={login}>
               <h2 className="fs-3 mb-4 text-center">會員登入</h2>
               <div className={`mb-3 ${styles['input-style']}`}>
@@ -30,7 +30,7 @@ export default function Login() {
                 />
                 <label htmlFor="userEmail">電子郵件</label>
               </div>
-              <div className={styles['input-style']}>
+              <div className={`${styles['input-style']}`}>
                 <input
                   type="password"
                   name="userPWD"
@@ -75,7 +75,9 @@ export default function Login() {
                 {/* END */}
               </div>
               {/* END */}
-              <button className={`fw-medium ${styles.btn}`}>登入</button>
+              <button className={`fw-medium text-white ${styles.btn}`}>
+                登入
+              </button>
               <div className="row justify-content-center align-items-center">
                 <div className="col-10">
                   <div

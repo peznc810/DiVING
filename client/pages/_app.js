@@ -2,8 +2,9 @@ import '@/styles/globals.scss'
 import { useEffect } from 'react'
 import { useRouter } from 'next/router'
 import DefaultLayout from '@/components/layout/default-layout'
-import DashboardLayout from '@/components/dashboard'
 
+// 會員中心的預設樣式
+import DashboardLayout from '@/components/dashboard/layout'
 //會員驗證專用provider component
 import { AuthProvider } from '@/hooks/auth'
 
@@ -18,25 +19,25 @@ export default function App({ Component, pageProps }) {
   }, [])
 
   const getLayout = () => {
-    // 針對會員中心的預設樣式
+    // 會員中心的預設樣式
     if (currentPage.startsWith('/dashboard')) {
       return (
-        <DefaultLayout currentPage={currentPage}>
-          <AuthProvider>
+        <AuthProvider>
+          <DefaultLayout currentPage={currentPage}>
             <DashboardLayout>
               <Component {...pageProps} />
             </DashboardLayout>
-          </AuthProvider>
-        </DefaultLayout>
+          </DefaultLayout>
+        </AuthProvider>
       )
     } else {
       // 其他所有頁面的預設樣式
       return (
-        <DefaultLayout currentPage={currentPage}>
-          <AuthProvider>
+        <AuthProvider>
+          <DefaultLayout currentPage={currentPage}>
             <Component {...pageProps} />
-          </AuthProvider>
-        </DefaultLayout>
+          </DefaultLayout>
+        </AuthProvider>
       )
     }
   }

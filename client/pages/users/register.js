@@ -10,11 +10,9 @@ export default function SignUp() {
   const { signUp, error } = useAuth()
   return (
     <>
-      <header className={styles.header}></header>
-      <main className={`${styles['main-style']} ${styles['main-layout']}`}>
-        <div className="d-flex justify-content-center">
+      <main className={`${styles['main-style']}`}>
+        <div className="d-flex justify-content-center mt-5">
           <div className={`${styles['card-style']} ${styles['card-layout']}`}>
-            {/* chrome會有一個自動填入的input功能，但無法修改其樣式，之後還是選用唇色做背景較合適 */}
             <form onSubmit={signUp}>
               <h2 className="fs-3 mb-4 text-center">註冊會員</h2>
               <div className={`mb-3 ${styles['input-style']}`}>
@@ -86,7 +84,6 @@ export default function SignUp() {
           </div>
         </div>
       </main>
-      <footer className={styles.footer}></footer>
     </>
   )
 }

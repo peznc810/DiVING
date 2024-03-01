@@ -1,39 +1,26 @@
 @import '@/styles/variable.scss';
 
 /* 主視覺 */
-.main-layout {
-  width: 100vw;
-  padding-block: 5vw;
-}
-
 .main-style {
   background-image: url(/images/users/bg.png);
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
-}
+  padding-block: 5vw;
+  & * {
+    color: $white;
+  }
 
-.main-style * {
-  color: #fff;
-}
-
-.main-style a {
-  display: inline-block;
-  text-decoration: none;
-}
-
-.main-style a:hover {
-  color: $secondary;
-  text-decoration: underline;
-}
-
-.card-layout {
-  max-width: 390px;
-  width: 100%;
-  padding: 40px 32px;
+  & a:hover {
+    color: $secondary !important;
+    text-decoration: underline;
+  }
 }
 
 .card-style {
+  max-width: 390px;
+  width: 100%;
+  padding: 40px 32px;
   border-radius: 10px;
   border: 1px solid rgba(255, 255, 255, 0.1);
   background: linear-gradient(
@@ -43,12 +30,11 @@
     rgba(255, 255, 255, 0.7) 206.99%
   );
   backdrop-filter: blur(2px);
-}
-
-.card-style form {
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
+  & form {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
 }
 
 /* input的相關設定 */
@@ -113,15 +99,13 @@
   background: rgba(217, 217, 217, 0.3);
   backdrop-filter: blur(2px);
   transition: background-color 0.2s ease-in-out;
-}
-
-.btn:hover {
-  cursor: pointer;
-  background-color: $secondary;
-}
-.btn:active {
-  /* background-color: #e5881e; */
-  box-shadow: 0 0 10px 6px #f49120 inset;
+  &:hover {
+    cursor: pointer;
+    background-color: $secondary;
+  }
+  &:active {
+    box-shadow: 0 0 10px 6px #f49120 inset;
+  }
 }
 
 /* social */
@@ -134,7 +118,7 @@
   margin: 0px 8px;
 }
 @media screen and (max-width: 390px) {
-  .main-layout {
+  .main-style {
     padding: 0px;
   }
 

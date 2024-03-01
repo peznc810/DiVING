@@ -5,8 +5,12 @@ export const AuthContext = createContext()
 
 export function AuthProvider({ children }) {
   // 使用者的狀態
-  const [user, setUser] = useState({})
-  // 錯誤訊息的狀態
+  const [user, setUser] = useState({
+    email: '',
+    password: '',
+    name: '',
+  })
+  // 表單錯誤訊息的狀態
   const [error, setError] = useState({
     // Require Message
     emailReq: '',
@@ -58,11 +62,11 @@ export function AuthProvider({ children }) {
         } else {
           // 登入成功要做的事
           let token = result.token
-          console.log(token)
-          // 解譯token並放入全域變數中，讓jsx可以使用
+          // console.log(token)
+          // 解譯token
           const userData = parseJwt(token)
           // 把會員的資料放到狀態中，之後可以共享到其他頁面
-          setUser(userData)
+          setUser({ ...userData, valid: true })
           // 把token存入localStorage
           // 後續要重新抓登入狀態時會需要
           localStorage.setItem('token', token)
@@ -98,11 +102,15 @@ export function AuthProvider({ children }) {
       credentials: 'include',
     })
       .then((response) => response.json())
-      .then((result) => {
+      .then(() => {
         // 把狀態中的user資料清除
-        token = null
+        setUser({
+          email: '',
+          password: '',
+          name: '',
+        })
         localStorage.removeItem('token')
-        console.log(result) /* 登入成功 */
+        // console.log(result) /* 登入成功 */
       })
       .catch((err) => {
         console.log(err)
@@ -136,7 +144,7 @@ export function AuthProvider({ children }) {
     })
       .then((response) => response.json())
       .then((result) => {
-        console.log(result)
+        // console.log(result)
         if (result.status === 'error') {
           newError.fillErr = result.msg
           hasError = true
@@ -171,7 +179,7 @@ export function AuthProvider({ children }) {
       .then((result) => {
         // 刷新頁面後，後台會給予新的token
         token = result.token
-        console.log(token)
+        // console.log(token)
         // 將新的token解譯出來，取出資料放入狀態
         const userData = parseJwt(token)
         setUser(userData)

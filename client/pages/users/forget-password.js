@@ -4,9 +4,8 @@ import styles from './styles.module.scss'
 export default function Forget() {
   return (
     <>
-      <header className={styles.header}></header>
-      <main className={`${styles['main-style']} ${styles['main-layout']}`}>
-        <div className="d-flex justify-content-center">
+      <main className={`${styles['main-style']}`}>
+        <div className="d-flex justify-content-center mt-5">
           <div className={`${styles['card-style']} ${styles['card-layout']}`}>
             {/* chrome會有一個自動填入的input功能，但無法修改其樣式，之後還是選用唇色做背景較合適 */}
             <form action="" method="post" autoComplete="off">
@@ -17,13 +16,13 @@ export default function Forget() {
               <div className={`mb-3 ${styles['input-style']} ${styles.limit}`}>
                 <input
                   type="email"
-                  name="email"
-                  id="email"
+                  name="userEmail"
+                  id="userEmail"
                   placeholder="電子郵件"
                 />
-                <label htmlFor="email">電子郵件</label>
+                <label htmlFor="userEmail">電子郵件</label>
                 {/* 警示標語 */}
-                <div className="fw-normal text-danger position-absolute">
+                <div className="fw-normal text-danger position-absolute d-none">
                   格式錯誤
                 </div>
               </div>
@@ -32,7 +31,6 @@ export default function Forget() {
           </div>
         </div>
       </main>
-      <footer className={styles.footer}></footer>
     </>
   )
 }
