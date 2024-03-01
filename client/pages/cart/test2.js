@@ -18,7 +18,7 @@
 import React, { useState } from 'react'
 
 export default function Home() {
-  let url = 'http://localhost:3005/api/test'
+  let url = 'http://localhost:3005/api/line-pay/order-test'
   fetch(url, {
     method: 'GET',
     // body: "",

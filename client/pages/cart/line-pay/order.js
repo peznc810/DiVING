@@ -37,30 +37,47 @@ export default function Order() {
 
   // 建立訂單，送至server建立訂單，packages與order id由server產生
   const createOrder = async () => {
-    // 送至server建立訂單，packages與order id由server產生
-    // products將會組合在packages屬性之下
-    // const res = await axiosInstance.post('/line-pay/create-order', {
-    //   amount: quantity1 * price1 + quantity2 * price2,
-    //   products: [
-    //     {
-    //       id: 1,
-    //       name: '測試商品1',
-    //       quantity: quantity1,
-    //       price: price1,
-    //     },
-    //     {
-    //       id: 2,
-    //       name: '測試商品2',
-    //       quantity: quantity2,
-    //       price: price2,
-    //     },
-    //   ],
-    // })
-    // console.log(res.data) //訂單物件格式(line-pay專用)
-    // if (res.data.status === 'success') {
-    //   setOrder(res.data.data.order)
-    //   toast.success('已成功建立訂單')
-    // }
+    const data = {
+      amount: quantity1 * price1 + quantity2 * price2,
+      products: [
+        {
+          id: 1,
+          name: '測試商品1',
+          quantity: quantity1,
+          price: price1,
+        },
+        {
+          id: 2,
+          name: '測試商品2',
+          quantity: quantity2,
+          price: price2,
+        },
+      ],
+    }
+
+    fetch('/line-pay/create-order', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok')
+        }
+        return response.json()
+      })
+      .then((data) => {
+        console.log('Response:', data)
+        if (data.status === 'success') {
+          setOrder(data.data.order)
+          toast.success('已成功建立訂單')
+        }
+      })
+      .catch((error) => {
+        console.error('Error:', error)
+      })
   }
 
   // 確認交易，處理伺服器通知line pay已確認付款，為必要流程
