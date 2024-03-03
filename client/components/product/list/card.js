@@ -59,14 +59,14 @@ export default function Card({data, addItem = () => {}}) {
                 {data.discount ?
                 <>
                 <span className="note-text">{`NT$${data.discount.toLocaleString()}`}</span> 
-                <p className="text-decoration-line-through type-text card-text">
+                <span className="text-decoration-line-through type-text card-text m-2">
                 {`NT$${data.price.toLocaleString()}`}
-                </p> 
+                </span> 
                 </>
                 : <>
-                <p className="my-2 type-text card-text">
+                <span className="my-2 price-text card-text">
                 {`NT$${data.price.toLocaleString()}`}
-                </p> 
+                </span> 
                 </>}
               </div>
             )}
@@ -115,13 +115,17 @@ export default function Card({data, addItem = () => {}}) {
 
         .note-text {
           color: var(--red, #dc5151);
-          font-size: 14.5px;
+          font-size: 15.5px;
         }
-
         .type-text {
           color: var(--gray, #858585);
           font-weight: normal;
-          font-size: 12.5px;
+          font-size: 13.5px;
+        }
+        .price-text{
+          color: var(--gray, #858585);
+          font-weight: normal;
+          font-size: 15.5px;
         }
 
         /* override by css variable */

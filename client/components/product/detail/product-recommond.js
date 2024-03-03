@@ -16,9 +16,10 @@ export default function ProductRecommend() {
 
   useEffect(() => {
     if (!pid) return
-    fetch(`http://localhost:3000/api/product/${pid}`)
+    fetch(`http://localhost:3000/api/product/`)
       .then((res) => res.json())
       .then((res) => {
+        // console.log(res)
         // 洗牌並選擇前四個產品
         const shuffledProducts = shuffle(res.data);
         const selectedProducts = shuffledProducts.slice(0, 4);
@@ -35,31 +36,35 @@ export default function ProductRecommend() {
           {product.map((productItem) => (
            <div key={productItem} className="col-sm-3 col-12 my-3">
               <Card className="custom-card bg-bg-gray">
+              <div>
                 <Card.Img
-                  variant="top"
-                  src={`/images/product/images/${productItem.category}/${productItem.id}/${productItem.img_top}`}
-                  style={{
-                    objectFit: 'cover',
-                    width: '100%',
-                    height: '100%',
-                  }}
-                />
+                    variant="top"
+                    src={`/images/product/images/${productItem.category}/${productItem.id}/${productItem.img_top}`}
+                    style={{
+                      objectFit: 'contain',
+                      width: '100%',
+                      height: '100%',
+                    }}
+                  />
+              </div>
                 <Card.Body>
-                  <Card.Title className="h6">{productItem.productItem}</Card.Title>
-                  <div className="d-flex justify-content-between align-items-center mt-2">
+                <div className="text-center">
+                <Card.Title className="h6 my-1">{productItem.brand}</Card.Title>
+                <p>{productItem.name}</p>
+                </div>
+                  <div className="d-flex justify-content-between align-items-center">
                     {productItem.discount ?
-                      <>
-                        <span className="note-text">{`NT$${productItem.discount}`}</span>
-                        <span className="text-decoration-line-through type-text">
-                          {`NT$${productItem.price.toString()}`}
+                      <div className="m-1">
+                        <span className="note-text">{`NT$${productItem.discount.toLocaleString()}`}</span>
+                        <span className="text-decoration-line-through type-text m-2">
+                          {`NT$${productItem.price.toLocaleString()}`}
                         </span>
-                      </>
+                      </div>
                       : 
                       <>
-                      <span>
-                        {/* {`NT$${productItem.price.toString()}`} */}
-                        <span className="note-text">Price not available</span>
-                      </span>
+                        <span className="price-text m-1">
+                          {`NT$${productItem.price.toLocaleString()}`}
+                        </span>
                       </>
                     }
                     <div>
@@ -89,14 +94,20 @@ export default function ProductRecommend() {
               width: 380px;
             }
           }
+          
           .note-text {
             color: var(--red, #dc5151);
+            font-size: 15.5px;
           }
-
           .type-text {
             color: var(--gray, #858585);
             font-weight: normal;
-            font-size: 14px;
+            font-size: 13.5px;
+          }
+          .price-text{
+            color: var(--gray, #858585);
+            font-weight: normal;
+            font-size: 15.5px;
           }
           .color-btn {
             width: 45px;

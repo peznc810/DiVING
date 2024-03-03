@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 
 import Stars from '@/components/product/star/star'
@@ -16,7 +16,9 @@ export default function Detail() {
   const router = useRouter()
   const { pid } = router.query
   const [product, setProduct] = useState(null)
-  const [items, setItems] = useState([])   // 加入到購物車中的項目
+
+  const [productCount, setProductCount] = useState(1) //增加、減少數量
+  const [items, setItems] = useState([])   //加入到購物車中的項目
 
   const [selectColor, setSelectColor] = useState(null)
   const [selectSize, setSelectSize] = useState(null)
@@ -32,32 +34,40 @@ export default function Detail() {
       })
   }, [pid])
 
+
+const increment = () =>{
+  setProductCount((prevCount)=>{
+    return prevCount + 1
+  })
+}
+
+const decrement = () =>{
+  setProductCount((prevCount)=>{
+    if( prevCount === 1){
+      return prevCount
+    }else{
+      return prevCount - 1 
+    }
+    })
+}
+
 // 在購物車中，遞增某商品id數量
-const increment = (id) => {
-  setItems(prevItems => {
-    return prevItems.map(item => {
-      if (item.id === id) {
-        return { ...item, qty: item.qty + 1 };
-      }
-      return item;
-    });
-  });
-}
-
-// 在購物車中，遞減某商品id數量
-const decrement = (id) => {
-  setItems(prevItems => {
-    return prevItems.map(item => {
-      if (item.id === id && item.qty > 0) {
-        return { ...item, qty: item.qty - 1 };
-      }
-      return item;
-    });
-  });
-}
+// const addCart = (id) => {
+//   setItems(prevItems => {
+//     return prevItems.map(item => {
+//       if (item.id === id) {
+//         return { ...item, qty: item.qty + 1 };
+//       }
+//       return item;
+//     });
+//   });
+// }
 
 
-  if (!product) return null  
+  if (!product) return null 
+  // if(!product){
+  //   return null 
+  // }
   return (
     <>
       <div className="container-1200">
@@ -93,23 +103,21 @@ const decrement = (id) => {
           <div className="col-sm-5">
             <h3>{product.name}</h3>
             <Stars />
-            <h6>4.0分 | 8則評價</h6>
-
+            <h6 className="my-1">4.0分 | 8則評價</h6>
             {product.discount ?
                 <>
                 <span className="note-text">{`NT$${product.discount.toLocaleString()}`}</span> 
-                <p className="text-decoration-line-through type-text">
+                <span className="text-decoration-line-through type-text m-3 my-2">
                 {`NT$${product.price.toLocaleString()}`}
-                </p> 
+                </span> 
                 </>
                 : <>
-                <p>
+                <p className="my-2 price-text">
                 {`NT$${product.price.toLocaleString()}`}
                 </p> 
                 </>
                 }
-
-            <p dangerouslySetInnerHTML={{ __html: product.info.replace(/\n/g, '<br>') }}></p>
+            <p className="my-1" dangerouslySetInnerHTML={{ __html: product.info.replace(/\n/g, '<br>') }}></p>
             <hr />
 
             {/* 顏色 button */}
@@ -156,16 +164,16 @@ const decrement = (id) => {
               <button 
                 className="btn btn-circle"
                 onClick={() => {
-                    decrement(product.id)
+                    decrement()
                   }}
               >
                 -
               </button>
-              <span className="mx-3">{items.find(item => item.id === product.id)?.qty || 1}</span>
+              <span className="mx-3"> {productCount} </span>
               <button 
                 className="btn btn-circle"
                 onClick={() => {
-                    increment(product.id)
+                    increment()
                   }}
               >
                 +
@@ -273,17 +281,24 @@ const decrement = (id) => {
             width: 380px;
           }
         }
+        .my-1 {
+          font-family: Arial, sans-serif;
+        }
         .note-text {
           color: var(--red, #dc5151);
-          font-size: 14.5px;
+          font-size: 16.5px;
         }
 
         .type-text {
           color: var(--gray, #858585);
           font-weight: normal;
-          font-size: 12.5px;
+          font-size: 14px;
         }
-
+        .price-text{
+            color: var(--gray, #858585);
+            font-weight: normal;
+            font-size: 16.5px;
+        }
         .btn-md:hover,
         .btn-outline-primary:hover,
         .btn-circle:hover {
