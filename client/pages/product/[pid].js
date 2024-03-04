@@ -294,6 +294,7 @@ const decrement = () =>{
                     </div>
                   </div>
                 </div>
+                
               </div>
             </div>
           </div>
