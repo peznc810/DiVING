@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import styles from './navmenu.module.scss'
 import { menuItems } from '@/config/nav-menu'
@@ -10,8 +10,13 @@ export default function NavMenu() {
   // const [hover, setHover] = useState(false)
   const [openIndex, setOpeIndex] = useState(false)
   // 會員登入狀態專用
-  const { user } = useAuth()
-  console.log(user)
+  const { initUser, user } = useAuth()
+
+  // BUG: 登出也會再檢查一次token
+  useEffect(() => {
+    initUser()
+  }, [])
+  // console.log(user)
 
   return (
     <>
@@ -106,7 +111,7 @@ export default function NavMenu() {
           )}
         </li>
         {/* 登入註冊icon */}
-        <li>
+        <li className="mx-1">
           {user.valid ? (
             <div className={`d-md-none d-block p-2 ${styles.avatar}`}>
               <Link href="/dashboard">
@@ -125,7 +130,7 @@ export default function NavMenu() {
           )}
         </li>
         {/* cart按鈕 */}
-        <li>
+        <li className="mx-1">
           <button
             type="button"
             className={`p-2 ${styles.cart} position-relative`}

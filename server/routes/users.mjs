@@ -15,10 +15,11 @@ app.use(express.urlencoded({ extended: true }))
 
 // checkToken跟logout需要
 const blackList = []
-let user
+// let user
 
 // 登入
 router.post('/login', upload.none(), async (req, res) => {
+  console.log('Login 登入');
   // 接收client的require
   const { userEmail, userPWD } = req.body
   // 比對db資料
@@ -28,13 +29,12 @@ router.post('/login', upload.none(), async (req, res) => {
     [userEmail, userPWD]
   )
   // 先放入全域變數，因為status會需要
-  user = userData
-  if (user) {
+  if (userData) {
     let token = jwt.sign({
-      email: user.email,
-      name: user.name,
-      tel: user.phone
-    }, secretKey, { expiresIn: '10m' })
+      userEmail: userData.email,
+      userName: userData.name,
+      tel: userData.phone
+    }, secretKey, { expiresIn: '1d' })
     res.status(200).json({ msg: '登入成功', token })
   } else {
     res.status(401).json({
@@ -46,11 +46,14 @@ router.post('/login', upload.none(), async (req, res) => {
 
 // 登出
 router.post('/logout', checkToken, (req, res) => {
+  console.log('Login 登出');
+  // console.log('logout');
   let token = req.get("Authorization");
+  // console.log(token);
   if (token && token.indexOf("Bearer ") === 0) {
     token = token.slice(7);
   };
-  // 如果沒有在名中，把目前的登出token放入名單中
+  // 如果沒有在名單中，把目前的登出token放入名單中
   blackList.push(token)
   // 初始化token
   token = jwt.sign({
@@ -60,19 +63,28 @@ router.post('/logout', checkToken, (req, res) => {
   }, secretKey, { expiresIn: '-10s' })
   res.status(200).json({
     msg: '登出成功',
-    token
   })
 })
 
 // 常駐登入狀態
-router.post('/status', checkToken, (req, res) => {
+router.post('/status', checkToken, async (req, res) => {
   // 可能不止這裡需要解譯過的資料，所以放到checkToken共用
-  if (user.email === req.decode.email) {
+  // 拿解譯過後的token資料過來跟資料庫比對
+  const { userEmail } = req.decode
+  
+  // 之後要把密碼重新編碼後再存入資料庫
+  const [[userData]] = await db.execute(
+    'SELECT * FROM `users` WHERE `email` = ?',
+    [userEmail]
+  )
+
+  if (userData) {
     // 重新核發token，前台需重新設置localStorage
+    // 目前只有拿這些資料，如果之後需要其他資料就用[password, ..userData]，取出除了密碼以外的資料
     let token = jwt.sign({
-      email: user.email,
-      name: user.name,
-      tel: user.phone
+      userEmail: userData.email,
+      userName: userData.name,
+      tel: userData.phone
     }, secretKey, { expiresIn: '10m' })
     res.status(200).json({
       msg: '使用者已登入',
@@ -116,27 +128,35 @@ router.post('/register', upload.none(), async (req, res) => {
 
 // 確認token資料
 function checkToken(req, res, next) {
+  // console.log('checkToken資料');
   let token = req.get('Authorization')
-  // console.log(token);
+  console.log(token);
   // 是否有token
   if (token && token.indexOf('Bearer ') === 0) {
+    // console.log('checkToken資料 2');
+    console.log(token);
     // 如果條件符合，取出token
     token = token.slice(7)
     // 檢查是否在已登出的名單中
     if (blackList.includes(token)) {
+      // console.log('checkToken資料 3');
       res.status(401).json({ status: 'error', msg: '登入驗證已失效，請重新登入' })
       // 結束整個middleware
       return false
     }
+    // 前台傳留存的token進來，要確認token是否過期
     jwt.verify(token, secretKey, (err, decode) => {
       if (err) {
+        // console.log('checkToken資料 4');
         return res.status(401).json({
           status: 'error',
-          msg: '驗證失敗，請重新登入'
+          msg: '驗證已失效，請重新登入'
         })
       } else {
+        // console.log('checkToken資料 5');
         // 把解譯過的資料放入req中讓其他狀態可以共用
         req.decode = decode
+        // 如果尚未過期就繼續執行
         next()
       }
     })

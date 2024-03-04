@@ -6,9 +6,10 @@ export const AuthContext = createContext()
 export function AuthProvider({ children }) {
   // 使用者的狀態
   const [user, setUser] = useState({
-    email: '',
-    password: '',
-    name: '',
+    userEmail: '',
+    userName: '',
+    tel: '',
+    valid: false,
   })
   // 表單錯誤訊息的狀態
   const [error, setError] = useState({
@@ -76,7 +77,6 @@ export function AuthProvider({ children }) {
           //   console.log(`${key}: ${value}`)
           // }
           hasError = false
-          // **成功要導向首頁還是會員頁？
           Router.push('/')
         }
 
@@ -102,15 +102,16 @@ export function AuthProvider({ children }) {
       credentials: 'include',
     })
       .then((response) => response.json())
-      .then(() => {
+      .then((result) => {
         // 把狀態中的user資料清除
         setUser({
-          email: '',
-          password: '',
-          name: '',
+          userEmail: '',
+          userName: '',
+          tel: '',
+          valid: false,
         })
+        console.log(result)
         localStorage.removeItem('token')
-        // console.log(result) /* 登入成功 */
       })
       .catch((err) => {
         console.log(err)
@@ -163,36 +164,46 @@ export function AuthProvider({ children }) {
       })
   }
 
-  // **進入網頁需要執行登入狀態確認，好像可以用Effect? 要確認幾次？
-  // 失敗中..sever用useEffect會回傳好幾次資料
+  // **進入網頁皆需要執行登入狀態確認
   const initUser = () => {
+    // 如果未登出，並重新進入(刷新)頁面，需要拿存留的token跟伺服器請求資料
     let token = localStorage.getItem('token')
-    let url = 'http://localhost:3005/api/users/status'
-    fetch(url, {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-      credentials: 'include',
-    })
-      .then((response) => response.json())
-      .then((result) => {
-        // 刷新頁面後，後台會給予新的token
-        token = result.token
-        // console.log(token)
-        // 將新的token解譯出來，取出資料放入狀態
-        const userData = parseJwt(token)
-        setUser(userData)
-        // 要設定新的token進localStorage
-        localStorage.setItem('token', token)
+    // 伺服器要確認當前的token是否過期
+    if (token) {
+      let url = 'http://localhost:3005/api/users/status'
+      fetch(url, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        credentials: 'include',
       })
-      .catch((err) => console.log(err))
-    // 要把userData的資料傳給其他頁面使用，這段最後得改寫到父母元件
+        .then((response) => response.json())
+        .then((result) => {
+          if (result.status === 'error') {
+            // 之後可能用alert之類的提示訊息處理
+            console.log(result.msg)
+            return
+          }
+          // 刷新頁面後，後台會給予新的token
+          token = result.token
+          // console.log(token)
+          // 將新的token解譯出來，取出資料放入狀態
+          const userData = parseJwt(token)
+          setUser({ ...userData, valid: true })
+          // 要設定新的token進localStorage
+          localStorage.setItem('token', token)
+        })
+        .catch((err) => console.log(err))
+    } else {
+      // 可能之後可以變成給新會員的相關優惠通知
+      console.log('無使用者')
+    }
   }
 
   return (
     <AuthContext.Provider
-      value={{ user, error, parseJwt, login, logout, signUp }}
+      value={{ user, error, parseJwt, login, logout, signUp, initUser }}
     >
       {children}
     </AuthContext.Provider>

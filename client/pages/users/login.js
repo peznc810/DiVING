@@ -60,8 +60,11 @@ export default function Login() {
                   </div>
                 </div>
                 <div className="col-auto">
-                  <Link href="/users/forget-password" className="small">
-                    忘記密碼?
+                  <Link
+                    href="/users/forget-password"
+                    className="small text-secondary"
+                  >
+                    忘記密碼？
                   </Link>
                 </div>
                 {/* 警示標語 */}
@@ -86,18 +89,18 @@ export default function Login() {
                     或
                   </div>
                 </div>
-                <div className="col-6 mt-3">
+                <div className="col-10 mt-3">
                   <div className={`small ${styles.btn}`}>
                     <FcGoogle className="me-2" />
-                    Google
+                    使用 Google 帳號登入
                   </div>
                 </div>
               </div>
               <p className="text-center mb-0 small">
-                還沒有帳號嗎?
+                還沒有帳號嗎？
                 <Link
                   href="/users/register"
-                  className="ps-1 text-secondary fw-bold"
+                  className="text-secondary fw-medium"
                 >
                   立即註冊
                 </Link>

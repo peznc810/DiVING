@@ -12,21 +12,20 @@ export default function App({ Component, pageProps }) {
   // 獲取當前頁面路徑
   const router = useRouter()
   const currentPage = router.pathname
+  // console.log(useAuth)
 
   // 導入bootstrap的JS函式庫
   useEffect(() => {
     import('bootstrap/dist/js/bootstrap')
   }, [])
 
-  const getLayout = () => {
+  const getLayout = (children) => {
     // 會員中心的預設樣式
     if (currentPage.startsWith('/dashboard')) {
       return (
         <AuthProvider>
           <DefaultLayout currentPage={currentPage}>
-            <DashboardLayout>
-              <Component {...pageProps} />
-            </DashboardLayout>
+            <DashboardLayout>{children}</DashboardLayout>
           </DefaultLayout>
         </AuthProvider>
       )
@@ -34,9 +33,7 @@ export default function App({ Component, pageProps }) {
       // 其他所有頁面的預設樣式
       return (
         <AuthProvider>
-          <DefaultLayout currentPage={currentPage}>
-            <Component {...pageProps} />
-          </DefaultLayout>
+          <DefaultLayout currentPage={currentPage}>{children}</DefaultLayout>
         </AuthProvider>
       )
     }
