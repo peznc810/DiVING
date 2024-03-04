@@ -52,10 +52,26 @@ export default function Filter() {
                 className="accordion-collapse collapse"
               >
                 <div className="accordion-body px-1">
-                  <ul>
-                    <li>版型較大，建議訂購小半號</li>
-                    <li>尺寸：可參考商品細節之尺寸指南</li>
-                  </ul>
+                 <div className="form-check">
+                    {items.map((product) => {
+                    const firstMapping = items.find((p) => p.brand === product.brand) === product;
+                    if (firstMapping) {
+                      return (
+                        <div key={product.id} className="form-check">
+                          <Link
+                            href="/product/list"
+                            className="form-check-label"
+                            htmlFor="flexCheckDefault"
+                            style={{ color: '#303132' }}
+                          >
+                            {product.brand}
+                          </Link>
+                        </div>
+                      );
+                    }
+                    return null;
+                  })}
+                  </div>
                 </div>
               </div>
             </div>
@@ -79,14 +95,26 @@ export default function Filter() {
                 className="accordion-collapse collapse"
               >
                 <div className="accordion-body px-1">
-                  <ol>
-                    <li>訂單金額滿新臺幣 2,000 元，即享免運服務</li>
-                    <li>臺北市：標準運送的商品可於 2-5 個工作天內送達<br />
-                    快遞運送的商品可於 2-3 個工作天內送達</li>
-                    <li>其它縣市：標準運送的商品可於 3-6 個工作天內送達<br />
-                    快遞運送的商品可於 3-5 個工作天內送達</li>
-                    <li>訂單皆於平日上班時間(09:00-18:00)處理與寄送</li>
-                  </ol>
+                  <div  className="form-check">
+                    {items.map((product) => {
+                      const firstMapping = items.find((p) => p.category === product.category) === product;
+                      if(firstMapping){
+                        return (
+                          <div key={product.id} className="form-check">
+                            <Link
+                              href="/product/list"
+                              className="form-check-label"
+                              htmlFor="flexCheckDefault"
+                              style={{ color: '#303132' }}
+                            >
+                              {product.category}
+                            </Link>
+                          </div>
+                        );
+                      }
+                      return null;
+                    })}
+                  </div>
                 </div>
               </div>
             </div>
