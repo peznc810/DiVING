@@ -10,7 +10,8 @@ import Link from 'next/link'
 import { MdScubaDiving } from "react-icons/md";
 import { GoHeartFill } from "react-icons/go";
 import { FaCartPlus } from "react-icons/fa";
-import styles from '@/components/product/product.module.css'
+import toast, { Toaster } from 'react-hot-toast'
+// import styles from '@/components/product/product.module.css'
 
 export default function Detail() {
   const router = useRouter()
@@ -63,6 +64,39 @@ const decrement = () =>{
 //   });
 // }
 
+//點選加入購物車，會出現吐司
+// const notify = (productName) => {
+//   const msgBox = (
+//     <div style={{ backgroundColor: 'white' }}>
+//       <p>{`${productName} 已成功加入到購物車中`}</p>
+//       <button
+//         onClick={() => {
+//           // 另一種導向至另一頁面路由的方式
+//           router.push('/cart/product')
+//         }}
+//       >
+//         前往 購物車頁面
+//       </button>
+//     </div>
+//   )
+//   toast.success(msgBox)
+// }
+
+ // ----------------------加入購物車的功能  ----------------------
+ const [cartItems, setCartItems] = useState([])
+ const [cartCount, setCartCount] = useState(0)
+
+ const addToCart = (product) => {
+   const existingItem = cartItems.find((item) => item.id === product.id)
+   if (existingItem) {
+     existingItem.quantity += 1
+   } else {
+     const newItem = { ...product, quantity: 1 }
+     setCartItems([...cartItems, newItem])
+   }
+   setCartCount(cartCount + 1)
+   toast(`${Lesson[0].name}已加入購物車中`)
+ }
 
   if (!product) return null 
   // if(!product){
@@ -180,17 +214,22 @@ const decrement = () =>{
               </button>
             </div>
 
-            {/* 加入購物車 */}
+            {/* 加入最愛 */}
             <button
               className="btn btn-secondary w-100 mb-3 my-3"
               style={{ fontWeight: 'bold', color: 'white' }}
             >
-              <GoHeartFill className='m-0 p-0' /> 加入最愛
+              <GoHeartFill /> 加入最愛
             </button>
             
-            {/* 加入最愛 */}
-            <button className="btn btn-outline-primary w-100">
-              加入購物車 <FaCartPlus />
+            {/* 加入購物車 */}
+            <button 
+              className="btn btn-outline-primary w-100">
+                加入購物車 <FaCartPlus />
+              <Toaster
+                  position="top-center"
+                  reverseOrder={false}
+                />
             </button>
 
             {/* 注意事項 */}
@@ -264,10 +303,11 @@ const decrement = () =>{
         <Switch imgDetails={product.img_detail.split(',')}  id={product.id} category={product.category} detail={product.detail}/>
       </div>
       <br /><br />
-      <div>
+         <div>
             <h3 className="text-center my-5">你可能會喜歡的商品⋯</h3>
             <ProductRecommond />
           </div>
+
 
       <style jsx>{`
         .container-1200 {
@@ -288,7 +328,6 @@ const decrement = () =>{
           color: var(--red, #dc5151);
           font-size: 16.5px;
         }
-
         .type-text {
           color: var(--gray, #858585);
           font-weight: normal;

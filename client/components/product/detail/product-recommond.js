@@ -54,7 +54,7 @@ export default function ProductRecommend() {
                 </div>
                   <div className="d-flex justify-content-between align-items-center">
                     {productItem.discount ?
-                      <div className="m-1">
+                      <div>
                         <span className="note-text">{`NT$${productItem.discount.toLocaleString()}`}</span>
                         <span className="text-decoration-line-through type-text m-2">
                           {`NT$${productItem.price.toLocaleString()}`}

@@ -11,9 +11,11 @@ import Link from 'next/link'
 import { MdScubaDiving } from "react-icons/md";
 import { GoHeartFill } from "react-icons/go";
 import { FaCartPlus } from "react-icons/fa";
-import styles from '@/components/product/product.module.css'
+
 
 export default function List() {
+  const [product, setProduct] = useState(null);    
+
   // Toggle the side navigation
   useEffect(() => {
     // fix next issue
@@ -40,7 +42,6 @@ export default function List() {
     }
   }, [])
 
-  const [product, setProduct] = useState(null);    
 
   useEffect(() => { 
     fetch("http://localhost:3000/api/product").then((res) => {
@@ -53,8 +54,6 @@ export default function List() {
     return product.data
   }, [product])
  
-
-  //在購物車中，增加數量
 
 
    // 加入到購物車中的項目
@@ -108,12 +107,12 @@ export default function List() {
                 <div className="scroll">
                   {/* 搜尋 */}
                   <Search />
-
+{/* 
                   <div>
                     <button type="button" className="btn my-1 all-product">
                       所有商品
                     </button>
-                  </div>
+                  </div> */}
 
                   {/* 篩選 filter */}
                   <div className="my-2">
@@ -153,7 +152,7 @@ export default function List() {
           }
         }
 
-        #wrapper {
+        {/* #wrapper {
           overflow-x: hidden;
         }
         #sidebar-wrapper {
@@ -188,48 +187,46 @@ export default function List() {
           body.sb-sidenav-toggled #wrapper #sidebar-wrapper {
             margin-left: -18rem;
           }
-        }
-
-         {
-          /* 分類 */
-        }
-        .card-text {
+        } */}
+        {/* .card-text {
           font-weight: 500;
           margin-bottom: 0.1rem;
-        }
+          box-sizing: border-box;
+          
+        } */}
 
         /* override by css variable */
-        .no-border {
+        {/* .no-border {
           --bs-border-width: 0;
-        }
+        } */}
 
         /* sidebar */
-        div.scroll {
+        {/* div.scroll {
           width: 100%;
           height: 80vh;
           overflow-x: hidden;
           overflow-y: scroll;
           text-align: left;
           padding: 10px;
-        }
+        } */}
 
         /* always show scrollbars */
-        ::-webkit-scrollbar {
+        {/* ::-webkit-scrollbar {
           -webkit-appearance: none;
           width: 7px;
-        }
+        } */}
 
-        ::-webkit-scrollbar-thumb {
+        {/* ::-webkit-scrollbar-thumb {
           border-radius: 4px;
           background-color: rgba(0, 0, 0, 0.5);
           box-shadow: 0 0 1px rgba(255, 255, 255, 0.5);
-        }
+        } */}
 
-        .all-product:hover {
+        {/* .all-product:hover {
           background-color: #ff9720;
           color: #fff;
           border: none;
-        }
+        } */}
 
          {
           /* .swiper {

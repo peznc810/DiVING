@@ -1,6 +1,75 @@
-import React from 'react'
+import { useMemo, useEffect, useState } from 'react'
+
+import { MdFiberNew, MdOutlineReplyAll, FaSortNumericUpAlt, FaSortNumericDown } from "react-icons/md";
 
 export default function OrderProduct() {
+  const [product, setProduct] = useState(null);    
+
+  useEffect(() => { 
+    fetch("http://localhost:3000/api/product").then((res) => {
+        return res.json()
+    }).then((data)=> setProduct(data))
+  }, [])
+
+  const items = useMemo(() => {
+    if (!product) return [];
+    return product.data
+  }, [product])
+  console.log(items)
+
+  // const items = useMemo(() => {
+  //   if (!product || !product.data || !Array.isArray(product.data)) {
+  //     console.log("Product data is not an array:", product.data);
+  //     return [];
+  //   }
+  //   return product.data;
+  // }, [product]);
+
+  //排序
+  // 全部商品
+  const sortAllProducts = () => {
+    const allSortedProducts = [...items].sort((a, b) => a.id - b.id);
+    setProduct(allSortedProducts);
+  };
+
+  // 上架時間
+  const sortCreatedDate = () => {
+    const sortedDate = [...items].sort((a, b) => a.created_at - b.created_at);
+    setProduct(sortedDate);
+  };
+
+  // 金額
+  const sortAscending = () => {
+    const sortedProducts = [...items].sort((a, b) => {
+      if (a.discount && b.discount) {
+        return a.discount - b.discount;
+      } else if (a.discount) {
+        return -1;
+      } else if (b.discount) {
+        return 1;
+      } else {
+        return a.price - b.price;
+      }
+    });
+    setProduct({ ...product, data: sortedProducts });
+  };
+
+  const sortDescending = () => {
+    const sortedProducts = [...items].sort((a, b) => {
+      if (a.discount && b.discount) {
+        return a.discount - b.discount;
+      } else if (a.discount) {
+        return -1;
+      } else if (b.discount) {
+        return 1;
+      } else {
+        return a.price - b.price;
+      }
+    });
+    setProduct({ ...product, data: sortedProducts });
+  };
+
+
   return (
     <>
       <div className="d-flex p-2 justify-content-end align-items-center">
@@ -20,19 +89,40 @@ export default function OrderProduct() {
             商品排序
           </button>
           <ul className="dropdown-menu">
-            <li>
-              <a className="dropdown-item" href="#">
-                最新上架商品
+          <li>
+              <a 
+              className="dropdown-item" 
+              href="#"
+              onClick={sortAllProducts}
+              >
+                <MdOutlineReplyAll /> 所有商品
               </a>
             </li>
             <li>
-              <a className="dropdown-item" href="#">
-                價格：由高至低
+              <a 
+              className="dropdown-item" 
+              href="#"
+              onClick={sortCreatedDate}
+              >
+               <MdFiberNew /> 最新上架商品
               </a>
             </li>
             <li>
-              <a className="dropdown-item" href="#">
-                價格：由低至高
+              <a 
+              className="dropdown-item" 
+              href="#"
+              onClick={sortAscending}
+              >
+                <FaSortNumericUpAlt /> 價格：由高至低
+              </a>
+            </li>
+            <li>
+              <a 
+              className="dropdown-item" 
+              href="#"
+              onClick={sortDescending}
+              >
+                <FaSortNumericDown /> 價格：由低至高
               </a>
             </li>
           </ul>

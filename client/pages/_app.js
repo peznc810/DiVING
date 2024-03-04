@@ -1,8 +1,10 @@
 import '@/styles/globals.scss'
+import '@/styles/product.scss'
 import { useEffect } from 'react'
 import { useRouter } from 'next/router'
 import DefaultLayout from '@/components/layout/default-layout'
 import DashboardLayout from '@/components/dashboard'
+
 
 export default function App({ Component, pageProps }) {
   // 獲取當前頁面路徑

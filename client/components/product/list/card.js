@@ -24,7 +24,7 @@ export default function Card({data, addItem = () => {}}) {
           onMouseLeave={handleMouseLeave}
         >
           <div className="card-body no-space-x">
-          <div className="img-wrap">
+          <div>
             <img
               src={`/images/product/images/${data.category}/${data.id}/${data.img_top}`}
               alt={`${data.id}`}
@@ -36,12 +36,11 @@ export default function Card({data, addItem = () => {}}) {
             {isHovered ? (
               <div>
                 <div className="bi-icon">
-                  <button className="btn mouse-add p-2" variant="light">
+                  <button className="btn mouse-add p-2">
                   <GoHeartFill />
                   </button>
                   <button 
                   className="btn mouse-add p-2" 
-                  variant="light"
                   onClick={()=>{
                     addItem(data)
                   }}
@@ -52,7 +51,7 @@ export default function Card({data, addItem = () => {}}) {
                 <Link href={`/product/${data.id}`}>View more &gt;&gt;</Link>
               </div>
             ) : (
-              <div className="p-3 card-text">
+              <div className="p-2 card-text">
                 <Stars />
                 <p className="card-text">{data.brand}</p>
                 <p className="card-text type-text h-now">{data.name}</p>
@@ -74,14 +73,13 @@ export default function Card({data, addItem = () => {}}) {
         </div>
       </div>      
       <style jsx>{`
-        .container-1200 {
+        .col{
           max-width: 1200px;
-          margin: 0 auto;
-          padding: 0;
         }
         @media screen and (max-width: 576px) {
-          .width-1200 {
-            width: 380px;
+          .col {
+            margin: 15px auto;
+            width: 390px;
           }
         }
 
@@ -103,29 +101,32 @@ export default function Card({data, addItem = () => {}}) {
         .w-350 {
           width: 100%;
         }
-
         .w-350 img {
           width: 100%;
         }
-
+        .bi-icon{
+          margin-top: 0px;
+        }
         .card-text {
           font-weight: 500;
-          margin-bottom: 0.1rem;
+          margin-bottom: 0.5px;
         }
-
         .note-text {
           color: var(--red, #dc5151);
-          font-size: 15.5px;
+          font-size: 16.5px;
+          font-family: Arial, sans-serif;
         }
         .type-text {
           color: var(--gray, #858585);
           font-weight: normal;
-          font-size: 13.5px;
+          font-size: 14px;
+          font-family: Arial, sans-serif;
         }
         .price-text{
-          color: var(--gray, #858585);
-          font-weight: normal;
-          font-size: 15.5px;
+            color: var(--gray, #858585);
+            font-weight: normal;
+            font-size: 16.5px;
+            font-family: Arial, sans-serif;
         }
 
         /* override by css variable */
@@ -138,15 +139,6 @@ export default function Card({data, addItem = () => {}}) {
           padding: var(--bs-card-spacer-y) 0;
           
         }
-        {/* .img-wrap{
-          width: 298px;
-          height: 298px;
-        }
-        .img-wrap img {
-          width: 100%;
-          height: 100%;
-          object-fit: cover;
-        } */}
         .h-now {
           font-size: 16px;
           color: #303132;

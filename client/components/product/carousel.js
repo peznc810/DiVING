@@ -22,7 +22,7 @@ export default function Carousel({imgFileNames, id, category}) {
           '--swiper-pagination-color': '#265475',
         }}
         autoplay={{
-          delay: 2500,
+          delay: 2000,
           disableOnInteraction: false,
         }}
         spaceBetween={10}
@@ -41,7 +41,7 @@ export default function Carousel({imgFileNames, id, category}) {
       </Swiper>
       <Swiper
         onSwiper={setThumbsSwiper}
-        spaceBetween={10}
+        spaceBetween={1}
         slidesPerView={4}
         freeMode={true}
         watchSlidesProgress={true}
@@ -58,18 +58,6 @@ export default function Carousel({imgFileNames, id, category}) {
       </Swiper>
       
       <style jsx>{`
-          {/* .mySwiper2 {
-          height: 80%;
-          width: 100%;
-        }
-
-        .mySwiper {
-          height: 20%;
-          box-sizing: border-box;
-          padding: 10px 0;
-          margin: 10px 0;
-        } */}
-
       .img-container {
           display: flex; 
           justify-content: center;
