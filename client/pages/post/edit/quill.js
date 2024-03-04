@@ -52,7 +52,12 @@ export default function Home() {
 
   return (
     <Container>
-      <Form className="my-3">
+      <Form
+        className="my-3"
+        ame="form1"
+        action="http://localhost:3000"
+        method="post"
+      >
         <Form.Label>文字編輯器 Quill Rich Text Editor</Form.Label>{' '}
         <InputGroup className="mb-3">
           <InputGroup.Text id="inputGroup-sizing-default">

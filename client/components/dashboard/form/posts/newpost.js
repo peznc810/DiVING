@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react'
 import styles from '../styles.module.scss'
 import Ckeditor from '@/components/post/ckeditor'
+import Tiptap from '@/components/post/tipTap'
 
-export default function Form() {
+export default function Form({ editor }) {
   const [editorLoaded, setEditorLoaded] = useState(false)
   const [data, setData] = useState('')
   useEffect(() => {
@@ -19,7 +20,10 @@ export default function Form() {
             <div className="accordion-body overflow-auto">
               {/* 從這裡加外掛 */}
               <input type="text" />
-              <div>
+              <Tiptap />
+              editor.getJSON()
+              {/* --CK語法-- */}
+              {/* <div>
                 <Ckeditor
                   name="description"
                   onChange={(data) => {
@@ -28,7 +32,7 @@ export default function Form() {
                   editorLoaded={editorLoaded}
                 />{' '}
                 {JSON.stringify(data)}{' '}
-              </div>
+              </div> */}
             </div>
           </div>
         </div>

@@ -26,14 +26,10 @@ export default function Detail() {
   const [isLoading, setIsLoading] = useState(true)
   const getPost = async (pid) => {
     try {
-      //   網址改成pid 用傳入的
-      //   const res = await fetch(
-      //     `https://my-json-server.typicode.com/eyesofkids/json-fake-data/products/${pid}`
-      //   )
+      // 網址改成pid 用傳入的
+      const res = await fetch(`http://localhost:3005/api/post/${pid}`)
 
-      //   const data = await res.json()
-      const data = postData.find((post) => post.id === `${pid}`)
-      console.log(data)
+      const data = await res.json()
 
       if (data.title) {
         setPost(data)
@@ -70,11 +66,13 @@ export default function Detail() {
       </div>{' '}
     </>
   )
-
   const getTagsArray = (tagsString) => {
-    return tagsString.split(',')
+    // 檢查 tagsString 是否存在
+    if (tagsString) {
+      return tagsString.split(',')
+    }
+    return []
   }
-
   const display = (
     <>
       <hr />

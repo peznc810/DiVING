@@ -11,17 +11,19 @@ export default function List() {
   const [isLoading, setIsLoading] = useState(true)
 
   const getTagsArray = (tagsString) => {
-    return tagsString.split(',')
+    // 檢查 tagsString 是否存在
+    if (tagsString) {
+      return tagsString.split(',')
+    }
+    return []
   }
 
   const getPost = async () => {
     try {
-      // const res = await fetch(
-      //   'https://my-json-server.typicode.com/eyesofkids/json-fake-data/products'
-      // )
+      const res = await fetch('http://localhost:3005/api/post')
       // 解析為JS的資料類型
-      // const data = await res.json()
-      const data = post
+      const data = await res.json()
+      // const data = post
       console.log(data)
 
       if (Array.isArray(data)) {
@@ -33,7 +35,7 @@ export default function List() {
         }, 1000)
       }
     } catch (e) {
-      console.log(e)
+      console.error('Error fetching data from the server:', e)
     }
   }
 
@@ -61,7 +63,7 @@ export default function List() {
                 </Link>
                 <Card.Body className="bg-light">
                   <Card.Subtitle className="mb-2 text-primary">
-                    {v.author} ﹡ {v.published}
+                    {v.user_id} ﹡ {v.published_at}
                   </Card.Subtitle>
                   <Card.Title>{v.title}</Card.Title>
                   <Card.Text className="text-truncate">{v.content}</Card.Text>
