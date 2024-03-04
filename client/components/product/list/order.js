@@ -1,6 +1,9 @@
 import { useMemo, useEffect, useState } from 'react'
 
-import { MdFiberNew, MdOutlineReplyAll, FaSortNumericUpAlt, FaSortNumericDown } from "react-icons/md";
+import { MdReplyAll } from "react-icons/md";
+import { MdFiberNew } from "react-icons/md";
+import { FaSortNumericUpAlt } from "react-icons/fa";
+import { FaSortNumericDownAlt } from "react-icons/fa";
 
 export default function OrderProduct() {
   const [product, setProduct] = useState(null);    
@@ -15,7 +18,7 @@ export default function OrderProduct() {
     if (!product) return [];
     return product.data
   }, [product])
-  console.log(items)
+  // console.log(items)
 
   // const items = useMemo(() => {
   //   if (!product || !product.data || !Array.isArray(product.data)) {
@@ -95,7 +98,7 @@ export default function OrderProduct() {
               href="#"
               onClick={sortAllProducts}
               >
-                <MdOutlineReplyAll /> 所有商品
+                <MdReplyAll /> 所有商品
               </a>
             </li>
             <li>
@@ -122,7 +125,7 @@ export default function OrderProduct() {
               href="#"
               onClick={sortDescending}
               >
-                <FaSortNumericDown /> 價格：由低至高
+                <FaSortNumericDownAlt /> 價格：由低至高
               </a>
             </li>
           </ul>
