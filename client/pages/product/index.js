@@ -9,9 +9,9 @@ import Pagination from '@/components/product/list/pagination'
 import Link from 'next/link'
 
 import { MdScubaDiving } from "react-icons/md";
+import { MdOutlineCategory } from "react-icons/md";
 import { GoHeartFill } from "react-icons/go";
 import { FaCartPlus } from "react-icons/fa";
-
 
 export default function List() {
   const [product, setProduct] = useState(null);    
@@ -70,6 +70,10 @@ export default function List() {
 
   return (
     <>
+    {/* header圖片 */}
+      {/* <div className="header-container">
+        <img src="/images/product/images/test/header1.png" />
+      </div> */}
       <div className="container-1200">
         {/* 麵包屑 */}
         <div className="my-3 d-flex mt-5">
@@ -87,7 +91,7 @@ export default function List() {
               className="p-2"
               style={{ color: '#303132' }}
             >
-              商品種類
+              <MdOutlineCategory /> 商品類別
             </Link>
           </div>
         </div>
@@ -107,8 +111,7 @@ export default function List() {
                 <div className="scroll">
                   {/* 搜尋 */}
                   <Search />
-{/* 
-                  <div>
+                  {/* <div>
                     <button type="button" className="btn my-1 all-product">
                       所有商品
                     </button>
@@ -151,6 +154,16 @@ export default function List() {
             width: 380px;
           }
         }
+        {/* header圖片 */}
+        {/* .header-container{
+          width: 1920px;
+          height: 280px;
+          overflow: hidden;
+        }
+        .header-container img {
+          width: 100%;
+          height: auto;
+        } */}
 
         {/* #wrapper {
           overflow-x: hidden;

@@ -8,6 +8,7 @@ import ProductRecommond from '@/components/product/detail/product-recommond'
 import Link from 'next/link'
 
 import { MdScubaDiving } from "react-icons/md";
+import { MdOutlineCategory } from "react-icons/md";
 import { GoHeartFill } from "react-icons/go";
 import { FaCartPlus } from "react-icons/fa";
 import toast, { Toaster } from 'react-hot-toast'
@@ -121,7 +122,7 @@ const decrement = () =>{
               className="p-2"
               style={{ color: '#303132' }}
             >
-              商品種類
+              <MdOutlineCategory /> 商品類別
             </Link>
           </div>
         </div>
