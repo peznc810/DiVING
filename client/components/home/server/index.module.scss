@@ -40,25 +40,32 @@
   .sevLesson {
     padding-inline: 80px;
     .imgDiv {
+      position: relative;
       border-radius: 6px;
       overflow: hidden;
+      width: 450px;
+      height: 520px;
     }
     .content {
-      padding: 100px 60px;
+      padding-top: 100px;
+      padding-left: 80px;
       width: 60%;
       height: 420px;
     }
   }
 
   .sevProduct {
-    padding-left: 100px;
+    padding-inline: 80px;
     padding-block: 100px;
     .imgDiv {
+      position: relative;
       border-radius: 6px;
       overflow: hidden;
+      width: 720px;
+      height: 400px;
     }
     .content {
-      padding-top: 70px;
+      padding-top: 50px;
       padding-right: 80px;
       width: 60%;
       height: 420px;
@@ -74,16 +81,15 @@
       text-align: start;
 
       h4 {
-        font-size: 20px;
+        font-size: 24px;
         line-height: 25px;
-
-        padding: 12px 24px;
+        padding: 16px 24px;
         border-radius: 30px 30px 0 30px;
       }
       p {
         color: #fff;
-        line-height: 35px;
-        margin-top: 30px;
+        line-height: 30px;
+        margin-top: 20px;
       }
     }
 
@@ -100,7 +106,8 @@
         }
       }
       .content {
-        padding: 20px 0px;
+        padding-top: 40px;
+        padding-inline: 0px;
         width: 95%;
         height: 420px;
       }
@@ -110,9 +117,9 @@
       flex-direction: column;
       align-items: center;
       padding-inline: 10px;
-      padding-block: 20px;
+      padding-block: 0px;
       .imgDiv {
-        margin-top: 180px;
+        margin-top: 130px;
         width: 95%;
         height: 280px;
         img {

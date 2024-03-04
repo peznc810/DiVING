@@ -4,6 +4,9 @@ import { useRouter } from 'next/router'
 import DefaultLayout from '@/components/layout/default-layout'
 import DashboardLayout from '@/components/dashboard'
 
+// 共享event資料的元件
+import EventProvider from '@/hooks/use-eventData'
+
 export default function App({ Component, pageProps }) {
   // 獲取當前頁面路徑
   const router = useRouter()
@@ -34,5 +37,9 @@ export default function App({ Component, pageProps }) {
     }
   }
 
-  return <>{getLayout(<Component {...pageProps} />)}</>
+  return (
+    <>
+      <EventProvider>{getLayout(<Component {...pageProps} />)}</EventProvider>
+    </>
+  )
 }

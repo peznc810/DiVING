@@ -50,7 +50,9 @@ export default function LatestNews({ eventList }) {
                   return (
                     <li
                       key={v.id}
-                      className={`d-flex align-items-center `}
+                      className={`d-flex align-items-center ${
+                        hoverID === v.id ? styles.active : ''
+                      }`}
                       onMouseEnter={() => {
                         previewHandle(v.id)
                       }}

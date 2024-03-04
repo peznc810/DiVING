@@ -29,8 +29,11 @@
   .homeHeader {
     background-image: url('../../../public/images/home/header-rwd.png');
     .homeContainer {
-      // padding-left: 10%;
+      padding-left: 10%;
       padding-top: 150px;
+      h2 {
+        font-size: 80px;
+      }
     }
   }
 }
@@ -49,6 +52,7 @@
       h4 {
         font-size: 18px;
         margin-top: 20px;
+        padding: 0;
         text-align: center;
       }
     }

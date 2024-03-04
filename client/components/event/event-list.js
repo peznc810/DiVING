@@ -106,7 +106,7 @@ export default function EventList({ eventList }) {
             <li className="page-item">
               <button
                 className={`page-link ${
-                  totalPages === 1 ? 'd-none' : 'd-block'
+                  totalPages === 1 || firstItemIndex <= 0 ? 'd-none' : 'd-block'
                 }`}
                 href="#"
                 aria-label="Next"

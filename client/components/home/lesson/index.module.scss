@@ -12,7 +12,8 @@
 
     .title {
       border-left: 4px solid $secondary;
-
+      padding-left: 40px;
+      margin-left: 50px;
       h3 {
         font-family: Noto Serif TC;
         letter-spacing: 1px;
@@ -45,16 +46,24 @@
   .lessonScroll {
     .lessonItem {
       position: relative;
+      overflow: hidden; //隱藏超出去content
       width: 320px;
       height: 320px;
       .lessonLink {
         color: #fff;
-      }
-      .info {
-        position: absolute;
-        top: 40%;
-        left: 33%;
-        z-index: 4;
+        .info {
+          width: 150px;
+          height: 56px;
+          position: absolute;
+          top: calc(50% - 28px);
+          left: calc(50% - 75px);
+          z-index: 4;
+        }
+        .imgDiv {
+          position: relative;
+          width: 320px;
+          height: 320px;
+        }
       }
     }
     .lessonItem:hover {
@@ -86,6 +95,14 @@
 }
 
 @media screen and (max-width: 768px) {
+  .LessonSection {
+    .titleBlock {
+      .title {
+        margin-left: 10px;
+      }
+    }
+  }
+
   .LessonSection {
     .lessonScroll {
       flex-wrap: wrap;
