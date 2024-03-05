@@ -94,7 +94,7 @@ const decrement = () =>{
    } else {
      const newItem = { ...product, quantity: 1 }
      setCartItems([...cartItems, newItem])
-   }
+   } 
    setCartCount(cartCount + 1)
    toast(`${Lesson[0].name}已加入購物車中`)
  }
