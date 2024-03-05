@@ -34,7 +34,7 @@ router.post('/login', upload.none(), async (req, res) => {
       userName: userData.name,
       tel: userData.phone
     }, secretKey, { expiresIn: '1d' })
-    res.status(200).json({ msg: '登入成功', token })
+    res.status(200).json({ status: 'success', msg: '登入成功', token })
   } else {
     res.status(401).json({
       status: "error",
@@ -46,7 +46,7 @@ router.post('/login', upload.none(), async (req, res) => {
 // Google登入
 router.post('/google-login', upload.none(), async (req, res) => {
   console.log(req.get('Authorization'));
-  res.json({msg:'測試中'})
+  res.json({ msg: '測試中' })
 })
 
 // 登出
@@ -64,6 +64,7 @@ router.post('/logout', checkToken, (req, res) => {
     tel: ''
   }, secretKey, { expiresIn: '-10s' })
   res.status(200).json({
+    status: 'success',
     msg: '登出成功',
   })
 })
@@ -73,7 +74,7 @@ router.post('/status', checkToken, async (req, res) => {
   // 可能不止這裡需要解譯過的資料，所以放到checkToken共用
   // 拿解譯過後的token資料過來跟資料庫比對
   const { userEmail } = req.decode
-  
+
   // 之後要把密碼重新編碼後再存入資料庫
   const [[userData]] = await db.execute(
     'SELECT * FROM `users` WHERE `email` = ?',
@@ -89,6 +90,7 @@ router.post('/status', checkToken, async (req, res) => {
       tel: userData.phone
     }, secretKey, { expiresIn: '10m' })
     res.status(200).json({
+      status: 'success',
       msg: '使用者已登入',
       token
     })
@@ -118,7 +120,7 @@ router.post('/register', upload.none(), async (req, res) => {
     "INSERT INTO `users` (`email`, `password`, `name`) VALUES (?, ?, ?);", [userEmail, userPWD, userName]
   )
     .then(() => {
-      res.status(200).json({ msg: '註冊成功' })
+      res.status(200).json({ status: 'success',msg: '註冊成功' })
     })
     .catch(err => {
       console.log(err);
@@ -149,7 +151,7 @@ function checkToken(req, res, next) {
           status: 'error',
           msg: '驗證已失效，請重新登入'
         })
-      } else {;
+      } else {
         // 把解譯過的資料放入req中讓其他狀態可以共用
         req.decode = decode
         // 如果尚未過期就繼續執行

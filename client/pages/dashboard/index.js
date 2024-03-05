@@ -1,17 +1,16 @@
 import { useRouter } from 'next/router'
 import { useAuth } from '@/hooks/auth'
-import { useEffect } from 'react'
 
 export default function MemberIndex() {
   const router = useRouter()
-  const { user } = useAuth()
-
-  useEffect(() => {
-    if (user.valid) {
+  const { auth } = useAuth()
+  // Make sure we're in the browser
+  if (typeof window !== 'undefined' && auth.isAuth) {
+    if (auth.isAuth) {
       router.push('/dashboard/profile')
     } else {
-      router.push('/users/')
+      router.push('/users/login')
     }
-  }, [user.valid, router])
+  }
   return <></>
 }

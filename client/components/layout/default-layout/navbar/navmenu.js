@@ -10,7 +10,7 @@ export default function NavMenu() {
   // const [hover, setHover] = useState(false)
   const [openIndex, setOpeIndex] = useState(false)
   // 帶入會員登入狀態專用
-  const { user } = useAuth()
+  const { auth } = useAuth()
 
   return (
     <>
@@ -84,7 +84,7 @@ export default function NavMenu() {
           )
         })}
         <li className={`mx-3`}>
-          {user.valid ? (
+          {auth.isAuth ? (
             <div className={`d-none d-md-block p-2 ${styles.avatar}`}>
               <Link href="/dashboard">
                 <Image
@@ -106,7 +106,7 @@ export default function NavMenu() {
         </li>
         {/* 登入註冊icon */}
         <li className="mx-1">
-          {user.valid ? (
+          {auth.isAuth ? (
             <div className={`d-md-none d-block p-2 ${styles.avatar}`}>
               <Link href="/dashboard">
                 <Image

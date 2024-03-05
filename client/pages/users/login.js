@@ -1,69 +1,24 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import styles from './styles.module.scss'
 import Link from 'next/link'
 import Head from 'next/head'
 
 // login with google
-import { useGoogleLogin } from '@react-oauth/google'
+
+import useFirebase from '@/hooks/use-firebase'
+
 // React icon
 import { FcGoogle } from 'react-icons/fc'
 import { useAuth } from '@/hooks/auth'
 
 export default function Login() {
-  const loginGoogle = useGoogleLogin({
-    onSuccess: (codeResponse) => {
-      let url = 'http://localhost:3005/api/users/google-login'
-      fetch(url, {
-        method: 'POST',
-        headers: {
-          Authorization: `Bearer ${codeResponse.access_token}`,
-        },
-        credentials: 'include',
-      })
-        .then((response) => response.json())
-        .then((result) => {
-          console.log(result)
-        })
-        .catch((err) => {
-          console.log(err)
-        })
-    },
-  })
-  const { login, setError, error } = useAuth()
-  // const [input, setInput] = useState({
-  //   emailVal: '',
-  //   passwordVal: '',
-  // })
+  const { login } = useAuth()
+  // cosnt = useState()
+  const { loginWithGoogle, loginGoogleRedirect, initGoogle } = useFirebase()
 
-  // const [formCheck, setFormCheck] = useState({
-  //   email: true,
-  //   password: true,
-  // })
-
-  // const handleSubmit = (e) => {
-  //   e.preventDefault()
-  //   const emailRegex = /^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/
-  //   const passwordRegex = /^(?=.*[0-9])(?=.*[a-zA-Z]){8,12}/
-  //   switch (true) {
-  //     case input.emailVal.trim() === '':
-  //       setError('電子郵件不得為空')
-  //       setFormCheck({ ...formCheck, email: false })
-  //       break
-  //     case !emailRegex.test(input.emailVal):
-  //       setError('電子郵件格式錯誤')
-  //       setFormCheck({ ...formCheck, email: false })
-  //       break
-  //     case input.passwordVal.trim() === '':
-  //       setError('密碼不得為空')
-  //       setFormCheck({ ...formCheck, password: false })
-  //       break
-  //     // case !passwordRegex.test(input.passwordVal):
-  //     //   setError('帳號或密碼錯誤')
-  //     //   break
-  //     default:
-  //       setFormCheck({ email: true, password: true, allCheck: true })
-  //   }
-  // }
+  useEffect(() => {
+    initGoogle()
+  }, [])
 
   return (
     <>
@@ -125,7 +80,7 @@ export default function Login() {
                   <p
                     className={`fw-medium small text-center text-danger mb-0 ${styles.notify}`}
                   >
-                    {error}
+                    {/* config error */}
                   </p>
                 </div>
                 {/* END */}
@@ -143,7 +98,7 @@ export default function Login() {
                 <div className="col-10 mt-3 text-center">
                   <button
                     className={`small ${styles.btn} w-100`}
-                    onClick={() => loginGoogle()}
+                    onClick={() => loginGoogleRedirect()}
                   >
                     <FcGoogle className="me-2" />
                     使用 Google 帳號登入

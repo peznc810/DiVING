@@ -16,5 +16,7 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig)
+// 先初始化firebase並取得Auth的方法
 export const auth = getAuth(app)
+// 用於創建Google登入的方法
 export const provider = new GoogleAuthProvider()
