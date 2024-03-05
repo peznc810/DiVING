@@ -101,7 +101,7 @@ export default function Carousel({imgFileNames, id, category}) {
         object-fit: contain; 
       }
     }
-      `}
+      `} 
       </style>
     </>
   )
