@@ -5,20 +5,21 @@ import { MdFiberNew } from "react-icons/md";
 import { FaSortNumericUpAlt } from "react-icons/fa";
 import { FaSortNumericDownAlt } from "react-icons/fa";
 
-export default function OrderProduct() {
-  const [product, setProduct] = useState(null);    
+export default function OrderProduct({product, setProduct}) {
+  // const [product, setProduct] = useState(null);    
+  console.log(product)
 
-  useEffect(() => { 
-    fetch("http://localhost:3000/api/product").then((res) => {
-        return res.json()
-    }).then((data)=> setProduct(data))
-  }, [])
+  // useEffect(() => { 
+  //   fetch("http://localhost:3000/api/product").then((res) => {
+  //       return res.json()
+  //   }).then((data)=> setProduct(data))
+  // }, [])
 
   const items = useMemo(() => {
     if (!product) return [];
     return product.data
   }, [product])
-  // console.log(items)
+  console.log(items)
 
   // const items = useMemo(() => {
   //   if (!product || !product.data || !Array.isArray(product.data)) {
@@ -42,33 +43,13 @@ export default function OrderProduct() {
   };
 
   // 金額
-  const sortAscending = () => {
-    const sortedProducts = [...items].sort((a, b) => {
-      if (a.discount && b.discount) {
-        return a.discount - b.discount;
-      } else if (a.discount) {
-        return -1;
-      } else if (b.discount) {
-        return 1;
-      } else {
-        return a.price - b.price;
-      }
-    });
+  const sortDescending = () => {
+    const sortedProducts = [...items].sort((a, b) => b.price - a.price);
     setProduct({ ...product, data: sortedProducts });
   };
 
-  const sortDescending = () => {
-    const sortedProducts = [...items].sort((a, b) => {
-      if (a.discount && b.discount) {
-        return a.discount - b.discount;
-      } else if (a.discount) {
-        return -1;
-      } else if (b.discount) {
-        return 1;
-      } else {
-        return a.price - b.price;
-      }
-    });
+  const sortAscending = () => {
+    const sortedProducts = [...items].sort((a, b) => a.price - b.price);
     setProduct({ ...product, data: sortedProducts });
   };
 
@@ -114,7 +95,7 @@ export default function OrderProduct() {
               <a 
               className="dropdown-item" 
               href="#"
-              onClick={sortAscending}
+              onClick={sortDescending}
               >
                 <FaSortNumericUpAlt /> 價格：由高至低
               </a>
@@ -123,7 +104,7 @@ export default function OrderProduct() {
               <a 
               className="dropdown-item" 
               href="#"
-              onClick={sortDescending}
+              onClick={sortAscending}
               >
                 <FaSortNumericDownAlt /> 價格：由低至高
               </a>

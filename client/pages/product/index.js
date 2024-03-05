@@ -15,6 +15,7 @@ import { FaCartPlus } from "react-icons/fa";
 
 export default function List() {
   const [product, setProduct] = useState(null);    
+  console.log(product)
 
   // Toggle the side navigation
   useEffect(() => {
@@ -100,7 +101,7 @@ export default function List() {
           <div className="card-text d-flex justify-content-between align-items-center">
             <h6 className="ps-3 my-1">當前的分類名稱</h6>
             {/* 排序 */}
-            <Order />
+            <Order product={product} setProduct={setProduct}/>
           </div>
         </div>
 
