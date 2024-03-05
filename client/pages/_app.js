@@ -5,7 +5,7 @@ import DefaultLayout from '@/components/layout/default-layout'
 
 // 會員中心的預設樣式
 import DashboardLayout from '@/components/dashboard/layout'
-//會員驗證專用provider component
+// 會員驗證專用provider component
 import { AuthProvider } from '@/hooks/auth'
 
 export default function App({ Component, pageProps }) {

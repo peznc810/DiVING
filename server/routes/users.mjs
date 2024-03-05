@@ -19,7 +19,7 @@ const blackList = []
 
 // 登入
 router.post('/login', upload.none(), async (req, res) => {
-  console.log('Login 登入');
+
   // 接收client的require
   const { userEmail, userPWD } = req.body
   // 比對db資料
@@ -28,7 +28,6 @@ router.post('/login', upload.none(), async (req, res) => {
     'SELECT * FROM `users` WHERE `email` = ? AND `password` = ?',
     [userEmail, userPWD]
   )
-  // 先放入全域變數，因為status會需要
   if (userData) {
     let token = jwt.sign({
       userEmail: userData.email,
@@ -44,12 +43,15 @@ router.post('/login', upload.none(), async (req, res) => {
   }
 })
 
+// Google登入
+router.post('/google-login', upload.none(), async (req, res) => {
+  console.log(req.get('Authorization'));
+  res.json({msg:'測試中'})
+})
+
 // 登出
 router.post('/logout', checkToken, (req, res) => {
-  console.log('Login 登出');
-  // console.log('logout');
   let token = req.get("Authorization");
-  // console.log(token);
   if (token && token.indexOf("Bearer ") === 0) {
     token = token.slice(7);
   };
@@ -128,18 +130,14 @@ router.post('/register', upload.none(), async (req, res) => {
 
 // 確認token資料
 function checkToken(req, res, next) {
-  // console.log('checkToken資料');
   let token = req.get('Authorization')
-  console.log(token);
   // 是否有token
   if (token && token.indexOf('Bearer ') === 0) {
-    // console.log('checkToken資料 2');
-    console.log(token);
+
     // 如果條件符合，取出token
     token = token.slice(7)
     // 檢查是否在已登出的名單中
     if (blackList.includes(token)) {
-      // console.log('checkToken資料 3');
       res.status(401).json({ status: 'error', msg: '登入驗證已失效，請重新登入' })
       // 結束整個middleware
       return false
@@ -147,13 +145,11 @@ function checkToken(req, res, next) {
     // 前台傳留存的token進來，要確認token是否過期
     jwt.verify(token, secretKey, (err, decode) => {
       if (err) {
-        // console.log('checkToken資料 4');
         return res.status(401).json({
           status: 'error',
           msg: '驗證已失效，請重新登入'
         })
-      } else {
-        // console.log('checkToken資料 5');
+      } else {;
         // 把解譯過的資料放入req中讓其他狀態可以共用
         req.decode = decode
         // 如果尚未過期就繼續執行

@@ -106,6 +106,9 @@
   &:active {
     box-shadow: 0 0 10px 6px #f49120 inset;
   }
+  & svg {
+    margin-bottom: 2px;
+  }
 }
 
 /* social */

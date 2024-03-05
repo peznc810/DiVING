@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import Link from 'next/link'
 import styles from './navmenu.module.scss'
 import { menuItems } from '@/config/nav-menu'
@@ -9,14 +9,8 @@ import { useAuth } from '@/hooks/auth'
 export default function NavMenu() {
   // const [hover, setHover] = useState(false)
   const [openIndex, setOpeIndex] = useState(false)
-  // 會員登入狀態專用
-  const { initUser, user } = useAuth()
-
-  // BUG: 登出也會再檢查一次token
-  useEffect(() => {
-    initUser()
-  }, [])
-  // console.log(user)
+  // 帶入會員登入狀態專用
+  const { user } = useAuth()
 
   return (
     <>
