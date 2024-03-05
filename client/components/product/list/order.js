@@ -2,11 +2,10 @@ import { useMemo, useEffect, useState } from 'react'
 
 import { MdReplyAll } from "react-icons/md";
 import { MdFiberNew } from "react-icons/md";
-import { FaSortNumericUpAlt } from "react-icons/fa";
 import { FaSortNumericDownAlt } from "react-icons/fa";
+import { FaSortNumericUpAlt } from "react-icons/fa";
 
 export default function OrderProduct({product, setProduct}) {
-  // const [product, setProduct] = useState(null);    
   console.log(product)
 
   // useEffect(() => { 
@@ -21,25 +20,19 @@ export default function OrderProduct({product, setProduct}) {
   }, [product])
   console.log(items)
 
-  // const items = useMemo(() => {
-  //   if (!product || !product.data || !Array.isArray(product.data)) {
-  //     console.log("Product data is not an array:", product.data);
-  //     return [];
-  //   }
-  //   return product.data;
-  // }, [product]);
-
   //排序
   // 全部商品
   const sortAllProducts = () => {
     const allSortedProducts = [...items].sort((a, b) => a.id - b.id);
-    setProduct(allSortedProducts);
+    setProduct({...product, data: allSortedProducts});
   };
 
   // 上架時間
   const sortCreatedDate = () => {
-    const sortedDate = [...items].sort((a, b) => a.created_at - b.created_at);
-    setProduct(sortedDate);
+    const newUpload = [...items].sort((a, b) => {
+      return new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+    });
+    setProduct({...product, data: newUpload});
   };
 
   // 金額
@@ -97,7 +90,7 @@ export default function OrderProduct({product, setProduct}) {
               href="#"
               onClick={sortDescending}
               >
-                <FaSortNumericUpAlt /> 價格：由高至低
+               <FaSortNumericDownAlt /> 價格：由高至低
               </a>
             </li>
             <li>
@@ -106,7 +99,7 @@ export default function OrderProduct({product, setProduct}) {
               href="#"
               onClick={sortAscending}
               >
-                <FaSortNumericDownAlt /> 價格：由低至高
+                <FaSortNumericUpAlt /> 價格：由低至高
               </a>
             </li>
           </ul>

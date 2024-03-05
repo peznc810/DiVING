@@ -1,6 +1,9 @@
 import { useMemo, useEffect, useState } from 'react'
+
 import Link from 'next/link'
-import { MdScubaDiving, MdOutlineCategory, MdOutlinePriceCheck } from "react-icons/md";
+import { MdScubaDiving } from "react-icons/md";
+import { MdOutlineCategory } from "react-icons/md";
+import { MdOutlinePriceCheck } from "react-icons/md";
 
 export default function Filter() {
   const [product, setProduct] = useState(null);
@@ -59,7 +62,7 @@ export default function Filter() {
                       return (
                         <div key={product.id} className="form-check">
                           <Link
-                            href="/product/list"
+                            href="?brand"
                             className="form-check-label"
                             htmlFor="flexCheckDefault"
                             style={{ color: '#303132' }}
@@ -148,9 +151,10 @@ export default function Filter() {
                     id="flexCheckDefault"
                   />
                   <label className="form-check-label" htmlFor="flexCheckDefault">
-                    $5,000以下
+                    $1,000以下
                   </label>
                 </div>
+
                 <div className="form-check">
                   <input
                     className="form-check-input"
@@ -159,9 +163,10 @@ export default function Filter() {
                     id="flexCheckChecked"
                   />
                   <label className="form-check-label" htmlFor="flexCheckChecked">
-                    $5,001 - $9,999
+                    $1,001 - $3,500
                   </label>
                 </div>
+
                 <div className="form-check">
                   <input
                     className="form-check-input"
@@ -170,7 +175,19 @@ export default function Filter() {
                     id="flexCheckChecked"
                   />
                   <label className="form-check-label" htmlFor="flexCheckChecked">
-                    $10,000
+                    $3,501 - $6,500
+                  </label>
+                </div>
+
+                <div className="form-check">
+                  <input
+                    className="form-check-input"
+                    type="checkbox"
+                    value=""
+                    id="flexCheckChecked"
+                  />
+                  <label className="form-check-label" htmlFor="flexCheckChecked">
+                    $6,500以上
                   </label>
                 </div>
               </div>

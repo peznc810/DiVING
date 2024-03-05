@@ -54,7 +54,6 @@ export default function List() {
     if (!product) return [];
     return product.data
   }, [product])
- 
 
 
    // 加入到購物車中的項目
