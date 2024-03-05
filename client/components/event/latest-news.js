@@ -27,9 +27,9 @@ export default function LatestNews({ eventList }) {
       <section className={`py-5 container`}>
         <div className={` row ${styles.latestBlock} `}>
           {/* ======== 最新消息 ======== */}
-          <div className={`col-7 ${styles.list}`}>
+          <div className={`col-12 col-sm-7 ${styles.list}`}>
             <div className={` border-bottom border-3 border-info `}>
-              <h2 className="text-info fw-bold ps-3">LATEST NEWS</h2>
+              <h2 className="text-info fw-bold ps-0 ps-sm-3">LATEST NEWS</h2>
             </div>
             {/* 列表 */}
             <div className={`${styles.items}`}>
@@ -50,25 +50,25 @@ export default function LatestNews({ eventList }) {
                   return (
                     <li
                       key={v.id}
-                      className={`d-flex align-items-center ${
-                        hoverID === v.id ? styles.active : ''
-                      }`}
+                      className={`${hoverID === v.id ? styles.active : ''}`}
                       onMouseEnter={() => {
                         previewHandle(v.id)
                       }}
                     >
-                      <div className={`me-5 ${styles.postDay}`}>
-                        <p className={`${styles.date}`}>{date}</p>
-                        <p className={`${styles.month}`}>{month}</p>
-                      </div>
-                      <div>
-                        <span
-                          className={`${styles.tag} px-2 py-1  mb-2 d-inline-block`}
-                        >
-                          {v.sort}
-                        </span>
-                        <h6 className={`m-0`}>{v.title}</h6>
-                      </div>
+                      <Link href={'/'} className={`d-flex align-items-center `}>
+                        <div className={`me-5 ${styles.postDay}`}>
+                          <p className={`${styles.date}`}>{date}</p>
+                          <p className={`${styles.month}`}>{month}</p>
+                        </div>
+                        <div>
+                          <span
+                            className={`${styles.tag} px-2 py-1  mb-2 d-inline-block`}
+                          >
+                            {v.sort}
+                          </span>
+                          <h6 className={`m-0`}>{v.title}</h6>
+                        </div>
+                      </Link>
                     </li>
                   )
                 })}

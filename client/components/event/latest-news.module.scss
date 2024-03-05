@@ -17,6 +17,9 @@
       li {
         padding: 16px 24px;
         border-bottom: 1px solid $light-gray;
+        a {
+          color: #333;
+        }
 
         h6 {
           font-size: 18px;
@@ -86,12 +89,9 @@
     }
   }
 }
-
-.allList {
-  padding-bottom: 40px;
-  letter-spacing: 1px;
+.button:focus {
+  box-shadow: none;
 }
-
 .pageBtn {
   background-color: $info;
   border: 1px solid $info;
@@ -101,5 +101,30 @@
   }
 }
 
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 390px) {
+  .latestBlock {
+    padding-block: 20px;
+    h2 {
+      text-align: center;
+      font-size: 30px;
+    }
+    //  列表
+    .list {
+      ul {
+        height: 300px;
+        li {
+          h6 {
+            font-size: 16px;
+          }
+          .postDay {
+            text-align: center;
+          }
+        }
+      }
+    }
+    // 預覽區塊
+    .preview {
+      display: none;
+    }
+  }
 }

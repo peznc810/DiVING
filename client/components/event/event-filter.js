@@ -18,9 +18,9 @@ export default function EventFilter({
   }
   return (
     <>
-      <div className={`${styles.filterBar} px-5`}>
-        <div className="container d-flex align-items-center justify-content-end">
-          <ul className={`d-flex m-0 p-0 ${styles.filterMenu}`}>
+      <div className={``}>
+        <div className={`container d-flex ${styles.filterBar} `}>
+          <ul className={`d-flex p-0 ${styles.filterMenu}`}>
             <li>
               <button
                 type="button"

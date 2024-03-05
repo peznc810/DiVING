@@ -7,7 +7,7 @@ const router = express.Router();
 const upload = multer();
 
 
-router.get('/', function (req, res, next) {
+router.get('/', (req, res, next) => {
     // 取得日期、設定格式
     let time = moment().format("YYYY-MM-DD");
     //   res.send('導向有今天日期的網址');
@@ -15,7 +15,7 @@ router.get('/', function (req, res, next) {
 });
 
 // 讀取
-router.get('/d/:date', function (req, res, next) {
+router.get('/d/:date', async (req, res, next) => {
     (async () => {
         // res.send("讀取指定日期的所有消費")
         // 取得url參數中的date

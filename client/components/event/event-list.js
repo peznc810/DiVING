@@ -3,6 +3,9 @@ import styles from './latest-news.module.scss'
 import EventCard from './event-card'
 import EventFilter from './event-filter'
 
+import { IoIosArrowBack } from 'react-icons/io'
+import { IoIosArrowForward } from 'react-icons/io'
+
 export default function EventList({ eventList }) {
   const itemsPrePage = 12 //設定每頁12個
   const [currentPage, setCurrentPage] = useState(1) //初始值為第一頁
@@ -56,9 +59,9 @@ export default function EventList({ eventList }) {
     <>
       {/* ======== 活動列表 ======== */}
       <section className={`container mb-5`}>
-        <div className={` ${styles.allList}`}>
+        <div className={` ${styles.latestBlock}`}>
           <div className={` border-bottom border-3 border-info `}>
-            <h2 className="text-info fw-bold ps-3">ALL EVENTS</h2>
+            <h2 className="text-info fw-bold ps-0 ps-sm-3">ALL EVENTS</h2>
           </div>
         </div>
         {/* 篩選＆收尋 */}
@@ -72,19 +75,21 @@ export default function EventList({ eventList }) {
 
         {/* 分頁 */}
         <nav aria-label="Page navigation example ">
-          <ul className={`pagination justify-content-center my-5`}>
+          <ul className={`pagination justify-content-center mb-5`}>
             <li
               className={`page-item ${
                 currentPage === 1 ? 'd-none' : 'd-block'
               }`}
             >
               <button
-                className="page-link"
+                className="page-link px-2"
                 href="#"
                 aria-label="Previous"
                 onClick={prePage}
               >
-                <span aria-hidden="true">&laquo;</span>
+                <span aria-hidden="true">
+                  <IoIosArrowBack />
+                </span>
               </button>
             </li>
             {Array.from({ length: totalPages }, (_, index) => {
@@ -105,14 +110,16 @@ export default function EventList({ eventList }) {
 
             <li className="page-item">
               <button
-                className={`page-link ${
-                  totalPages === 1 || firstItemIndex <= 0 ? 'd-none' : 'd-block'
+                className={`page-link px-2 ${
+                  totalPages === 1 || firstItemIndex < 0 ? 'd-none' : 'd-block'
                 }`}
                 href="#"
                 aria-label="Next"
                 onClick={nextPage}
               >
-                <span aria-hidden="true">&raquo;</span>
+                <span aria-hidden="true">
+                  <IoIosArrowForward />
+                </span>
               </button>
             </li>
           </ul>

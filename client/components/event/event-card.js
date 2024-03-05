@@ -30,11 +30,11 @@ export default function EventCard({ eventList = '' }) {
                     priority
                   ></Image>
                 </div>
-                <div className={`${styles.content} my-3`}>
-                  <div
-                    className={`d-flex justify-content-between align-items-center mb-2`}
-                  >
-                    <span className={`${styles.tag} px-2 py-1 d-inline-block`}>
+                <div className={`${styles.content}`}>
+                  <div className={`d-flex mb-2 ${styles.tagBlock}`}>
+                    <span
+                      className={`${styles.tag} px-2 py-1 d-inline-block text-nowrap`}
+                    >
                       {v.sort}
                     </span>
                     <span className={`${styles.date}`}>{date}</span>

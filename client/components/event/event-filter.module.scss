@@ -1,10 +1,13 @@
 @import '@/styles/variable.scss';
 
 .filterBar {
+  justify-content: end;
+  align-items: center;
   li {
     margin-right: 20px;
   }
   .filterMenu {
+    margin: 0;
     button {
       letter-spacing: 1px;
       border: 0;
@@ -33,6 +36,39 @@
       line-height: 24px;
       text-align: center;
       padding-inline: 6px;
+    }
+  }
+}
+
+@media screen and (max-width: 390px) {
+  .filterBar {
+    flex-direction: column-reverse;
+    align-items: end;
+    li {
+      margin-inline: 5px;
+    }
+
+    .filterMenu {
+      margin-top: 20px;
+      button {
+        text-wrap: nowrap;
+        padding: 8px 4px;
+      }
+    }
+
+    .search {
+      width: 200px;
+      height: 30px;
+      input {
+        padding: 4px 8px;
+      }
+      button {
+        background-color: $info;
+        color: #fff;
+        // padding: 4px 8px;
+        font-size: 16px;
+        line-height: 16px;
+      }
     }
   }
 }
