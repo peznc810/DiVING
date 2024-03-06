@@ -9,6 +9,7 @@ export function AuthProvider({ children }) {
     userEmail: '',
     userName: '',
     tel: '',
+    avatar: '',
     isAuth: false,
   })
 
@@ -58,6 +59,50 @@ export function AuthProvider({ children }) {
       })
   }
 
+  // Google登入
+  const loginGoogle = (providerData) => {
+    const userData = JSON.stringify(providerData)
+    let url = 'http://localhost:3005/api/users/google-login'
+    fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-type': 'application/json',
+      },
+      body: userData,
+      credentials: 'include',
+    })
+      .then((response) => response.json())
+      .then((result) => {
+        console.log(result)
+        if (result.status === 'success') {
+          // 登入成功要做的事
+          let token = result.token
+          // console.log(token)
+          // 解譯token
+          const userData = parseJwt(token)
+          // 把會員的資料放到狀態中，之後可以共享到其他頁面
+          setAuth({ ...userData, isAuth: true })
+          // 把token存入localStorage，後續要重新抓登入狀態時會需要
+          localStorage.setItem('token', token)
+
+          // 檢查解譯出來的data
+          // for (let [key, value] of Object.entries(auth)) {
+          //   console.log(`${key}: ${value}`)
+          // }
+          router.push('/')
+        } else {
+          // server res be like:
+          // res.status(401).json({
+          //   status: "error",
+          //   msg: "帳號或密碼錯誤",
+          // })
+          console.log(result.msg)
+        }
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+  }
   // 登出
   const logout = () => {
     let url = 'http://localhost:3005/api/users/logout'
@@ -128,7 +173,9 @@ export function AuthProvider({ children }) {
     })
       .then((response) => response.json())
       .then((result) => {
-        if (result.status !== 'error') {
+        if (result.status === 'error') {
+          console.log(result.msg)
+        } else {
           router.push('/users/login')
         }
       })
@@ -204,6 +251,7 @@ export function AuthProvider({ children }) {
         auth,
         parseJwt,
         login,
+        loginGoogle,
         logout,
         signUp,
         signUpGoogle,

@@ -44,9 +44,29 @@ router.post('/login', upload.none(), async (req, res) => {
 })
 
 // Google登入
-router.post('/google-login', upload.none(), async (req, res) => {
-  console.log(req.get('Authorization'));
-  res.json({ msg: '測試中' })
+router.post('/google-login', async (req, res) => {
+  // 接收client的require
+  const { email, uid } = req.body
+  // 比對db資料
+  // 如果比對成功回傳資料，如果失敗則回傳錯誤訊息
+  const [[userData]] = await db.execute(
+    'SELECT * FROM `users` WHERE `email` = ? AND `googleUID` = ?',
+    [email, uid]
+  )
+  if (userData) {
+    let token = jwt.sign({
+      userEmail: userData.email,
+      userName: userData.name,
+      tel: userData.phone,
+      avatar: userData.avatar
+    }, secretKey, { expiresIn: '1d' })
+    res.status(200).json({ status: 'success', msg: '登入成功', token })
+  } else {
+    res.status(401).json({
+      status: "error",
+      msg: "帳號或密碼錯誤",
+    })
+  }
 })
 
 // 登出
@@ -130,23 +150,21 @@ router.post('/register', upload.none(), async (req, res) => {
 
 // Google註冊
 router.post('/google-register', async (req, res) => {
-  // console.log(req.body)
-  const { displayName, email, photoURL } = req.body
-  console.log(email);
+  console.log(req.body)
+  const { displayName, email, photoURL, uid } = req.body
   const [[userData]] = await db.execute(
-    'SELECT * FROM `users` WHERE `email` = ?',
-    [email]
+    'SELECT * FROM `users` WHERE `googleUID` = ?',
+    [uid]
   )
-  console.log(userData);
   if (userData) {
     res.status(409).json({
       status: 'error',
-      msg: 'Email已註冊'
+      msg: '此帳號已註冊'
     })
     return
   }
   await db.execute(
-    "INSERT INTO `users` (`name`, `email`, `avatar`) VALUES (?, ?, ?);", [displayName, email, photoURL]
+    "INSERT INTO `users` (`name`, `email`, `avatar`, `googleUID`) VALUES (?, ?, ?, ?);", [displayName, email, photoURL, uid]
   )
     .then(() => {
       res.status(200).json({ status: 'success',msg: '註冊成功' })

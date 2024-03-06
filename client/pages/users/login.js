@@ -11,15 +11,25 @@ import { FcGoogle } from 'react-icons/fc'
 import { useAuth } from '@/hooks/auth'
 
 export default function Login() {
-  const { login } = useAuth()
-  const { loginGoogleRedirect, initGoogle } = useFirebase()
+  const { login, loginGoogle, auth } = useAuth()
+  const { loginGoogleRedirect, logoutFirebase, initGoogle } = useFirebase()
 
   // 初次渲染時監聽firebase的google登入狀態
-  // useEffect(() => {
-  //   initGoogle()
-  // }, [])
+  useEffect(() => {
+    initGoogle(callbackGoogleLogin)
+  }, [])
 
-  // 處理google登入後，要向伺服器進行登入動作
+  // 將拿到的google資料進行處理
+  const callbackGoogleLogin = (providerData) => {
+    // 取得使用者的資料
+    // console.log(providerData)
+    // 判斷當前是否已經登入，如果已登入就結束function（因為init本意為檢查是否登入，未登入才會執行其他事情）
+    if (auth.isAuth) return
+    // initGoogle取得資料並同步給其他function後，此處先將資料登出，避免google資料仍留存
+    logoutFirebase()
+    // 如果尚未登入，則執行登入流程
+    loginGoogle(providerData)
+  }
 
   return (
     <>

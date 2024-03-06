@@ -17,7 +17,10 @@ import {
 // 雖然一樣拿的到資料，但Cross會報錯
 const loginWithGoogle = (callback) => {
   signInWithPopup(auth, provider)
-    .then((result) => console.log(result))
+    .then((result) => {
+      console.log(result)
+      callback(result.user.providerData[0])
+    })
     .catch((err) => console.log(err))
 }
 
@@ -41,7 +44,7 @@ const initGoogle = (callback) => {
         // 2.
         // const token = credential.accessToken
         const user = result.user
-        console.log(user)
+        // console.log(user)
       }
     })
     .catch((error) => {
@@ -49,6 +52,7 @@ const initGoogle = (callback) => {
     })
 
   // Listening for auth state changes.
+  // 如果有登入google要執行的事情
   // 將收到的google資料透過callback function送出去
   onAuthStateChanged(auth, (user) => {
     if (user) {

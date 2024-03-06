@@ -16,18 +16,21 @@ export default function SignUp() {
 
   // 初次渲染時監聽firebase的google登入狀態
   useEffect(() => {
+    console.log('register')
     initGoogle(callbackGoogleSign)
-    // logoutFirebase()
+    // logoutFirebase() /* 測試用之後可以拔掉 */
   }, [])
 
   // 將拿到的google資料進行處理
-  const callbackGoogleSign = async (providerData) => {
+  const callbackGoogleSign = (providerData) => {
     // 取得使用者的資料
     // console.log(providerData)
     // 判斷當前是否已經登入，如果已登入就結束function（因為init本意為檢查是否登入，未登入才會執行其他事情）
     if (auth.isAuth) return
+    // initGoogle取得資料並同步給其他function後，此處先將資料登出，避免google資料仍留存
+    logoutFirebase()
     // 如果尚未登入，則執行註冊流程
-    const res = await signUpGoogle(providerData)
+    signUpGoogle(providerData)
   }
   return (
     <>
