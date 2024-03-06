@@ -5,8 +5,7 @@ import { MdScubaDiving } from "react-icons/md";
 import { MdOutlineCategory } from "react-icons/md";
 import { MdOutlinePriceCheck } from "react-icons/md";
 
-export default function Filter() {
-  const [product, setProduct] = useState(null);
+export default function Filter({product, setProduct}) {
   const [buttonStyles, setButtonStyles] = useState({
     brand: '',
     category: '',
@@ -62,7 +61,7 @@ export default function Filter() {
                       return (
                         <div key={product.id} className="form-check">
                           <Link
-                            href="?brand"
+                            href={`/product/${product.brand}`}
                             className="form-check-label"
                             htmlFor="flexCheckDefault"
                             style={{ color: '#303132' }}

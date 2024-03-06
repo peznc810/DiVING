@@ -120,7 +120,7 @@ export default function List() {
                   {/* 篩選 filter */}
                   <div className="my-2">
                     <div className="accordion accordion-flush">
-                      <Filter />
+                      <Filter product={product} setProduct={setProduct}/>
                     </div>
                   </div>
                 </div>
@@ -135,7 +135,7 @@ export default function List() {
                 )}                  
                 </div>
                 </div>
-                <Pagination />
+                <Pagination product={product} setProduct={setProduct}/>
               </div>
             </div>
           </div>
