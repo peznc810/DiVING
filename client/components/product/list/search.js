@@ -1,10 +1,18 @@
-import React from 'react'
+import { useMemo, useState } from 'react'
 
-export default function SearchProduct() {
+export default function SearchProduct({product, setProduct}) {
+  const [searchProduct, setSearchProduct] = useState('')
+
+  const items = useMemo(() => {
+    if (!product) return [];
+    return product.data
+  }, [product])
+
   return (
-    <div className="pe-1 my-3">
+    <div 
+    className="pe-1 my-3">
       <form className="d-flex" role="search">
-        <div className="input-group position-relative d-inline-flex align-items-center">
+      <div className="input-group position-relative d-inline-flex align-items-center">
           <input
             type="text"
             className="form-control border-end"

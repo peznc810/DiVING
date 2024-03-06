@@ -187,7 +187,7 @@ export default function Filter() {
                     id="flexCheckChecked"
                   />
                   <label className="form-check-label" htmlFor="flexCheckChecked">
-                    $6,500以上
+                    $6,00
                   </label>
                 </div>
               </div>

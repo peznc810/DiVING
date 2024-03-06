@@ -188,6 +188,19 @@ div.scroll {
   object-fit: cover;
 }
 
+//order
+#sidebarToggle:hover {
+  background-color: #ff9720;
+  color: #fff;
+  border: none;
+}
+.dropdown-item:hover,
+.dropdown-toggle:hover {
+  background-color: #265475;
+  color: #fff;
+  border: none;
+}
+
 //filter
 .accordion-button.active {
   background-color: #265475;

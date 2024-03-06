@@ -110,7 +110,7 @@ export default function List() {
               <div className="bg-white me-3" id="sidebar-wrapper">
                 <div className="scroll">
                   {/* 搜尋 */}
-                  <Search />
+                  <Search product={product} setProduct={setProduct}/>
                   {/* <div>
                     <button type="button" className="btn my-1 all-product">
                       所有商品

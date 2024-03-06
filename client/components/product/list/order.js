@@ -1,4 +1,4 @@
-import { useMemo, useEffect, useState } from 'react'
+import { useMemo, useState } from 'react'
 
 import { MdReplyAll } from "react-icons/md";
 import { MdFiberNew } from "react-icons/md";
@@ -6,21 +6,11 @@ import { FaSortNumericDownAlt } from "react-icons/fa";
 import { FaSortNumericUpAlt } from "react-icons/fa";
 
 export default function OrderProduct({product, setProduct}) {
-  console.log(product)
-
-  // useEffect(() => { 
-  //   fetch("http://localhost:3000/api/product").then((res) => {
-  //       return res.json()
-  //   }).then((data)=> setProduct(data))
-  // }, [])
-
   const items = useMemo(() => {
     if (!product) return [];
     return product.data
   }, [product])
-  console.log(items)
 
-  //排序
   // 全部商品
   const sortAllProducts = () => {
     const allSortedProducts = [...items].sort((a, b) => a.id - b.id);
@@ -45,7 +35,6 @@ export default function OrderProduct({product, setProduct}) {
     const sortedProducts = [...items].sort((a, b) => a.price - b.price);
     setProduct({ ...product, data: sortedProducts });
   };
-
 
   return (
     <>
@@ -106,17 +95,7 @@ export default function OrderProduct({product, setProduct}) {
         </div>
       </div>
       <style jsx>{`
-        #sidebarToggle:hover {
-          background-color: #ff9720;
-          color: #fff;
-          border: none;
-        }
-        .dropdown-item:hover,
-        .dropdown-toggle:hover {
-          background-color: #265475;
-          color: #fff;
-          border: none;
-        }
+        
       `}</style>
     </>
   )
