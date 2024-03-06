@@ -1,11 +1,12 @@
 import express from 'express';
 import db from '../db.mjs'; // 修改路徑以匹配你的實際結構
+import { v4 as uuidv4 } from 'uuid';
 
 const router = express.Router();
 
-// 定義處理 `/api/post` GET 請求的路由
-
-router.get('/', async (req, res) => {
+// 定義處理 `/api/post` 請求的路由
+  //讀取所有文章
+  router.get('/', async (req, res) => {
     try {
       const [rows, _fields] = await db.execute('SELECT * FROM post');
       res.json(rows);
@@ -15,6 +16,7 @@ router.get('/', async (req, res) => {
     }
   });
 
+  //讀取動態文章
   router.get('/:pid', async (req, res) => {
     const postId = req.params.pid;
 
@@ -31,5 +33,40 @@ router.get('/', async (req, res) => {
     res.status(500).json({ error: 'NOOOOOO' });    
   }
 });
+
+router.post('/edit/quill', async (req, res) => {
+  const { user_id, title, image, content} = req.body;
+  const id = uuidv4();
+  const now = new Date();
+
+  try {
+    const [result] = await db.execute('INSERT INTO post (id, user_id, title, image, content, created_at, published_at, updated_at, is_published) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)', 
+     [id, user_id, title, image, content, now, now, now, 1]);   
+    // [user_id, title, image, content, created_at, published_at, updated_at, is_published]);
+
+    res.status(201).json({ status: 'success', message: '成功寫入'});
+  } catch (error) {
+    console.error('Error executing database query:', error);
+    res.status(500).json({ error: '寫失敗' });
+  }
+});
+
+router.post("/test", async(req, res) => {
+  const {name, title} = req.body;
+  const id = uuidv4();
+
+  try {
+    // Using prepared statement to handle the parameter
+    const [result] = await db.execute('INSERT INTO test (id, name, title) VALUES (?, ?, ?)', [id, name, title]);
+
+    console.log(`Inserted UUID: ${id}`);
+
+    res.status(200).json({ status: 'success', message: '成功寫入', insertedUUID: id });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ status: 'error', message: 'Internal server error' });
+  }
+})
+
 
 export default router;

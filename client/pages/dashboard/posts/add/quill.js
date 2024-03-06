@@ -1,61 +1,53 @@
 // npm install quill react-quill 應該會改用CKEditor
 
 import React, { useState } from 'react'
-import dynamic from 'next/dynamic'
-import 'react-quill/dist/quill.snow.css' // Import Quill styles
 import { Form, InputGroup, Stack, Button, Container } from 'react-bootstrap'
-
-const QuillEditor = dynamic(() => import('react-quill'), { ssr: false })
+import DiButton from '@/components/post/dibutton'
+import QuillEditor from '@/components/post/quill'
 
 export default function Home() {
   const [content, setContent] = useState('')
   //   console.log(QuillEditor)
-
-  //建立 Quill 編輯器元件 (pages/index.js)
-  const quillModules = {
-    toolbar: [
-      [{ header: [1, 2, 3, false] }],
-      ['bold', 'italic', 'underline', 'strike', 'blockquote'],
-      [{ list: 'ordered' }, { list: 'bullet' }],
-      ['link', 'image'],
-      [{ align: [] }],
-      [{ color: [] }],
-      ['code-block'],
-      ['clean'],
-    ],
-  }
-
-  const quillFormats = [
-    'header',
-    'bold',
-    'italic',
-    'underline',
-    'strike',
-    'blockquote',
-    'list',
-    'bullet',
-    'link',
-    'image',
-    'align',
-    'color',
-    'code-block',
-  ]
+  const [editedContent, setEditedContent] = useState('') // For updating content
+  const [noteList, setNoteList] = useState([]) // For storing notes
 
   const handleEditorChange = (newContent) => {
     setContent(newContent)
   }
 
-  const handleShowContent = () => {
-    // 在這個例子中，按下按鈕時顯示編輯器的內容
-    alert(content)
+  const handleCreateNote = () => {
+    // 創建新筆記
+    setNoteList([...noteList, content])
+    // setContent('')
+  }
+
+  const handleEditNote = (index) => {
+    // 編輯現有筆記
+    setEditedContent(noteList[index])
+  }
+
+  const handleUpdateNote = () => {
+    // 更新筆記
+    const updatedNoteList = [...noteList]
+    updatedNoteList[noteList.indexOf(editedContent)] = content
+    setNoteList(updatedNoteList)
+    setEditedContent('')
+    setContent('')
+  }
+
+  const handleDeleteNote = (index) => {
+    // 刪除筆記
+    const updatedNoteList = [...noteList]
+    updatedNoteList.splice(index, 1)
+    setNoteList(updatedNoteList)
   }
 
   return (
     <Container>
       <Form
         className="my-3"
-        ame="form1"
-        action="http://localhost:3000"
+        name="add-post"
+        action="http://localhost:3005/api/edit/quill"
         method="post"
       >
         <Form.Label>文字編輯器 Quill Rich Text Editor</Form.Label>{' '}
@@ -76,21 +68,20 @@ export default function Home() {
             <div className="h-full w-[90vw]">
               {' '}
               <QuillEditor
-                value={content}
+                value={editedContent || content}
                 onChange={handleEditorChange}
-                modules={quillModules}
-                formats={quillFormats}
                 className="w-full h-[70%] mt-10 bg-white"
               />{' '}
+              {JSON.stringify(content)}{' '}
             </div>{' '}
           </div>{' '}
         </Form.Group>
         <Stack direction="horizontal" gap={3}>
           <div className="p-2 mx-auto">
-            <Button onClick={handleShowContent} variant="secondary">
-              送出(顯示編輯器內容)
+            <Button onClick={handleCreateNote} variant="secondary">
+              送出
             </Button>{' '}
-            <Button variant="danger">取消</Button>{' '}
+            <DiButton text={'取消'} classname={'danger'} />
           </div>
         </Stack>
       </Form>
