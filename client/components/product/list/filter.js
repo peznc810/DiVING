@@ -11,6 +11,7 @@ export default function Filter({product, setProduct}) {
     category: '',
     price: ''
   });
+  const [nowSort, setNowSort] = useState('');
   
   useEffect(() => { 
     fetch("http://localhost:3000/api/product").then((res) => {
@@ -28,6 +29,11 @@ export default function Filter({product, setProduct}) {
       ...buttonStyles,
       [buttonName]: buttonStyles[buttonName] ? '' : 'active'
     });
+  }
+
+  const sortClick = (value) => {
+    setNowSort(value);
+    setProduct(value);
   }
 
   return (
@@ -65,6 +71,7 @@ export default function Filter({product, setProduct}) {
                             className="form-check-label"
                             htmlFor="flexCheckDefault"
                             style={{ color: '#303132' }}
+                            onClick={sortClick}
                           >
                             {product.brand}
                           </Link>
@@ -105,10 +112,11 @@ export default function Filter({product, setProduct}) {
                       return (
                         <div key={product.id} className="form-check">
                           <Link
-                            href="/product/list"
+                            href={`/product/${product.category}`}
                             className="form-check-label"
                             htmlFor="flexCheckDefault"
                             style={{ color: '#303132' }}
+                            onClick={sortClick}
                           >
                             {product.category}
                           </Link>
