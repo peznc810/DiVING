@@ -1,13 +1,34 @@
-import React from 'react'
+import { useEffect } from 'react'
 import Link from 'next/link'
 import styles from './styles.module.scss'
 
 // React icon
 import { FcGoogle } from 'react-icons/fc'
+
+// defult auth
 import { useAuth } from '@/hooks/auth'
+// google auth
+import useFirebase from '@/hooks/use-firebase'
 
 export default function SignUp() {
-  const { signUp, error } = useAuth()
+  const { signUp, signUpGoogle, auth } = useAuth()
+  const { loginGoogleRedirect, initGoogle, logoutFirebase } = useFirebase()
+
+  // 初次渲染時監聽firebase的google登入狀態
+  useEffect(() => {
+    initGoogle(callbackGoogleSign)
+    // logoutFirebase()
+  }, [])
+
+  // 將拿到的google資料進行處理
+  const callbackGoogleSign = async (providerData) => {
+    // 取得使用者的資料
+    // console.log(providerData)
+    // 判斷當前是否已經登入，如果已登入就結束function（因為init本意為檢查是否登入，未登入才會執行其他事情）
+    if (auth.isAuth) return
+    // 如果尚未登入，則執行註冊流程
+    const res = await signUpGoogle(providerData)
+  }
   return (
     <>
       <main className={`${styles['main-style']}`}>
@@ -53,9 +74,9 @@ export default function SignUp() {
               </div>
               {/* 警示標語 */}
               <p
-                className={`fw-medium small text-center text-danger mb-0 ${styles.notify}`}
+                className={`fw-medium small text-center text-danger mb-0 position-absolute ${styles.notify}`}
               >
-                {error.fillErr ? error.fillErr : ''}
+                {/* config error */}
               </p>
               {/* END */}
               <button className={`fw-medium ${styles.btn}`}>註冊</button>
@@ -67,11 +88,15 @@ export default function SignUp() {
                     或
                   </div>
                 </div>
-                <div className="col-6 mt-3">
-                  <div className={`small ${styles.btn}`}>
+                <div className="col-10 mt-3 text-center">
+                  <button
+                    type="button"
+                    className={`small ${styles.btn} w-100`}
+                    onClick={loginGoogleRedirect}
+                  >
                     <FcGoogle className="me-2" />
-                    Google
-                  </div>
+                    使用 Google 帳號註冊
+                  </button>
                 </div>
               </div>
               <p className="text-center mb-0">

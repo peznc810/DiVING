@@ -4,7 +4,6 @@ import Link from 'next/link'
 import Head from 'next/head'
 
 // login with google
-
 import useFirebase from '@/hooks/use-firebase'
 
 // React icon
@@ -13,12 +12,14 @@ import { useAuth } from '@/hooks/auth'
 
 export default function Login() {
   const { login } = useAuth()
-  // cosnt = useState()
-  const { loginWithGoogle, loginGoogleRedirect, initGoogle } = useFirebase()
+  const { loginGoogleRedirect, initGoogle } = useFirebase()
 
-  useEffect(() => {
-    initGoogle()
-  }, [])
+  // 初次渲染時監聽firebase的google登入狀態
+  // useEffect(() => {
+  //   initGoogle()
+  // }, [])
+
+  // 處理google登入後，要向伺服器進行登入動作
 
   return (
     <>
@@ -78,7 +79,7 @@ export default function Login() {
                 {/* 警示標語 */}
                 <div className="col-12">
                   <p
-                    className={`fw-medium small text-center text-danger mb-0 ${styles.notify}`}
+                    className={`fw-medium small text-center text-danger mb-0 position-absolute ${styles.notify}`}
                   >
                     {/* config error */}
                   </p>
@@ -97,8 +98,9 @@ export default function Login() {
                 </div>
                 <div className="col-10 mt-3 text-center">
                   <button
+                    type="button"
                     className={`small ${styles.btn} w-100`}
-                    onClick={() => loginGoogleRedirect()}
+                    onClick={loginGoogleRedirect}
                   >
                     <FcGoogle className="me-2" />
                     使用 Google 帳號登入

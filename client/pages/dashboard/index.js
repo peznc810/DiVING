@@ -6,11 +6,7 @@ export default function MemberIndex() {
   const { auth } = useAuth()
   // Make sure we're in the browser
   if (typeof window !== 'undefined' && auth.isAuth) {
-    if (auth.isAuth) {
-      router.push('/dashboard/profile')
-    } else {
-      router.push('/users/login')
-    }
+    router.push('/dashboard/profile')
   }
   return <></>
 }

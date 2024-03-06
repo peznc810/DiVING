@@ -104,7 +104,7 @@ router.post('/status', checkToken, async (req, res) => {
 
 // 註冊
 router.post('/register', upload.none(), async (req, res) => {
-  const { userName, userEmail, userPWD, rePWD } = req.body
+  const { userName, userEmail, userPWD } = req.body
   const [[userData]] = await db.execute(
     'SELECT * FROM `users` WHERE `email` = ?',
     [userEmail]
@@ -128,6 +128,34 @@ router.post('/register', upload.none(), async (req, res) => {
     })
 })
 
+// Google註冊
+router.post('/google-register', async (req, res) => {
+  // console.log(req.body)
+  const { displayName, email, photoURL } = req.body
+  console.log(email);
+  const [[userData]] = await db.execute(
+    'SELECT * FROM `users` WHERE `email` = ?',
+    [email]
+  )
+  console.log(userData);
+  if (userData) {
+    res.status(409).json({
+      status: 'error',
+      msg: 'Email已註冊'
+    })
+    return
+  }
+  await db.execute(
+    "INSERT INTO `users` (`name`, `email`, `avatar`) VALUES (?, ?, ?);", [displayName, email, photoURL]
+  )
+    .then(() => {
+      res.status(200).json({ status: 'success',msg: '註冊成功' })
+    })
+    .catch(err => {
+      console.log(err);
+      res.status(500).json({ status: 'error', msg: '註冊失敗，請再試一次' })
+    })
+})
 
 
 // 確認token資料

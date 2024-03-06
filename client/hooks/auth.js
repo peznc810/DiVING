@@ -25,7 +25,6 @@ export function AuthProvider({ children }) {
     e.preventDefault()
     // 建立自定義表單，並把form的資料格式放入
     let formData = new FormData(e.target)
-
     // // 把表單資料傳給後台
     let url = 'http://localhost:3005/api/users/login'
     fetch(url, {
@@ -44,8 +43,7 @@ export function AuthProvider({ children }) {
           const userData = parseJwt(token)
           // 把會員的資料放到狀態中，之後可以共享到其他頁面
           setAuth({ ...userData, isAuth: true })
-          // 把token存入localStorage
-          // 後續要重新抓登入狀態時會需要
+          // 把token存入localStorage，後續要重新抓登入狀態時會需要
           localStorage.setItem('token', token)
 
           // 檢查解譯出來的data
@@ -97,7 +95,6 @@ export function AuthProvider({ children }) {
     // for (let [key, value] of formData.entries()) {
     //   console.log(`${key}: ${value}`)
     // }
-
     // 把表單資料傳給後台
     let url = 'http://localhost:3005/api/users/register'
     fetch(url, {
@@ -108,6 +105,29 @@ export function AuthProvider({ children }) {
       .then((response) => response.json())
       .then((result) => {
         // console.log(result)
+        if (result.status !== 'error') {
+          router.push('/users/login')
+        }
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+  }
+  // Google註冊
+  const signUpGoogle = (providerData) => {
+    const userData = JSON.stringify(providerData)
+    // 把表單資料傳給後台
+    let url = 'http://localhost:3005/api/users/google-register'
+    fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: userData,
+      credentials: 'include',
+    })
+      .then((response) => response.json())
+      .then((result) => {
         if (result.status !== 'error') {
           router.push('/users/login')
         }
@@ -147,9 +167,13 @@ export function AuthProvider({ children }) {
             setAuth({ ...userData, isAuth: true })
             // 要設定新的token進localStorage
             localStorage.setItem('token', token)
-            console.log('success')
+            // 如果在登入狀態下進入login頁面，會轉跳至會員中心
+            if (router.pathname.startsWith(loginRoute)) {
+              router.push(protectedRoutes)
+            }
           } else {
-            // token過期
+            // token過期，跳轉至登入頁面
+            router.push(loginRoute)
             // 之後可能用alert之類的提示訊息處理
             console.warn(result.msg)
           }
@@ -166,7 +190,7 @@ export function AuthProvider({ children }) {
     }
   }
 
-  // didMount(初次渲染)後，向伺服器要求檢查會員是否登入中
+  // 初次渲染後，向伺服器要求檢查會員是否登入中
   useEffect(() => {
     if (router.isReady && !auth.isAuth) {
       checkAuth()
@@ -182,6 +206,7 @@ export function AuthProvider({ children }) {
         login,
         logout,
         signUp,
+        signUpGoogle,
       }}
     >
       {children}
