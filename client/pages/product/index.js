@@ -56,17 +56,6 @@ export default function List() {
   }, [product])
 
 
-   // 加入到購物車中的項目
-   const [addCart, setAddCart] = useState([])
-
-   const addItem = (item) => {
-    //先擴充屬性多一個aty:1
-    const newItem = { ...item, qty:1 }
-    //1 2
-    const newItems = [...items, item]
-    //3
-    setAddCart(newItems)
-  }
 
   return (
     <>
@@ -131,7 +120,7 @@ export default function List() {
                 <div className="container-fluid">
                 <div className="row row-cols-1 row-cols-md-3 g-4">
                 {items.map((data) => 
-                  <Card key={data} data={data} addItem={addItem} />
+                  <Card key={data} data={data} />
                 )}                  
                 </div>
                 </div>

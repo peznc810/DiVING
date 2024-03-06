@@ -67,7 +67,7 @@ export default function Filter({product, setProduct}) {
                       return (
                         <div key={product.id} className="form-check">
                           <Link
-                            href={`/product/${product.brand}`}
+                            href={`/product/sort/${product.brand}`}
                             className="form-check-label"
                             htmlFor="flexCheckDefault"
                             style={{ color: '#303132' }}
@@ -112,7 +112,7 @@ export default function Filter({product, setProduct}) {
                       return (
                         <div key={product.id} className="form-check">
                           <Link
-                            href={`/product/${product.category}`}
+                            href={`/product/sort/${product.category}`}
                             className="form-check-label"
                             htmlFor="flexCheckDefault"
                             style={{ color: '#303132' }}
