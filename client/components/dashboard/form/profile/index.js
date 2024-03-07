@@ -37,6 +37,7 @@ export default function Form() {
                           type="text"
                           id="myName"
                           className="form-control"
+                          placeholder="王小美"
                         />
                       </div>
                       <div className="col-12 col-sm-6">
@@ -58,13 +59,19 @@ export default function Form() {
                           type="email"
                           id="myEmail"
                           className="form-control"
+                          placeholder="xxx@test.com.tw"
                         />
                       </div>
                       <div className="col-12 col-sm-6">
                         <label htmlFor="myTel" className="form-label">
                           電話號碼
                         </label>
-                        <input type="tel" id="myTel" className="form-control" />
+                        <input
+                          type="tel"
+                          id="myTel"
+                          className="form-control"
+                          placeholder="0987654321"
+                        />
                       </div>
                       <div className="col-9">
                         <label htmlFor="address" className="form-label">
