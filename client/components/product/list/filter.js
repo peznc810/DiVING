@@ -7,24 +7,34 @@ import { MdOutlinePriceCheck } from 'react-icons/md'
 
 export default function Filter({ product, setProduct }) {
   console.log(product)
+
   const [buttonStyles, setButtonStyles] = useState({
     brand: '',
     category: '',
     price: '',
   })
 
+  const [uniqueBrand, setUniqueBrand] = useState([])
+  const [uniqueCategory, setUniqueCategory] = useState([])
+
   // 去除重複的分類
+  // const brand = useMemo(() => {
+  //   const uniqueBrand = new Set([...product].map((v) => v.brand))
+  //   return Array.from(uniqueBrand)
+  // }, [product])
+  // console.log(brand)
+
   const brand = useMemo(() => {
     const uniqueBrand = new Set(product.map((v) => v.brand))
     return Array.from(uniqueBrand)
   }, [product])
-  // console.log(brand)
+  console.log(brand)
 
-  const category = useMemo(() => {
-    const uniqueCategory = new Set(product.map((v) => v.category))
-    return Array.from(uniqueCategory)
-  }, [product])
-  //console.log(category)
+  // const category = useMemo(() => {
+  //   const uniqueCategory = new Set(product.map((v) => v.category))
+  //   return Array.from(uniqueCategory)
+  // }, [product])
+  // console.log(category)
 
   const handleButtonClick = (buttonName) => {
     setButtonStyles({
@@ -62,11 +72,10 @@ export default function Filter({ product, setProduct }) {
                     return (
                       <div key={v} className="form-check">
                         <Link
-                          href={`/product/sort/${v}`}
+                          href={`/product/${v}`}
                           className="form-check-label"
                           htmlFor="flexCheckDefault"
                           style={{ color: '#303132' }}
-                          // onClick={sortClick}
                         >
                           {v}
                         </Link>
@@ -79,7 +88,7 @@ export default function Filter({ product, setProduct }) {
           </div>
 
           {/* 商品類別 */}
-          <div className="accordion-item">
+          {/* <div className="accordion-item">
             <h2 className="accordion-header">
               <button
                 className={`accordion-button collapsed ${buttonStyles.category}`}
@@ -103,11 +112,10 @@ export default function Filter({ product, setProduct }) {
                     return (
                       <div key={v} className="form-check">
                         <Link
-                          href={`/product/sort/${v}`}
+                          href={`/product/${v}`}
                           className="form-check-label"
                           htmlFor="flexCheckDefault"
                           style={{ color: '#303132' }}
-                          // onClick={sortClick}
                         >
                           {v}
                         </Link>
@@ -117,7 +125,7 @@ export default function Filter({ product, setProduct }) {
                 </div>
               </div>
             </div>
-          </div>
+          </div> */}
 
           {/* 價格篩選 */}
           <div className="accordion-item">

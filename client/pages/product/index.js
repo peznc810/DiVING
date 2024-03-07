@@ -8,6 +8,8 @@ import Filter from '@/components/product/list/filter'
 import Pagination from '@/components/product/list/pagination'
 import Link from 'next/link'
 
+import Breadcrumb from 'react-bootstrap/Breadcrumb'
+
 import { MdScubaDiving } from 'react-icons/md'
 import { MdOutlineCategory } from 'react-icons/md'
 import { GoHeartFill } from 'react-icons/go'
@@ -58,7 +60,7 @@ export default function List() {
       </div> */}
       <div className="container-1200">
         {/* 麵包屑 */}
-        <div className="my-3 d-flex mt-5">
+        {/* <div className="my-3 d-flex mt-5">
           <div className="d-flex align-items-center">
             <Link
               href="/product/list"
@@ -77,7 +79,14 @@ export default function List() {
               <MdOutlineCategory /> 商品類別
             </Link>
           </div>
-        </div>
+        </div> */}
+        <Breadcrumb>
+          <Breadcrumb.Item href="#">Home</Breadcrumb.Item>
+          <Breadcrumb.Item href="https://getbootstrap.com/docs/4.0/components/breadcrumb/">
+            Library
+          </Breadcrumb.Item>
+          <Breadcrumb.Item active>Data</Breadcrumb.Item>
+        </Breadcrumb>
 
         <div className="row mt-2 mb-3">
           <div className="card-text d-flex justify-content-between align-items-center">
@@ -86,7 +95,6 @@ export default function List() {
             <Order product={product} setProduct={setProduct} />
           </div>
         </div>
-
         <div className="row text-center">
           <div className="col-sm-12">
             <div className="d-flex" id="wrapper">
