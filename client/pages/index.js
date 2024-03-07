@@ -6,6 +6,7 @@ import Server from '@/components/home/server'
 import Products from '@/components/home/products'
 import LessonSection from '@/components/home/lesson'
 import MapSection from '@/components/home/map'
+import Coupon from '@/components/coupon/coupon'
 import { useEvent } from '@/hooks/use-eventData'
 
 export default function Index() {
@@ -14,7 +15,10 @@ export default function Index() {
   const eventList = useEvent()
   // 改變頁面body的顏色
   useEffect(() => {
-    if (currentPage === '/') document.body.style.backgroundColor = '#013c64'
+    if (currentPage === '/') {
+      document.body.style.backgroundColor = '#013c64'
+      // document.body.style.position = 'relative'
+    }
     // 如果跳轉到其他頁面背景不會改變
     return () => {
       document.body.style.backgroundColor = ''
@@ -29,6 +33,7 @@ export default function Index() {
       <LessonSection />
       <Products />
       <MapSection />
+      <Coupon />
     </>
   )
 }

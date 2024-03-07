@@ -2,6 +2,8 @@ import React, { useState } from 'react'
 import styles from './latest-news.module.scss'
 import EventCard from './event-card'
 import EventFilter from './event-filter'
+import Pagination from '../common/pagination'
+// import usePagination from '@/hooks/use-pagination'
 
 import { IoIosArrowBack } from 'react-icons/io'
 import { IoIosArrowForward } from 'react-icons/io'
@@ -18,9 +20,6 @@ export default function EventList({ eventList }) {
 
   const totalPages = Math.ceil(filterItems.length / itemsPrePage) //算出頁數
 
-  const handlePage = (newPage) => {
-    setCurrentPage(newPage)
-  }
   const nextPage = () => {
     if (currentPage < totalPages) setCurrentPage(currentPage + 1)
   }
@@ -74,6 +73,7 @@ export default function EventList({ eventList }) {
         <EventCard eventList={currentItems} />
 
         {/* 分頁 */}
+
         <nav aria-label="Page navigation example ">
           <ul className={`pagination justify-content-center mb-5`}>
             <li
@@ -100,7 +100,7 @@ export default function EventList({ eventList }) {
                       currentPage === index + 1 ? styles.pageBtn : ''
                     }`}
                     type="button"
-                    onClick={() => handlePage(index + 1)}
+                    onClick={() => setCurrentPage(index + 1)}
                   >
                     {index + 1}
                   </button>

@@ -11,17 +11,22 @@ export default function LatestNews({ eventList }) {
 
   const previewHandle = (id) => {
     setHoverID(id)
-    // 根據滑鼠滑進，find找到相對應的id會回傳true
+    // 根據滑鼠滑進，find找到相對應的id會回傳
     const hovered = eventList.find((event) => event.id === id)
     setPreviewID(hovered)
+    // console.log(hovered)
   }
 
+  // 一開始今來頁面previewID只抓到一開始傳進來的空陣列，所以用依賴，如果eventList改變了，會顯示第一筆資料
   useEffect(() => {
-    if (hoverID && previewID && hoverID !== previewID.id) {
-      setPreviewID(null)
+    if (eventList.length) {
+      setPreviewID(eventList[0])
     }
-  }, [hoverID, previewID])
+  }, [eventList])
 
+  console.log(previewID)
+  // console.log(initialPreviewIndex)
+  console.log(eventList)
   return (
     <>
       <section className={`py-5 container`}>

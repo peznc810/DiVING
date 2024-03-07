@@ -3,7 +3,7 @@ import Image from 'next/image'
 import styles from './event-card.module.scss'
 import Link from 'next/link'
 
-export default function EventCard({ eventList = '' }) {
+export default function EventCard({ eventList = [] }) {
   // console.log(event)
 
   return (
