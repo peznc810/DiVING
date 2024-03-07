@@ -2,6 +2,7 @@ import React from 'react'
 import styles from './styles.module.scss'
 import Link from 'next/link'
 import Image from 'next/image'
+import { useRouter } from 'next/router'
 
 // React icon
 import { GoPerson } from 'react-icons/go'
@@ -11,8 +12,13 @@ import { FaRegHeart } from 'react-icons/fa'
 import { LuClipboardList } from 'react-icons/lu'
 import { HiOutlineTicket } from 'react-icons/hi'
 import { TbLogout2 } from 'react-icons/tb'
+import { useAuth } from '@/hooks/auth'
 
 export default function Menu() {
+  const router = useRouter()
+  const path = router.pathname
+  // console.log(path)
+  const { logout } = useAuth()
   return (
     <>
       <div
@@ -24,19 +30,20 @@ export default function Menu() {
           <div className={`m-auto mb-4 ${styles.avatar}`}>
             <Image src="/images/users/woman.jpg" alt="avatar" fill priority />
           </div>
-          {/* 顯示優惠券張數 */}
-          <div className="text-center py-3 border-top border-bottom ">
-            {/* 欠： hover的動畫 */}
+          {/* (先拔掉)顯示優惠券張數 */}
+          {/* <div className="text-center py-3 border-top border-bottom d-none">
             <Link href="/dashboard/coupons" className=" text-secondary">
               1
             </Link>
             <div className="">可用優惠券</div>
-          </div>
+          </div> */}
           {/* 列表 */}
           <ul className="list-unstyled my-3 px-0">
             <li>
               <Link
-                className="text-center text-sm-start ps-sm-4"
+                className={`text-center text-sm-start ps-sm-4 ${
+                  path.includes('profile') ? 'bg-secondary' : ''
+                }`}
                 href="/dashboard/profile"
               >
                 <GoPerson />
@@ -45,7 +52,9 @@ export default function Menu() {
             </li>
             <li>
               <Link
-                className="text-center text-sm-start ps-sm-4"
+                className={`text-center text-sm-start ps-sm-4 ${
+                  path.includes('orders') ? 'bg-secondary' : ''
+                }`}
                 href="/dashboard/orders"
               >
                 <LuClipboardList />
@@ -54,7 +63,9 @@ export default function Menu() {
             </li>
             <li className="">
               <Link
-                className="text-center text-sm-start ps-sm-4"
+                className={`text-center text-sm-start ps-sm-4 ${
+                  path.includes('coupons') ? 'bg-secondary' : ''
+                }`}
                 href="/dashboard/coupons"
               >
                 <HiOutlineTicket />
@@ -63,7 +74,9 @@ export default function Menu() {
             </li>
             <li>
               <Link
-                className="text-center text-sm-start ps-sm-4"
+                className={`text-center text-sm-start ps-sm-4 ${
+                  path.includes('comments') ? 'bg-secondary' : ''
+                }`}
                 href="/dashboard/comments"
               >
                 <TbMessage />
@@ -72,7 +85,9 @@ export default function Menu() {
             </li>
             <li>
               <Link
-                className="text-center text-sm-start ps-sm-4"
+                className={`text-center text-sm-start ps-sm-4 ${
+                  path.includes('favorites') ? 'bg-secondary' : ''
+                }`}
                 href="/dashboard/favorites"
               >
                 <FaRegHeart />
@@ -81,7 +96,9 @@ export default function Menu() {
             </li>
             <li>
               <Link
-                className="text-center text-sm-start ps-sm-4"
+                className={`text-center text-sm-start ps-sm-4 ${
+                  path.includes('posts') ? 'bg-secondary' : ''
+                }`}
                 href="/dashboard/posts"
               >
                 <RiFileList2Line />
@@ -91,7 +108,8 @@ export default function Menu() {
             <li>
               <Link
                 className="text-center text-sm-start ps-sm-4"
-                href="/dashboard/logout"
+                href="/"
+                onClick={logout}
               >
                 <TbLogout2 />
                 登出
