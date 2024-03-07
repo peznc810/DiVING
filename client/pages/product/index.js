@@ -8,13 +8,13 @@ import Filter from '@/components/product/list/filter'
 import Pagination from '@/components/product/list/pagination'
 import Link from 'next/link'
 
-import { MdScubaDiving } from "react-icons/md";
-import { MdOutlineCategory } from "react-icons/md";
-import { GoHeartFill } from "react-icons/go";
-import { FaCartPlus } from "react-icons/fa";
+import { MdScubaDiving } from 'react-icons/md'
+import { MdOutlineCategory } from 'react-icons/md'
+import { GoHeartFill } from 'react-icons/go'
+import { FaCartPlus } from 'react-icons/fa'
 
 export default function List() {
-  const [product, setProduct] = useState([]);    
+  const [product, setProduct] = useState([])
   console.log(product)
 
   // Toggle the side navigation
@@ -22,7 +22,6 @@ export default function List() {
     // fix next issue
     if (typeof window !== 'undefined') {
       const sidebarToggle = document.body.querySelector('#sidebarToggle')
-
       if (sidebarToggle) {
         // 在localStorage中儲存目前sidebar情況
         if (localStorage.getItem('sb|sidebar-toggle') === 'true') {
@@ -43,11 +42,12 @@ export default function List() {
     }
   }, [])
 
-
-  useEffect(() => { 
-    fetch("http://localhost:3000/api/product").then((res) => {
+  useEffect(() => {
+    fetch('http://localhost:3000/api/product')
+      .then((res) => {
         return res.json()
-    }).then((data)=> setProduct(data? data.data : []))
+      })
+      .then((data) => setProduct(data ? data.data : []))
   }, [])
 
   // const items = useMemo(() => {
@@ -55,11 +55,9 @@ export default function List() {
   //   return product.data
   // }, [product])
 
-
-
   return (
     <>
-    {/* header圖片 */}
+      {/* header圖片 */}
       {/* <div className="header-container">
         <img src="/images/product/images/test/header1.png" />
       </div> */}
@@ -72,7 +70,8 @@ export default function List() {
               className="p-2"
               style={{ color: '#303132' }}
             >
-              <MdScubaDiving />品牌
+              <MdScubaDiving />
+              品牌
             </Link>
             <div className="p-1">&gt;</div>
             <Link
@@ -89,7 +88,7 @@ export default function List() {
           <div className="card-text d-flex justify-content-between align-items-center">
             <h6 className="ps-3 my-1">當前的分類名稱</h6>
             {/* 排序 */}
-            <Order product={product} setProduct={setProduct}/>
+            <Order product={product} setProduct={setProduct} />
           </div>
         </div>
 
@@ -99,7 +98,7 @@ export default function List() {
               <div className="bg-white me-3" id="sidebar-wrapper">
                 <div className="scroll">
                   {/* 搜尋 */}
-                  <Search product={product} setProduct={setProduct}/>
+                  <Search product={product} setProduct={setProduct} />
                   {/* <div>
                     <button type="button" className="btn my-1 all-product">
                       所有商品
@@ -109,7 +108,7 @@ export default function List() {
                   {/* 篩選 filter */}
                   <div className="my-2">
                     <div className="accordion accordion-flush">
-                      <Filter product={product} setProduct={setProduct}/>
+                      <Filter product={product} setProduct={setProduct} />
                     </div>
                   </div>
                 </div>
@@ -118,13 +117,13 @@ export default function List() {
               {/* 卡片 */}
               <div id="page-content-wrapper">
                 <div className="container-fluid">
-                <div className="row row-cols-1 row-cols-md-3 g-4">
-                {product.map((data) => 
-                  <Card key={data} data={data} />
-                )}                  
+                  <div className="row row-cols-1 row-cols-md-3 g-4">
+                    {product.map((value) => (
+                      <Card key={value} value={value} setProduct={setProduct} />
+                    ))}
+                  </div>
                 </div>
-                </div>
-                <Pagination product={product} setProduct={setProduct}/>
+                <Pagination product={product} setProduct={setProduct} />
               </div>
             </div>
           </div>

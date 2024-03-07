@@ -7,10 +7,10 @@ import Switch from '@/components/product/detail/switch'
 import ProductRecommond from '@/components/product/detail/product-recommond'
 import Link from 'next/link'
 
-import { MdScubaDiving } from "react-icons/md";
-import { MdOutlineCategory } from "react-icons/md";
-import { GoHeartFill } from "react-icons/go";
-import { FaCartPlus } from "react-icons/fa";
+import { MdScubaDiving } from 'react-icons/md'
+import { MdOutlineCategory } from 'react-icons/md'
+import { GoHeartFill } from 'react-icons/go'
+import { FaCartPlus } from 'react-icons/fa'
 import toast, { Toaster } from 'react-hot-toast'
 // import styles from '@/components/product/product.module.css'
 
@@ -20,7 +20,7 @@ export default function Detail() {
   const [product, setProduct] = useState(null)
 
   const [productCount, setProductCount] = useState(1) //增加、減少數量
-  const [items, setItems] = useState([])   //加入到購物車中的項目
+  const [items, setItems] = useState([]) //加入到購物車中的項目
 
   const [selectColor, setSelectColor] = useState(null)
   const [selectSize, setSelectSize] = useState(null)
@@ -36,72 +36,25 @@ export default function Detail() {
       })
   }, [pid])
 
-
-const increment = () =>{
-  setProductCount((prevCount)=>{
-    return prevCount + 1
-  })
-}
-
-const decrement = () =>{
-  setProductCount((prevCount)=>{
-    if( prevCount === 1){
-      return prevCount
-    }else{
-      return prevCount - 1 
-    }
+  const increment = () => {
+    setProductCount((prevCount) => {
+      return prevCount + 1
     })
-}
+  }
 
-// 在購物車中，遞增某商品id數量
-// const addCart = (id) => {
-//   setItems(prevItems => {
-//     return prevItems.map(item => {
-//       if (item.id === id) {
-//         return { ...item, qty: item.qty + 1 };
-//       }
-//       return item;
-//     });
-//   });
-// }
+  const decrement = () => {
+    setProductCount((prevCount) => {
+      if (prevCount === 1) {
+        return prevCount
+      } else {
+        return prevCount - 1
+      }
+    })
+  }
 
-//點選加入購物車，會出現吐司
-// const notify = (productName) => {
-//   const msgBox = (
-//     <div style={{ backgroundColor: 'white' }}>
-//       <p>{`${productName} 已成功加入到購物車中`}</p>
-//       <button
-//         onClick={() => {
-//           // 另一種導向至另一頁面路由的方式
-//           router.push('/cart/product')
-//         }}
-//       >
-//         前往 購物車頁面
-//       </button>
-//     </div>
-//   )
-//   toast.success(msgBox)
-// }
-
- // ----------------------加入購物車的功能  ----------------------
- const [cartItems, setCartItems] = useState([])
- const [cartCount, setCartCount] = useState(0)
-
- const addToCart = (product) => {
-   const existingItem = cartItems.find((item) => item.id === product.id)
-   if (existingItem) {
-     existingItem.quantity += 1
-   } else {
-     const newItem = { ...product, quantity: 1 }
-     setCartItems([...cartItems, newItem])
-   } 
-   setCartCount(cartCount + 1)
-   toast(`${Lesson[0].name}已加入購物車中`)
- }
-
-  if (!product) return null 
+  if (!product) return null
   // if(!product){
-  //   return null 
+  //   return null
   // }
   return (
     <>
@@ -114,7 +67,8 @@ const decrement = () =>{
               className="p-2"
               style={{ color: '#303132' }}
             >
-              <MdScubaDiving />品牌
+              <MdScubaDiving />
+              品牌
             </Link>
             <div className="p-1">&gt;</div>
             <Link
@@ -131,7 +85,11 @@ const decrement = () =>{
         <div className="row mt-5 mx-2 my-5">
           <div className="col-sm-7">
             <div className="position-sticky" style={{ top: '2rem' }}>
-              <Carousel imgFileNames={product.img.split(',')} id={product.id} category={product.category} />
+              <Carousel
+                imgFileNames={product.img.split(',')}
+                id={product.id}
+                category={product.category}
+              />
             </div>
           </div>
 
@@ -139,20 +97,26 @@ const decrement = () =>{
             <h3>{product.name}</h3>
             <Stars />
             <h6 className="my-1">4.0分 | 8則評價</h6>
-            {product.discount ?
-                <>
-                <span className="note-text">{`NT$${product.discount.toLocaleString()}`}</span> 
+            {product.discount ? (
+              <>
+                <span className="note-text">{`NT$${product.discount.toLocaleString()}`}</span>
                 <span className="text-decoration-line-through type-text m-3 my-2">
-                {`NT$${product.price.toLocaleString()}`}
-                </span> 
-                </>
-                : <>
+                  {`NT$${product.price.toLocaleString()}`}
+                </span>
+              </>
+            ) : (
+              <>
                 <p className="my-2 price-text">
-                {`NT$${product.price.toLocaleString()}`}
-                </p> 
-                </>
-                }
-            <p className="my-1" dangerouslySetInnerHTML={{ __html: product.info.replace(/\n/g, '<br>') }}></p>
+                  {`NT$${product.price.toLocaleString()}`}
+                </p>
+              </>
+            )}
+            <p
+              className="my-1"
+              dangerouslySetInnerHTML={{
+                __html: product.info.replace(/\n/g, '<br>'),
+              }}
+            ></p>
             <hr />
 
             {/* 顏色 button */}
@@ -179,37 +143,37 @@ const decrement = () =>{
             <span className="btn-size p-2">尺寸</span>
             {product.size.split(',').map((size) => {
               return (
-              <button 
-              key={size}
-              onClick={()=> setSelectSize(size)}
-              className="btn btn-circle"
-              style={
-                selectSize === size 
-                ? { backgroundColor: '#265475', color: 'white' }
-                : null
-              }
-              >
-                {size}
-              </button>
+                <button
+                  key={size}
+                  onClick={() => setSelectSize(size)}
+                  className="btn btn-circle"
+                  style={
+                    selectSize === size
+                      ? { backgroundColor: '#265475', color: 'white' }
+                      : null
+                  }
+                >
+                  {size}
+                </button>
               )
             })}
 
             {/* 選擇數量 */}
             <div>
-              <button 
+              <button
                 className="btn btn-circle"
                 onClick={() => {
-                    decrement()
-                  }}
+                  decrement()
+                }}
               >
                 -
               </button>
               <span className="mx-3"> {productCount} </span>
-              <button 
+              <button
                 className="btn btn-circle"
                 onClick={() => {
-                    increment()
-                  }}
+                  increment()
+                }}
               >
                 +
               </button>
@@ -222,15 +186,11 @@ const decrement = () =>{
             >
               <GoHeartFill /> 加入最愛
             </button>
-            
+
             {/* 加入購物車 */}
-            <button 
-              className="btn btn-outline-primary w-100">
-                加入購物車 <FaCartPlus />
-              <Toaster
-                  position="top-center"
-                  reverseOrder={false}
-                />
+            <button className="btn btn-outline-primary w-100">
+              加入購物車 <FaCartPlus />
+              <Toaster position="top-center" reverseOrder={false} />
             </button>
 
             {/* 注意事項 */}
@@ -285,16 +245,21 @@ const decrement = () =>{
                     <div className="accordion-body px-1">
                       <ol>
                         <li>訂單金額滿新臺幣 2,000 元，即享免運服務</li>
-                        <li>臺北市：標準運送的商品可於 2-5 個工作天內送達<br />
-                        快遞運送的商品可於 2-3 個工作天內送達</li>
-                        <li>其它縣市：標準運送的商品可於 3-6 個工作天內送達<br />
-                        快遞運送的商品可於 3-5 個工作天內送達</li>
+                        <li>
+                          臺北市：標準運送的商品可於 2-5 個工作天內送達
+                          <br />
+                          快遞運送的商品可於 2-3 個工作天內送達
+                        </li>
+                        <li>
+                          其它縣市：標準運送的商品可於 3-6 個工作天內送達
+                          <br />
+                          快遞運送的商品可於 3-5 個工作天內送達
+                        </li>
                         <li>訂單皆於平日上班時間(09:00-18:00)處理與寄送</li>
                       </ol>
                     </div>
                   </div>
                 </div>
-                
               </div>
             </div>
           </div>
@@ -302,14 +267,19 @@ const decrement = () =>{
 
         <hr />
         {/* 商品介紹 + 顧客評價 */}
-        <Switch imgDetails={product.img_detail.split(',')}  id={product.id} category={product.category} detail={product.detail}/>
+        <Switch
+          imgDetails={product.img_detail.split(',')}
+          id={product.id}
+          category={product.category}
+          detail={product.detail}
+        />
       </div>
-      <br /><br />
-         <div>
-            <h3 className="text-center my-5">你可能會喜歡的商品⋯</h3>
-            <ProductRecommond />
-          </div>
-
+      <br />
+      <br />
+      <div>
+        <h3 className="text-center my-5">你可能會喜歡的商品⋯</h3>
+        <ProductRecommond />
+      </div>
 
       <style jsx>{`
         .container-1200 {
@@ -335,10 +305,10 @@ const decrement = () =>{
           font-weight: normal;
           font-size: 14px;
         }
-        .price-text{
-            color: var(--gray, #858585);
-            font-weight: normal;
-            font-size: 16.5px;
+        .price-text {
+          color: var(--gray, #858585);
+          font-weight: normal;
+          font-size: 16.5px;
         }
         .btn-md:hover,
         .btn-outline-primary:hover,

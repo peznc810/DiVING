@@ -1,13 +1,14 @@
-import {useState} from 'react';
+import { useState } from 'react'
 import Stars from '@/components/product/star/star'
 import Pagination from '@/components/product/list/pagination'
 import Link from 'next/link'
 
-import { GoHeartFill } from "react-icons/go";
-import { FaCartPlus } from "react-icons/fa";
+import { GoHeartFill } from 'react-icons/go'
+import { FaCartPlus } from 'react-icons/fa'
 
+export default function Card({ value }) {
+  console.log(value)
 
-export default function Card({data, addItem = () => {}}) {  
   const handleMouseEnter = () => {
     setIsHovered(true)
   }
@@ -16,7 +17,7 @@ export default function Card({data, addItem = () => {}}) {
   }
   const [isHovered, setIsHovered] = useState(false)
   return (
-    <>          
+    <>
       <div className="col">
         <div
           className="card w-350 border-radius"
@@ -24,56 +25,53 @@ export default function Card({data, addItem = () => {}}) {
           onMouseLeave={handleMouseLeave}
         >
           <div className="card-body no-space-x">
-          <div>
-            <img
-              src={`/images/product/images/${data.category}/${data.id}/${data.img_top}`}
-              alt={`${data.id}`}
-              style={{
-                marginTop: isHovered ? '0' : '-15px',
-              }}
-            />
+            <div>
+              <img
+                src={`/images/product/images/${value.category}/${value.id}/${value.img_top}`}
+                alt={`${value.id}`}
+                style={{
+                  marginTop: isHovered ? '0' : '-15px',
+                }}
+              />
             </div>
             {isHovered ? (
               <div>
                 <div className="bi-icon">
                   <button className="btn mouse-add p-2">
-                  <GoHeartFill />
+                    <GoHeartFill />
                   </button>
-                  <button 
-                  className="btn mouse-add p-2" 
-                  onClick={()=>{
-                    addItem(data)
-                  }}
-                  >
+                  <button className="btn mouse-add p-2">
                     <FaCartPlus />
                   </button>
                 </div>
-                <Link href={`/product/${data.id}`}>View more &gt;&gt;</Link>
+                <Link href={`/product/${value.id}`}>View more &gt;&gt;</Link>
               </div>
             ) : (
               <div className="p-2 card-text">
                 <Stars />
-                <p className="card-text">{data.brand}</p>
-                <p className="card-text type-text h-now">{data.name}</p>
-                {data.discount ?
-                <>
-                <span className="note-text">{`NT$${data.discount.toLocaleString()}`}</span> 
-                <span className="text-decoration-line-through type-text card-text m-2">
-                {`NT$${data.price.toLocaleString()}`}
-                </span> 
-                </>
-                : <>
-                <span className="my-2 price-text card-text">
-                {`NT$${data.price.toLocaleString()}`}
-                </span> 
-                </>}
+                <p className="card-text">{value.brand}</p>
+                <p className="card-text type-text h-now">{value.name}</p>
+                {value.discount ? (
+                  <>
+                    <span className="note-text">{`NT$${value.discount.toLocaleString()}`}</span>
+                    <span className="text-decoration-line-through type-text card-text m-2">
+                      {`NT$${value.price.toLocaleString()}`}
+                    </span>
+                  </>
+                ) : (
+                  <>
+                    <span className="my-2 price-text card-text">
+                      {`NT$${value.price.toLocaleString()}`}
+                    </span>
+                  </>
+                )}
               </div>
             )}
           </div>
         </div>
-      </div>      
+      </div>
       <style jsx>{`
-        .col{
+        .col {
           max-width: 1200px;
         }
         @media screen and (max-width: 576px) {
@@ -104,7 +102,7 @@ export default function Card({data, addItem = () => {}}) {
         .w-350 img {
           width: 100%;
         }
-        .bi-icon{
+        .bi-icon {
           margin-top: 0px;
         }
         .card-text {
@@ -122,11 +120,11 @@ export default function Card({data, addItem = () => {}}) {
           font-size: 14px;
           font-family: Arial, sans-serif;
         }
-        .price-text{
-            color: var(--gray, #858585);
-            font-weight: normal;
-            font-size: 16.5px;
-            font-family: Arial, sans-serif;
+        .price-text {
+          color: var(--gray, #858585);
+          font-weight: normal;
+          font-size: 16.5px;
+          font-family: Arial, sans-serif;
         }
 
         /* override by css variable */
@@ -137,7 +135,6 @@ export default function Card({data, addItem = () => {}}) {
         /*  card-body override */
         .no-space-x {
           padding: var(--bs-card-spacer-y) 0;
-          
         }
         .h-now {
           font-size: 16px;
