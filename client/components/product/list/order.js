@@ -58,7 +58,6 @@ export default function OrderProduct({product, setProduct}) {
           <li>
               <a 
               className="dropdown-item" 
-              href="#"
               onClick={sortAllProducts}
               >
                 <MdReplyAll /> 所有商品
@@ -67,7 +66,6 @@ export default function OrderProduct({product, setProduct}) {
             <li>
               <a 
               className="dropdown-item" 
-              href="#"
               onClick={sortCreatedDate}
               >
                <MdFiberNew /> 最新上架商品
@@ -76,7 +74,6 @@ export default function OrderProduct({product, setProduct}) {
             <li>
               <a 
               className="dropdown-item" 
-              href="#"
               onClick={sortDescending}
               >
                <FaSortNumericDownAlt /> 價格：由高至低
@@ -85,7 +82,6 @@ export default function OrderProduct({product, setProduct}) {
             <li>
               <a 
               className="dropdown-item" 
-              href="#"
               onClick={sortAscending}
               >
                 <FaSortNumericUpAlt /> 價格：由低至高

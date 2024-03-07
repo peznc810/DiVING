@@ -14,7 +14,7 @@ import { GoHeartFill } from "react-icons/go";
 import { FaCartPlus } from "react-icons/fa";
 
 export default function List() {
-  const [product, setProduct] = useState(null);    
+  const [product, setProduct] = useState([]);    
   console.log(product)
 
   // Toggle the side navigation
@@ -47,13 +47,13 @@ export default function List() {
   useEffect(() => { 
     fetch("http://localhost:3000/api/product").then((res) => {
         return res.json()
-    }).then((data)=> setProduct(data))
+    }).then((data)=> setProduct(data? data.data : []))
   }, [])
 
-  const items = useMemo(() => {
-    if (!product) return [];
-    return product.data
-  }, [product])
+  // const items = useMemo(() => {
+  //   if (!product) return [];
+  //   return product.data
+  // }, [product])
 
 
 
@@ -119,7 +119,7 @@ export default function List() {
               <div id="page-content-wrapper">
                 <div className="container-fluid">
                 <div className="row row-cols-1 row-cols-md-3 g-4">
-                {items.map((data) => 
+                {product.map((data) => 
                   <Card key={data} data={data} />
                 )}                  
                 </div>

@@ -1,44 +1,41 @@
 import { useMemo, useEffect, useState } from 'react'
 
 import Link from 'next/link'
-import { MdScubaDiving } from "react-icons/md";
-import { MdOutlineCategory } from "react-icons/md";
-import { MdOutlinePriceCheck } from "react-icons/md";
+import { MdScubaDiving } from 'react-icons/md'
+import { MdOutlineCategory } from 'react-icons/md'
+import { MdOutlinePriceCheck } from 'react-icons/md'
 
-export default function Filter({product, setProduct}) {
+export default function Filter({ product, setProduct }) {
+  console.log(product)
   const [buttonStyles, setButtonStyles] = useState({
     brand: '',
     category: '',
-    price: ''
-  });
-  const [nowSort, setNowSort] = useState('');
-  
-  useEffect(() => { 
-    fetch("http://localhost:3000/api/product").then((res) => {
-        return res.json()
-    }).then((data)=> setProduct(data))
-  }, [])
+    price: '',
+  })
 
-  const items = useMemo(() => {
-    if (!product) return [];
-    return product.data
+  // 去除重複的分類
+  const brand = useMemo(() => {
+    const uniqueBrand = new Set(product.map((v) => v.brand))
+    return Array.from(uniqueBrand)
   }, [product])
+  // console.log(brand)
+
+  const category = useMemo(() => {
+    const uniqueCategory = new Set(product.map((v) => v.category))
+    return Array.from(uniqueCategory)
+  }, [product])
+  //console.log(category)
 
   const handleButtonClick = (buttonName) => {
     setButtonStyles({
       ...buttonStyles,
-      [buttonName]: buttonStyles[buttonName] ? '' : 'active'
-    });
-  }
-
-  const sortClick = (value) => {
-    setNowSort(value);
-    setProduct(value);
+      [buttonName]: buttonStyles[buttonName] ? '' : 'active',
+    })
   }
 
   return (
     <>
-      <div className="my-4"> 
+      <div className="my-4">
         <div className="accordion accordion-flush" id="accordionFlushExample">
           {/* 品牌 */}
           <div className="accordion-item">
@@ -61,24 +58,20 @@ export default function Filter({product, setProduct}) {
             >
               <div className="accordion-body px-1">
                 <div className="form-check">
-                  {items.map((product) => {
-                    const firstMapping = items.find((p) => p.brand === product.brand) === product;
-                    if (firstMapping) {
-                      return (
-                        <div key={product.id} className="form-check">
-                          <Link
-                            href={`/product/sort/${product.brand}`}
-                            className="form-check-label"
-                            htmlFor="flexCheckDefault"
-                            style={{ color: '#303132' }}
-                            onClick={sortClick}
-                          >
-                            {product.brand}
-                          </Link>
-                        </div>
-                      );
-                    }
-                    return null;
+                  {brand.map((v) => {
+                    return (
+                      <div key={v} className="form-check">
+                        <Link
+                          href={`/product/sort/${v}`}
+                          className="form-check-label"
+                          htmlFor="flexCheckDefault"
+                          style={{ color: '#303132' }}
+                          // onClick={sortClick}
+                        >
+                          {v}
+                        </Link>
+                      </div>
+                    )
                   })}
                 </div>
               </div>
@@ -106,24 +99,20 @@ export default function Filter({product, setProduct}) {
             >
               <div className="accordion-body px-1">
                 <div className="form-check">
-                  {items.map((product) => {
-                    const firstMapping = items.find((p) => p.category === product.category) === product;
-                    if(firstMapping){
-                      return (
-                        <div key={product.id} className="form-check">
-                          <Link
-                            href={`/product/sort/${product.category}`}
-                            className="form-check-label"
-                            htmlFor="flexCheckDefault"
-                            style={{ color: '#303132' }}
-                            onClick={sortClick}
-                          >
-                            {product.category}
-                          </Link>
-                        </div>
-                      );
-                    }
-                    return null;
+                  {category.map((v) => {
+                    return (
+                      <div key={v} className="form-check">
+                        <Link
+                          href={`/product/sort/${v}`}
+                          className="form-check-label"
+                          htmlFor="flexCheckDefault"
+                          style={{ color: '#303132' }}
+                          // onClick={sortClick}
+                        >
+                          {v}
+                        </Link>
+                      </div>
+                    )
                   })}
                 </div>
               </div>
@@ -157,7 +146,10 @@ export default function Filter({product, setProduct}) {
                     value=""
                     id="flexCheckDefault"
                   />
-                  <label className="form-check-label" htmlFor="flexCheckDefault">
+                  <label
+                    className="form-check-label"
+                    htmlFor="flexCheckDefault"
+                  >
                     $1,000以下
                   </label>
                 </div>
@@ -169,7 +161,10 @@ export default function Filter({product, setProduct}) {
                     value=""
                     id="flexCheckChecked"
                   />
-                  <label className="form-check-label" htmlFor="flexCheckChecked">
+                  <label
+                    className="form-check-label"
+                    htmlFor="flexCheckChecked"
+                  >
                     $1,001 - $3,500
                   </label>
                 </div>
@@ -181,7 +176,10 @@ export default function Filter({product, setProduct}) {
                     value=""
                     id="flexCheckChecked"
                   />
-                  <label className="form-check-label" htmlFor="flexCheckChecked">
+                  <label
+                    className="form-check-label"
+                    htmlFor="flexCheckChecked"
+                  >
                     $3,501 - $6,500
                   </label>
                 </div>
@@ -193,8 +191,11 @@ export default function Filter({product, setProduct}) {
                     value=""
                     id="flexCheckChecked"
                   />
-                  <label className="form-check-label" htmlFor="flexCheckChecked">
-                    $6,00
+                  <label
+                    className="form-check-label"
+                    htmlFor="flexCheckChecked"
+                  >
+                    $6,500以上
                   </label>
                 </div>
               </div>
