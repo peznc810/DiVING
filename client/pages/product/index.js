@@ -1,4 +1,4 @@
-import { useMemo, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import Stars from '@/components/product/star/star'
 import Card from '@/components/product/list/card'
@@ -50,11 +50,6 @@ export default function List() {
       .then((data) => setProduct(data ? data.data : []))
   }, [])
 
-  // const items = useMemo(() => {
-  //   if (!product) return [];
-  //   return product.data
-  // }, [product])
-
   return (
     <>
       {/* header圖片 */}
@@ -99,11 +94,6 @@ export default function List() {
                 <div className="scroll">
                   {/* 搜尋 */}
                   <Search product={product} setProduct={setProduct} />
-                  {/* <div>
-                    <button type="button" className="btn my-1 all-product">
-                      所有商品
-                    </button>
-                  </div> */}
 
                   {/* 篩選 filter */}
                   <div className="my-2">
@@ -118,9 +108,15 @@ export default function List() {
               <div id="page-content-wrapper">
                 <div className="container-fluid">
                   <div className="row row-cols-1 row-cols-md-3 g-4">
-                    {product.map((value) => (
-                      <Card key={value} value={value} setProduct={setProduct} />
-                    ))}
+                    {Array.isArray(product) &&
+                      product.map((value) => (
+                        <Card
+                          key={value}
+                          value={value}
+                          product={product}
+                          setProduct={setProduct}
+                        />
+                      ))}
                   </div>
                 </div>
                 <Pagination product={product} setProduct={setProduct} />

@@ -6,7 +6,7 @@ import Link from 'next/link'
 import { GoHeartFill } from 'react-icons/go'
 import { FaCartPlus } from 'react-icons/fa'
 
-export default function Card({ value }) {
+export default function Card({ product, setProduct, value }) {
   console.log(value)
 
   const handleMouseEnter = () => {
