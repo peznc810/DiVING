@@ -1,7 +1,7 @@
 @import '@/styles/variable.scss';
 
 .carouselInner {
-  padding-bottom: 70px;
+  padding-bottom: 20px;
   padding-left: 40px;
   overflow-x: scroll;
   scroll-snap-type: x mandatory;
@@ -10,8 +10,7 @@
 }
 
 .arrowBtn {
-  right: 50px;
-  bottom: 0;
+  padding-right: 60px;
   button {
     background-color: transparent;
     border: 1px solid #fff;
@@ -21,15 +20,19 @@
     width: 40px;
     height: 40px;
     text-align: center;
-    // line-height: 50px;
+    line-height: 20px;
+  }
+  button:hover {
+    border: 1px solid $secondary;
+    color: $secondary;
   }
 }
 
 @media screen and (max-width: 768px) {
   .carouselInner {
-    padding-left: 0px;
+    padding-left: 10px;
   }
   .arrowBtn {
-    right: 20px;
+    padding-right: 20px;
   }
 }

@@ -18,8 +18,8 @@ export default function Server() {
               <Image
                 src={'/images/home/server-lesson.jpg'}
                 alt=""
-                width={400}
-                height={520}
+                fill
+                style={{ objectFit: 'cover' }}
                 priority
               />
             </div>
@@ -47,8 +47,8 @@ export default function Server() {
               <Image
                 src={'/images/home/server-3.jpg'}
                 alt=""
-                width={720}
-                height={420}
+                fill
+                style={{ objectFit: 'cover' }}
                 priority
               />
             </div>

@@ -8,6 +8,9 @@ import DashboardLayout from '@/components/dashboard/layout'
 // 會員驗證專用provider component
 import { AuthProvider } from '@/hooks/auth'
 
+// 共享event資料的元件
+import EventProvider from '@/hooks/use-eventData'
+
 export default function App({ Component, pageProps }) {
   // 獲取當前頁面路徑
   const router = useRouter()
@@ -39,5 +42,9 @@ export default function App({ Component, pageProps }) {
     }
   }
 
-  return <>{getLayout(<Component {...pageProps} />)}</>
+  return (
+    <>
+      <EventProvider>{getLayout(<Component {...pageProps} />)}</EventProvider>
+    </>
+  )
 }
