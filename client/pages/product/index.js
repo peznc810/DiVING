@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { use, useEffect, useState } from 'react'
 
 import Stars from '@/components/product/star/star'
 import Card from '@/components/product/list/card'
@@ -17,6 +17,8 @@ import { FaCartPlus } from 'react-icons/fa'
 
 export default function List() {
   const [product, setProduct] = useState([])
+  const [currentSort, setCurrentSort] = useState('')
+
   console.log(product)
 
   // Toggle the side navigation
@@ -90,7 +92,7 @@ export default function List() {
 
         <div className="row mt-2 mb-3">
           <div className="card-text d-flex justify-content-between align-items-center">
-            <h6 className="ps-3 my-1">當前的分類名稱</h6>
+            <h6 className="ps-3 my-1">當前的分類：{currentSort}</h6>
             {/* 排序 */}
             <Order product={product} setProduct={setProduct} />
           </div>
@@ -106,7 +108,11 @@ export default function List() {
                   {/* 篩選 filter */}
                   <div className="my-2">
                     <div className="accordion accordion-flush">
-                      <Filter product={product} setProduct={setProduct} />
+                      <Filter
+                        product={product}
+                        setProduct={setProduct}
+                        setCurrentSort={setCurrentSort}
+                      />
                     </div>
                   </div>
                 </div>

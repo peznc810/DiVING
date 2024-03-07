@@ -1,11 +1,14 @@
-import { useMemo, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
+
+import Order from '@/components/product/list/order'
+import Search from '@/components/product/list/search'
 
 import Link from 'next/link'
 import { MdScubaDiving } from 'react-icons/md'
 import { MdOutlineCategory } from 'react-icons/md'
 import { MdOutlinePriceCheck } from 'react-icons/md'
 
-export default function Filter({ product, setProduct }) {
+export default function Filter({ product, setProduct, setCurrentSort }) {
   console.log(product)
 
   const [buttonStyles, setButtonStyles] = useState({
@@ -14,10 +17,7 @@ export default function Filter({ product, setProduct }) {
     price: '',
   })
 
-  const [uniqueBrand, setUniqueBrand] = useState([])
-  const [uniqueCategory, setUniqueCategory] = useState([])
-
-  const brand = [
+  const allBrand = [
     'ADISI',
     'Unidive',
     'AROPEC',
@@ -27,24 +27,8 @@ export default function Filter({ product, setProduct }) {
     'HeleiWaho',
     'OceanMax',
   ]
-  // 去除重複的分類
-  // const brand = useMemo(() => {
-  //   const uniqueBrand = new Set([...product].map((v) => v.brand))
-  //   return Array.from(uniqueBrand)
-  // }, [product])
-  // console.log(brand)
 
-  // const brand = useMemo(() => {
-  //   const uniqueBrand = new Set(product.map((v) => v.brand))
-  //   return Array.from(uniqueBrand)
-  // }, [product])
-  // console.log(brand)
-
-  // const category = useMemo(() => {
-  //   const uniqueCategory = new Set(product.map((v) => v.category))
-  //   return Array.from(uniqueCategory)
-  // }, [product])
-  // console.log(category)
+  const allCategory = ['防寒衣', '面鏡', '呼吸管', '蛙鞋', '配件']
 
   const handleButtonClick = (buttonName) => {
     setButtonStyles({
@@ -78,14 +62,14 @@ export default function Filter({ product, setProduct }) {
             >
               <div className="accordion-body px-1">
                 <div className="form-check">
-                  {brand.map((v) => {
+                  {allBrand.map((v) => {
                     return (
                       <div
                         key={v}
                         className="form-check"
                         onClick={() => {
                           setProduct((c) => c.filter((n) => n.brand === v))
-                          // setCurrentBrand(v) 當前的分類（要從index接收傳遞過來的狀態變更）
+                          setCurrentSort(v) //當前的分類（要從index接收傳遞過來的狀態變更）
                         }}
                       >
                         <div
@@ -105,7 +89,7 @@ export default function Filter({ product, setProduct }) {
           </div>
 
           {/* 商品類別 */}
-          {/* <div className="accordion-item">
+          <div className="accordion-item">
             <h2 className="accordion-header">
               <button
                 className={`accordion-button collapsed ${buttonStyles.category}`}
@@ -125,24 +109,31 @@ export default function Filter({ product, setProduct }) {
             >
               <div className="accordion-body px-1">
                 <div className="form-check">
-                  {category.map((v) => {
+                  {allCategory.map((v) => {
                     return (
-                      <div key={v} className="form-check">
-                        <Link
+                      <div
+                        key={v}
+                        className="form-check"
+                        onClick={() => {
+                          setProduct((c) => c.filter((n) => n.category === v))
+                          setCurrentSort(v) //當前的分類（要從index接收傳遞過來的狀態變更）
+                        }}
+                      >
+                        <div
                           href={`/product/${v}`}
                           className="form-check-label"
                           htmlFor="flexCheckDefault"
                           style={{ color: '#303132' }}
                         >
                           {v}
-                        </Link>
+                        </div>
                       </div>
                     )
                   })}
                 </div>
               </div>
             </div>
-          </div> */}
+          </div>
 
           {/* 價格篩選 */}
           <div className="accordion-item">

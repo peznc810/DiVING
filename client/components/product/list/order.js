@@ -74,7 +74,6 @@ export default function OrderProduct({ product, setProduct }) {
           </ul>
         </div>
       </div>
-      <style jsx>{``}</style>
     </>
   )
 }
