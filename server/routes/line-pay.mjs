@@ -35,7 +35,7 @@ router.post("/create-order", async(req, res)=>{
       {
         id: packgeId,
         amount: req.body.totalPrice,
-        products: req.body.products2,
+        products: req.body.products,
       },
     ],
     options:{ display: {locale:"zh_TW"}},
@@ -46,9 +46,13 @@ router.post("/create-order", async(req, res)=>{
     id: orderId,
     user_id : userId,
     total_price : req.body.totalPrice,
+    payment: "Line pay",
+    shipping: "宅配",
     status: "建立成功",
     order_info: JSON.stringify(order),
   }
+
+  addOrder(dbOrder)
 
   const products=req.body.products
 
@@ -61,6 +65,7 @@ router.post("/create-order", async(req, res)=>{
       order_time: product.order_time,
       num: product.num,
     }
+    addOrderDetail(dbOrderDetail)
   });
 
   res.json({status: "success", data: {order},dbOrder :{dbOrder}})
@@ -81,23 +86,22 @@ router.get("/reserve", async(req,res)=>{
   let orderRecord, error
 
   await getOrder(orderId).then(result => {
-    orderRecord = result;
+    [[orderRecord]] = result;
   }).catch(err => {
     error = err
   })
   if (error) {
     res.status(400).json(error)
   }
-  if (orderRecord) {
-    res.status(200).json(orderRecord)
-  }
+
 
   const order = JSON.parse(orderRecord.order_info)
 
   console.log(`獲得訂單資料，內容如下：`)
-  console.log(order)
+  // console.log(order)
 
   try{
+
     const linePayResponse = await linePayClient.request.send({
       body: { ...order, redirectUrls },
     })
@@ -111,16 +115,18 @@ router.get("/reserve", async(req,res)=>{
       linePayResponse.body.info.paymentAccessToken
 
     console.log(`預計付款資料(Reservation)已建立。資料如下:`)
-    console.log(reservation)
+    // console.log(reservation)
 
-    await updateOrder(JSON.stringify(reservation), reservation.transactionId, orderId).then().catch(err => {
+    // res.redirect(linePayResponse.body.info.paymentUrl.web)
+
+    await updateOrder(JSON.stringify(reservation), reservation.transactionId, orderId).then(    res.redirect(linePayResponse.body.info.paymentUrl.web)
+    ).catch(err => {
       error = err
     })
     if (error) {
       res.status(400).json(error)
     }
 
-    res.redirect(linePayResponse.body.info.paymentUrl.web)
   }catch(e){
     console.log("error", e);
   }
@@ -132,15 +138,12 @@ router.get("/confirm", async(req, res)=>{
   let dbOrder, error
 
   await getOrderByTid(transactionId).then(result => {
-    dbOrder = result;
+    [[dbOrder]] = result;
   }).catch(err => {
     error = err
   })
   if (error) {
     res.status(400).json(error)
-  }
-  if (orderRecord) {
-    res.status(200).json(orderRecord)
   }
 
   const transaction = JSON.parse(dbOrder.reservation)
@@ -150,6 +153,7 @@ router.get("/confirm", async(req, res)=>{
   const amount = transaction.amount
 
   try {
+
     const linePayResponse = await linePayClient.confirm.send({
       transactionId: transactionId,
       body: {
@@ -157,8 +161,6 @@ router.get("/confirm", async(req, res)=>{
         amount: amount,
       },
     })
-
-    console.log(linePayResponse);
 
     let status = "paid"
 
@@ -192,7 +194,7 @@ router.get("/check-transaction", async( req,res)=>{
 function getOrder(orderId) {
   return new Promise(async (resolve, reject) => {
     const result = await db.execute(
-      'SELECT * FROM `order` WHERE `id` = ?',[orderId]
+      'SELECT * FROM `purchase_order` WHERE `id` = ?',[orderId]
     );
     if (result) {
       resolve(result)
@@ -205,7 +207,7 @@ function getOrder(orderId) {
 function getOrderByTid(transactionId) {
   return new Promise(async (resolve, reject) => {
     const result = await db.execute(
-      'SELECT * FROM `order` WHERE `transaction_id` = ?',[transactionId]
+      'SELECT * FROM `purchase_order` WHERE `transaction_id` = ?',[transactionId]
     );
     if (result) {
       resolve(result)
@@ -217,13 +219,13 @@ function getOrderByTid(transactionId) {
 
 function updateOrder(reservation, transaction_id, orderId){
   return new Promise(async (resolve, reject)=>{
-    await db.execute("UPDATE `order` SET `reservation` = ?, `transaction_id` = ? WHERE `order`.`id` =?;",[reservation, transaction_id, orderId])
+    await db.execute("UPDATE `purchase_order` SET `reservation` = ?, `transaction_id` = ? WHERE `id` =?;",[reservation, transaction_id, orderId])
   })
 }
 
 function updateOrderStatus(status, return_code, confirm, orderId){
   return new Promise(async (resolve, reject)=>{
-    await db.execute("UPDATE `order` SET `status` = ?, `return_code` = ?, `confirm` = ? WHERE `order`.`id` =?;",[status, return_code, confirm, orderId])
+    await db.execute("UPDATE `purchase_order` SET `status` = ?, `return_code` = ?, `confirm` = ? WHERE `id` =?;",[status, return_code, confirm, orderId])
   })
 }
 
@@ -240,7 +242,7 @@ function addOrder(dbOrder){
   const datetimeNow = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
   return new Promise(async (resolve, reject) => {
     const [result] = await db.execute(
-      'INSERT INTO `order`(id, user_id, total_price, payment, shipping, status, order_info, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?);',[
+      'INSERT INTO `purchase_order`(id, user_id, total_price, payment, shipping, status, order_info, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?);',[
         dbOrder.id, dbOrder.user_id, dbOrder.total_price, dbOrder.payment, dbOrder.shipping, dbOrder.status, dbOrder.order_info, datetimeNow
       ]
     );
@@ -256,22 +258,26 @@ function addOrderDetail(dbOrderDetail){
   return new Promise(async (resolve, reject) => {
     if(dbOrderDetail.product_id){
       const [result] = await db.execute(
-        'INSERT INTO `order_detail`(order_id, product_id, num) VALUES (?, ?);',[
+        'INSERT INTO `order_detail`(order_id, product_id, num) VALUES (?, ?, ?);',[
           dbOrderDetail.order_id, dbOrderDetail.product_id, dbOrderDetail.num
         ]
       );
+      if (result) {
+        resolve(result)
+      } else {
+        reject({ status: "error", msg: "err" })
+      }
     }else if(dbOrderDetail.lesson_id){
       const [result] = await db.execute(
-        'INSERT INTO `order_detail`(order_id, lesson_id, num, order_time) VALUES (?, ?);',[
+        'INSERT INTO `order_detail`(order_id, lesson_id, num, order_time) VALUES (?, ?, ?, ?);',[
           dbOrderDetail.order_id, dbOrderDetail.lesson_id, dbOrderDetail.num, dbOrderDetail.order_time
         ]
       );
-    }
-
-    if (result) {
-      resolve(result)
-    } else {
-      reject({ status: "error", msg: "err" })
+      if (result) {
+        resolve(result)
+      } else {
+        reject({ status: "error", msg: "err" })
+      }
     }
   })
 }

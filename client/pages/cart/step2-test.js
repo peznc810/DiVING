@@ -144,8 +144,14 @@ export default function Home() {
     if (checkFormat()) {
       const products = []
       cartData.forEach((data) => {
-        products.push(data)
+        products.push({
+          id: data.product_id || data.lesson_id,
+          name: data.productName || data.lessonName,
+          quantity: data.num,
+          price: data.productDiscount || data.productPrice || data.lessonPrice,
+        })
       })
+      console.log(products)
       const data = { user_id, totalPrice, products }
       const url = 'http://localhost:3005/api/line-pay/create-order'
       fetch(url, {
@@ -183,7 +189,7 @@ export default function Home() {
 
     const url = `http://localhost:3005/api/line-pay/confirm?transactionId=${transactionId}`
 
-    fetch(url, {
+    await fetch(url, {
       method: 'GET',
     })
       .then((response) => response.json())
@@ -512,12 +518,12 @@ export default function Home() {
             <button type="submit" className="btn next-step-btn text-white px-5">
               <h5 className="fw-bold py-1 px-3">提交訂單</h5>
             </button>
-            <button onClick={goLinePay} disabled={!order.orderId}>
-              前往付款
-            </button>
           </div>
         </div>
       </form>
+      <button onClick={goLinePay} disabled={!order.orderId}>
+        前往付款
+      </button>
       <style jsx>{`
         h1,
         h2,

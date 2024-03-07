@@ -15,6 +15,7 @@ const [cUser] = userData.filter((v) => {
 export default function Home() {
   const router = useRouter()
 
+  const [order, setOrder] = useState({})
   const [cartData, setCartData] = useState(null)
   const [userInputs, setUserInputs] = useState({
     user_name: '',
@@ -26,6 +27,11 @@ export default function Home() {
     cCard_address: '',
     order_note: '',
   })
+  const [result, setResult] = useState({
+    returnCode: '',
+    returnMessage: '',
+  })
+  const [isLoading, setIsLoading] = useState(true)
 
   let totalPrice = 0
 
@@ -33,6 +39,33 @@ export default function Home() {
     const data = JSON.parse(localStorage.getItem('cart'))
     setCartData(data)
   }, [])
+
+  useEffect(() => {
+    if (router.isReady) {
+      // 這裡確保能得到router.query值
+      console.log(router.query)
+      // http://localhost:3000/order?transactionId=2022112800733496610&orderId=da3b7389-1525-40e0-a139-52ff02a350a8
+      // 這裡要得到交易id，處理伺服器通知line pay已確認付款，為必要流程
+      // TODO: 除非為不需登入的交易，為提高安全性應檢查是否為會員登入狀態
+      const { transactionId, orderId } = router.query
+      console.log('1111')
+
+      // 如果沒有帶transactionId或orderId時，導向至首頁(或其它頁)
+      if (!transactionId || !orderId) {
+        // 關閉載入狀態
+        setIsLoading(false)
+        // 不繼續處理
+        return
+      }
+      console.log('2222')
+
+      // 向server發送確認交易api
+      handleConfirm(transactionId)
+      console.log('3333')
+    }
+
+    // eslint-disable-next-line
+  }, [router.isReady])
 
   const t1Change = () => {
     setUserInputs((prevState) => ({
@@ -62,62 +95,165 @@ export default function Home() {
   }
 
   const checkFormat = () => {
-    const phone = document.querySelector('.user_phone').value
-    const user_name = document.querySelector('.user_name').value
-    const cCard_name = document.querySelector('.cCard_name').value
-
-    let emptyInput
-
-    const phoneRegex = /^09\d{8}$/
-    const chineseRegex = /^[\u4e00-\u9fa5]+$/
-
-    const inputs = document.querySelectorAll('input[type=text]')
-
-    inputs.forEach((input) => {
-      if (!input.value) {
-        emptyInput = '有地方尚未填寫'
-      }
-    })
-
-    if (emptyInput) {
-      notify(emptyInput)
-      return false
-    }
-
-    function checkCorr(value, regex, errMsg) {
-      if (!regex.test(value)) {
-        notify(errMsg)
-        return false
-      }
-      return true
-    }
-
-    if (!checkCorr(phone, phoneRegex, '收件人電話 格式錯誤')) {
-      return false
-    }
-
-    if (!checkCorr(user_name, chineseRegex, '收件人名稱 格式錯誤')) {
-      return false
-    }
-
-    if (!checkCorr(cCard_name, chineseRegex, '持卡人姓名 格式錯誤')) {
-      return false
-    }
-
     return true
+
+    // const phone = document.querySelector('.user_phone').value
+    // const user_name = document.querySelector('.user_name').value
+    // const cCard_name = document.querySelector('.cCard_name').value
+
+    // let emptyInput
+
+    // const phoneRegex = /^09\d{8}$/
+    // const chineseRegex = /^[\u4e00-\u9fa5]+$/
+
+    // const inputs = document.querySelectorAll('input[type=text]')
+
+    // inputs.forEach((input) => {
+    //   if (!input.value) {
+    //     emptyInput = '有地方尚未填寫'
+    //   }
+    // })
+
+    // if (emptyInput) {
+    //   notify(emptyInput)
+    //   return false
+    // }
+
+    // function checkCorr(value, regex, errMsg) {
+    //   if (!regex.test(value)) {
+    //     notify(errMsg)
+    //     return false
+    //   }
+    //   return true
+    // }
+
+    // if (!checkCorr(phone, phoneRegex, '收件人電話 格式錯誤')) {
+    //   return false
+    // }
+
+    // if (!checkCorr(user_name, chineseRegex, '收件人名稱 格式錯誤')) {
+    //   return false
+    // }
+
+    // if (!checkCorr(cCard_name, chineseRegex, '持卡人姓名 格式錯誤')) {
+    //   return false
+    // }
+
+    // return true
   }
 
   const handleSub = (e) => {
     e.preventDefault()
     if (checkFormat()) {
-      router.push('./step3')
+      const products = []
+      cartData.forEach((data) => {
+        products.push({
+          id: data.product_id || data.lesson_id,
+          name: data.productName || data.lessonName,
+          quantity: data.num,
+          price: data.productDiscount || data.productPrice || data.lessonPrice,
+        })
+      })
+      console.log(products)
+      const data = { user_id, totalPrice, products }
+      const url = 'http://localhost:3005/api/line-pay/create-order'
+      fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      })
+        .then((res) => {
+          return res.json()
+        })
+        .then((data) => {
+          console.log(data)
+          if (data.status === 'success') {
+            setOrder(data.data.order)
+          }
+        })
+        .catch((err) => {
+          console.log(err)
+        })
+      // router.push('./step3')
     }
+  }
+
+  const goLinePay = () => {
+    if (window.confirm('確認要導向至LINE Pay進行付款?')) {
+      // 先連到node伺服器後，導向至LINE Pay付款頁面
+      window.location.href = `http://localhost:3005/api/line-pay/reserve?orderId=${order.orderId}`
+    }
+  }
+
+  const handleConfirm = async (transactionId) => {
+    let res
+    console.log('00000')
+    const url = `http://localhost:3005/api/line-pay/confirm?transactionId=${transactionId}`
+    console.log('00001')
+
+    await fetch(url, {
+      method: 'GET',
+    })
+      .then((response) => {
+        return response.json()
+      })
+      .then((result) => {
+        res = result
+      })
+      .catch((err) => {
+        console.error('An error occurred:', err)
+      })
+
+    console.log('aaa')
+    if (res.status === 'success') {
+      toast.success('付款成功')
+    } else {
+      toast.error('付款失敗')
+    }
+
+    console.log('bbb')
+
+    if (res.data) {
+      setResult(res.data)
+    }
+
+    console.log('ccc')
+
+    // 處理完畢，關閉載入狀態
+    setIsLoading(false)
+    console.log('ddd')
   }
 
   const notify = (msg) => {
     const msgBox = <p style={{ margin: 0 }}>{msg}</p>
 
     toast.error(msgBox)
+  }
+
+  const confirmOrder = (
+    <>
+      <h2>最後付款確認結果(returnCode=0000 代表成功): </h2>
+      <p>{JSON.stringify(result)}</p>
+      <p>
+        <button
+          onClick={() => {
+            window.location.href = '/test/line-pay/order'
+          }}
+        >
+          重新測試
+        </button>
+      </p>
+    </>
+  )
+
+  if (isLoading) {
+    return (
+      <>
+        <p>與伺服器連線同步中...</p>
+      </>
+    )
   }
 
   return (
@@ -412,12 +548,16 @@ export default function Home() {
                 <h5 className="fw-bold py-1 px-3">提交訂單</h5>
               </button>
             </Link> */}
-            <button className="btn next-step-btn text-white px-5">
+            <button type="submit" className="btn next-step-btn text-white px-5">
               <h5 className="fw-bold py-1 px-3">提交訂單</h5>
             </button>
           </div>
         </div>
       </form>
+      <button onClick={goLinePay} disabled={!order.orderId}>
+        前往付款
+      </button>
+      {result.returnCode ? confirmOrder : <h1>tttt</h1>}
       <style jsx>{`
         h1,
         h2,
