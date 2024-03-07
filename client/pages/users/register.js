@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import styles from './styles.module.scss'
 
@@ -11,15 +11,56 @@ import { useAuth } from '@/hooks/auth'
 import useFirebase from '@/hooks/use-firebase'
 
 export default function SignUp() {
-  const { signUp, signUpGoogle, auth } = useAuth()
+  const { signUp, signUpGoogle, auth, setMsg, errorMsg } = useAuth()
   const { loginGoogleRedirect, initGoogle, logoutFirebase } = useFirebase()
 
   // 初次渲染時監聽firebase的google登入狀態
   useEffect(() => {
-    console.log('register')
+    setMsg('')
     initGoogle(callbackGoogleSign)
-    // logoutFirebase() /* 測試用之後可以拔掉 */
   }, [])
+
+  const [inputVal, setVal] = useState({
+    nameVal: '',
+    emailVal: '',
+    passwordVal: '',
+    repasswordVal: '',
+  })
+
+  useEffect(() => {
+    setMsg('')
+  }, [inputVal])
+
+  const handleSignUp = (e) => {
+    e.preventDefault()
+    const emailRegex = /^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/
+    const passwordRegex = /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,12}/
+    switch (true) {
+      case inputVal.nameVal.trim() === '':
+        setMsg('姓名為必填欄位')
+        break
+      case inputVal.emailVal.trim() === '':
+        setMsg('電子郵件為必填欄位')
+        break
+      case !emailRegex.test(inputVal.emailVal):
+        setMsg('電子郵件格式錯誤')
+        break
+      case inputVal.passwordVal.trim() === '':
+        setMsg('密碼不得為空')
+        break
+      case !passwordRegex.test(inputVal.passwordVal):
+        setMsg('請輸入8-12位數(含英文大小寫)')
+        break
+      case inputVal.repasswordVal.trim() === '':
+        setMsg('請再確認一次密碼')
+        break
+      case inputVal.passwordVal !== inputVal.repasswordVal:
+        setMsg('密碼不符')
+        break
+      default:
+        signUp(e)
+    }
+  }
 
   // 將拿到的google資料進行處理
   const callbackGoogleSign = (providerData) => {
@@ -37,7 +78,7 @@ export default function SignUp() {
       <main className={`${styles['main-style']}`}>
         <div className="d-flex justify-content-center mt-5">
           <div className={`${styles['card-style']} ${styles['card-layout']}`}>
-            <form onSubmit={signUp}>
+            <form onSubmit={handleSignUp}>
               <h2 className="fs-3 mb-4 text-center">註冊會員</h2>
               <div className={`mb-3 ${styles['input-style']}`}>
                 <input
@@ -45,15 +86,21 @@ export default function SignUp() {
                   name="userName"
                   id="userName"
                   placeholder="姓名"
+                  onChange={(e) =>
+                    setVal({ ...inputVal, nameVal: e.target.value })
+                  }
                 />
                 <label htmlFor="userName">姓名</label>
               </div>
               <div className={`mb-3 ${styles['input-style']}`}>
                 <input
-                  type="email"
+                  type="text"
                   name="userEmail"
                   id="userEmail"
                   placeholder="電子郵件"
+                  onChange={(e) =>
+                    setVal({ ...inputVal, emailVal: e.target.value })
+                  }
                 />
                 <label htmlFor="userEmail">電子郵件</label>
               </div>
@@ -62,7 +109,10 @@ export default function SignUp() {
                   type="password"
                   name="userPWD"
                   id="userPWD"
-                  placeholder="密碼"
+                  placeholder="請輸入8-12位(含大小寫英文字母)"
+                  onChange={(e) =>
+                    setVal({ ...inputVal, passwordVal: e.target.value })
+                  }
                 />
                 <label htmlFor="userPWD">密碼</label>
               </div>
@@ -71,15 +121,18 @@ export default function SignUp() {
                   type="password"
                   name="rePWD"
                   id="rePWD"
-                  placeholder="確認密碼"
+                  placeholder="請再輸入一次"
+                  onChange={(e) =>
+                    setVal({ ...inputVal, repasswordVal: e.target.value })
+                  }
                 />
                 <label htmlFor="rePWD">確認密碼</label>
               </div>
               {/* 警示標語 */}
               <p
-                className={`fw-medium small text-center text-danger mb-0 position-absolute ${styles.notify}`}
+                className={`fw-medium small text-center text-danger mb-0 ${styles.notify}`}
               >
-                {/* config error */}
+                {errorMsg}
               </p>
               {/* END */}
               <button className={`fw-medium ${styles.btn}`}>註冊</button>

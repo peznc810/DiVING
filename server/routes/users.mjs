@@ -19,7 +19,6 @@ const blackList = []
 
 // 登入
 router.post('/login', upload.none(), async (req, res) => {
-
   // 接收client的require
   const { userEmail, userPWD } = req.body
   // 比對db資料
@@ -28,6 +27,7 @@ router.post('/login', upload.none(), async (req, res) => {
     'SELECT * FROM `users` WHERE `email` = ? AND `password` = ?',
     [userEmail, userPWD]
   )
+  console.log(userData)
   if (userData) {
     let token = jwt.sign({
       userEmail: userData.email,
@@ -64,7 +64,7 @@ router.post('/google-login', async (req, res) => {
   } else {
     res.status(401).json({
       status: "error",
-      msg: "帳號或密碼錯誤",
+      msg: "查無此使用者，請先註冊帳號",
     })
   }
 })
@@ -132,7 +132,7 @@ router.post('/register', upload.none(), async (req, res) => {
   if (userData) {
     res.status(409).json({
       status: 'error',
-      msg: 'Email已註冊'
+      msg: '此帳號已註冊'
     })
     return false
   }

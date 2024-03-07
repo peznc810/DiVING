@@ -4,6 +4,7 @@ import { useRouter } from 'next/router'
 export const AuthContext = createContext(null)
 
 export function AuthProvider({ children }) {
+  const router = useRouter()
   // 使用者的全域狀態
   const [auth, setAuth] = useState({
     userEmail: '',
@@ -13,6 +14,9 @@ export function AuthProvider({ children }) {
     isAuth: false,
   })
 
+  // 表單使用的錯誤訊息
+  const [errorMsg, setMsg] = useState('')
+
   // 解譯token的方法
   const parseJwt = (token) => {
     const base64Payload = token.split('.')[1]
@@ -20,13 +24,12 @@ export function AuthProvider({ children }) {
     return JSON.parse(payload.toString())
   }
 
-  const router = useRouter()
   // 登入
   const login = (e) => {
     e.preventDefault()
     // 建立自定義表單，並把form的資料格式放入
     let formData = new FormData(e.target)
-    // // 把表單資料傳給後台
+    // // 把表單格式的資料傳給後台
     let url = 'http://localhost:3005/api/users/login'
     fetch(url, {
       method: 'POST',
@@ -52,6 +55,8 @@ export function AuthProvider({ children }) {
           //   console.log(`${key}: ${value}`)
           // }
           router.push('/')
+        } else {
+          setMsg(result.msg)
         }
       })
       .catch((err) => {
@@ -73,7 +78,6 @@ export function AuthProvider({ children }) {
     })
       .then((response) => response.json())
       .then((result) => {
-        console.log(result)
         if (result.status === 'success') {
           // 登入成功要做的事
           let token = result.token
@@ -94,9 +98,9 @@ export function AuthProvider({ children }) {
           // server res be like:
           // res.status(401).json({
           //   status: "error",
-          //   msg: "帳號或密碼錯誤",
+          //   msg: "查無使用者，請先註冊",
           // })
-          console.log(result.msg)
+          setMsg(result.msg)
         }
       })
       .catch((err) => {
@@ -152,12 +156,15 @@ export function AuthProvider({ children }) {
         // console.log(result)
         if (result.status !== 'error') {
           router.push('/users/login')
+        } else {
+          setMsg(result.msg)
         }
       })
       .catch((err) => {
         console.log(err)
       })
   }
+
   // Google註冊
   const signUpGoogle = (providerData) => {
     const userData = JSON.stringify(providerData)
@@ -173,10 +180,10 @@ export function AuthProvider({ children }) {
     })
       .then((response) => response.json())
       .then((result) => {
-        if (result.status === 'error') {
-          console.log(result.msg)
-        } else {
+        if (result.status !== 'error') {
           router.push('/users/login')
+        } else {
+          setMsg(result.msg)
         }
       })
       .catch((err) => {
@@ -249,6 +256,8 @@ export function AuthProvider({ children }) {
       value={{
         setAuth,
         auth,
+        setMsg,
+        errorMsg,
         parseJwt,
         login,
         loginGoogle,

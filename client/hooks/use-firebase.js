@@ -2,11 +2,8 @@
 //在config中已初始化
 import { auth, provider } from '@/config/firebase'
 import {
-  getAuth,
   signInWithPopup,
   signOut,
-  GoogleAuthProvider,
-  FacebookAuthProvider,
   signInWithRedirect,
   getRedirectResult,
   onAuthStateChanged,
@@ -69,17 +66,14 @@ const initGoogle = (callback) => {
   })
 }
 
-// 測試需要，正式上線的話目前不需
 const logoutFirebase = () => {
-  const auth = getAuth()
-
   signOut(auth)
-    .then(function () {
+    .then(() => {
       // Sign-out successful.
       console.log('Sign-out successful.')
       // window.location.assign('https://accounts.google.com/logout')
     })
-    .catch(function (error) {
+    .catch((error) => {
       // An error happened.
       console.log(error)
     })

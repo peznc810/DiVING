@@ -33,7 +33,7 @@
   & form {
     display: flex;
     flex-direction: column;
-    gap: 24px;
+    gap: 20px;
   }
 }
 
@@ -58,6 +58,11 @@
       /* 沒有轉透明的話，focus時文字會保留在上方，看起來怪怪的 */
       color: transparent;
     }
+    &[id='userPWD']:focus::placeholder,
+    &[id='rePWD']:focus::placeholder {
+      font-size: 14px;
+      color: rgba(208, 208, 208, 0.3);
+    }
     /* 使用者"focus"以及"輸入完文字並within focus"時的label都要套用的樣式 */
     &:focus ~ label,
     &:not(:placeholder-shown) ~ label {
@@ -65,9 +70,9 @@
       transform: scale(0.85) translateY(-1.2rem);
     }
     &[id='userEmail']:focus ~ label,
-    &[id='repassword']:focus ~ label,
+    &[id='rePWD']:focus ~ label,
     &[id='userEmail']:not(:placeholder-shown) ~ label,
-    &[id='repassword']:not(:placeholder-shown) ~ label {
+    &[id='rePWD']:not(:placeholder-shown) ~ label {
       transform: scale(0.85) translateY(-1.2rem) translateX(-0.2rem);
     }
   }
@@ -87,7 +92,7 @@
 
 // 警號訊息
 .notify {
-  height: 1rem;
+  height: 1.375rem;
 }
 
 /* 按鈕樣式 */

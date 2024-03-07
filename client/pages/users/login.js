@@ -11,7 +11,7 @@ import { FcGoogle } from 'react-icons/fc'
 import { useAuth } from '@/hooks/auth'
 
 export default function Login() {
-  const { login, loginGoogle, auth } = useAuth()
+  const { login, loginGoogle, auth, setMsg, errorMsg } = useAuth()
   const { loginGoogleRedirect, logoutFirebase, initGoogle } = useFirebase()
 
   // 初次渲染時監聽firebase的google登入狀態
@@ -31,6 +31,83 @@ export default function Login() {
     loginGoogle(providerData)
   }
 
+  // 表單驗證 START
+  const [inputVal, setVal] = useState({
+    emailVal: '',
+    passwordVal: '',
+  })
+
+  useEffect(() => {
+    setMsg('')
+  }, [inputVal])
+
+  const handleLogin = (e) => {
+    e.preventDefault()
+    const emailRegex = /^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/
+    // \w+ 開頭包含數字、字母與底線至少一次
+    // ([-+.]\w+)*@\w+ 可包含（-+.或其他數字、字母、底線至少一次）或完全沒有，並緊跟著@符號，接著數字、字母、底線至少一次
+    // ([-.]\w+)*\.\w+ 可包含(-.或其他數字、字母、底線至少一次)或完全沒有，並緊跟著.符號，接著數字、字母、底線至少一次
+    // ([-.]\w+)*$ 結尾需要包含數字、字母、底線至少一次
+    const passwordRegex = /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,12}/
+    switch (true) {
+      case inputVal.emailVal.trim() === '':
+        setMsg('電子郵件不得為空')
+        break
+      case !emailRegex.test(inputVal.emailVal):
+        setMsg('電子郵件格式錯誤')
+        break
+      case inputVal.passwordVal.trim() === '':
+        setMsg('密碼不得為空')
+        break
+      case !passwordRegex.test(inputVal.passwordVal):
+        setMsg('請輸入8-12位數(含大小寫英文字母)')
+        break
+      default:
+        login(e)
+    }
+  }
+  // 表單驗證 END
+
+  // 記住我 START
+  const [isChecked, setIsChecked] = useState(Boolean)
+
+  useEffect(() => {
+    // 初始化取得先前存放的localStorage
+    const checkedValue = localStorage.getItem('checked') === 'true'
+    setIsChecked(checkedValue)
+    // 先前未勾選並進入頁面時時 input 為 null
+    const input = localStorage.getItem('email')
+    // 如果input是null的話，表單驗證無法判斷
+    input === null
+      ? setVal({ ...inputVal, emailVal: '' })
+      : setVal({ ...inputVal, emailVal: input })
+  }, [])
+
+  const handleChecked = (e) => {
+    // 抓取被勾選
+    const checked = e.target.checked
+    const emailVal = inputVal.emailVal
+    // 控制remember勾選後，input新增的localStorage的值
+    if (checked) {
+      localStorage.setItem('email', emailVal)
+      localStorage.setItem('checked', 'true')
+    } else {
+      localStorage.removeItem('email')
+      localStorage.setItem('checked', 'false')
+    }
+
+    setIsChecked(checked)
+  }
+
+  const handleInputVal = (e) => {
+    const emailVal = e.target.value
+    setVal({ ...inputVal, emailVal: emailVal })
+    // 控制remember勾選後，input又變更時要更新的localStorage
+    if (isChecked) {
+      localStorage.setItem('email', emailVal)
+    }
+  }
+  // 記住我 END
   return (
     <>
       <Head>
@@ -40,31 +117,33 @@ export default function Login() {
         <div className="d-flex justify-content-center mt-5">
           <div className={`${styles['card-style']}`}>
             {/* login的訊息會慢一拍過來 */}
-            <form onSubmit={login}>
+            <form onSubmit={handleLogin}>
               <h2 className="fs-3 mb-4 text-center">會員登入</h2>
               <div className={`mb-3 ${styles['input-style']}`}>
                 <input
-                  type="email"
+                  type="text"
                   name="userEmail"
                   id="userEmail"
-                  placeholder="電子郵件"
-                  autoComplete="email"
+                  placeholder="請輸入"
+                  onChange={handleInputVal}
+                  value={inputVal.emailVal}
                 />
                 <label htmlFor="userEmail">電子郵件</label>
               </div>
               <div className={`${styles['input-style']}`}>
                 <input
-                  type="text"
+                  type="password"
                   name="userPWD"
                   id="userPWD"
-                  placeholder="密碼"
+                  placeholder="請輸入8-12位(含大小寫英文字母)"
+                  onChange={(e) =>
+                    setVal({ ...inputVal, passwordVal: e.target.value })
+                  }
                 />
                 <label htmlFor="userPWD">密碼</label>
               </div>
               {/* 記住我＆忘記密碼 */}
-              <div
-                className={`row justify-content-between gy-1 ${styles.space}`}
-              >
+              <div className={`row justify-content-between ${styles.space}`}>
                 <div className="col-auto">
                   <div className="form-check">
                     <input
@@ -72,6 +151,8 @@ export default function Login() {
                       name="remember"
                       id="remember"
                       className="form-check-input"
+                      onChange={handleChecked}
+                      checked={isChecked}
                     />
                     <label
                       htmlFor="remember"
@@ -86,15 +167,13 @@ export default function Login() {
                     忘記密碼？
                   </Link>
                 </div>
-                {/* 警示標語 */}
-                <div className="col-12">
-                  <p
-                    className={`fw-medium small text-center text-danger mb-0 position-absolute ${styles.notify}`}
-                  >
-                    {/* config error */}
-                  </p>
-                </div>
-                {/* END */}
+              </div>
+              {/* END */}
+              {/* 警示標語 */}
+              <div
+                className={`fw-medium small text-center text-danger mb-0 ${styles.notify}`}
+              >
+                {errorMsg}
               </div>
               {/* END */}
               <button className={`fw-medium ${styles.btn}`}>登入</button>
