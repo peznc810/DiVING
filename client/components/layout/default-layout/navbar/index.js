@@ -3,6 +3,7 @@ import NavMenu from './navmenu'
 import NavRwd from './navRwd'
 import SideCart from './sideCart'
 import styles from './index.module.scss'
+import Link from 'next/link'
 
 export default function Navbar(background) {
   return (
@@ -22,7 +23,9 @@ export default function Navbar(background) {
             <i className="bi bi-list"></i>
           </button>
 
-          <h1 className="fw-bolder m-0 text-light">DiVING</h1>
+          <Link href="/" className="fs-1 fw-bolder m-0 text-light">
+            DiVING
+          </Link>
           <div>
             <NavMenu />
           </div>
