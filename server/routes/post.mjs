@@ -8,11 +8,11 @@ const router = express.Router();
   //讀取所有文章
   router.get('/', async (req, res) => {
     try {
-      const [rows, _fields] = await db.execute('SELECT * FROM post');
-      res.json(rows);
+      const [result, _fields] = await db.execute('SELECT * FROM post');
+      res.json(result);
     } catch (error) {
       console.error('Error executing database query:', error);
-      res.status(500).json({ error: 'NOOOOOO' });    
+      res.status(500).json({ error: 'NOOOOOO' });  
     }
   });
 
@@ -21,10 +21,10 @@ const router = express.Router();
     const postId = req.params.pid;
 
   try {
-    const [rows, _fields] = await db.execute('SELECT * FROM post WHERE id = ? ', [postId]);
+    const [result, _fields] = await db.execute('SELECT * FROM post WHERE id = ? ', [postId]);
 
-    if(rows.length === 1) {
-        res.json(rows[0]); //回傳單篇文章的數據
+    if(result.length === 1) {
+        res.json(result[0]); //回傳單篇文章的數據
     }else{
         res.status(404).json({ error: '沒這篇啦'})
     }
@@ -35,18 +35,19 @@ const router = express.Router();
 });
 
 router.post('/edit/quill', async (req, res) => {
-  const { user_id, title, image, content} = req.body;
+  const { user_id, title, image, content, tags} = req.body;
   const id = uuidv4();
   const now = new Date();
 
   try {
-    const [result] = await db.execute('INSERT INTO post (id, user_id, title, image, content, created_at, published_at, updated_at, is_published) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)', 
-     [id, user_id, title, image, content, now, now, now, 1]);   
-    // [user_id, title, image, content, created_at, published_at, updated_at, is_published]);
+    const [result] = await db.execute('INSERT INTO post (id, user_id, title, image, content, published_at, updated_at,tags , is_published) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)', 
+     [id, '001', title, image, content, now, now, tags, 1]);   
 
     res.status(201).json({ status: 'success', message: '成功寫入'});
+      // res.redirect('http://localhost:3000/dashboard/posts/');
   } catch (error) {
     console.error('Error executing database query:', error);
+    
     res.status(500).json({ error: '寫失敗' });
   }
 });

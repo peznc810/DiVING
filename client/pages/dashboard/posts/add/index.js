@@ -1,47 +1,53 @@
 import { useEffect, useState } from 'react'
 import CKeditor from '@/components/post/ckeditor'
-import { Form, InputGroup, Stack, Container, Badge } from 'react-bootstrap'
+import { Form, InputGroup, Stack, Container } from 'react-bootstrap'
 import DiButton from '@/components/post/dibutton'
+import ImageUpload from '@/components/post/imageUpload'
+import TagGenerator from '@/components/post/tagGenerator'
+import DOMPurify from 'dompurify'
+
+// const tags = [
+//   { id: '1', name: '第一' },
+//   { id: '2', name: '第二' },
+// ]
 
 export default function Index() {
   const [editorLoaded, setEditorLoaded] = useState(false)
-  const [data, setData] = useState('')
-  const [tags, setTags] = useState([])
-  const [newTag, setNewTag] = useState('')
+
+  const [formData, setFormData] = useState({
+    user_id: '有值',
+    title: '123',
+    image: 'post.jpg',
+    content: '123',
+    tags: '1,2,3',
+  })
 
   useEffect(() => {
     setEditorLoaded(true)
   }, [])
 
-  const handleAddTag = () => {
-    if (newTag.trim() !== '' && !tags.includes(newTag)) {
-      setTags([...tags, newTag])
-      setNewTag('')
-    }
+  const handleFormDataChange = (fieldName) => (e) => {
+    const newData = e.target.value
+    setFormData({ ...formData, [fieldName]: newData })
   }
 
-  const handleRemoveTag = (tagToRemove) => {
-    const updatedTags = tags.filter((tag) => tag !== tagToRemove)
-    setTags(updatedTags)
-  }
-
-  const handleSubmit = async () => {
-    // 將文章數據和標籤提交到後端資料庫
-    const postData = {
-      title: '文章標題',
-      content: data,
-      tags: tags,
-    }
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    console.log('Submitting data:', formData)
 
     // 在這裡發送POST請求到後端保存數據
     try {
-      const response = await fetch('YOUR_BACKEND_API_URL', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(postData),
-      })
+      const response = await fetch(
+        'http://localhost:3005/api/post/edit/quill',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(formData),
+          // body: JSON.stringify(postData),
+        }
+      )
 
       // 處理後端返回的響應
       const result = await response.json()
@@ -53,70 +59,48 @@ export default function Index() {
 
   return (
     <>
-      <div style={{ height: '80px' }}></div>
       <Container>
-        <Form
-          className="my-3"
-          ame="form1"
-          action="http://localhost:3000"
-          method="post"
-        >
+        <Form className="my-3" onSubmit={handleSubmit}>
           <Form.Label>文字編輯器 Quill Rich Text Editor</Form.Label>{' '}
           <InputGroup className="mb-3">
             <InputGroup.Text id="inputGroup-sizing-default">
               文章標題
             </InputGroup.Text>
             <Form.Control
-              aria-label="Default"
+              name="title"
+              aria-label="title"
               aria-describedby="inputGroup-sizing-default"
+              onChange={handleFormDataChange('title')}
             />
           </InputGroup>
-          <div className="mb-3">
-            {tags.map((tag) => (
-              <Badge
-                key={tag}
-                pill
-                bg="primary"
-                className="mr-2"
-                onClick={() => handleRemoveTag(tag)}
-              >
-                {tag}
-              </Badge>
-            ))}
+          <div className="board">
+            <ImageUpload />
           </div>
-          <Form.Control
-            type="text"
-            placeholder="新增標籤..."
-            value={newTag}
-            onChange={(e) => setNewTag(e.target.value)}
+          <TagGenerator
+            value={'value'}
+            onChange={handleFormDataChange('tags')}
           />
-          <DiButton text={'新增標籤'} color="#ff9720" onClick={handleAddTag} />
           <br />
           <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
             <div className="h-screen w-screen flex items-center flex-col">
               {' '}
               <div className="h-full w-[90vw]">
-                <div>
-                  <CKeditor
-                    name="description"
-                    onChange={(data) => {
-                      setData(data)
-                    }}
-                    editorLoaded={editorLoaded}
-                  />{' '}
-                  {JSON.stringify(data)}{' '}
-                </div>
-              </div>{' '}
-            </div>{' '}
+                <CKeditor
+                  name="content"
+                  onChange={(data) => {
+                    const purifyData = DOMPurify.sanitize(data)
+                    // 將 CKEditor 中的 HTML 內容存儲到 formData.content
+                    setFormData({ ...formData, content: purifyData })
+                  }}
+                  editorLoaded={editorLoaded}
+                />
+              </div>
+            </div>
           </Form.Group>
           <Stack direction="horizontal" gap={3}>
             <div className="p-2 mx-auto">
               <DiButton text={'取消'} color={'#dc5151'} />
-              <DiButton
-                text={'儲存文章'}
-                color={'#013c64'}
-                onClick={handleSubmit}
-              />
+              <DiButton type={'submit'} text={'送出'} color={'#013c64'} />
             </div>
           </Stack>
         </Form>

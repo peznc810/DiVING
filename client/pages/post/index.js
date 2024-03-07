@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import loaderStyles from '@/styles/loader/loader_ripple.module.css'
-import post from '@/data/post/post.json'
 import { Container, Dropdown, Card, Col, Row, Stack } from 'react-bootstrap'
 import Caro from '@/components/post/caro'
 import DiButton from '@/components/post/dibutton'
@@ -21,10 +20,7 @@ export default function List() {
   const getPost = async () => {
     try {
       const res = await fetch('http://localhost:3005/api/post')
-      // 解析為JS的資料類型
       const data = await res.json()
-      // const data = post
-      console.log(data)
 
       if (Array.isArray(data)) {
         // 設定到狀態
@@ -71,7 +67,7 @@ export default function List() {
                     <div className="p-2">
                       {getTagsArray(v.tags).map((tag, index) => (
                         <Link key={index} href="/post/list" target="_blank">
-                          <DiButton text={`# ${tag}`} />
+                          <DiButton text={`# ${tag}`} color={'red'} />
                         </Link>
                       ))}
                     </div>

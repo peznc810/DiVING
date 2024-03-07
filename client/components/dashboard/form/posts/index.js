@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import styles from '../styles.module.scss'
 import Link from 'next/link'
 
@@ -8,6 +8,26 @@ import { MdOutlineLibraryAdd } from 'react-icons/md'
 import { FaEdit } from 'react-icons/fa'
 
 export default function Form() {
+  const [postList, setPostList] = useState([])
+
+  const getPost = async () => {
+    try {
+      const res = await fetch('http://localhost:3005/api/post')
+      const data = await res.json()
+      console.log(data)
+
+      if (Array.isArray(data)) {
+        setPostList(data)
+      }
+    } catch (e) {
+      console.error('Error fetching data from the server:', e)
+    }
+  }
+
+  useEffect(() => {
+    getPost()
+  }, [])
+
   return (
     <>
       <div className={`col-sm-8 p-0 rounded-end ${styles['form-container']}`}>
@@ -36,46 +56,35 @@ export default function Form() {
                 </thead>
                 <tbody>
                   {/* 之後改用map */}
-                  <tr className="align-middle">
-                    <td>1</td>
-                    <td>
-                      <Link
-                        href="#"
-                        className={`text-black ${styles['text-hover']}`}
-                      >
-                        潛水攝影的光影之旅
-                      </Link>
-                    </td>
-                    <td>2024/03/26 14:00</td>
-                    <td>
-                      <a href="/dashboard/posts/edit" className="btn">
-                        <FaEdit />
-                      </a>
-                      <button type="button" className="btn">
-                        <FaTrashCan />
-                      </button>
-                    </td>
-                  </tr>
-                  <tr className="align-middle">
-                    <td>1</td>
-                    <td>
-                      <Link
-                        href="#"
-                        className={`text-black ${styles['text-hover']}`}
-                      >
-                        潛水攝影的光影之旅
-                      </Link>
-                    </td>
-                    <td>2024/03/26 14:00</td>
-                    <td>
-                      <a href="/dashboard/posts/edit" className="btn">
-                        <FaEdit />
-                      </a>
-                      <button type="button" className="btn">
-                        <FaTrashCan />
-                      </button>
-                    </td>
-                  </tr>
+                  {postList.map((v, i) => (
+                    <>
+                      <tr className="align-middle" key={v.id}>
+                        <td>{i + 1}</td>
+                        <td>
+                          <Link
+                            href="#"
+                            className={`text-black ${styles['text-hover']}`}
+                          >
+                            {v.title}
+                          </Link>
+                        </td>
+                        <td>
+                          {new Date(v.published_at)
+                            .toLocaleDateString()
+                            .toString()
+                            .replace(/\//g, '-')}
+                        </td>
+                        <td>
+                          <Link href="/dashboard/posts/edit" className="btn">
+                            <FaEdit />
+                          </Link>
+                          <button type="button" className="btn">
+                            <FaTrashCan />
+                          </button>
+                        </td>
+                      </tr>
+                    </>
+                  ))}
                 </tbody>
               </table>
               <div className="d-flex justify-content-center">

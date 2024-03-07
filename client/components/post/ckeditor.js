@@ -21,6 +21,12 @@ export default function Ckeditor({ onChange, editorLoaded, name, value }) {
             const data = editor.getData()
             onChange(data)
           }}
+          // onBlur={(event, editor) => {
+          //   console.log('Blur.', editor)
+          // }}
+          // onFocus={(event, editor) => {
+          //   console.log('Focus.', editor)
+          // }}
         />
       ) : (
         <div>Editor loading</div>

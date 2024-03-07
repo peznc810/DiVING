@@ -140,7 +140,7 @@ export default function Detail() {
   )
   return (
     <>
-      <Link href="/post/list">回列表頁</Link>
+      <Link href="/post">回列表頁</Link>
       {isLoading ? loader : display}
       <hr />
     </>

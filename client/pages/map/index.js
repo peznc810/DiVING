@@ -13,7 +13,7 @@ import Image from 'next/image'
 
 export default function Test() {
   const [selectedDis, setSelectedDis] = useState(null) //被選的區的id
-  const [selectedDisName, setSelectedDisName] = useState('') //被選的區名 用來放標題
+  const [selectedDisName, setSelectedDisName] = useState('請點選地圖') //被選的區名 用來放標題
   const [disData, setDisData] = useState([]) //單個區的資料
   const [selectPoint, setSelectPointData] = useState([]) //被選的潛點的id
   const [selectedPointData, setSelectedPointData] = useState(null) //單潛點的資料

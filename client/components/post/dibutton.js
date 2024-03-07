@@ -1,6 +1,6 @@
-const DiButton = ({ text, onClick, color }) => {
+const DiButton = ({ type, text, onClick, color }) => {
   return (
-    <button type="button" onClick={onClick} color={color}>
+    <button type={type} onClick={onClick} color={color}>
       {text}
       <style jsx>{`
         button {
