@@ -17,6 +17,16 @@ export default function Filter({ product, setProduct }) {
   const [uniqueBrand, setUniqueBrand] = useState([])
   const [uniqueCategory, setUniqueCategory] = useState([])
 
+  const brand = [
+    'ADISI',
+    'Unidive',
+    'AROPEC',
+    'EXQUIS',
+    'PrincetonTec',
+    'MYSTIC',
+    'HeleiWaho',
+    'OceanMax',
+  ]
   // 去除重複的分類
   // const brand = useMemo(() => {
   //   const uniqueBrand = new Set([...product].map((v) => v.brand))
@@ -24,11 +34,11 @@ export default function Filter({ product, setProduct }) {
   // }, [product])
   // console.log(brand)
 
-  const brand = useMemo(() => {
-    const uniqueBrand = new Set(product.map((v) => v.brand))
-    return Array.from(uniqueBrand)
-  }, [product])
-  console.log(brand)
+  // const brand = useMemo(() => {
+  //   const uniqueBrand = new Set(product.map((v) => v.brand))
+  //   return Array.from(uniqueBrand)
+  // }, [product])
+  // console.log(brand)
 
   // const category = useMemo(() => {
   //   const uniqueCategory = new Set(product.map((v) => v.category))
@@ -70,15 +80,22 @@ export default function Filter({ product, setProduct }) {
                 <div className="form-check">
                   {brand.map((v) => {
                     return (
-                      <div key={v} className="form-check">
-                        <Link
+                      <div
+                        key={v}
+                        className="form-check"
+                        onClick={() => {
+                          setProduct((c) => c.filter((n) => n.brand === v))
+                          // setCurrentBrand(v) 當前的分類（要從index接收傳遞過來的狀態變更）
+                        }}
+                      >
+                        <div
                           href={`/product/${v}`}
                           className="form-check-label"
                           htmlFor="flexCheckDefault"
                           style={{ color: '#303132' }}
                         >
                           {v}
-                        </Link>
+                        </div>
                       </div>
                     )
                   })}

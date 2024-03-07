@@ -10,7 +10,7 @@ export default function OrderProduct({ product, setProduct }) {
   // 全部商品
   const sortAllProducts = () => {
     const allSortedProducts = [...product].sort((a, b) => a.id - b.id)
-    setProduct({ ...product, data: allSortedProducts })
+    setProduct(allSortedProducts)
   }
 
   // 上架時間
@@ -18,18 +18,18 @@ export default function OrderProduct({ product, setProduct }) {
     const newUpload = [...product].sort((a, b) => {
       return new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
     })
-    setProduct({ ...product, data: newUpload })
+    setProduct(newUpload)
   }
 
   // 金額
   const sortDescending = () => {
     const sortedProducts = [...product].sort((a, b) => b.price - a.price)
-    setProduct({ ...product, data: sortedProducts })
+    setProduct(sortedProducts)
   }
 
   const sortAscending = () => {
     const sortedProducts = [...product].sort((a, b) => a.price - b.price)
-    setProduct({ ...product, data: sortedProducts })
+    setProduct(sortedProducts)
   }
 
   return (
