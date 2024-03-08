@@ -1,7 +1,7 @@
 import * as fs from 'fs';
 import createError from 'http-errors';
 import express from 'express';
-// import session from 'express-session';
+import session from 'express-session';
 import cors from 'cors'
 import { join, dirname } from 'path';
 import cookieParser from 'cookie-parser';
@@ -12,8 +12,8 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 // 引入.env檔
-// import 'dotenv/config.js'
-// const secretKey = process.env.SECRET_KEY;
+import 'dotenv/config.js'
+const secretKey = process.env.SECRET_KEY;
 
 
 const app = express();
@@ -32,15 +32,15 @@ app.use(
 )
 
 // session的設定
-// app.use(session({
-//   secret: secretKey,
-//   resave: false,
-//   saveUninitialized: true,
-//   cookie: {
-//     // Cookie的有效週期, 以毫秒為單位
-//     maxAge: 86400000,
-//   },
-// }))
+app.use(session({
+  secret: secretKey,
+  resave: false,
+  saveUninitialized: true,
+  cookie: {
+    // Cookie的有效週期, 以毫秒為單位
+    maxAge: 86400000,
+  },
+}))
 
 // View engine setup
 app.set('views', join(__dirname, 'views'));
