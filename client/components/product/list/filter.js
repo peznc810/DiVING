@@ -8,7 +8,12 @@ import { MdScubaDiving } from 'react-icons/md'
 import { MdOutlineCategory } from 'react-icons/md'
 import { MdOutlinePriceCheck } from 'react-icons/md'
 
-export default function Filter({ product, setProduct, setCurrentSort, a }) {
+export default function Filter({
+  product,
+  setProduct,
+  setCurrentSort,
+  originalData,
+}) {
   console.log(product)
 
   const [buttonStyles, setButtonStyles] = useState({
@@ -68,8 +73,10 @@ export default function Filter({ product, setProduct, setCurrentSort, a }) {
                         key={v}
                         className="form-check"
                         onClick={() => {
-                          console.log(a)
-                          setProduct(a.data.filter((n) => n.brand === v))
+                          console.log(originalData)
+                          setProduct(
+                            originalData.data.filter((n) => n.brand === v)
+                          )
                           setCurrentSort(v)
                         }}
                       >
@@ -116,7 +123,10 @@ export default function Filter({ product, setProduct, setCurrentSort, a }) {
                         key={v}
                         className="form-check"
                         onClick={() => {
-                          setProduct((c) => c.filter((n) => n.category === v))
+                          console.log(originalData)
+                          setProduct(
+                            originalData.data.filter((n) => n.category === v)
+                          )
                           setCurrentSort(v)
                         }}
                       >

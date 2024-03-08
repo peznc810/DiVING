@@ -17,7 +17,7 @@ import { FaCartPlus } from 'react-icons/fa'
 
 export default function List() {
   const [product, setProduct] = useState([])
-  const [a, setA] = useState([])
+  const [originalData, setOriginalData] = useState([])
 
   const [currentSort, setCurrentSort] = useState('')
 
@@ -55,7 +55,7 @@ export default function List() {
       })
       .then((data) => {
         setProduct(data ? data.data : [])
-        setA(data)
+        setOriginalData(data)
       })
   }, [])
 
@@ -117,7 +117,7 @@ export default function List() {
                         product={product}
                         setProduct={setProduct}
                         setCurrentSort={setCurrentSort}
-                        a={a}
+                        originalData={originalData}
                       />
                     </div>
                   </div>
