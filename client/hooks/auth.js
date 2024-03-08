@@ -5,7 +5,7 @@ export const AuthContext = createContext(null)
 
 export function AuthProvider({ children }) {
   const router = useRouter()
-  const initUser = {
+  const initAuth = {
     id: '',
     userEmail: '',
     userName: '',
@@ -13,7 +13,7 @@ export function AuthProvider({ children }) {
     isAuth: false,
   }
   // 使用者的全域狀態
-  const [auth, setAuth] = useState(initUser)
+  const [auth, setAuth] = useState(initAuth)
 
   // 表單使用的錯誤訊息
   const [errorMsg, setMsg] = useState('')
@@ -120,7 +120,7 @@ export function AuthProvider({ children }) {
       .then((response) => response.json())
       .then((result) => {
         // 把狀態中的user資料清除
-        setAuth(initUser)
+        setAuth(initAuth)
         console.log(result)
         localStorage.removeItem('token')
       })
@@ -218,6 +218,7 @@ export function AuthProvider({ children }) {
           } else {
             // token過期，跳轉至登入頁面
             router.push(loginRoute)
+            setAuth(initAuth)
             localStorage.removeItem('token')
             // 之後可能改用alert之類的提示訊息處理
             console.warn(result.msg)

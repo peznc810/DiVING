@@ -177,6 +177,21 @@ router.post('/google-register', async (req, res) => {
     })
 })
 
+// 讀取profile
+router.get('/:id', checkToken,async (req, res) => {
+  console.log(req.params)
+  const id = req.params.id
+  const [[userData]] = await db.execute(
+    'SELECT * FROM `users` WHERE `id` = ? ',
+    [id]
+  )
+  if(userData){
+    res.status(200).json({ status:'success',msg: 'test', userData })
+  } else {
+    res.status(404).json({status:'error',msg:'查無資料'})
+  }
+})
+
 
 // 確認token資料
 function checkToken(req, res, next) {
