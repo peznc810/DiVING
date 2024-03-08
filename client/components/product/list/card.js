@@ -7,7 +7,7 @@ import { GoHeartFill } from 'react-icons/go'
 import { FaCartPlus } from 'react-icons/fa'
 
 export default function Card({ product, setProduct, value }) {
-  console.log(value)
+  // console.log(value)
 
   const handleMouseEnter = () => {
     setIsHovered(true)

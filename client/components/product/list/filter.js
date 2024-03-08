@@ -8,7 +8,7 @@ import { MdScubaDiving } from 'react-icons/md'
 import { MdOutlineCategory } from 'react-icons/md'
 import { MdOutlinePriceCheck } from 'react-icons/md'
 
-export default function Filter({ product, setProduct, setCurrentSort }) {
+export default function Filter({ product, setProduct, setCurrentSort, a }) {
   console.log(product)
 
   const [buttonStyles, setButtonStyles] = useState({
@@ -68,8 +68,9 @@ export default function Filter({ product, setProduct, setCurrentSort }) {
                         key={v}
                         className="form-check"
                         onClick={() => {
-                          setProduct((c) => c.filter((n) => n.brand === v))
-                          setCurrentSort(v) //當前的分類（要從index接收傳遞過來的狀態變更）
+                          console.log(a)
+                          setProduct(a.data.filter((n) => n.brand === v))
+                          setCurrentSort(v)
                         }}
                       >
                         <div
@@ -116,7 +117,7 @@ export default function Filter({ product, setProduct, setCurrentSort }) {
                         className="form-check"
                         onClick={() => {
                           setProduct((c) => c.filter((n) => n.category === v))
-                          setCurrentSort(v) //當前的分類（要從index接收傳遞過來的狀態變更）
+                          setCurrentSort(v)
                         }}
                       >
                         <div
