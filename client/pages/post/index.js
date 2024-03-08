@@ -4,6 +4,7 @@ import loaderStyles from '@/styles/loader/loader_ripple.module.css'
 import { Container, Dropdown, Card, Col, Row, Stack } from 'react-bootstrap'
 import Caro from '@/components/post/caro'
 import DiButton from '@/components/post/dibutton'
+import DOMPurify from 'dompurify'
 
 export default function List() {
   const [postList, setPostList] = useState([])
@@ -62,7 +63,15 @@ export default function List() {
                     {v.user_id} ﹡ {v.published_at}
                   </Card.Subtitle>
                   <Card.Title>{v.title}</Card.Title>
-                  <Card.Text className="text-truncate">{v.content}</Card.Text>
+                  <Card.Text className="text-truncate">
+                    {' '}
+                    <div
+                      dangerouslySetInnerHTML={{
+                        __html: DOMPurify.sanitize(v.content),
+                      }}
+                    ></div>
+                    {/* {v.content} */}
+                  </Card.Text>
                   <Stack direction="horizontal" gap={3}>
                     <div className="p-2">
                       {getTagsArray(v.tags).map((tag, index) => (

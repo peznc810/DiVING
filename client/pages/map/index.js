@@ -11,6 +11,8 @@ import ImageViewModal from '@/components/map/imageViewModal'
 import styles from './svg.module.scss'
 import Image from 'next/image'
 
+const AUTHORIZATION_KEY = 'CWA-12A9C569-394E-4169-AD84-A7592FBBEAF1'
+
 export default function Test() {
   const [selectedDis, setSelectedDis] = useState(null) //被選的區的id
   const [selectedDisName, setSelectedDisName] = useState('請點選地圖') //被選的區名 用來放標題
@@ -57,6 +59,8 @@ export default function Test() {
     // 更新選定的地圖
     setSelectedDis(clickedMap.id) //改變被選的區的id
     setSelectedDisName(clickedMap.name) //改變被選的區的名字
+    // const newData = e.target.value
+    // setFormData({ ...formData, [fieldName]: newData })
   }
 
   // 點擊潛點
@@ -73,6 +77,32 @@ export default function Test() {
     setShowModal(false)
   }
 
+  // 定義會使用到的資料狀態
+  const [currentWeather, setCurrentWeather] = useState({
+    StationName: '龍洞資料浮標',
+    StationID: '46694A',
+    WaveHeight: '2.1',
+    SeaTemperature: 19.2,
+    WindSpeed: '6.6',
+    WindDirection: '4.0',
+    WindDirectionDescription: 'N',
+    DateTime: '2024-03-08T03:00:00+08:00',
+  })
+
+  const handleWeatherClick = () => {
+    fetch(
+      `https://opendata.cwa.gov.tw/api/v1/rest/datastore/O-B0075-001?Authorization=${AUTHORIZATION_KEY}&format=JSON&StationID=${currentWeather.StationID}&WeatherElement=&sort=StationID`
+    )
+      .then((response) => response.json())
+      .then((data) => {
+        //定義 `locationData` 把回傳的資料中會用到的部分取出來
+        const locationData = data.records.seasurfaceobs.location[0]
+        //將風速（WDSD）和氣溫（TEMP）的資料取出
+        const weatherElements = locationData.weatherElement
+        console.log('data', data)
+      })
+  }
+
   return (
     <>
       <ImageViewModal
@@ -83,7 +113,7 @@ export default function Test() {
       />
       {/* Modal↑ */}
       <div style={{ height: '80px' }}></div>
-      <Container>
+      <Container className="mt-5">
         <Row>
           <Col xs={12} md={6} lg={6}>
             <div style={{ width: '100%', height: '100%' }}>
@@ -100,6 +130,7 @@ export default function Test() {
                     <g
                       className={styles['district']}
                       onClick={(e) => handleMapClick(e)}
+                      onChange={handleWeatherClick}
                     >
                       {/* 1墾丁 */}
                       <path
@@ -232,22 +263,29 @@ export default function Test() {
               </div>
             </div>
           </Col>
-          <Col>
+          <Col className={styles['weather']}>
             <h3>{selectedDisName}</h3>
-            <Stack direction="horizontal" gap={3}>
+            <h4>{currentWeather.StationName}</h4>
+            <button onClick={handleWeatherClick}>取得氣象API</button>
+            <Stack
+              direction="horizontal"
+              gap={3}
+              className={styles['weather-detail']}
+            >
               <div className="p-2">
                 {' '}
                 <FaWind />
-                25
+                {currentWeather.WindDirection}
               </div>
               <div className="p-2">
                 <LuWaves />
-                123
+                {currentWeather.WaveHeight}
               </div>
               <div className="p-2">
                 <TiWeatherCloudy />
-                123
+                {Math.round(currentWeather.SeaTemperature)}
               </div>
+              <div>{currentWeather.WindSpeed}</div>
               <div className="p-2">
                 <BsFillSunsetFill />
                 123

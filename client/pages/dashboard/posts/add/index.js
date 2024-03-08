@@ -91,6 +91,7 @@ export default function Index() {
                     const purifyData = DOMPurify.sanitize(data)
                     // 將 CKEditor 中的 HTML 內容存儲到 formData.content
                     setFormData({ ...formData, content: purifyData })
+                    console.log(purifyData)
                   }}
                   editorLoaded={editorLoaded}
                 />

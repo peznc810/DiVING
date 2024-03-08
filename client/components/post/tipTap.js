@@ -21,7 +21,6 @@ export default function Tiptap() {
           const data = editor.getJSON()
         }}
       />
-      
     </>
   )
 }

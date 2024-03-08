@@ -8,7 +8,9 @@ const router = express.Router();
   //讀取所有文章
   router.get('/', async (req, res) => {
     try {
-      const [result, _fields] = await db.execute('SELECT * FROM post');
+      const [result, field] = await db.execute('SELECT * FROM post');
+
+      console.log(field);
       res.json(result);
     } catch (error) {
       console.error('Error executing database query:', error);

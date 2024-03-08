@@ -35,7 +35,13 @@ export default function Quill() {
 
   return (
     <>
-      <QuillEditor modules={quillModules} formats={quillFormats} />
+      <QuillEditor
+        modules={quillModules}
+        formats={quillFormats}
+        onChange={(data) => {
+          console.log(data)
+        }}
+      />
     </>
   )
 }

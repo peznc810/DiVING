@@ -6,7 +6,6 @@ import Link from 'next/link'
 import styles from '@/styles/loader/loader_ripple.module.css'
 import postData from '@/data/post/post.json'
 import DiButton from '@/components/post/dibutton'
-
 import { Container, Card, Col, Row, Stack } from 'react-bootstrap'
 
 export default function Detail() {
@@ -77,8 +76,8 @@ export default function Detail() {
     <>
       <hr />
       <Container>
-        <Row>
-          <Col lg={3}>
+        <Row className="justify-content-evenly">
+          <Col lg={3} sm={3}>
             <h4>相關文章</h4>
             <Stack>
               <Row xs={1} className="g-4">
@@ -107,7 +106,7 @@ export default function Detail() {
                                 href="/post/list"
                                 target="_blank"
                               >
-                                <DiButton text={`# ${tag}`} />
+                                <DiButton text={`# ${tag}`} color={'green'} />
                               </Link>
                             ))}
                           </div>
@@ -119,10 +118,10 @@ export default function Detail() {
               </Row>
             </Stack>
           </Col>
-          <Col xs={9} className="bg-light">
+          <Col xs={8} className="bg-light p-4">
             <p>{post.published}</p>
             <h3>{post.title}</h3>
-            <p>作者:{post.author}</p>
+            <p>作者:{post.user_id}</p>
             <div className="p-2">
               {' '}
               {getTagsArray(post.tags).map((tag, index) => (
@@ -132,7 +131,12 @@ export default function Detail() {
               ))}
             </div>
             <Card.Img variant="top" src={`/images/post/${post.image}`} />
-            <p>內文:{post.content}</p>
+            <div
+              className="m-4"
+              dangerouslySetInnerHTML={{
+                __html: post.content,
+              }}
+            ></div>
           </Col>
         </Row>
       </Container>
@@ -140,7 +144,9 @@ export default function Detail() {
   )
   return (
     <>
-      <Link href="/post">回列表頁</Link>
+      <Container>
+        <Link href="/post">回列表頁</Link>
+      </Container>
       {isLoading ? loader : display}
       <hr />
     </>
