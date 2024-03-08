@@ -14,8 +14,6 @@ const linePayClient = createLinePayClient({
   env: process.env.NODE_ENV,
 })
 
-
-
 const app = express();
 
 app.use(express.json());
@@ -26,16 +24,17 @@ router.post("/create-order", async(req, res)=>{
   const orderId =uuidv4()
   const packgeId = uuidv4()
 
+  const { totalPrice, lineProducts, products } = req.body;
   //傳送給line pay的資料
   const order = {
     orderId: orderId,
     currency: "TWD",
-    amount: req.body.totalPrice,
+    amount: totalPrice,
     packages: [
       {
         id: packgeId,
-        amount: req.body.totalPrice,
-        products: req.body.products,
+        amount: totalPrice,
+        products: lineProducts,
       },
     ],
     options:{ display: {locale:"zh_TW"}},
@@ -45,7 +44,7 @@ router.post("/create-order", async(req, res)=>{
   const dbOrder = {
     id: orderId,
     user_id : userId,
-    total_price : req.body.totalPrice,
+    total_price : totalPrice,
     payment: "Line pay",
     shipping: "宅配",
     status: "建立成功",
@@ -54,142 +53,93 @@ router.post("/create-order", async(req, res)=>{
 
   addOrder(dbOrder)
 
-  const products=req.body.products
-
   // 寫入資料庫的資料 order_detail
-  products.forEach(product => {
+  products.forEach(({ product_id, lesson_id, order_time, num }) => {
     const dbOrderDetail = {
       order_id: orderId,
-      product_id: product.product_id,
-      lesson_id: product.lesson_id,
-      order_time: product.order_time,
-      num: product.num,
-    }
-    addOrderDetail(dbOrderDetail)
+      product_id,
+      lesson_id,
+      order_time,
+      num,
+    };
+    addOrderDetail(dbOrderDetail);
   });
 
   res.json({status: "success", data: {order},dbOrder :{dbOrder}})
 })
 
-router.get("/reserve", async(req,res)=>{
-  if(!req.query.orderId){
-    return res.json({status:"error", message: "order id不存在"})
-  }
+router.get("/reserve", async (req, res) => {
+  try {
+    if (!req.query.orderId) {
+      return res.json({ status: "error", message: "order id不存在" });
+    }
 
-  const orderId = req.query.orderId
+    const orderId = req.query.orderId;
+    const redirectUrls = {
+      confirmUrl: process.env.REACT_REDIRECT_CONFIRM_URL,
+      cancelUrl: process.env.REACT_REDIRECT_CANCEL_URL,
+    };
 
-  const redirectUrls = {
-    confirmUrl: process.env.REACT_REDIRECT_CONFIRM_URL,
-    cancelUrl: process.env.REACT_REDIRECT_CANCEL_URL,
-  }
+    const [[orderRecord]] = await getOrder(orderId);
+    if (!orderRecord) {
+      return res.status(400).json({ status: "error", message: "無法找到該訂單" });
+    }
 
-  let orderRecord, error
+    console.log(orderRecord);
 
-  await getOrder(orderId).then(result => {
-    [[orderRecord]] = result;
-  }).catch(err => {
-    error = err
-  })
-  if (error) {
-    res.status(400).json(error)
-  }
-
-
-  const order = JSON.parse(orderRecord.order_info)
-
-  console.log(`獲得訂單資料，內容如下：`)
-  // console.log(order)
-
-  try{
+    const order = JSON.parse(orderRecord.order_info);
 
     const linePayResponse = await linePayClient.request.send({
       body: { ...order, redirectUrls },
-    })
+    });
 
-    const reservation = JSON.parse(JSON.stringify(order))
+    const reservation = {
+      ...order,
+      returnCode: linePayResponse.body.returnCode,
+      returnMessage: linePayResponse.body.returnMessage,
+      transactionId: linePayResponse.body.info.transactionId,
+      paymentAccessToken: linePayResponse.body.info.paymentAccessToken,
+    };
 
-    reservation.returnCode = linePayResponse.body.returnCode
-    reservation.returnMessage = linePayResponse.body.returnMessage
-    reservation.transactionId = linePayResponse.body.info.transactionId
-    reservation.paymentAccessToken =
-      linePayResponse.body.info.paymentAccessToken
+    await updateOrder(JSON.stringify(reservation), reservation.transactionId, orderId);
+    
+    res.redirect(linePayResponse.body.info.paymentUrl.web);
+  } catch (error) {
+    console.log("發生錯誤", error);
+    res.status(500).json({ status: "error", message: "伺服器錯誤" });
+  }
+});
 
-    console.log(`預計付款資料(Reservation)已建立。資料如下:`)
-    // console.log(reservation)
+router.get("/confirm", async (req, res) => {
+  try {
+    const transactionId = req.query.transactionId;
 
-    // res.redirect(linePayResponse.body.info.paymentUrl.web)
-
-    await updateOrder(JSON.stringify(reservation), reservation.transactionId, orderId).then(    res.redirect(linePayResponse.body.info.paymentUrl.web)
-    ).catch(err => {
-      error = err
-    })
-    if (error) {
-      res.status(400).json(error)
+    const [[dbOrder]] = await getOrderByTid(transactionId);
+    if (!dbOrder) {
+      return res.status(400).json({ status: "error", message: "無法找到該訂單" });
     }
 
-  }catch(e){
-    console.log("error", e);
-  }
-})
-
-router.get("/confirm", async(req, res)=>{
-  const transactionId = req.query.transactionId
-
-  let dbOrder, error
-
-  await getOrderByTid(transactionId).then(result => {
-    [[dbOrder]] = result;
-  }).catch(err => {
-    error = err
-  })
-  if (error) {
-    res.status(400).json(error)
-  }
-
-  const transaction = JSON.parse(dbOrder.reservation)
-
-  console.log(transaction);
-
-  const amount = transaction.amount
-
-  try {
+    const transaction = JSON.parse(dbOrder.reservation);
+    const amount = transaction.amount;
 
     const linePayResponse = await linePayClient.confirm.send({
-      transactionId: transactionId,
+      transactionId,
       body: {
         currency: 'TWD',
-        amount: amount,
+        amount,
       },
-    })
+    });
 
-    let status = "paid"
+    let status = linePayResponse.body.returnCode === '0000' ? 'paid' : 'fail';
 
-    if (linePayResponse.body.returnCode !== '0000') {
-      status = 'fail'
-    }
+    await updateOrderStatus(status, linePayResponse.body.returnCode, JSON.stringify(linePayResponse.body), dbOrder.id);
 
-    await updateOrderStatus(status, linePayResponse.body.returnCode, JSON.stringify(linePayResponse.body), dbOrder.id)
-
-    return res.json({ status: 'success', data: linePayResponse.body })
-  }catch(error){
-    return res.json({status: "fail", data: error.data})
+    return res.json({ status: 'success', data: linePayResponse.body });
+  } catch (error) {
+    console.log("錯誤", error);
+    return res.status(500).json({ status: "fail", message: "伺服器錯誤" });
   }
-})
-
-router.get("/check-transaction", async( req,res)=>{
-  const transactionId = req.query.transactionId
-
-  try{
-    const linePayResponse = await linePayClient.checkPaymentStatus.send({
-      transactionId: transactionId,
-      params: {},
-    })
-
-    res.json(linePayResponse.body)
-  }catch(e){
-    res.json({ error: e })
-  }
-})
+});
 
 function getOrder(orderId) {
   return new Promise(async (resolve, reject) => {
@@ -218,131 +168,71 @@ function getOrderByTid(transactionId) {
 }
 
 function updateOrder(reservation, transaction_id, orderId){
-  return new Promise(async (resolve, reject)=>{
-    await db.execute("UPDATE `purchase_order` SET `reservation` = ?, `transaction_id` = ? WHERE `id` =?;",[reservation, transaction_id, orderId])
-  })
+  return db.execute("UPDATE `purchase_order` SET `reservation` = ?, `transaction_id` = ? WHERE `id` =?;",[reservation, transaction_id, orderId])
 }
 
-function updateOrderStatus(status, return_code, confirm, orderId){
-  return new Promise(async (resolve, reject)=>{
-    await db.execute("UPDATE `purchase_order` SET `status` = ?, `return_code` = ?, `confirm` = ? WHERE `id` =?;",[status, return_code, confirm, orderId])
-  })
+function updateOrderStatus(status, return_code, confirm, orderId) {
+  return db.execute("UPDATE `purchase_order` SET `status` = ?, `return_code` = ?, `confirm` = ? WHERE `id` = ?;", [status, return_code, confirm, orderId]);
 }
 
 function addOrder(dbOrder){
   const now = new Date();
-
   const year = now.getFullYear();
-  const month = String(now.getMonth() + 1).padStart(2, '0'); // 月份从0开始，需要加1，并且使用padStart()函数补齐两位
+  const month = String(now.getMonth() + 1).padStart(2, '0');
   const day = String(now.getDate()).padStart(2, '0');
   const hours = String(now.getHours()).padStart(2, '0');
   const minutes = String(now.getMinutes()).padStart(2, '0');
   const seconds = String(now.getSeconds()).padStart(2, '0');
 
   const datetimeNow = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
-  return new Promise(async (resolve, reject) => {
-    const [result] = await db.execute(
+  
+  return new Promise((resolve, reject) => {
+    db.execute(
       'INSERT INTO `purchase_order`(id, user_id, total_price, payment, shipping, status, order_info, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?);',[
         dbOrder.id, dbOrder.user_id, dbOrder.total_price, dbOrder.payment, dbOrder.shipping, dbOrder.status, dbOrder.order_info, datetimeNow
       ]
-    );
-    if (result) {
-      resolve(result)
-    } else {
-      reject({ status: "error", msg: "err" })
-    }
-  })
-}
-
-function addOrderDetail(dbOrderDetail){
-  return new Promise(async (resolve, reject) => {
-    if(dbOrderDetail.product_id){
-      const [result] = await db.execute(
-        'INSERT INTO `order_detail`(order_id, product_id, num) VALUES (?, ?, ?);',[
-          dbOrderDetail.order_id, dbOrderDetail.product_id, dbOrderDetail.num
-        ]
-      );
+    ).then(([result]) => {
       if (result) {
-        resolve(result)
+        resolve(result);
       } else {
-        reject({ status: "error", msg: "err" })
+        reject({ status: "error", msg: "err" });
       }
-    }else if(dbOrderDetail.lesson_id){
-      const [result] = await db.execute(
-        'INSERT INTO `order_detail`(order_id, lesson_id, num, order_time) VALUES (?, ?, ?, ?);',[
-          dbOrderDetail.order_id, dbOrderDetail.lesson_id, dbOrderDetail.num, dbOrderDetail.order_time
-        ]
-      );
-      if (result) {
-        resolve(result)
-      } else {
-        reject({ status: "error", msg: "err" })
-      }
-    }
+    })
+    .catch(error => {
+      reject({ status: "error", msg: error.message });
+    });
+    
   })
 }
 
-//測試用
-router.get("/", async(req,res)=>{
-  let test, error
-  await getTest(req).then(result => {
-    test = result;
-  }).catch(err => {
-    error = err
-  })
-  if (error) {
-    res.status(400).json(error)
-  }
-  if (test) {
-    res.status(200).json(test)
-  }
-})
+function addOrderDetail(dbOrderDetail) {
+  return new Promise((resolve, reject) => {
+    let sql = '';
+    let values = [];
 
-router.post("/", async(req, res)=>{
-
-  let test, error
-  const {user_name, user_phone} = req.body
-  await addTest(user_name,user_phone).then(result => {
-    test = result;
-  }).catch(err => {
-    error = err
-  })
-  if (error) {
-    res.status(400).json(error)
-  }
-  if (test) {
-    res.status(200).json(test)
-  }
-})
-
-function getTest(req) {
-  return new Promise(async (resolve, reject) => {
-    const [result] = await db.execute(
-      'SELECT * FROM `test`'
-    );
-    if (result) {
-      resolve(result)
+    if (dbOrderDetail.product_id) {
+      sql = 'INSERT INTO `order_detail`(order_id, product_id, num) VALUES (?, ?, ?);';
+      values = [dbOrderDetail.order_id, dbOrderDetail.product_id, dbOrderDetail.num];
+    } else if (dbOrderDetail.lesson_id) {
+      sql = 'INSERT INTO `order_detail`(order_id, lesson_id, num, order_time) VALUES (?, ?, ?, ?);';
+      values = [dbOrderDetail.order_id, dbOrderDetail.lesson_id, dbOrderDetail.num, dbOrderDetail.order_time];
     } else {
-      reject({ status: "error", msg: "err" })
+      reject({ status: "error", msg: "Missing product_id or lesson_id" });
+      return;
     }
-  })
+
+    db.execute(sql, values)
+      .then(([result]) => {
+        if (result) {
+          resolve(result);
+        } else {
+          reject({ status: "error", msg: "Insertion failed" });
+        }
+      })
+      .catch(error => {
+        reject({ status: "error", msg: error.message });
+      });
+  });
 }
-
-function addTest(user_name, user_phone){
-  return new Promise(async (resolve, reject) => {
-    const [result] = await db.execute(
-      'INSERT INTO `test`(user_name, user_phone) VALUES (?, ?);',[
-        user_name, user_phone
-      ]
-    );
-    if (result) {
-      resolve(result)
-    } else {
-      reject({ status: "error", msg: "err" })
-    }
-  })
-}
-
-
 
 export default router
