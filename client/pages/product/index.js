@@ -1,4 +1,4 @@
-import { use, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import Stars from '@/components/product/star/star'
 import Card from '@/components/product/list/card'
@@ -9,7 +9,7 @@ import Pagination from '@/components/product/list/pagination'
 import Link from 'next/link'
 
 import Breadcrumb from 'react-bootstrap/Breadcrumb'
-
+import { FaHome } from 'react-icons/fa'
 import { MdScubaDiving } from 'react-icons/md'
 import { MdOutlineCategory } from 'react-icons/md'
 import { GoHeartFill } from 'react-icons/go'
@@ -19,7 +19,8 @@ export default function List() {
   const [product, setProduct] = useState([])
   const [originalData, setOriginalData] = useState([])
 
-  const [currentSort, setCurrentSort] = useState('')
+  const [currentBrand, setCurrentBrand] = useState('')
+  const [currentCategory, setCurrentCategory] = useState('')
 
   console.log(product)
 
@@ -61,43 +62,27 @@ export default function List() {
 
   return (
     <>
-      {/* header圖片 */}
-      {/* <div className="header-container">
-        <img src="/images/product/images/test/header1.png" />
-      </div> */}
       <div className="container-1200">
         {/* 麵包屑 */}
-        {/* <div className="my-3 d-flex mt-5">
-          <div className="d-flex align-items-center">
-            <Link
-              href="/product/list"
-              className="p-2"
-              style={{ color: '#303132' }}
-            >
-              <MdScubaDiving />
-              品牌
-            </Link>
-            <div className="p-1">&gt;</div>
-            <Link
-              href="/product/list"
-              className="p-2"
-              style={{ color: '#303132' }}
-            >
-              <MdOutlineCategory /> 商品類別
-            </Link>
-          </div>
-        </div> */}
         <Breadcrumb>
-          <Breadcrumb.Item href="#">Home</Breadcrumb.Item>
-          <Breadcrumb.Item href="https://getbootstrap.com/docs/4.0/components/breadcrumb/">
-            Library
+          <Breadcrumb.Item href="http://localhost:3000">
+            <FaHome />
           </Breadcrumb.Item>
-          <Breadcrumb.Item active>Data</Breadcrumb.Item>
+          <Breadcrumb.Item href="http://localhost:3000/product">
+            商品列表
+          </Breadcrumb.Item>
+
+          {currentBrand && (
+            <Breadcrumb.Item href="">{currentBrand}</Breadcrumb.Item>
+          )}
+          {currentCategory && (
+            <Breadcrumb.Item href="">{currentCategory}</Breadcrumb.Item>
+          )}
         </Breadcrumb>
 
         <div className="row mt-2 mb-3">
           <div className="card-text d-flex justify-content-between align-items-center">
-            <h6 className="ps-3 my-1">當前的分類：{currentSort}</h6>
+            <h6 className="ps-3 my-1">所有商品（70）</h6>
             {/* 排序 */}
             <Order product={product} setProduct={setProduct} />
           </div>
@@ -116,7 +101,8 @@ export default function List() {
                       <Filter
                         product={product}
                         setProduct={setProduct}
-                        setCurrentSort={setCurrentSort}
+                        setCurrentBrand={setCurrentBrand}
+                        setCurrentCategory={setCurrentCategory}
                         originalData={originalData}
                       />
                     </div>

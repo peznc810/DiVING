@@ -34,7 +34,7 @@ export default function OrderProduct({ product, setProduct }) {
 
   return (
     <>
-      <div className="d-flex p-2 justify-content-end align-items-center">
+      <div className="d-flex p-3 justify-content-between align-items-center">
         <div className="toolbar">
           <button className="btn" id="sidebarToggle">
             隱藏篩選條件 <i className="bi bi-toggles"></i>

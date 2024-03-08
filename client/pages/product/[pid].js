@@ -1,12 +1,13 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 
 import Stars from '@/components/product/star/star'
 import Carousel from '@/components/product/carousel'
 import Switch from '@/components/product/detail/switch'
 import ProductRecommond from '@/components/product/detail/product-recommond'
-import Link from 'next/link'
 
+import Breadcrumb from 'react-bootstrap/Breadcrumb'
+import { FaHome } from 'react-icons/fa'
 import { MdScubaDiving } from 'react-icons/md'
 import { MdOutlineCategory } from 'react-icons/md'
 import { GoHeartFill } from 'react-icons/go'
@@ -60,26 +61,17 @@ export default function Detail() {
     <>
       <div className="container-1200">
         {/* 麵包屑 */}
-        <div className="my-3 d-flex mt-5">
-          <div className="d-flex align-items-center">
-            <Link
-              href="/product/list"
-              className="p-2"
-              style={{ color: '#303132' }}
-            >
-              <MdScubaDiving />
-              品牌
-            </Link>
-            <div className="p-1">&gt;</div>
-            <Link
-              href="/product/list"
-              className="p-2"
-              style={{ color: '#303132' }}
-            >
-              <MdOutlineCategory /> 商品類別
-            </Link>
-          </div>
-        </div>
+        <Breadcrumb>
+          <Breadcrumb.Item href="http://localhost:3000">
+            <FaHome />
+          </Breadcrumb.Item>
+          <Breadcrumb.Item href="http://localhost:3000/product">
+            商品列表
+          </Breadcrumb.Item>
+          <Breadcrumb.Item href={`http://localhost:3000/product/${pid}`}>
+            商品細節
+          </Breadcrumb.Item>
+        </Breadcrumb>
 
         {/* 輪播 + 商品規格 */}
         <div className="row mt-5 mx-2 my-5">

@@ -12,10 +12,10 @@ export default function Filter({
   product,
   setProduct,
   setCurrentSort,
+  setCurrentBrand,
+  setCurrentCategory,
   originalData,
 }) {
-  console.log(product)
-
   const [buttonStyles, setButtonStyles] = useState({
     brand: '',
     category: '',
@@ -77,7 +77,7 @@ export default function Filter({
                           setProduct(
                             originalData.data.filter((n) => n.brand === v)
                           )
-                          setCurrentSort(v)
+                          setCurrentBrand(v)
                         }}
                       >
                         <div
@@ -127,7 +127,7 @@ export default function Filter({
                           setProduct(
                             originalData.data.filter((n) => n.category === v)
                           )
-                          setCurrentSort(v)
+                          setCurrentCategory(v)
                         }}
                       >
                         <div
