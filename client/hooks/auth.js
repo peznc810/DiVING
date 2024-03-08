@@ -5,14 +5,15 @@ export const AuthContext = createContext(null)
 
 export function AuthProvider({ children }) {
   const router = useRouter()
-  // 使用者的全域狀態
-  const [auth, setAuth] = useState({
+  const initUser = {
+    id: '',
     userEmail: '',
     userName: '',
-    tel: '',
     avatar: '',
     isAuth: false,
-  })
+  }
+  // 使用者的全域狀態
+  const [auth, setAuth] = useState(initUser)
 
   // 表單使用的錯誤訊息
   const [errorMsg, setMsg] = useState('')
@@ -42,7 +43,6 @@ export function AuthProvider({ children }) {
         if (result.status !== 'error') {
           // 登入成功要做的事
           let token = result.token
-          // console.log(token)
           // 解譯token
           const userData = parseJwt(token)
           // 把會員的資料放到狀態中，之後可以共享到其他頁面
@@ -81,7 +81,6 @@ export function AuthProvider({ children }) {
         if (result.status === 'success') {
           // 登入成功要做的事
           let token = result.token
-          // console.log(token)
           // 解譯token
           const userData = parseJwt(token)
           // 把會員的資料放到狀態中，之後可以共享到其他頁面
@@ -121,12 +120,7 @@ export function AuthProvider({ children }) {
       .then((response) => response.json())
       .then((result) => {
         // 把狀態中的user資料清除
-        setAuth({
-          userEmail: '',
-          userName: '',
-          tel: '',
-          isAuth: false,
-        })
+        setAuth(initUser)
         console.log(result)
         localStorage.removeItem('token')
       })
@@ -140,10 +134,6 @@ export function AuthProvider({ children }) {
     e.preventDefault()
     // 建立自定義表單，並把form的資料格式放入
     let formData = new FormData(e.target)
-    // console.log(e.target)
-    // for (let [key, value] of formData.entries()) {
-    //   console.log(`${key}: ${value}`)
-    // }
     // 把表單資料傳給後台
     let url = 'http://localhost:3005/api/users/register'
     fetch(url, {
@@ -228,7 +218,8 @@ export function AuthProvider({ children }) {
           } else {
             // token過期，跳轉至登入頁面
             router.push(loginRoute)
-            // 之後可能用alert之類的提示訊息處理
+            localStorage.removeItem('token')
+            // 之後可能改用alert之類的提示訊息處理
             console.warn(result.msg)
           }
         })
