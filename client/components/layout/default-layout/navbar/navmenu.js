@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import styles from './navmenu.module.scss'
 import { menuItems } from '@/config/nav-menu'
@@ -9,6 +9,12 @@ import { useAuth } from '@/hooks/auth'
 export default function NavMenu() {
   // const [hover, setHover] = useState(false)
   const [openIndex, setOpeIndex] = useState(false)
+  const [cartData, setCartData] = useState(null)
+
+  useEffect(() => {
+    const data = JSON.parse(localStorage.getItem('cart'))
+    setCartData(data)
+  }, [])
   // 帶入會員登入狀態專用
   const { auth } = useAuth()
 
@@ -136,7 +142,7 @@ export default function NavMenu() {
             <span
               className={`${styles.cartDot} position-absolute translate-middle badge rounded-pill bg-danger`}
             >
-              5
+              {cartData ? cartData.length : 0}
             </span>
           </button>
         </li>
