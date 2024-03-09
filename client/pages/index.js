@@ -17,7 +17,7 @@ export default function Index() {
   useEffect(() => {
     if (currentPage === '/') {
       document.body.style.backgroundColor = '#013c64'
-      // document.body.style.position = 'relative'
+      document.body.style.position = 'relative'
     }
     // 如果跳轉到其他頁面背景不會改變
     return () => {
