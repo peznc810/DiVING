@@ -116,6 +116,16 @@ export default function List() {
           )
         })
         break
+      case 'descending':
+        result.sort((a, b) => {
+          return b.price - a.price
+        })
+        break
+      case 'ascending':
+        result.sort((a, b) => {
+          return a.price - b.price
+        })
+        break
       default:
         break
     }
