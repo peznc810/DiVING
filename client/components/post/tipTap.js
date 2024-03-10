@@ -1,5 +1,5 @@
 'use client'
-
+// npm install @tiptap/react @tiptap/pm @tiptap/starter-kit
 import { useEditor, EditorContent } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
 import { Editor } from '@tiptap/core'

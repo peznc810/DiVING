@@ -1,9 +1,16 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import 'react-quill/dist/quill.snow.css' // Import Quill styles
 import dynamic from 'next/dynamic'
 const QuillEditor = dynamic(() => import('react-quill'), { ssr: false })
 
-export default function Quill() {
+export default function Quill({ initialContent }) {
+  const [content, setContent] = useState('')
+
+  useEffect(() => {
+    // Set the initial content when the component mounts
+    setContent(initialContent || '')
+  }, [initialContent])
+
   const quillModules = {
     toolbar: [
       [{ header: [1, 2, 3, false] }],
@@ -38,6 +45,7 @@ export default function Quill() {
       <QuillEditor
         modules={quillModules}
         formats={quillFormats}
+        value={content}
         onChange={(data) => {
           console.log(data)
         }}

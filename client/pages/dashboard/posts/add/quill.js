@@ -89,7 +89,6 @@ export default function Quill() {
                   </div>
                   <TagGenerator onChange={handleFormDataChange('tags')} />
                   <br />
-                  <br />
                   <Form.Group
                     className="mb-3"
                     controlId="exampleForm.ControlTextarea1"

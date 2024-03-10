@@ -62,7 +62,7 @@ export default function Form() {
                         <td>{i + 1}</td>
                         <td>
                           <Link
-                            href="#"
+                            href={`/post/${v.id}`}
                             className={`text-black ${styles['text-hover']}`}
                           >
                             {v.title}
@@ -75,10 +75,13 @@ export default function Form() {
                             .replace(/\//g, '-')}
                         </td>
                         <td>
-                          <Link href="/dashboard/posts/edit" className="btn">
+                          <Link
+                            href={`/dashboard/posts/edit/${v.id}`}
+                            className="btn"
+                          >
                             <FaEdit />
                           </Link>
-                          <button type="button" className="btn">
+                          <button type="button" className="btn" onClick={''}>
                             <FaTrashCan />
                           </button>
                         </td>

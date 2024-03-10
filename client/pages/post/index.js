@@ -127,8 +127,8 @@ export default function List() {
                   </Dropdown.Item>
                   <Dropdown.Item href="#/action-3">???</Dropdown.Item>
                 </Dropdown.Menu>
+                <input placeholder="Search" type="text" name="" id="" />
               </Dropdown>
-              <input placeholder="Search" type="text" name="" id="" />
             </Col>
           </Row>
         </div>

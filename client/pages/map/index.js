@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Container, Row, Col, Button, Card, Stack } from 'react-bootstrap'
+import { Container, Row, Col, Button, Stack, Image } from 'react-bootstrap'
 import aboutData from '@/data/map/about'
 import mapData from '@/data/map/map'
 import DiButton from '@/components/post/dibutton'
@@ -9,7 +9,6 @@ import { LuWaves } from 'react-icons/lu'
 import { BsFillSunsetFill } from 'react-icons/bs'
 import ImageViewModal from '@/components/map/imageViewModal'
 import styles from './svg.module.scss'
-import Image from 'next/image'
 
 const AUTHORIZATION_KEY = 'CWA-12A9C569-394E-4169-AD84-A7592FBBEAF1'
 
@@ -81,12 +80,12 @@ export default function Test() {
   const [currentWeather, setCurrentWeather] = useState({
     StationName: '龍洞資料浮標',
     StationID: '46694A',
-    WaveHeight: '2.1',
-    SeaTemperature: 19.2,
-    WindSpeed: '6.6',
-    WindDirection: '4.0',
+    WaveHeight: '',
+    SeaTemperature: '',
+    WindSpeed: '',
+    WindDirection: '',
     WindDirectionDescription: 'N',
-    DateTime: '2024-03-08T03:00:00+08:00',
+    DateTime: '',
   })
 
   const handleWeatherClick = () => {
@@ -95,37 +94,80 @@ export default function Test() {
     )
       .then((response) => response.json())
       .then((data) => {
-        //定義 `locationData` 把回傳的資料中會用到的部分取出來
-        const locationData = data.records.seasurfaceobs.location[0]
-        //將風速（WDSD）和氣溫（TEMP）的資料取出
-        const weatherElements = locationData.weatherElement
         console.log('data', data)
+
+        // 取得 SeaSurfaceObs 的資料
+        const seaSurfaceObs = data?.Records?.SeaSurfaceObs
+
+        if (seaSurfaceObs) {
+          // 取得第一個位置的氣象觀測時間資料
+          const observationTimes =
+            seaSurfaceObs.Location[0]?.StationObsTimes?.StationObsTime
+
+          if (observationTimes && observationTimes.length > 0) {
+            // 取得第一個觀測時間點的氣象元素資料
+            const weatherElements = observationTimes[0]?.WeatherElements
+
+            if (weatherElements) {
+              // 取得風速和波高資訊
+              // const dateTime = observationTimes[0]?.DateTime
+              const windSpeed = weatherElements?.PrimaryAnemometer?.WindSpeed
+              const WindDirection =
+                weatherElements?.PrimaryAnemometer?.WindDirection
+
+              const waveHeight = weatherElements?.WaveHeight
+              const SeaTemperature = weatherElements?.SeaTemperature
+
+              // 解析並重新格式化日期
+              const dateTimeString = observationTimes[0]?.DateTime
+              const formattedDateTime = dateTimeString
+                .toString()
+                .replace(/T/, ' ')
+                .replace(/:00\+08:00/, '')
+
+              setCurrentWeather((prevWeather) => ({
+                ...prevWeather,
+                DateTime: formattedDateTime,
+                WindSpeed: windSpeed,
+                WaveHeight: waveHeight,
+                SeaTemperature: SeaTemperature,
+                WindDirection: WindDirection,
+              }))
+            } else {
+              console.error('找不到氣象元素資訊')
+            }
+          } else {
+            console.error('找不到氣象觀測時間資訊')
+          }
+        } else {
+          console.error('找不到 SeaSurfaceObs 資訊')
+        }
+      })
+      .catch((error) => {
+        console.error('發生錯誤：', error)
       })
   }
 
   return (
     <>
-      <ImageViewModal
-        showModal={showModal}
-        handleClose={closeModal}
-        imageSrc={selectedImage}
-        fullscreen={'xxl-down'}
-      />
-      {/* Modal↑ */}
-      <div style={{ height: '80px' }}></div>
-      <Container className="mt-5">
-        <Row>
-          <Col xs={12} md={6} lg={6}>
-            <div style={{ width: '100%', height: '100%' }}>
+      <main className={styles['main']}>
+        <ImageViewModal
+          showModal={showModal}
+          handleClose={closeModal}
+          imageSrc={selectedImage}
+          fullscreen={'xxl-down'}
+        />
+        {/* Modal↑ */}
+        <div style={{ height: '30px' }}></div>
+        <Container className="my-5 p-3 border ">
+          <Row>
+            <Col xs={12} md={6} lg={6} className="border-end">
               <div className={styles['box']}>
-                <Image
-                  className={styles['bg']}
-                  src="/images/post/test.jpeg"
-                  alt="bg"
-                  width="100"
-                  height="100"
-                />
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 700">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 480 600"
+                  // id="drawable-illustration"
+                >
                   <g className="layer">
                     <g
                       className={styles['district']}
@@ -137,6 +179,7 @@ export default function Test() {
                         d="M197.48 454.08l.89-.12 1.15-1.51.22-1.28.46-.93.22-2.09.65-2.29.39-.54-.18-1.44-1.41-1.94h-.76l.04-8.8.18-1.98.47-1.98 1.05-1.16.68-2.13-.04-2.76.5-.93.11-8.52.65-1.87.94-3.39.54-3.39 1.09-.74 1.01.04.83.58.76-.04 1.55 1.24 1.7.08 1.98-.82 1.33.08 1.26.62 1.51.12 1.77-1.32.94-1.28.46-1.24.79-.82 2.16-1.36 2.45-2.1 1.98-.12 1.81-.46 1.66-.12.94.42.57 1.05.29 1.52.87.54 1.12.08 2.34-.58 1.09-.66.5-1.05.98-1.24 2.74.16 1.26.32 3.36 2.06 2.66 3.62 1.01.93h1.09l.72-.46 1.66-1.71.89-.36 1.73-1.71 1.51-.16 1.01.38 1.33 1.09 1.26-.46 1.83 1.39.55 2.81-.04 1.79.39.82 1.3.78 1.88.12 1.01.7.46.74v3.27l.39.62-.57.7-.33 1.13v2.99l-1.01 2.06-.11 1.59-1.12 1.44h-4.82l-.83.7-.9 2.06-.61.78-2.56.54-2.27.85-1.15-.12-.61.5v.85l-1.05 1.4-.5 1.79-2.31 3.31-.57 1.98-1.37 1.87v2.95l-1.05 1.55.37 1.75-1.44 3.3-.18 1.08 1.59 2.71.18 1.59 1.22 2.01.46 1.09.04 1.9-.26 1.01-.9.62-.61.89.15 1.32.39.77-.11.85 1.33 1.05 1.51 1.89 1.7 1.79.76 1.74-1.15 1.47-1.81.16-1.09.38-1.77 5-.47.74.04 1.2.87.62 1.81 1.83 1.66.73.9.04.5.89 1.44 1.31.15 3.26-1.51 1.09-.26.58 2.74 2.78.43 1.01-.79 1.47.07 1.27.9.35h1.3l2.38 1.24 1.19 1.23 2.45.42 2.27 2.09 1.01-.12 1.7-1.13 1.51-.24.17 1.46-.71 1.31-.04.91.41 1.4-.09 1.13-.88.95.17 2.26.34.91-.34 1.58.38 1.13-.34 1.81.67.63-.21.91-1.35 1v1.35l.59 1.94.42.54 1.39.54-.42.54-.09 1.31-1.01 1.26-.04 1.77.3.59.04 3.84 1.01 2.35-1.86 1.54v1.22l-1.6.81-.21 1.98-3.33 1.72-1.39.4-.13 1.17.3 1.17-.72 2.16.46 2.66 1.39 2.07 1.3 2.3-.08 1.21.88 1.17-.88.68h-1.26l-.67-.58-.38-2.35-.84.05-.97-.68-.3-.86-1.22-1.13-.42-.77-.84.32-.93-.09-.93-1.09-1.64-.63-1.47.09-.76-.81-1.13-.49-.5-.95-.97-.18-.71.86-.93.37-.63 1.35.21 1.94-1.01.72-.04 1.17-1.86.32-.46-.27-.93-1.4-.26-1.13-.8.23-.26-.63.34-3.12-.04-1.44.5-.95v-.95l-.46-1.13-.67-.63-.3-1.09-.63-.18-.89-.95-1.34-3.07-.17-1.67.67-1.09.89-.49-.26-1.44.5-1.04 1.01.04.34-.54.04-1.45-.67-2.12.3-.95.67-.05 1.26-.95-.3-2.17-.93-2.17.13-.67-1.26-1.44.17-.54-.76-.72.38-1.49-.63-.95.09-1.26-.46-1.22-.13-1.4-.76-1.77-.42-.45-.21-1.22.38-1.22-1.64-2.89-.67-1.67-1.43-1.54-1.73-1.31-.13-.32.42-2.17-.71-2.26-.63-1.4-.04-1.81-.97-1.77-2.61-2.76-1.89-1.63-.93-2.26-.67-1-.5-.18-.8-1.45-4.5-3.35-4.13-2.45-3.37-1.68-2.36-1.54-1.3-.54-1.77-1.05-2.44-1.81-.63-.32-1.77-2.03-.89-1.27-.21-.95-1.17-.59.03-9.22.05.05z"
                         className="cls-7"
                         data-id="1"
+                        id="kenting"
                       ></path>
                       {/* 2綠島 */}
                       <path
@@ -261,112 +304,123 @@ export default function Test() {
                   <rect x="48" y="480" width="120" height="100" />
                 </svg>
               </div>
+            </Col>
+            <Col className={styles['weather']}>
+              <h3>{selectedDisName}</h3>
+              <h4>{currentWeather.StationName}</h4>
+              <button onClick={handleWeatherClick}>取得氣象API</button>
+              <div>
+                {/* 時間 */}
+                {currentWeather.DateTime}
+              </div>
+              <Stack
+                direction="horizontal"
+                gap={4}
+                className={styles['weather-detail']}
+              >
+                <div>
+                  {/* 風向 */}
+                  <FaWind />
+                  {currentWeather.WindDirection}
+                </div>
+                <div>
+                  {/* 浪高 */}
+                  <LuWaves />
+                  {currentWeather.WaveHeight}
+                </div>
+                <div>
+                  {/* 海溫 */}
+                  <TiWeatherCloudy />
+                  {Math.round(currentWeather.SeaTemperature)}
+                </div>
+                <div>
+                  {/* 風速 */}
+                  {currentWeather.WindSpeed}
+                </div>
+                <div>
+                  <BsFillSunsetFill />
+                  123
+                </div>
+              </Stack>
+              <div>
+                <Container>
+                  {disData.map((v) => {
+                    const fileNames = v.image.split(',')
+                    return (
+                      <React.Fragment key={v.id}>
+                        {fileNames.map((fileName, index) => (
+                          <Image
+                            thumbnail
+                            fluid
+                            key={index}
+                            src={`/images/map/${fileName.trim()}`}
+                            alt={v.image}
+                            onClick={() =>
+                              handleCardImageClick(
+                                `/images/map/${fileName.trim()}`
+                              )
+                            }
+                          />
+                        ))}
+                      </React.Fragment>
+                    )
+                  })}
+                </Container>
+              </div>
+            </Col>
+            {/* 試動畫區塊 */}
+            <div style={{ backgroundColor: 'yellow', height: '10px' }}>
+              <div className={styles['eclipse']}></div>
             </div>
-          </Col>
-          <Col className={styles['weather']}>
-            <h3>{selectedDisName}</h3>
-            <h4>{currentWeather.StationName}</h4>
-            <button onClick={handleWeatherClick}>取得氣象API</button>
-            <Stack
-              direction="horizontal"
-              gap={3}
-              className={styles['weather-detail']}
-            >
+            {/* 試動畫區塊^^^ */}
+          </Row>
+          <hr />
+          <div className="bg-light text-center">
+            {selectedPointData &&
+              selectedPointData.map((v) => (
+                <DiButton
+                  key={v.id}
+                  text={v.name}
+                  color={'#013c64'}
+                  onClick={() => handlePointButtonClick(v.id)}
+                />
+              ))}
+          </div>
+          <Container>
+            <Stack direction="horizontal" gap={3}>
               <div className="p-2">
-                {' '}
-                <FaWind />
-                {currentWeather.WindDirection}
-              </div>
-              <div className="p-2">
-                <LuWaves />
-                {currentWeather.WaveHeight}
-              </div>
-              <div className="p-2">
-                <TiWeatherCloudy />
-                {Math.round(currentWeather.SeaTemperature)}
-              </div>
-              <div>{currentWeather.WindSpeed}</div>
-              <div className="p-2">
-                <BsFillSunsetFill />
-                123
+                <Button variant="secondary">相關課程</Button> <div></div>
+                <div>
+                  {' '}
+                  {selectedPointData &&
+                    selectedPointData
+                      .filter((data) => data.id === selectPoint)
+                      .map((v) => {
+                        const fileNames = v.image.split(',')
+                        return (
+                          <React.Fragment key={v.id}>
+                            {fileNames.map((fileName, index) => (
+                              <Image
+                                fluid
+                                key={index}
+                                src={`/images/map/${fileName.trim()}`}
+                                alt={v.image}
+                                onClick={() =>
+                                  handleCardImageClick(
+                                    `/images/map/${fileName.trim()}`
+                                  )
+                                }
+                              />
+                            ))}
+                          </React.Fragment>
+                        )
+                      })}
+                </div>
               </div>
             </Stack>
-            <div>
-              <Container fluid className="border">
-                {disData.map((v) => {
-                  const fileNames = v.image.split(',')
-                  return (
-                    <React.Fragment key={v.id}>
-                      {fileNames.map((fileName, index) => (
-                        <Card.Img
-                          key={index}
-                          variant="top"
-                          src={`/images/map/${fileName.trim()}`}
-                          alt={v.image}
-                          onClick={() =>
-                            handleCardImageClick(
-                              `/images/map/${fileName.trim()}`
-                            )
-                          }
-                        />
-                      ))}
-                    </React.Fragment>
-                  )
-                })}
-              </Container>
-            </div>
-          </Col>
-          {/* 試動畫區塊 */}
-          <div style={{ backgroundColor: 'yellow', height: '10px' }}>
-            <div className={styles['eclipse']}></div>
-          </div>
-          {/* 試動畫區塊^^^ */}
-        </Row>
-        <hr />
-        <div className="bg-light">
-          {selectedPointData &&
-            selectedPointData.map((v) => (
-              <DiButton
-                key={v.id}
-                text={v.name}
-                onClick={() => handlePointButtonClick(v.id)}
-              />
-            ))}
-        </div>
-        <Container className="border">
-          <Stack direction="horizontal" gap={3}>
-            <div className="p-2">
-              <Button variant="secondary">相關課程</Button> <div></div>
-              <div>
-                {' '}
-                {selectedPointData &&
-                  selectedPointData
-                    .filter((data) => data.id === selectPoint)
-                    .map((v) => {
-                      const fileNames = v.image.split(',')
-                      return (
-                        <React.Fragment key={v.id}>
-                          {fileNames.map((fileName, index) => (
-                            <Card.Img
-                              key={index}
-                              variant="top"
-                              src={`/images/map/${fileName.trim()}`}
-                              alt={v.image}
-                              onClick={() =>
-                                handleCardImageClick(
-                                  `/images/map/${fileName.trim()}`
-                                )
-                              }
-                            />
-                          ))}
-                        </React.Fragment>
-                      )
-                    })}
-              </div>
-            </div>
-          </Stack>
+          </Container>
         </Container>
-      </Container>
+      </main>
     </>
   )
 }

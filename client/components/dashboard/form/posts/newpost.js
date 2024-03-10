@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import styles from '../styles.module.scss'
 import Ckeditor from '@/components/post/ckeditor'
-import Tiptap from '@/components/post/tipTap'
+// import Tiptap from '@/components/post/tipTap'
 
 export default function Form({ editor }) {
   const [editorLoaded, setEditorLoaded] = useState(false)
@@ -37,7 +37,7 @@ export default function Form({ editor }) {
                 rows="10"
                 className="form-control"
               ></textarea>
-              <Tiptap />
+              {/* <Tiptap /> */}
               {/* --CK語法-- */}
               {/* <div>
                 <Ckeditor
