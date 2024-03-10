@@ -52,22 +52,38 @@ export default function OrderProduct({ product, setProduct }) {
           </button>
           <ul className="dropdown-menu">
             <li>
-              <a className="dropdown-item" onClick={sortAllProducts}>
+              <a
+                href="?=all"
+                className="dropdown-item"
+                onClick={sortAllProducts}
+              >
                 <MdReplyAll /> 所有商品
               </a>
             </li>
             <li>
-              <a className="dropdown-item" onClick={sortCreatedDate}>
+              <a
+                href="?=new"
+                className="dropdown-item"
+                onClick={sortCreatedDate}
+              >
                 <MdFiberNew /> 最新上架商品
               </a>
             </li>
             <li>
-              <a className="dropdown-item" onClick={sortDescending}>
+              <a
+                href="?=descending"
+                className="dropdown-item"
+                onClick={sortDescending}
+              >
                 <FaSortNumericDownAlt /> 價格：由高至低
               </a>
             </li>
             <li>
-              <a className="dropdown-item" onClick={sortAscending}>
+              <a
+                href="?=ascending"
+                className="dropdown-item"
+                onClick={sortAscending}
+              >
                 <FaSortNumericUpAlt /> 價格：由低至高
               </a>
             </li>

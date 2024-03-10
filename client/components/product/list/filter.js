@@ -11,7 +11,6 @@ import { MdOutlinePriceCheck } from 'react-icons/md'
 export default function Filter({
   product,
   setProduct,
-  setCurrentSort,
   setCurrentBrand,
   setCurrentCategory,
   originalData,
@@ -81,7 +80,7 @@ export default function Filter({
                         }}
                       >
                         <div
-                          href={`/product/${v}`}
+                          // href="?=brand"
                           className="form-check-label"
                           htmlFor="flexCheckDefault"
                           style={{ color: '#303132' }}
