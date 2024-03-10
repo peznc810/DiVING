@@ -30,6 +30,43 @@ export default function Filter({
 
   const allCategory = ['防寒衣', '面鏡', '呼吸管', '蛙鞋', '配件']
 
+  //價格篩選
+  const [priceFilter, setPriceFilter] = useState({
+    $1000以下: false,
+    '$1001-$3500': false,
+    '$3501-$6500': false,
+    $6501以上: false,
+  })
+
+  const handlePriceFilterChange = (priceRange) => {
+    setPriceFilter({
+      ...priceFilter,
+      [priceRange]: !priceFilter[priceRange],
+    })
+  }
+
+  useEffect(() => {
+    // 根據價格篩選條件來過濾產品數據
+    const filteredProducts = product.filter((item) => {
+      if (priceFilter['$1000以下']) {
+        return item.price < 1000
+      }
+      if (priceFilter['$1001-$3500']) {
+        return item.price >= 1001 && item.price <= 3500
+      }
+      if (priceFilter['$3501-$6500']) {
+        return item.price >= 3501 && item.price <= 6500
+      }
+      if (priceFilter['$6501以上']) {
+        return item.price > 6500
+      }
+      return true
+    })
+
+    // 更新顯示的產品數據
+    setProduct(filteredProducts)
+  }, [priceFilter])
+
   //css樣式
   const handleButtonClick = (buttonName) => {
     setButtonStyles({
@@ -168,6 +205,7 @@ export default function Filter({
                     type="checkbox"
                     value=""
                     id="flexCheckDefault"
+                    onChange={() => handlePriceFilterChange('$1000以下')}
                   />
                   <label
                     className="form-check-label"
@@ -183,6 +221,7 @@ export default function Filter({
                     type="checkbox"
                     value=""
                     id="flexCheckChecked"
+                    onChange={() => handlePriceFilterChange('$1001-$3500')}
                   />
                   <label
                     className="form-check-label"
@@ -198,6 +237,7 @@ export default function Filter({
                     type="checkbox"
                     value=""
                     id="flexCheckChecked"
+                    onChange={() => handlePriceFilterChange('$3501-$6500')}
                   />
                   <label
                     className="form-check-label"
@@ -213,6 +253,7 @@ export default function Filter({
                     type="checkbox"
                     value=""
                     id="flexCheckChecked"
+                    onChange={() => handlePriceFilterChange('$6501以上')}
                   />
                   <label
                     className="form-check-label"
