@@ -7,18 +7,43 @@ const MySwal = withReactContent(Swal)
 import { FaShoppingCart, FaRegTrashAlt } from 'react-icons/fa'
 import CartStep from '@/components/cart/cart-step'
 
+//抓取使用者id
+const userId = '1'
+
+//抓取使用者擁有的優惠券
+let coupon_has
+
+await fetch(`http://localhost:3005/api/order/user-coupon?userId=${userId}`, {
+  method: 'GET',
+})
+  .then((response) => {
+    return response.json()
+  })
+  .then((result) => {
+    coupon_has = result
+  })
+  .catch((err) => {
+    console.error('An error occurred:', err)
+  })
+
+console.log(coupon_has)
+
 export default function Home() {
   const [cartData, setCartData] = useState([])
   const [totalPrice, setTotalPrice] = useState(0)
   const [deliveryFee] = useState(50)
   const [discount] = useState(0)
 
+  //抓取購物車內的物品
   useEffect(() => {
     const data = JSON.parse(localStorage.getItem('cart'))
-    setCartData(data)
-    calculateTotalPrice(data)
+    if (data) {
+      setCartData(data)
+      calculateTotalPrice(data)
+    }
   }, [])
 
+  //刪除通知
   const notifySA = (productName, i) => {
     MySwal.fire({
       icon: 'question',
@@ -38,10 +63,10 @@ export default function Home() {
     })
   }
 
+  //計算價格
   const calculateTotalPrice = (data) => {
     let total = 0
-    data.forEach((item) => {
-      const { productDiscount, num, productPrice, lessonPrice } = item
+    data.forEach(({ productDiscount, num, productPrice, lessonPrice }) => {
       const price = productDiscount
         ? productDiscount * num
         : (productPrice || lessonPrice) * num
@@ -50,24 +75,39 @@ export default function Home() {
     setTotalPrice(total)
   }
 
+  // const calculateTotalPrice = (data) => {
+  //   let total = 0
+  //   data.forEach((item) => {
+  //     const { productDiscount, num, productPrice, lessonPrice } = item
+  //     const price = productDiscount
+  //       ? productDiscount * num
+  //       : (productPrice || lessonPrice) * num
+  //     total += price
+  //   })
+  //   setTotalPrice(total)
+  // }
+
+  //增加商品數量
   const handleIncrement = (index) => {
     const updatedCartData = [...cartData]
     updatedCartData[index].num += 1
     setCartData(updatedCartData)
     localStorage.setItem('cart', JSON.stringify(updatedCartData))
-    calculateTotalPrice(updatedCartData)
+    // calculateTotalPrice(updatedCartData)
   }
 
+  //減少商品數量
   const handleDecrement = (index) => {
     const updatedCartData = [...cartData]
     if (updatedCartData[index].num > 1) {
       updatedCartData[index].num -= 1
       setCartData(updatedCartData)
       localStorage.setItem('cart', JSON.stringify(updatedCartData))
-      calculateTotalPrice(updatedCartData)
+      // calculateTotalPrice(updatedCartData)
     }
   }
 
+  //更改商品數量
   const handleInputChange = (index, event) => {
     const updatedCartData = [...cartData]
     const newValue = parseInt(event.target.value)
@@ -75,17 +115,23 @@ export default function Home() {
       updatedCartData[index].num = newValue
       setCartData(updatedCartData)
       localStorage.setItem('cart', JSON.stringify(updatedCartData))
-      calculateTotalPrice(updatedCartData)
+      // calculateTotalPrice(updatedCartData)
     }
   }
 
+  //刪除商品
   const handleDeleteItem = (index) => {
     const updatedCartData = [...cartData]
     updatedCartData.splice(index, 1)
     setCartData(updatedCartData)
     localStorage.setItem('cart', JSON.stringify(updatedCartData))
-    calculateTotalPrice(updatedCartData)
+    // calculateTotalPrice(updatedCartData)
   }
+
+  //購物車更動後 更新價格
+  useEffect(() => {
+    calculateTotalPrice(cartData)
+  }, [cartData])
 
   return (
     <div className="container">
@@ -152,10 +198,6 @@ export default function Home() {
                           </h5>
                         </>
                       )}
-                      {/* <h5 className="fw-bold discounted">打折後</h5>
-                      <p className="imperceptible text-decoration-line-through">
-                        {productPrice || lessonPrice}
-                      </p> */}
                     </td>
                     <td>
                       <button
@@ -195,40 +237,6 @@ export default function Home() {
             ) : (
               <></>
             )}
-            {/* <tr>
-              <td>
-                <div className="row">
-                  <img />
-                  <div>
-                    <h5 className="fw-bold text-start">商品名</h5>
-                    <p className="imperceptible text-start">商品細節</p>
-                  </div>
-                </div>
-              </td>
-              <td>
-                <h5 className="fw-bold discounted">打折後</h5>
-                <p className="imperceptible text-decoration-line-through">
-                  打折前
-                </p>
-              </td>
-              <td>
-                <button type="button" className="btn btn-light">
-                  +
-                </button>
-                <input
-                  type="text"
-                  className="w-25 text-center"
-                  placeholder="1"
-                />
-                <button type="button" className="btn btn-light">
-                  -
-                </button>
-              </td>
-              <td>NT$XXX</td>
-              <td>
-                <FaRegTrashAlt size={22} />
-              </td>
-            </tr> */}
           </tbody>
         </table>
       </div>
@@ -296,11 +304,20 @@ export default function Home() {
           margin: 0;
         }
 
-        .order-detail {
+         {
+          /* .order-detail {
           margin-inline: 0;
         }
 
         .spacing {
+          margin-top: 1rem;
+          margin-bottom: 1rem;
+        } */
+        }
+
+        .order-detail,
+        .spacing {
+          margin-inline: 0;
           margin-top: 1rem;
           margin-bottom: 1rem;
         }
@@ -329,16 +346,22 @@ export default function Home() {
 
         .section-name {
           background-color: #f5f5f5;
-          padding-left: 0.5rem;
-          padding-top: 0.5rem;
-          padding-bottom: 0.5rem;
+          padding: 0.5rem;
         }
 
-        .pay-section {
+         {
+          /* .pay-section {
           border: 1px solid #f5f5f5;
           padding: 0;
         }
 
+        .order-section {
+          border: 1px solid #f5f5f5;
+          padding: 0;
+        } */
+        }
+
+        .pay-section,
         .order-section {
           border: 1px solid #f5f5f5;
           padding: 0;
@@ -369,8 +392,7 @@ export default function Home() {
         }
 
         .btn-light {
-          padding-block: 2px;
-          padding-inline: 6px;
+          padding: 2px 6px;
         }
 
         @media (max-width: 576px) {

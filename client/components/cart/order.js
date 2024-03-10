@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import Link from 'next/link'
 
 import CartStep from '@/components/cart/cart-step'
@@ -20,7 +20,7 @@ const [oData, pData, lData] = await Promise.all([
   fetchData('http://localhost:3005/api/order/lesson'),
 ])
 
-export default function Home() {
+export default async function Home({ orderIdTest }) {
   const router = useRouter()
   const { orderId } = router.query
 
@@ -48,6 +48,35 @@ export default function Home() {
       }
     }
     return item
+  })
+
+  const [order, setOrder] = useState(null)
+
+  useEffect(() => {
+    const fetchOrder = async () => {
+      try {
+        await fetch(
+          `http://localhost:3005/api/order/order?orderId=${orderIdTest}`,
+          {
+            method: 'GET',
+          }
+        )
+          .then((response) => {
+            return response.json()
+          })
+          .then((result) => {
+            console.log(result)
+            setOrder(result)
+          })
+          .catch((err) => {
+            console.error('An error occurred:', err)
+          })
+      } catch (error) {
+        console.error('Error fetching data:', error)
+      }
+    }
+
+    fetchOrder()
   })
 
   let totalPrice = 0

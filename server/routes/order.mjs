@@ -4,24 +4,11 @@ const router = express.Router();
 import db from '../db.mjs';
 import 'dotenv/config.js'
 
-import { createLinePayClient } from 'line-pay-merchant'
-
-import { v4 as uuidv4 } from 'uuid'
-
-const linePayClient = createLinePayClient({
-  channelId: process.env.LINE_PAY_CHANNEL_ID,
-  channelSecretKey: process.env.LINE_PAY_CHANNEL_SECRET,
-  env: process.env.NODE_ENV,
-})
-
-
-
 const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-//測試用
 router.get("/", async(req,res)=>{
   let order, error
   await getOrderDetail(req).then(result => {
@@ -37,33 +24,65 @@ router.get("/", async(req,res)=>{
   }
 })
 
+router.get("/order/:orderId", async(req,res)=>{
+  const orderId = req.query.orderId
+  let order, error
+  await getOrder(orderId).then(result => {
+    order = result;
+  }).catch(err => {
+    error = err
+  })
+  if (error) {
+    res.status(400).json(error)
+  }
+  if (order) {
+    res.status(200).json(order)
+  }
+})
+
 router.get("/product", async(req,res)=>{
-    let order, error
+    let product, error
     await getProduct(req).then(result => {
-      order = result;
+      product = result;
     }).catch(err => {
       error = err
     })
     if (error) {
       res.status(400).json(error)
     }
-    if (order) {
-      res.status(200).json(order)
+    if (product) {
+      res.status(200).json(product)
     }
   })
 
   router.get("/lesson", async(req,res)=>{
-    let order, error
+    let lesson, error
     await getLesson(req).then(result => {
-      order = result;
+      lesson = result;
     }).catch(err => {
       error = err
     })
     if (error) {
       res.status(400).json(error)
     }
-    if (order) {
-      res.status(200).json(order)
+    if (lesson) {
+      res.status(200).json(lesson)
+    }
+  })
+
+  router.get("/user-coupon/:userId", async(req,res)=>{
+    const userId = req.query.userId
+    let coupon, error
+    await getUserCoupon(userId).then(result => {
+      coupon = result;
+    }).catch(err => {
+      error = err
+    })
+    if (error) {
+      res.status(400).json(error)
+    }
+    if (coupon) {
+      res.status(200).json(coupon)
     }
   })
 
@@ -80,7 +99,20 @@ function getOrderDetail(req) {
   })
 }
 
-function getProduct(req) {
+function getOrderDetail(orderId) {
+  return new Promise(async (resolve, reject) => {
+    const [result] = await db.execute(
+      'SELECT order_detail.*, product.name, product.price , lesson.name, lesson.price FROM order_detail JOIN product ON product.id = order_detail.product_id JOIN lesson ON lesson.id = order_detail.lesson_id WHERE order_detail.order_id = ?',[orderId]
+    );
+    if (result) {
+      resolve(result)
+    } else {
+      reject({ status: "error", msg: "err" })
+    }
+  })
+}
+
+  function getProduct(req) {
     return new Promise(async (resolve, reject) => {
       const [result] = await db.execute(
         'SELECT * FROM `product`'
@@ -97,6 +129,19 @@ function getProduct(req) {
     return new Promise(async (resolve, reject) => {
       const [result] = await db.execute(
         'SELECT * FROM `lesson`'
+      );
+      if (result) {
+        resolve(result)
+      } else {
+        reject({ status: "error", msg: "err" })
+      }
+    })
+  }
+
+  function getUserCoupon(userId) {
+    return new Promise(async (resolve, reject) => {
+      const [result] = await db.execute(
+        'SELECT coupon_has.*, coupon.name FROM coupon_has JOIN coupon ON coupon_has.coupon_id = coupon.id WHERE coupon_has.user_id = ?',[userId]
       );
       if (result) {
         resolve(result)
