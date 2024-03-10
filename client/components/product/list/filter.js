@@ -1,9 +1,5 @@
 import { useEffect, useState } from 'react'
 
-import Order from '@/components/product/list/order'
-import Search from '@/components/product/list/search'
-
-import Link from 'next/link'
 import { MdScubaDiving } from 'react-icons/md'
 import { MdOutlineCategory } from 'react-icons/md'
 import { MdOutlinePriceCheck } from 'react-icons/md'
@@ -34,6 +30,7 @@ export default function Filter({
 
   const allCategory = ['防寒衣', '面鏡', '呼吸管', '蛙鞋', '配件']
 
+  //css樣式
   const handleButtonClick = (buttonName) => {
     setButtonStyles({
       ...buttonStyles,
