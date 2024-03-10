@@ -1,39 +1,27 @@
 import React, { useState, useEffect } from 'react'
 
-export default function Pagination({ product, setProduct }) {
+export default function Pagination({ totalPages, setFilterSettings, page }) {
   const perPage = 6
   // 目前頁碼
-  const [currentPage, setCurrentPage] = useState(1)
   // 計算總頁數
-  const totalPages = Math.ceil(product.length / perPage)
-
-  // 分頁資料
-  const paginatedData = product.slice(
-    (currentPage - 1) * perPage,
-    currentPage * perPage
-  )
+  // const totalPages = Math.ceil(filteredProducts.length / perPage)
 
   // 換頁處理
   const handlePageChange = (pageNumber) => {
-    setCurrentPage(pageNumber)
+    setFilterSettings((c) => ({ ...c, page: pageNumber }))
   }
-
-  // 初始化時只顯示前六筆資料
-  // useEffect(() => {
-  //   setCurrentPage(1)
-  // }, [product])
 
   return (
     <>
       <div className="container-1200 pagination-container">
         <nav aria-label="Page navigation example mx-auto">
           <ul className="pagination">
-            <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
+            <li className={`page-item ${page === 1 ? 'disabled' : ''}`}>
               <a
                 className="page-link"
                 href="?=page"
                 aria-label="Previous"
-                onClick={() => handlePageChange(currentPage - 1)}
+                onClick={() => handlePageChange(page - 1)}
               >
                 <span aria-hidden="true">&laquo;</span>
               </a>
@@ -41,13 +29,11 @@ export default function Pagination({ product, setProduct }) {
             {Array.from({ length: totalPages }, (_, index) => (
               <li
                 key={index}
-                className={`page-item ${
-                  currentPage === index + 1 ? 'active' : ''
-                }`}
+                className={`page-item ${page === index + 1 ? 'active' : ''}`}
               >
                 <a
                   className="page-link"
-                  href="?=page"
+                  // href="?=page"
                   onClick={() => handlePageChange(index + 1)}
                 >
                   {index + 1}
@@ -55,15 +41,13 @@ export default function Pagination({ product, setProduct }) {
               </li>
             ))}
             <li
-              className={`page-item ${
-                currentPage === totalPages ? 'disabled' : ''
-              }`}
+              className={`page-item ${page === totalPages ? 'disabled' : ''}`}
             >
               <a
                 className="page-link"
-                href="?=page"
+                // href="?=page"
                 aria-label="Next"
-                onClick={() => handlePageChange(currentPage + 1)}
+                onClick={() => handlePageChange(page + 1)}
               >
                 <span aria-hidden="true">&raquo;</span>
               </a>

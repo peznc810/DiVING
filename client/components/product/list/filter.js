@@ -4,13 +4,7 @@ import { MdScubaDiving } from 'react-icons/md'
 import { MdOutlineCategory } from 'react-icons/md'
 import { MdOutlinePriceCheck } from 'react-icons/md'
 
-export default function Filter({
-  product,
-  setProduct,
-  setCurrentBrand,
-  setCurrentCategory,
-  originalData,
-}) {
+export default function Filter({ setFilterSettings, clearSettings }) {
   const [buttonStyles, setButtonStyles] = useState({
     brand: '',
     category: '',
@@ -37,35 +31,6 @@ export default function Filter({
     '$3501-$6500': false,
     $6501以上: false,
   })
-
-  const handlePriceFilterChange = (priceRange) => {
-    setPriceFilter({
-      ...priceFilter,
-      [priceRange]: !priceFilter[priceRange],
-    })
-  }
-
-  useEffect(() => {
-    // 根據價格篩選條件來過濾產品數據
-    const filteredProducts = product.filter((item) => {
-      if (priceFilter['$1000以下']) {
-        return item.price < 1000
-      }
-      if (priceFilter['$1001-$3500']) {
-        return item.price >= 1001 && item.price <= 3500
-      }
-      if (priceFilter['$3501-$6500']) {
-        return item.price >= 3501 && item.price <= 6500
-      }
-      if (priceFilter['$6501以上']) {
-        return item.price > 6500
-      }
-      return true
-    })
-
-    // 更新顯示的產品數據
-    setProduct(filteredProducts)
-  }, [priceFilter])
 
   //css樣式
   const handleButtonClick = (buttonName) => {
@@ -106,11 +71,10 @@ export default function Filter({
                         key={v}
                         className="form-check"
                         onClick={() => {
-                          // console.log(originalData)
-                          setProduct(
-                            originalData.data.filter((n) => n.brand === v)
-                          )
-                          setCurrentBrand(v)
+                          setFilterSettings((c) => ({
+                            ...c,
+                            brand: v,
+                          }))
                         }}
                       >
                         <div
@@ -139,7 +103,7 @@ export default function Filter({
                 data-bs-target="#panelsStayOpen-collapseTwo"
                 aria-expanded="false"
                 aria-controls="panelsStayOpen-collapseTwo"
-                onClick={() => handleButtonClick('category')}
+                onClick={() => 'category'}
               >
                 <MdOutlineCategory className="m-1" /> 商品類別
               </button>
@@ -156,11 +120,10 @@ export default function Filter({
                         key={v}
                         className="form-check"
                         onClick={() => {
-                          // console.log(originalData)
-                          setProduct(
-                            originalData.data.filter((n) => n.category === v)
-                          )
-                          setCurrentCategory(v)
+                          setFilterSettings((c) => ({
+                            ...c,
+                            category: v,
+                          }))
                         }}
                       >
                         <div
@@ -189,10 +152,11 @@ export default function Filter({
                 data-bs-target="#panelsStayOpen-collapseThree"
                 aria-expanded="false"
                 aria-controls="panelsStayOpen-collapseThree"
-                onClick={() => handleButtonClick('price')}
+                onClick={() => 'price'}
               >
                 <MdOutlinePriceCheck className="m-1" /> 價格篩選
               </button>
+              <button onClick={clearSettings}>clear settings</button>
             </h2>
             <div
               id="panelsStayOpen-collapseThree"
@@ -205,7 +169,12 @@ export default function Filter({
                     type="checkbox"
                     value=""
                     id="flexCheckDefault"
-                    onChange={() => handlePriceFilterChange('$1000以下')}
+                    onChange={() => {
+                      setFilterSettings((c) => ({
+                        ...c,
+                        price: '$1000以下',
+                      }))
+                    }}
                   />
                   <label
                     className="form-check-label"
@@ -221,7 +190,12 @@ export default function Filter({
                     type="checkbox"
                     value=""
                     id="flexCheckChecked"
-                    onChange={() => handlePriceFilterChange('$1001-$3500')}
+                    onChange={() => {
+                      setFilterSettings((c) => ({
+                        ...c,
+                        price: '$1001-$3500',
+                      }))
+                    }}
                   />
                   <label
                     className="form-check-label"
@@ -237,7 +211,12 @@ export default function Filter({
                     type="checkbox"
                     value=""
                     id="flexCheckChecked"
-                    onChange={() => handlePriceFilterChange('$3501-$6500')}
+                    onChange={() => {
+                      setFilterSettings((c) => ({
+                        ...c,
+                        price: '$3501-$6500',
+                      }))
+                    }}
                   />
                   <label
                     className="form-check-label"
@@ -246,14 +225,18 @@ export default function Filter({
                     $3,501 - $6,500
                   </label>
                 </div>
-
                 <div className="form-check my-2">
                   <input
                     className="form-check-input"
                     type="checkbox"
                     value=""
                     id="flexCheckChecked"
-                    onChange={() => handlePriceFilterChange('$6501以上')}
+                    onChange={() => {
+                      setFilterSettings((c) => ({
+                        ...c,
+                        price: '$6501以上',
+                      }))
+                    }}
                   />
                   <label
                     className="form-check-label"

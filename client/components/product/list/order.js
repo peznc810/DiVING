@@ -5,32 +5,32 @@ import { MdFiberNew } from 'react-icons/md'
 import { FaSortNumericDownAlt } from 'react-icons/fa'
 import { FaSortNumericUpAlt } from 'react-icons/fa'
 
-export default function OrderProduct({ product, setProduct }) {
-  console.log(product)
+export default function OrderProduct({ setSorting }) {
+  // console.log(product)
   // 全部商品
-  const sortAllProducts = () => {
-    const allSortedProducts = [...product].sort((a, b) => a.id - b.id)
-    setProduct(allSortedProducts)
-  }
+  // const sortAllProducts = () => {
+  //   const allSortedProducts = [...product].sort((a, b) => a.id - b.id)
+  //   setProduct(allSortedProducts)
+  // }
 
   // 上架時間
-  const sortCreatedDate = () => {
-    const newUpload = [...product].sort((a, b) => {
-      return new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
-    })
-    setProduct(newUpload)
-  }
+  // const sortCreatedDate = () => {
+  //   const newUpload = [...product].sort((a, b) => {
+  //     return new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+  //   })
+  //   setProduct(newUpload)
+  // }
 
   // 金額
-  const sortDescending = () => {
-    const sortedProducts = [...product].sort((a, b) => b.price - a.price)
-    setProduct(sortedProducts)
-  }
+  // const sortDescending = () => {
+  //   const sortedProducts = [...product].sort((a, b) => b.price - a.price)
+  //   setProduct(sortedProducts)
+  // }
 
-  const sortAscending = () => {
-    const sortedProducts = [...product].sort((a, b) => a.price - b.price)
-    setProduct(sortedProducts)
-  }
+  // const sortAscending = () => {
+  //   const sortedProducts = [...product].sort((a, b) => a.price - b.price)
+  //   setProduct(sortedProducts)
+  // }
 
   return (
     <>
@@ -53,23 +53,23 @@ export default function OrderProduct({ product, setProduct }) {
           <ul className="dropdown-menu">
             <li>
               <a
-                href="?=all"
+                // href="?=all"
                 className="dropdown-item"
-                onClick={sortAllProducts}
+                onClick={() => setSorting('all')}
               >
                 <MdReplyAll /> 所有商品
               </a>
             </li>
             <li>
               <a
-                href="?=new"
+                // href="?=new"
                 className="dropdown-item"
-                onClick={sortCreatedDate}
+                onClick={() => setSorting('createdAt')}
               >
                 <MdFiberNew /> 最新上架商品
               </a>
             </li>
-            <li>
+            {/* <li>
               <a
                 href="?=descend"
                 className="dropdown-item"
@@ -77,8 +77,8 @@ export default function OrderProduct({ product, setProduct }) {
               >
                 <FaSortNumericDownAlt /> 價格：由高至低
               </a>
-            </li>
-            <li>
+            </li> */}
+            {/* <li>
               <a
                 href="?=ascend"
                 className="dropdown-item"
@@ -86,7 +86,7 @@ export default function OrderProduct({ product, setProduct }) {
               >
                 <FaSortNumericUpAlt /> 價格：由低至高
               </a>
-            </li>
+            </li> */}
           </ul>
         </div>
       </div>

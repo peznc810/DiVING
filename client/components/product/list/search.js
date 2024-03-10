@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react'
 
-export default function SearchProduct({ product, setProduct }) {
+export default function SearchProduct({ setFilterSettings }) {
   return (
     <div className="pe-1 my-3">
       <form className="d-flex" role="search">
@@ -14,6 +14,9 @@ export default function SearchProduct({ product, setProduct }) {
             style={{
               borderRadius: 2.8,
             }}
+            onChange={(e) =>
+              setFilterSettings((c) => ({ ...c, searchKey: e.target.value }))
+            }
           />
           <i
             className="bi bi-search position-absolute"

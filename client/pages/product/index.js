@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useMemo, useEffect, useState } from 'react'
 
 import Stars from '@/components/product/star/star'
 import Card from '@/components/product/list/card'
@@ -15,13 +15,10 @@ import { MdOutlineCategory } from 'react-icons/md'
 import { GoHeartFill } from 'react-icons/go'
 import { FaCartPlus } from 'react-icons/fa'
 
+const perPage = 6
+
 export default function List() {
   const [product, setProduct] = useState([])
-  const [originalData, setOriginalData] = useState([])
-
-  const [currentBrand, setCurrentBrand] = useState('')
-  const [currentCategory, setCurrentCategory] = useState('')
-
   console.log(product)
 
   // Toggle the side navigation
@@ -49,6 +46,89 @@ export default function List() {
     }
   }, [])
 
+  const [filterSettings, setFilterSettings] = useState({
+    brand: '',
+    category: '',
+    page: 1,
+    price: '',
+    searchKey: '',
+  })
+
+  const clearSettings = () => {
+    setFilterSettings({
+      brand: '',
+      category: '',
+      page: 1,
+      price: '',
+      searchKey: '',
+    })
+  }
+
+  const filteredProducts = useMemo(() => {
+    const { brand, category, price, searchKey } = filterSettings
+    let filteredProducts = product
+    if (brand) {
+      filteredProducts = filteredProducts.filter((v) => v.brand === brand)
+    }
+    if (category) {
+      filteredProducts = filteredProducts.filter((v) => v.category === category)
+    }
+    if (price) {
+      filteredProducts = filteredProducts.filter((item) => {
+        let finalPrice = item.discount || item.price
+        if (price === '$1000以下') {
+          return finalPrice < 1000
+        }
+        if (price === '$1001-$3500') {
+          return finalPrice >= 1001 && finalPrice <= 3500
+        }
+        if (price === '$3501-$6500') {
+          return finalPrice >= 3501 && finalPrice <= 6500
+        }
+        if (price === '$6501以上') {
+          return finalPrice > 6500
+        }
+        return true
+      })
+    }
+    if (searchKey) {
+      filteredProducts = filteredProducts.filter((v) =>
+        v.name.includes(searchKey)
+      )
+    }
+    return filteredProducts
+  }, [product, filterSettings])
+
+  const [sorting, setSorting] = useState('')
+
+  const currentSortedPageFilteredProduct = useMemo(() => {
+    let result = filteredProducts
+    switch (sorting) {
+      case 'all':
+        result.sort((a, b) => {
+          return a.id - b.id
+        })
+        break
+      case 'createdAt':
+        result.sort((a, b) => {
+          return (
+            new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+          )
+        })
+        break
+      default:
+        break
+    }
+    const { page } = filterSettings
+    result = result
+    if (page === 1) {
+      result = result.slice(0, perPage)
+    } else {
+      result = result.slice((page - 1) * perPage, page * perPage)
+    }
+    return result
+  }, [filteredProducts, filterSettings, sorting])
+
   useEffect(() => {
     fetch('http://localhost:3000/api/product')
       .then((res) => {
@@ -56,7 +136,6 @@ export default function List() {
       })
       .then((data) => {
         setProduct(data ? data.data : [])
-        setOriginalData(data)
       })
   }, [])
 
@@ -72,11 +151,11 @@ export default function List() {
             商品列表
           </Breadcrumb.Item>
 
-          {currentBrand && (
-            <Breadcrumb.Item href="">{currentBrand}</Breadcrumb.Item>
+          {filterSettings.brand && (
+            <Breadcrumb.Item href="">{filterSettings.brand}</Breadcrumb.Item>
           )}
-          {currentCategory && (
-            <Breadcrumb.Item href="">{currentCategory}</Breadcrumb.Item>
+          {filterSettings.category && (
+            <Breadcrumb.Item href="">{filterSettings.category}</Breadcrumb.Item>
           )}
         </Breadcrumb>
 
@@ -84,7 +163,7 @@ export default function List() {
           <div className="card-text d-flex justify-content-between align-items-center">
             <h6 className="ps-3 my-1">所有商品（70）</h6>
             {/* 排序 */}
-            <Order product={product} setProduct={setProduct} />
+            <Order setSorting={setSorting} />
           </div>
         </div>
         <div className="row text-center">
@@ -93,17 +172,16 @@ export default function List() {
               <div className="bg-white me-3" id="sidebar-wrapper">
                 <div className="scroll">
                   {/* 搜尋 */}
-                  <Search product={product} setProduct={setProduct} />
+                  <Search setFilterSettings={setFilterSettings} />
 
                   {/* 篩選 filter */}
                   <div className="my-2">
                     <div className="accordion accordion-flush">
                       <Filter
                         product={product}
-                        setProduct={setProduct}
-                        setCurrentBrand={setCurrentBrand}
-                        setCurrentCategory={setCurrentCategory}
-                        originalData={originalData}
+                        setFilterSettings={setFilterSettings}
+                        filterSettings={filterSettings}
+                        clearSettings={clearSettings}
                       />
                     </div>
                   </div>
@@ -114,21 +192,20 @@ export default function List() {
               <div id="page-content-wrapper">
                 <div className="container-fluid">
                   <div className="row row-cols-1 row-cols-md-3 g-4">
-                    {Array.isArray(product) &&
-                      product.map((value) => (
+                    {Array.isArray(currentSortedPageFilteredProduct) &&
+                      currentSortedPageFilteredProduct.map((value) => (
                         <Card
                           key={value}
                           value={value}
-                          product={product}
                           setProduct={setProduct}
                         />
                       ))}
                   </div>
                 </div>
                 <Pagination
-                  product={product}
-                  setProduct={setProduct}
-                  originalData={originalData}
+                  totalPages={Math.ceil(filteredProducts.length / perPage)}
+                  setFilterSettings={setFilterSettings}
+                  page={filterSettings.page}
                 />
               </div>
             </div>
