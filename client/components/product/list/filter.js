@@ -164,7 +164,7 @@ export default function Filter({
               id="panelsStayOpen-collapseThree"
               className="accordion-collapse collapse"
             >
-              <div className="accordion-body px-1">
+              <div className="accordion-body ">
                 <div className="form-check">
                   <input
                     className="form-check-input"
@@ -180,7 +180,7 @@ export default function Filter({
                   </label>
                 </div>
 
-                <div className="form-check">
+                <div className="form-check my-2">
                   <input
                     className="form-check-input"
                     type="checkbox"
@@ -195,7 +195,7 @@ export default function Filter({
                   </label>
                 </div>
 
-                <div className="form-check">
+                <div className="form-check my-2">
                   <input
                     className="form-check-input"
                     type="checkbox"
@@ -210,7 +210,7 @@ export default function Filter({
                   </label>
                 </div>
 
-                <div className="form-check">
+                <div className="form-check my-2">
                   <input
                     className="form-check-input"
                     type="checkbox"
