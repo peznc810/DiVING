@@ -125,7 +125,11 @@ export default function List() {
                       ))}
                   </div>
                 </div>
-                <Pagination product={product} setProduct={setProduct} />
+                <Pagination
+                  product={product}
+                  setProduct={setProduct}
+                  originalData={originalData}
+                />
               </div>
             </div>
           </div>

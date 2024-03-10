@@ -71,7 +71,7 @@ export default function OrderProduct({ product, setProduct }) {
             </li>
             <li>
               <a
-                href="?=descending"
+                href="?=descend"
                 className="dropdown-item"
                 onClick={sortDescending}
               >
@@ -80,7 +80,7 @@ export default function OrderProduct({ product, setProduct }) {
             </li>
             <li>
               <a
-                href="?=ascending"
+                href="?=ascend"
                 className="dropdown-item"
                 onClick={sortAscending}
               >

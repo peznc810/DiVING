@@ -72,7 +72,7 @@ export default function Filter({
                         key={v}
                         className="form-check"
                         onClick={() => {
-                          console.log(originalData)
+                          // console.log(originalData)
                           setProduct(
                             originalData.data.filter((n) => n.brand === v)
                           )
@@ -122,7 +122,7 @@ export default function Filter({
                         key={v}
                         className="form-check"
                         onClick={() => {
-                          console.log(originalData)
+                          // console.log(originalData)
                           setProduct(
                             originalData.data.filter((n) => n.category === v)
                           )
