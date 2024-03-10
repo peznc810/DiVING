@@ -27,44 +27,18 @@ router.post('/login', upload.none(), async (req, res) => {
     'SELECT * FROM `users` WHERE `email` = ? AND `password` = ?',
     [userEmail, userPWD]
   )
-  console.log(userData)
   if (userData) {
     let token = jwt.sign({
+      id: userData.id,
       userEmail: userData.email,
       userName: userData.name,
-      tel: userData.phone
+      avatar: userData.avatar,
     }, secretKey, { expiresIn: '1d' })
     res.status(200).json({ status: 'success', msg: '登入成功', token })
   } else {
     res.status(401).json({
       status: "error",
       msg: "帳號或密碼錯誤",
-    })
-  }
-})
-
-// Google登入
-router.post('/google-login', async (req, res) => {
-  // 接收client的require
-  const { email, uid } = req.body
-  // 比對db資料
-  // 如果比對成功回傳資料，如果失敗則回傳錯誤訊息
-  const [[userData]] = await db.execute(
-    'SELECT * FROM `users` WHERE `email` = ? AND `googleUID` = ?',
-    [email, uid]
-  )
-  if (userData) {
-    let token = jwt.sign({
-      userEmail: userData.email,
-      userName: userData.name,
-      tel: userData.phone,
-      avatar: userData.avatar
-    }, secretKey, { expiresIn: '1d' })
-    res.status(200).json({ status: 'success', msg: '登入成功', token })
-  } else {
-    res.status(401).json({
-      status: "error",
-      msg: "查無此使用者，請先註冊帳號",
     })
   }
 })
@@ -79,9 +53,10 @@ router.post('/logout', checkToken, (req, res) => {
   blackList.push(token)
   // 初始化token
   token = jwt.sign({
-    email: '',
-    name: '',
-    tel: ''
+    id: '',
+    userEmail: '',
+    userName: '',
+    avatar: '',
   }, secretKey, { expiresIn: '-10s' })
   res.status(200).json({
     status: 'success',
@@ -105,10 +80,11 @@ router.post('/status', checkToken, async (req, res) => {
     // 重新核發token，前台需重新設置localStorage
     // 目前只有拿這些資料，如果之後需要其他資料就用[password, ..userData]，取出除了密碼以外的資料
     let token = jwt.sign({
+      id: userData.id,
       userEmail: userData.email,
       userName: userData.name,
-      tel: userData.phone
-    }, secretKey, { expiresIn: '10m' })
+      avatar: userData.avatar,
+    }, secretKey, { expiresIn: '1d' })
     res.status(200).json({
       status: 'success',
       msg: '使用者已登入',
@@ -140,7 +116,7 @@ router.post('/register', upload.none(), async (req, res) => {
     "INSERT INTO `users` (`email`, `password`, `name`) VALUES (?, ?, ?);", [userEmail, userPWD, userName]
   )
     .then(() => {
-      res.status(200).json({ status: 'success',msg: '註冊成功' })
+      res.status(200).json({ status: 'success', msg: '註冊成功' })
     })
     .catch(err => {
       console.log(err);
@@ -148,12 +124,38 @@ router.post('/register', upload.none(), async (req, res) => {
     })
 })
 
+// Google登入
+router.post('/google-login', async (req, res) => {
+  // 接收client的require
+  const { email, uid } = req.body
+  // 比對db資料
+  // 如果比對成功回傳資料，如果失敗則回傳錯誤訊息
+  const [[userData]] = await db.execute(
+    'SELECT * FROM `users` WHERE `email` = ? AND `google_uid` = ?',
+    [email, uid]
+  )
+  if (userData) {
+    let token = jwt.sign({
+      id: userData.id,
+      userEmail: userData.email,
+      userName: userData.name,
+      avatar: userData.avatar,
+    }, secretKey, { expiresIn: '1d' })
+    res.status(200).json({ status: 'success', msg: '登入成功', token })
+  } else {
+    res.status(401).json({
+      status: "error",
+      msg: "查無此使用者，請先註冊帳號",
+    })
+  }
+})
+
 // Google註冊
 router.post('/google-register', async (req, res) => {
   console.log(req.body)
   const { displayName, email, photoURL, uid } = req.body
   const [[userData]] = await db.execute(
-    'SELECT * FROM `users` WHERE `googleUID` = ?',
+    'SELECT * FROM `users` WHERE `google_uid` = ?',
     [uid]
   )
   if (userData) {
@@ -164,15 +166,30 @@ router.post('/google-register', async (req, res) => {
     return
   }
   await db.execute(
-    "INSERT INTO `users` (`name`, `email`, `avatar`, `googleUID`) VALUES (?, ?, ?, ?);", [displayName, email, photoURL, uid]
+    "INSERT INTO `users` (`name`, `email`, `avatar`, `google_uid`) VALUES (?, ?, ?, ?);", [displayName, email, photoURL, uid]
   )
     .then(() => {
-      res.status(200).json({ status: 'success',msg: '註冊成功' })
+      res.status(200).json({ status: 'success', msg: '註冊成功' })
     })
     .catch(err => {
       console.log(err);
       res.status(500).json({ status: 'error', msg: '註冊失敗，請再試一次' })
     })
+})
+
+// 讀取profile
+router.get('/:id', checkToken,async (req, res) => {
+  console.log(req.params)
+  const id = req.params.id
+  const [[userData]] = await db.execute(
+    'SELECT * FROM `users` WHERE `id` = ? ',
+    [id]
+  )
+  if(userData){
+    res.status(200).json({ status:'success',msg: 'test', userData })
+  } else {
+    res.status(404).json({status:'error',msg:'查無資料'})
+  }
 })
 
 
