@@ -16,7 +16,6 @@ export default function Filter({ setFilterSettings, clearSettings }) {
     'ADISI',
     'Unidive',
     'AROPEC',
-    'EXQUIS',
     'PrincetonTec',
     'MYSTIC',
     'HeleiWaho',
