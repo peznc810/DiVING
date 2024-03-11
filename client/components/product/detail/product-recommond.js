@@ -37,63 +37,126 @@ export default function ProductRecommend() {
         <div className="row justify-content-center my-5">
           {product.map((productItem) => (
             <div key={productItem} className="col-sm-3 col-12 my-3">
-              <Card className="custom-card bg-bg-gray">
-                <Stack className="discount-tag" direction="horizontal" gap={2}>
-                  <Badge bg="danger">DISCOUNT</Badge>
-                </Stack>
-                <div>
-                  <Card.Img
-                    variant="top"
-                    src={`/images/product/images/${productItem.category}/${productItem.id}/${productItem.img_top}`}
-                    style={{
-                      objectFit: 'contain',
-                      width: '100%',
-                      height: '100%',
-                    }}
-                  />
-                </div>
-                <Card.Body>
-                  <div className="text-center">
-                    <Link
-                      className="h6 my-2"
-                      href={`/product/${productItem.id}`}
+              {productItem.discount ? (
+                <>
+                  <Card className="custom-card bg-bg-gray">
+                    <Stack
+                      className="discount-tag"
+                      direction="horizontal"
+                      gap={2}
                     >
-                      {productItem.brand}
-                    </Link>
-                    <br />
-                    <Link
-                      className="h6 my-2"
-                      href={`/product/${productItem.id}`}
-                    >
-                      {productItem.name}
-                    </Link>
-                  </div>
-                  <div className="d-flex justify-content-between align-items-center">
-                    {productItem.discount ? (
-                      <div>
-                        <span className="note-text">{`NT$${productItem.discount.toLocaleString()}`}</span>
-                        <span className="text-decoration-line-through type-text m-2">
-                          {`NT$${productItem.price.toLocaleString()}`}
-                        </span>
-                      </div>
-                    ) : (
-                      <>
-                        <span className="price-text m-1">
-                          {`NT$${productItem.price.toLocaleString()}`}
-                        </span>
-                      </>
-                    )}
+                      <Badge bg="danger">DISCOUNT</Badge>
+                    </Stack>
                     <div>
-                      <Button className="color-btn" variant="light">
-                        <GoHeartFill />
-                      </Button>
-                      <Button className="color-btn" variant="light">
-                        <FaCartPlus />
-                      </Button>
+                      <Card.Img
+                        variant="top"
+                        src={`/images/product/images/${productItem.category}/${productItem.id}/${productItem.img_top}`}
+                        style={{
+                          objectFit: 'contain',
+                          width: '100%',
+                          height: '100%',
+                        }}
+                      />
                     </div>
+                    <Card.Body>
+                      <div className="text-center">
+                        <Link
+                          className="h6 my-2"
+                          href={`/product/${productItem.id}`}
+                        >
+                          {productItem.brand}
+                        </Link>
+                        <br />
+                        <Link
+                          className="h6 my-2"
+                          href={`/product/${productItem.id}`}
+                        >
+                          {productItem.name}
+                        </Link>
+                      </div>
+                      <div className="d-flex justify-content-between align-items-center">
+                        {productItem.discount ? (
+                          <div>
+                            <span className="note-text">{`NT$${productItem.discount.toLocaleString()}`}</span>
+                            <span className="text-decoration-line-through type-text m-2">
+                              {`NT$${productItem.price.toLocaleString()}`}
+                            </span>
+                          </div>
+                        ) : (
+                          <>
+                            <span className="price-text m-1">
+                              {`NT$${productItem.price.toLocaleString()}`}
+                            </span>
+                          </>
+                        )}
+                        <div>
+                          <Button className="color-btn" variant="light">
+                            <GoHeartFill />
+                          </Button>
+                          <Button className="color-btn" variant="light">
+                            <FaCartPlus />
+                          </Button>
+                        </div>
+                      </div>
+                    </Card.Body>
+                  </Card>
+                </>
+              ) : (
+                <Card className="custom-card bg-bg-gray">
+                  <div>
+                    <Card.Img
+                      variant="top"
+                      src={`/images/product/images/${productItem.category}/${productItem.id}/${productItem.img_top}`}
+                      style={{
+                        objectFit: 'contain',
+                        width: '100%',
+                        height: '100%',
+                      }}
+                    />
                   </div>
-                </Card.Body>
-              </Card>
+                  <Card.Body>
+                    <div className="text-center">
+                      <Link
+                        className="h6 my-2"
+                        href={`/product/${productItem.id}`}
+                      >
+                        {productItem.brand}
+                      </Link>
+                      <br />
+                      <Link
+                        className="h6 my-2"
+                        href={`/product/${productItem.id}`}
+                      >
+                        {productItem.name}
+                      </Link>
+                    </div>
+                    <div className="d-flex justify-content-between align-items-center">
+                      {productItem.discount ? (
+                        <div>
+                          <span className="note-text">{`NT$${productItem.discount.toLocaleString()}`}</span>
+                          <span className="text-decoration-line-through type-text m-2">
+                            {`NT$${productItem.price.toLocaleString()}`}
+                          </span>
+                        </div>
+                      ) : (
+                        <>
+                          <span className="price-text m-1">
+                            {`NT$${productItem.price.toLocaleString()}`}
+                          </span>
+                        </>
+                      )}
+                      <div>
+                        <Button className="color-btn" variant="light">
+                          <GoHeartFill />
+                        </Button>
+                        <Button className="color-btn" variant="light">
+                          <FaCartPlus />
+                        </Button>
+                      </div>
+                    </div>
+                  </Card.Body>
+                </Card>
+              )}
             </div>
           ))}
         </div>
