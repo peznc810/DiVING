@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react'
 import { MdScubaDiving } from 'react-icons/md'
 import { MdOutlineCategory } from 'react-icons/md'
 import { MdOutlinePriceCheck } from 'react-icons/md'
+import { TbSettingsX } from 'react-icons/tb'
 
 export default function Filter({ setFilterSettings, clearSettings }) {
   const [buttonStyles, setButtonStyles] = useState({
@@ -156,7 +157,6 @@ export default function Filter({ setFilterSettings, clearSettings }) {
               >
                 <MdOutlinePriceCheck className="m-1" /> 價格篩選
               </button>
-              <button onClick={clearSettings}>clear settings</button>
             </h2>
             <div
               id="panelsStayOpen-collapseThree"
@@ -247,6 +247,16 @@ export default function Filter({ setFilterSettings, clearSettings }) {
                 </div>
               </div>
             </div>
+          </div>
+          {/* 清除按鍵 */}
+
+          <div className="my-3 col text-center">
+            <button
+              className="btn btn-primary clear-settings"
+              onClick={clearSettings}
+            >
+              Clear Settings <TbSettingsX className="TbSettingsX" />
+            </button>
           </div>
         </div>
       </div>
