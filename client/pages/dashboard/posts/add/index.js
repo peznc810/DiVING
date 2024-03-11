@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import CKeditor from '@/components/post/ckeditor'
 import { Form, InputGroup, Stack, Container } from 'react-bootstrap'
-import DiButton from '@/components/post/dibutton'
+import DiButton from '@/components/post/diButton'
 import ImageUpload from '@/components/post/imageUpload'
 import TagGenerator from '@/components/post/tagGenerator'
 import DOMPurify from 'dompurify'

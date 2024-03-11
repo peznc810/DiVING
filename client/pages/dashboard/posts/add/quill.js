@@ -7,7 +7,7 @@ import Menu from '@/components/dashboard/menu'
 import styles from '@/components/dashboard/styles.module.scss'
 
 import { Form, InputGroup, Stack, Container } from 'react-bootstrap'
-import DiButton from '@/components/post/dibutton'
+import DiButton from '@/components/post/diButton'
 import QuillEditor from '@/components/post/quill'
 import ImageUpload from '@/components/post/imageUpload'
 import TagGenerator from '@/components/post/tagGenerator'

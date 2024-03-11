@@ -1,4 +1,4 @@
-const DiButton = ({ type, text, onClick, color }) => {
+export default function DiButton({ type, text, onClick, color }) {
   return (
     <button type={type} onClick={onClick} color={color}>
       {text}
@@ -23,5 +23,3 @@ const DiButton = ({ type, text, onClick, color }) => {
     </button>
   )
 }
-
-export default DiButton

@@ -5,7 +5,7 @@ import { useRouter } from 'next/router'
 import Link from 'next/link'
 import styles from '@/styles/loader/loader_ripple.module.css'
 import postData from '@/data/post/post.json'
-import DiButton from '@/components/post/dibutton'
+import TagButton from '@/components/post/tagButton'
 import { Container, Card, Col, Row, Stack } from 'react-bootstrap'
 
 export default function Detail() {
@@ -74,51 +74,41 @@ export default function Detail() {
   }
   const display = (
     <>
-      <hr />
       <Container>
         <Row className="justify-content-evenly">
-          <Col lg={3} sm={3}>
+          <Col md={3}>
             <h4>相關文章</h4>
-            <Stack>
-              <Row xs={1} className="g-4">
-                {postData.map((v) => (
-                  <Col key={v.id}>
-                    <Card>
-                      <Link
-                        href={`/post/${v.id}`}
-                        style={{ textDecoration: 'none' }}
-                      >
-                        <Card.Img
-                          variant="top"
-                          src={`/images/post/${v.image}`}
-                        />
-                      </Link>
-                      <Card.Body className="bg-light">
-                        <Card.Subtitle className="mb-2 text-primary">
-                          {v.author}
-                        </Card.Subtitle>
-                        <h6>{v.title}</h6>
-                        <Stack direction="horizontal" gap={1}>
-                          <div>
-                            {getTagsArray(v.tags).map((tag, index) => (
-                              <Link
-                                key={index}
-                                href="/post/list"
-                                target="_blank"
-                              >
-                                <DiButton text={`# ${tag}`} color={'green'} />
-                              </Link>
-                            ))}
-                          </div>
-                        </Stack>
-                      </Card.Body>
-                    </Card>
-                  </Col>
-                ))}
-              </Row>
-            </Stack>
+            <Row xs={1} className="gy-4">
+              {postData.map((v) => (
+                <Col key={v.id}>
+                  <Card>
+                    <Link
+                      href={`/post/${v.id}`}
+                      style={{ textDecoration: 'none' }}
+                    >
+                      <Card.Img variant="top" src={`/images/post/${v.image}`} />
+                    </Link>
+                    <Card.Body className="bg-light">
+                      <Card.Subtitle className="mb-2 text-primary">
+                        {v.author}
+                      </Card.Subtitle>
+                      <h6>{v.title}</h6>
+                      <Stack direction="horizontal" gap={1}>
+                        <div>
+                          {getTagsArray(v.tags).map((tag, index) => (
+                            <Link key={index} href="/post/list" target="_blank">
+                              <TagButton text={`# ${tag}`} />
+                            </Link>
+                          ))}
+                        </div>
+                      </Stack>
+                    </Card.Body>
+                  </Card>
+                </Col>
+              ))}
+            </Row>
           </Col>
-          <Col xs={8} className="bg-light p-4">
+          <Col md={8} className="bg-light p-4">
             <p>{post.published}</p>
             <h3>{post.title}</h3>
             <p>作者:{post.user_id}</p>
@@ -126,17 +116,19 @@ export default function Detail() {
               {' '}
               {getTagsArray(post.tags).map((tag, index) => (
                 <Link key={index} href="/post/list" target="_blank">
-                  <DiButton text={`# ${tag}`} />
+                  <TagButton text={`# ${tag}`} />
                 </Link>
               ))}
             </div>
             <Card.Img variant="top" src={`/images/post/${post.image}`} />
-            <div
-              className="m-4"
-              dangerouslySetInnerHTML={{
-                __html: post.content,
-              }}
-            ></div>
+            <p>
+              <div
+                className="m-4"
+                dangerouslySetInnerHTML={{
+                  __html: post.content,
+                }}
+              ></div>
+            </p>
           </Col>
         </Row>
       </Container>
@@ -144,11 +136,10 @@ export default function Detail() {
   )
   return (
     <>
-      <Container>
+      <Container className="mt-5 p-3">
         <Link href="/post">回列表頁</Link>
       </Container>
       {isLoading ? loader : display}
-      <hr />
     </>
   )
 }

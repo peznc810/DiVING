@@ -3,7 +3,7 @@ import Link from 'next/link'
 import loaderStyles from '@/styles/loader/loader_ripple.module.css'
 import { Container, Dropdown, Card, Col, Row, Stack } from 'react-bootstrap'
 import Caro from '@/components/post/caro'
-import DiButton from '@/components/post/dibutton'
+import TagButton from '@/components/post/tagButton'
 import DOMPurify from 'dompurify'
 
 export default function List() {
@@ -51,7 +51,7 @@ export default function List() {
   const display = (
     <>
       <Container className="mb-3">
-        <Row xs={2} md={2} lg={2} className="g-4">
+        <Row xs={1} md={2} lg={2} className="g-4">
           {postList.map((v) => (
             <Col key={v.id}>
               <Card>
@@ -63,20 +63,26 @@ export default function List() {
                     {v.user_id} ﹡ {v.published_at}
                   </Card.Subtitle>
                   <Card.Title>{v.title}</Card.Title>
-                  <Card.Text className="text-truncate">
-                    {' '}
+                  <Card.Text>
                     <div
+                      style={{
+                        overflow: 'hidden',
+                        display: '-webkit-box',
+                        WebkitBoxOrient: 'vertical',
+                        textOverflow: 'ellipsis',
+                        WebkitLineClamp: 2, // 要顯示的行數
+                      }}
                       dangerouslySetInnerHTML={{
                         __html: DOMPurify.sanitize(v.content),
                       }}
                     ></div>
                     {/* {v.content} */}
                   </Card.Text>
-                  <Stack direction="horizontal" gap={3}>
-                    <div className="p-2">
+                  <Stack direction="horizontal" gap={2}>
+                    <div>
                       {getTagsArray(v.tags).map((tag, index) => (
                         <Link key={index} href="/post/list" target="_blank">
-                          <DiButton text={`# ${tag}`} color={'red'} />
+                          <TagButton text={`# ${tag}`} color={'red'} />
                         </Link>
                       ))}
                     </div>
@@ -92,7 +98,7 @@ export default function List() {
 
   return (
     <>
-      <Container className=" text-end">
+      <Container className="mt-5 text-end">
         <div className="my-2">
           Hi UUUUUUUUUUser
           <Link className="ms-3" href={'/'}>
@@ -135,6 +141,7 @@ export default function List() {
 
         {isLoading ? loader : display}
       </Container>
+      <style jsx>{``}</style>
     </>
   )
 }
