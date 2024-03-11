@@ -1,13 +1,15 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
-import shuffle from 'lodash/shuffle'; // 引入洗牌函式
+import shuffle from 'lodash/shuffle' // 引入洗牌函式
 
 import Card from 'react-bootstrap/Card'
 import Button from 'react-bootstrap/Button'
 
-import { GoHeartFill } from "react-icons/go";
-import { FaCartPlus } from "react-icons/fa";
-import Products from '@/components/home/products';
+import { GoHeartFill } from 'react-icons/go'
+import { FaCartPlus } from 'react-icons/fa'
+import Link from 'next/link'
+
+// import Products from '@/components/home/products'
 
 export default function ProductRecommend() {
   const router = useRouter()
@@ -19,25 +21,23 @@ export default function ProductRecommend() {
     fetch(`http://localhost:3000/api/product/`)
       .then((res) => res.json())
       .then((res) => {
-        // console.log(res)
-        // 洗牌並選擇前四個產品
-        const shuffledProducts = shuffle(res.data);
-        const selectedProducts = shuffledProducts.slice(0, 4);
-        setProduct(selectedProducts);
+        const shuffledProducts = shuffle(res.data)
+        const selectedProducts = shuffledProducts.slice(0, 4)
+        setProduct(selectedProducts)
       })
   }, [pid])
 
-  if (!product || !Array.isArray(product)) return null  
+  if (!product || !Array.isArray(product)) return null
 
   return (
     <>
       <div className="container width-1200">
         <div className="row justify-content-center my-5">
           {product.map((productItem) => (
-           <div key={productItem} className="col-sm-3 col-12 my-3">
+            <div key={productItem} className="col-sm-3 col-12 my-3">
               <Card className="custom-card bg-bg-gray">
-              <div>
-                <Card.Img
+                <div>
+                  <Card.Img
                     variant="top"
                     src={`/images/product/images/${productItem.category}/${productItem.id}/${productItem.img_top}`}
                     style={{
@@ -46,27 +46,43 @@ export default function ProductRecommend() {
                       height: '100%',
                     }}
                   />
-              </div>
-                <Card.Body>
-                <div className="text-center">
-                <Card.Title className="h6 my-1">{productItem.brand}</Card.Title>
-                <p>{productItem.name}</p>
                 </div>
+                <Card.Body>
+                  <div className="text-center">
+                    <Link
+                      className="h6 my-2"
+                      href={`/product/${productItem.id}`}
+                    >
+                      {productItem.brand}
+                    </Link>
+                    <br />
+                    <Link
+                      className="h6 my-2"
+                      href={`/product/${productItem.id}`}
+                    >
+                      {productItem.name}
+                    </Link>
+
+                    {/* <Card.Title className="h6 my-1"> */}
+
+                    {/* </Card.Title> */}
+                    {/* <p>{productItem.name}</p> */}
+                  </div>
                   <div className="d-flex justify-content-between align-items-center">
-                    {productItem.discount ?
+                    {productItem.discount ? (
                       <div>
                         <span className="note-text">{`NT$${productItem.discount.toLocaleString()}`}</span>
                         <span className="text-decoration-line-through type-text m-2">
                           {`NT$${productItem.price.toLocaleString()}`}
                         </span>
                       </div>
-                      : 
+                    ) : (
                       <>
                         <span className="price-text m-1">
                           {`NT$${productItem.price.toLocaleString()}`}
                         </span>
                       </>
-                    }
+                    )}
                     <div>
                       <Button className="color-btn" variant="light">
                         <GoHeartFill />
@@ -94,7 +110,7 @@ export default function ProductRecommend() {
               width: 380px;
             }
           }
-          
+
           .note-text {
             color: var(--red, #dc5151);
             font-size: 15.5px;
@@ -104,7 +120,7 @@ export default function ProductRecommend() {
             font-weight: normal;
             font-size: 13.5px;
           }
-          .price-text{
+          .price-text {
             color: var(--gray, #858585);
             font-weight: normal;
             font-size: 15.5px;

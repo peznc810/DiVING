@@ -271,7 +271,7 @@ export default function Filter({ setFilterSettings, clearSettings }) {
             </div>
           </div>
           {/* 清除按鍵 */}
-          <div className="my-3 col text-center">
+          <div className="my-4 col text-center">
             <button
               className="btn btn-primary clear-settings"
               onClick={clearSettings}

@@ -12,7 +12,7 @@ export default function SearchProduct({ setFilterSettings }) {
             aria-label="from"
             aria-describedby="from"
             style={{
-              borderRadius: 2.8,
+              borderRadius: 4,
             }}
             onChange={(e) =>
               setFilterSettings((c) => ({ ...c, searchKey: e.target.value }))
