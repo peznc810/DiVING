@@ -4,7 +4,7 @@ import Stars from '@/components/product/star/star'
 import ProductRecommond from '@/components/product/detail/product-recommond'
 import Link from 'next/link'
 
-export default function Switch({imgDetails, id, category, detail}) {
+export default function Switch({ imgDetails, id, category, detail }) {
   const [isSwitchOn, setIsSwitchOn] = useState(false)
 
   const handleSwitchToggle = () => {
@@ -77,8 +77,6 @@ export default function Switch({imgDetails, id, category, detail}) {
               </button>
             </div>
           </div>
-
-          
         </div>
       )}
       {!isSwitchOn && (
@@ -90,24 +88,33 @@ export default function Switch({imgDetails, id, category, detail}) {
           <div className="row mt-2 mx-2 my-5">
             <div className="col-sm-12">
               <p className="text-center my-3 font-weight-light">
-                <p className="p-3" dangerouslySetInnerHTML={{ __html: detail.replace(/\n/g, '<br>') }}></p>
+                <p
+                  className="p-3"
+                  dangerouslySetInnerHTML={{
+                    __html: detail.replace(/\n/g, '<br>'),
+                  }}
+                ></p>
               </p>
               <div className="img-container">
                 {imgDetails.map((imgDetail) => {
                   return (
                     <div key={imgDetail}>
                       <div className="p-2 my-3 custom-image-container">
-                        <img src={`/images/product/images/${category}/${id}/${imgDetail}`} />
+                        <img
+                          className="my-2"
+                          src={`/images/product/images/${category}/${id}/${imgDetail}`}
+                        />
                       </div>
                     </div>
-                  );
+                  )
                 })}
               </div>
             </div>
           </div>
         </div>
       )}
-      <br /><br />
+      <br />
+      <br />
       <style>{`    
       .form-check-input{
         width: 40px;
