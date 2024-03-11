@@ -13,8 +13,8 @@ export default function Profile() {
     tel: '',
     address: '',
   }
+  // 取得dbData
   const [userProfile, setUserProfile] = useState(initUserProfile)
-  // console.log(auth)
   const getUserProfile = async (id) => {
     const token = localStorage.getItem('token')
     const url = `http://localhost:3005/api/users/${id}`
@@ -27,8 +27,6 @@ export default function Profile() {
     })
       .then((res) => res.json())
       .then((result) => {
-        console.log(result)
-        console.log(result.userData)
         const dbUser = result.userData
         const dbUserProfile = { ...userProfile }
         for (const key in dbUserProfile) {
@@ -42,19 +40,51 @@ export default function Profile() {
       .catch((err) => console.log(err))
   }
 
+  // 抓取表單欄位變動的值
+  const [newProfile, setProfile] = useState({})
+  const handleChangeProfile = (e) => {
+    setProfile({ ...newProfile, [e.target.name]: e.target.value })
+  }
+
+  // 更新dbData
+  const updateProfile = async (id, profile) => {
+    const url = `http://localhost:3005/api/users/${id}/profile`
+    const data = profile.JSON.stringify()
+    const token = localStorage.getItem('token')
+    await fetch(url, {
+      method: 'PUT',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      body: data,
+      credentials: 'include',
+    })
+      .then((res) => res.JSON())
+      .then((result) => console.log(result))
+      .catch((err) => console.log(err))
+  }
+
   useEffect(() => {
     if (auth.id !== '') {
       getUserProfile(auth.id)
     }
   }, [auth])
 
+  useEffect(() => {
+    setProfile(userProfile)
+  }, [userProfile])
   return (
     <>
       <Head>
         <title>個人資料</title>
       </Head>
       <Menu />
-      <Form userProfile={userProfile} />
+      <Form
+        userProfile={userProfile}
+        handleVal={handleChangeProfile}
+        newProfile={newProfile}
+        updateProfile={updateProfile}
+      />
     </>
   )
 }

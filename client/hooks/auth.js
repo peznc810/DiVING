@@ -44,7 +44,9 @@ export function AuthProvider({ children }) {
           // 登入成功要做的事
           let token = result.token
           // 解譯token
-          const userData = parseJwt(token)
+          const user = parseJwt(token)
+          const id = user.id.toString()
+          const userData = { ...user, id: id }
           // 把會員的資料放到狀態中，之後可以共享到其他頁面
           setAuth({ ...userData, isAuth: true })
           // 把token存入localStorage，後續要重新抓登入狀態時會需要
