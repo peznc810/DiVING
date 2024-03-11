@@ -14,7 +14,7 @@ export default function Coupon() {
   const textRef = useRef(null)
   // const navigate = useNavigate() // 導向路徑
 
-  const url = 'http://localhost:3005/api/coupon/:id'
+  const url = 'http://localhost:3005/api/coupon/'
   // 連接資料庫
   useEffect(() => {
     fetch(url, {
@@ -30,7 +30,7 @@ export default function Coupon() {
       .catch(() => {
         console.log('連接錯誤')
       })
-  }, [])
+  }, [showCoupon, codeShow])
   // 複製文字
   const copyText = () => {
     const text = textRef.current.innerText

@@ -1,8 +1,30 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import styles from '../styles.module.scss'
 import Image from 'next/image'
+import { useAuth } from '@/hooks/auth'
 
 export default function Form() {
+  const [couponData, setCouponData] = useState()
+  const { auth } = useAuth()
+  console.log(auth)
+
+  const url = `http://localhost:3005/api/coupon/25`
+  useEffect(() => {
+    fetch(url, {
+      method: 'get',
+    })
+      .then((response) => {
+        return response.json()
+      })
+      .then((results) => {
+        console.log(results)
+        setCouponData(results)
+      })
+      .catch((error) => {
+        console.log('連線錯誤')
+      })
+  }, [])
+
   return (
     <>
       <div className={`col-sm-8 p-0 rounded-end ${styles['form-container']}`}>
@@ -36,40 +58,27 @@ export default function Form() {
               <div className="mb-5">
                 <div className={`row g-3 ${styles.card}`}>
                   {/* 卡片本體 */}
-                  <div className="col-12 col-md-6">
-                    <div className=" d-flex border border-info rounded p-3 h-100">
-                      <div
-                        className={`rounded ${styles.avatar} flex-shrink-0 me-3`}
-                      >
-                        <Image
-                          src="/images/coupons/turtle.jpg"
-                          alt="turtle"
-                          fill
-                        />
+                  {couponData.map((v, i) => {
+                    return (
+                      <div className="col-12 col-md-6" key={v.id}>
+                        <div className=" d-flex border border-info rounded p-3 h-100">
+                          <div
+                            className={`rounded ${styles.avatar} flex-shrink-0 me-3`}
+                          >
+                            <Image
+                              src="/images/coupons/turtle.jpg"
+                              alt="turtle"
+                              fill
+                            />
+                          </div>
+                          <div className="right flex-grow-1">
+                            <h4 className="fs-6">{v.coupon_name}</h4>
+                            <p>Lorem ipsum dolor sit</p>
+                          </div>
+                        </div>
                       </div>
-                      <div className="right flex-grow-1">
-                        <h4 className="fs-6">新會員</h4>
-                        <p>Lorem ipsum dolor sit</p>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="col-12 col-md-6">
-                    <div className=" d-flex border border-info rounded p-3 h-100">
-                      <div
-                        className={`rounded ${styles.avatar} flex-shrink-0 me-3`}
-                      >
-                        <Image
-                          src="/images/coupons/turtle.jpg"
-                          alt="turtle"
-                          fill
-                        />
-                      </div>
-                      <div className="right flex-grow-1">
-                        <h4 className="fs-6">新會員</h4>
-                        <p>Lorem ipsum dolor sit</p>
-                      </div>
-                    </div>
-                  </div>
+                    )
+                  })}
                 </div>
               </div>
               {/* 頁數按鈕 */}

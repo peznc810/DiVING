@@ -8,7 +8,9 @@ export default function DefaultLayout({ currentPage, children }) {
   return (
     <>
       <Navbar background={navBackground} />
-      <div style={{ paddingTop: '60px' }}>{children}</div>
+      <div style={{ paddingTop: `${currentPage === '/' ? '0px' : '60px'}` }}>
+        {children}
+      </div>
       <Footer />
     </>
   )

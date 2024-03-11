@@ -17,8 +17,8 @@ router.get('/', async (req, res) => {
 
 
 // 讀取資料
-router.get('/:id',(req,res)=>{
+// router.get('/:id',(req,res)=>{
 
-})
+// })
 
 export default router

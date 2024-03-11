@@ -11,6 +11,7 @@ import { fileURLToPath, pathToFileURL } from 'url';
 // import indexRouter from './routes/index.mjs';
 // import usersRouter from './routes/users.mjs';
 import eventRouter from './routes/event.mjs'
+// import couponRouter from './routes/coupon.mjs'
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -59,6 +60,7 @@ app.use(express.static(join(__dirname, 'public')));
 // app.use('/', indexRouter);
 // app.use('/users', usersRouter);
 app.use('/event', eventRouter);
+// app.use('/coupon', couponRouter);
 
 // 載入routes中的各路由檔案，並套用api路由 START
 const apiPath = '/api' // 預設路由

@@ -3,7 +3,6 @@ import styles from './latest-news.module.scss'
 import EventCard from './event-card'
 import EventFilter from './event-filter'
 import Pagination from '../common/pagination'
-// import usePagination from '@/hooks/use-pagination'
 
 import { IoIosArrowBack } from 'react-icons/io'
 import { IoIosArrowForward } from 'react-icons/io'
