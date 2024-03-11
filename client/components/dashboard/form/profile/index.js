@@ -4,9 +4,13 @@ import styles from './styles.module.scss'
 export default function Form({
   userProfile = {},
   handleChangeProfile = () => {},
-  newProfile = {},
-  updateProfile = (id = 0, profile) => {},
+  handleUpdateProfile = () => {},
+  handleChangePWD = () => {},
+  handleUpdatePWD = () => {},
+  errorMsg = {},
 }) {
+  // 表單驗證（除email之外，接不可存在特殊符號）
+
   return (
     <>
       <div className={`col-sm-8 p-0 rounded-end ${styles['form-container']}`}>
@@ -31,12 +35,12 @@ export default function Form({
                 className="accordion-collapse collapse"
                 data-bs-parent="#accordionFlushExample"
               >
-                <form onSubmit={updateProfile}>
+                <form onSubmit={handleUpdateProfile}>
                   <div className="accordion-body">
                     <div className="row gy-4">
                       <div className="col-12 col-sm-6">
                         <label htmlFor="myName" className="form-label">
-                          姓名
+                          <span style={{ color: 'red' }}>*</span> 姓名
                         </label>
                         <input
                           type="text"
@@ -45,7 +49,6 @@ export default function Form({
                           name="name"
                           placeholder="王小美"
                           defaultValue={userProfile.name}
-                          onChange={handleChangeProfile}
                         />
                       </div>
                       <div className="col-12 col-sm-6">
@@ -58,13 +61,12 @@ export default function Form({
                           className="form-control"
                           name="birth"
                           defaultValue={userProfile.birth}
-                          onChange={handleChangeProfile}
                         />
                       </div>
                       {/* 改的話要再註冊驗證一次 */}
                       <div className="col-12 col-sm-6">
                         <label htmlFor="myEmail" className="form-label">
-                          電子郵件
+                          <span style={{ color: 'red' }}>*</span> 電子郵件
                         </label>
                         <input
                           type="email"
@@ -73,7 +75,6 @@ export default function Form({
                           name="email"
                           placeholder="xxx@test.com.tw"
                           defaultValue={userProfile.email}
-                          onChange={handleChangeProfile}
                         />
                       </div>
                       <div className="col-12 col-sm-6">
@@ -87,9 +88,7 @@ export default function Form({
                           name="tel"
                           placeholder="0987654321"
                           maxLength={10}
-                          defaultValue={
-                            userProfile.tel ? `0${userProfile.tel}` : ''
-                          }
+                          defaultValue={userProfile.tel}
                           onChange={handleChangeProfile}
                         />
                       </div>
@@ -103,7 +102,6 @@ export default function Form({
                           className="form-control"
                           name="address"
                           defaultValue={userProfile.address}
-                          onChange={handleChangeProfile}
                         />
                       </div>
                       <div className="col-12 text-end">
@@ -144,46 +142,72 @@ export default function Form({
                 className="accordion-collapse collapse"
                 data-bs-parent="#accordionFlushExample"
               >
-                <form action="">
+                <form onSubmit={handleUpdatePWD}>
                   <div className="accordion-body">
                     <div className="row gy-1">
                       <div className="col-6 me-1 pb-4 position-relative">
-                        <label htmlFor="password" className="form-label">
-                          舊密碼
-                        </label>
-                        <input
-                          type="password"
-                          id="password"
-                          className="form-control"
-                        />
-                        {/* 警示訊息 */}
-                        {/* 還是改成紅色border + 叉叉icon？ */}
-                        <div
-                          id="emailHelp"
-                          className="form-text text-danger ps-1 position-absolute bottom-0 d-none"
-                        >
-                          密碼錯誤
+                        <div className="d-flex justify-content-between">
+                          <label htmlFor="origin" className="form-label">
+                            舊密碼
+                          </label>
+                          {/* 警示訊息 */}
+                          {/* 還是改成紅色border + 叉叉icon？ */}
+                          <span className="form-text text-danger pe-1 m-0">
+                            {errorMsg.originErr !== '' && errorMsg.originErr}
+                          </span>
                         </div>
                         {/* END */}
-                      </div>
-                      <div className="col-6 me-1 pb-4">
-                        <label htmlFor="newPassword" className="form-label">
-                          新密碼
-                        </label>
                         <input
                           type="password"
-                          id="newPassword"
-                          className="form-control"
+                          id="origin"
+                          name="origin"
+                          className={`form-control ${
+                            errorMsg.originErr !== '' && 'border-danger'
+                          }`}
+                          maxLength={12}
+                          onChange={handleChangePWD}
+                        />
+                      </div>
+                      <div className="col-6 me-1 pb-4">
+                        <div className="d-flex justify-content-between">
+                          <label htmlFor="newPWD" className="form-label">
+                            新密碼
+                          </label>
+                          <span className="form-text text-danger pe-1 m-0 mb-1">
+                            {errorMsg.newPWDErr !== '' && errorMsg.newPWDErr}
+                          </span>
+                        </div>
+                        <input
+                          type="password"
+                          id="newPWD"
+                          name="newPWD"
+                          className={`form-control ${
+                            errorMsg.newPWDErr !== '' && 'border-danger'
+                          }`}
+                          placeholder="請輸入8-12位(含大小寫英文字母)"
+                          maxLength={12}
+                          onChange={handleChangePWD}
                         />
                       </div>
                       <div className="col-6 me-1 pb-4 position-relative">
-                        <label htmlFor="rePassword" className="form-label">
-                          確認密碼
-                        </label>
+                        <div className="d-flex justify-content-between">
+                          <label htmlFor="rePWD" className="form-label">
+                            確認密碼
+                          </label>
+                          <span className="form-text text-danger pe-1 m-0 mb-1">
+                            {errorMsg.rePWDErr !== '' && errorMsg.rePWDErr}
+                          </span>
+                        </div>
                         <input
                           type="password"
-                          id="rePassword"
-                          className="form-control"
+                          id="rePWD"
+                          name="rePWD"
+                          className={`form-control ${
+                            errorMsg.rePWDErr !== '' && 'border-danger'
+                          }`}
+                          placeholder="請輸入8-12位(含大小寫英文字母)"
+                          maxLength={12}
+                          onChange={handleChangePWD}
                         />
                         <div
                           id="emailHelp"

@@ -219,7 +219,9 @@ export function AuthProvider({ children }) {
             }
           } else {
             // token過期，跳轉至登入頁面
-            router.push(loginRoute)
+            if (router.pathname.startsWith(protectedRoutes)) {
+              router.push(loginRoute)
+            }
             setAuth(initAuth)
             localStorage.removeItem('token')
             // 之後可能改用alert之類的提示訊息處理

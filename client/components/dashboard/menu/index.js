@@ -3,16 +3,11 @@ import styles from './styles.module.scss'
 import Link from 'next/link'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
+import { useAuth } from '@/hooks/auth'
+import { menuItems } from '@/config/dashboard-menu'
 
 // React icon
-import { GoPerson } from 'react-icons/go'
-import { RiFileList2Line } from 'react-icons/ri'
-import { TbMessage } from 'react-icons/tb'
-import { FaRegHeart } from 'react-icons/fa'
-import { LuClipboardList } from 'react-icons/lu'
-import { HiOutlineTicket } from 'react-icons/hi'
 import { TbLogout2 } from 'react-icons/tb'
-import { useAuth } from '@/hooks/auth'
 
 export default function Menu() {
   const router = useRouter()
@@ -39,72 +34,21 @@ export default function Menu() {
           </div> */}
           {/* 列表 */}
           <ul className="list-unstyled my-3 px-0">
-            <li>
-              <Link
-                className={`text-center text-sm-start ps-sm-4 ${
-                  path.includes('profile') ? 'bg-secondary' : ''
-                }`}
-                href="/dashboard/profile"
-              >
-                <GoPerson />
-                個人資訊
-              </Link>
-            </li>
-            <li>
-              <Link
-                className={`text-center text-sm-start ps-sm-4 ${
-                  path.includes('orders') ? 'bg-secondary' : ''
-                }`}
-                href="/dashboard/orders"
-              >
-                <LuClipboardList />
-                訂單記錄
-              </Link>
-            </li>
-            <li className="">
-              <Link
-                className={`text-center text-sm-start ps-sm-4 ${
-                  path.includes('coupons') ? 'bg-secondary' : ''
-                }`}
-                href="/dashboard/coupons"
-              >
-                <HiOutlineTicket />
-                優惠券
-              </Link>
-            </li>
-            <li>
-              <Link
-                className={`text-center text-sm-start ps-sm-4 ${
-                  path.includes('comments') ? 'bg-secondary' : ''
-                }`}
-                href="/dashboard/comments"
-              >
-                <TbMessage />
-                我的評論
-              </Link>
-            </li>
-            <li>
-              <Link
-                className={`text-center text-sm-start ps-sm-4 ${
-                  path.includes('favorites') ? 'bg-secondary' : ''
-                }`}
-                href="/dashboard/favorites"
-              >
-                <FaRegHeart />
-                我的收藏
-              </Link>
-            </li>
-            <li>
-              <Link
-                className={`text-center text-sm-start ps-sm-4 ${
-                  path.includes('posts') ? 'bg-secondary' : ''
-                }`}
-                href="/dashboard/posts"
-              >
-                <RiFileList2Line />
-                我的文章
-              </Link>
-            </li>
+            {menuItems.map((item, index) => {
+              return (
+                <li key={index}>
+                  <Link
+                    className={`text-center text-sm-start ps-sm-4 ${
+                      path.includes(item.pathname) ? 'bg-secondary' : ''
+                    }`}
+                    href={`/dashboard/${item.pathname}`}
+                  >
+                    {item.icon}
+                    {item.label}
+                  </Link>
+                </li>
+              )
+            })}
             <li>
               <Link
                 className="text-center text-sm-start ps-sm-4"
