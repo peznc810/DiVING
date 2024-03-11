@@ -13,7 +13,6 @@ import { MdOutlineCategory } from 'react-icons/md'
 import { GoHeartFill } from 'react-icons/go'
 import { FaCartPlus } from 'react-icons/fa'
 import toast, { Toaster } from 'react-hot-toast'
-// import styles from '@/components/product/product.module.css'
 
 export default function Detail() {
   const router = useRouter()

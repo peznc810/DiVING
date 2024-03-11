@@ -26,12 +26,26 @@ export default function Filter({ setFilterSettings, clearSettings }) {
   const allCategory = ['防寒衣', '面鏡', '呼吸管', '蛙鞋', '配件']
 
   //價格篩選
+  const [selectedPrice, setSelectedPrice] = useState('')
+
   const [priceFilter, setPriceFilter] = useState({
     $1000以下: false,
     '$1001-$3500': false,
     '$3501-$6500': false,
     $6501以上: false,
   })
+
+  const handlePriceChange = (priceRange) => {
+    setFilterSettings((prevFilterSettings) => ({
+      ...prevFilterSettings,
+      price: priceRange,
+    }))
+  }
+
+  const handlePriceRadioChange = (priceRange) => {
+    handlePriceChange(priceRange)
+    setSelectedPrice(priceRange)
+  }
 
   //css樣式
   const handleButtonClick = (buttonName) => {
@@ -166,14 +180,16 @@ export default function Filter({ setFilterSettings, clearSettings }) {
                 <div className="form-check">
                   <input
                     className="form-check-input"
-                    type="checkbox"
+                    type="radio"
                     value=""
                     id="flexCheckDefault"
+                    checked={selectedPrice === '$1000以下'}
                     onChange={() => {
                       setFilterSettings((c) => ({
                         ...c,
                         price: '$1000以下',
                       }))
+                      setSelectedPrice('$1000以下')
                     }}
                   />
                   <label
@@ -187,14 +203,16 @@ export default function Filter({ setFilterSettings, clearSettings }) {
                 <div className="form-check my-2">
                   <input
                     className="form-check-input"
-                    type="checkbox"
+                    type="radio"
                     value=""
                     id="flexCheckChecked"
+                    checked={selectedPrice === '$1001-$3500'}
                     onChange={() => {
                       setFilterSettings((c) => ({
                         ...c,
                         price: '$1001-$3500',
                       }))
+                      setSelectedPrice('$1001-$3500')
                     }}
                   />
                   <label
@@ -208,14 +226,16 @@ export default function Filter({ setFilterSettings, clearSettings }) {
                 <div className="form-check my-2">
                   <input
                     className="form-check-input"
-                    type="checkbox"
+                    type="radio"
                     value=""
                     id="flexCheckChecked"
+                    checked={selectedPrice === '$3501-$6500'}
                     onChange={() => {
                       setFilterSettings((c) => ({
                         ...c,
                         price: '$3501-$6500',
                       }))
+                      setSelectedPrice('$3501-$6500')
                     }}
                   />
                   <label
@@ -228,21 +248,23 @@ export default function Filter({ setFilterSettings, clearSettings }) {
                 <div className="form-check my-2">
                   <input
                     className="form-check-input"
-                    type="checkbox"
+                    type="radio"
                     value=""
                     id="flexCheckChecked"
+                    checked={selectedPrice === '$6501以上'}
                     onChange={() => {
                       setFilterSettings((c) => ({
                         ...c,
                         price: '$6501以上',
                       }))
+                      setSelectedPrice('$6501以上')
                     }}
                   />
                   <label
                     className="form-check-label"
                     htmlFor="flexCheckChecked"
                   >
-                    $6,500以上
+                    $6,501以上
                   </label>
                 </div>
               </div>
