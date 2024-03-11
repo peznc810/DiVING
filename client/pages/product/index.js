@@ -171,7 +171,7 @@ export default function List() {
 
         <div className="row mt-2 mb-3">
           <div className="card-text d-flex justify-content-between align-items-center">
-            <h6 className="ps-3 my-1">所有商品（70）</h6>
+            <h6 className="ps-3 my-1"></h6>
             {/* 排序 */}
             <Order setSorting={setSorting} />
           </div>

@@ -187,6 +187,18 @@ div.scroll {
   object-fit: cover;
 }
 
+//card
+.discount-tag{
+  font-size: 12px;
+  padding: 4px 4px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 2;
+  margin: 10px;
+  font-size: 15px;
+}
+
 //order
 #sidebarToggle:hover {
   background-color: #ff9720;

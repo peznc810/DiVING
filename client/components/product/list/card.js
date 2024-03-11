@@ -3,6 +3,8 @@ import Stars from '@/components/product/star/star'
 import Pagination from '@/components/product/list/pagination'
 import Link from 'next/link'
 
+import Badge from 'react-bootstrap/Badge'
+import Stack from 'react-bootstrap/Stack'
 import { GoHeartFill } from 'react-icons/go'
 import { FaCartPlus } from 'react-icons/fa'
 
@@ -26,6 +28,9 @@ export default function Card({ setProduct, value }) {
         >
           <div className="card-body no-space-x">
             <div>
+              <Stack className="discount-tag" direction="horizontal" gap={2}>
+                <Badge bg="danger">DISCOUNT</Badge>
+              </Stack>
               <img
                 src={`/images/product/images/${value.category}/${value.id}/${value.img_top}`}
                 alt={`${value.id}`}

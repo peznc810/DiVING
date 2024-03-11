@@ -4,6 +4,8 @@ import shuffle from 'lodash/shuffle' // 引入洗牌函式
 
 import Card from 'react-bootstrap/Card'
 import Button from 'react-bootstrap/Button'
+import Badge from 'react-bootstrap/Badge'
+import Stack from 'react-bootstrap/Stack'
 
 import { GoHeartFill } from 'react-icons/go'
 import { FaCartPlus } from 'react-icons/fa'
@@ -36,6 +38,9 @@ export default function ProductRecommend() {
           {product.map((productItem) => (
             <div key={productItem} className="col-sm-3 col-12 my-3">
               <Card className="custom-card bg-bg-gray">
+                <Stack className="discount-tag" direction="horizontal" gap={2}>
+                  <Badge bg="danger">DISCOUNT</Badge>
+                </Stack>
                 <div>
                   <Card.Img
                     variant="top"
@@ -62,11 +67,6 @@ export default function ProductRecommend() {
                     >
                       {productItem.name}
                     </Link>
-
-                    {/* <Card.Title className="h6 my-1"> */}
-
-                    {/* </Card.Title> */}
-                    {/* <p>{productItem.name}</p> */}
                   </div>
                   <div className="d-flex justify-content-between align-items-center">
                     {productItem.discount ? (
