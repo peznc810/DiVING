@@ -24,7 +24,8 @@ router.post("/create-order", async(req, res)=>{
   const orderId =uuidv4()
   const packgeId = uuidv4()
 
-  const { totalPrice, lineProducts, products } = req.body;
+  const { totalPrice, lineProducts, products, receiver, credit_card, order_note } = req.body;
+
   //傳送給line pay的資料
   const order = {
     orderId: orderId,
@@ -48,7 +49,10 @@ router.post("/create-order", async(req, res)=>{
     payment: "Line pay",
     shipping: "宅配",
     status: "建立成功",
+    receiver : JSON.stringify(receiver),
+    credit_card: JSON.stringify(credit_card),
     order_info: JSON.stringify(order),
+    order_note,
   }
 
   addOrder(dbOrder)
@@ -70,29 +74,31 @@ router.post("/create-order", async(req, res)=>{
 
 router.get("/reserve", async (req, res) => {
   try {
+    console.log("1");
     if (!req.query.orderId) {
       return res.json({ status: "error", message: "order id不存在" });
     }
+    console.log("2");
 
     const orderId = req.query.orderId;
     const redirectUrls = {
       confirmUrl: process.env.REACT_REDIRECT_CONFIRM_URL,
       cancelUrl: process.env.REACT_REDIRECT_CANCEL_URL,
     };
-
+    console.log("3");
     const [[orderRecord]] = await getOrder(orderId);
     if (!orderRecord) {
       return res.status(400).json({ status: "error", message: "無法找到該訂單" });
     }
-
-    console.log(orderRecord);
+    console.log("4");
 
     const order = JSON.parse(orderRecord.order_info);
+    console.log("5");
 
     const linePayResponse = await linePayClient.request.send({
       body: { ...order, redirectUrls },
     });
-
+    console.log("6");
     const reservation = {
       ...order,
       returnCode: linePayResponse.body.returnCode,
@@ -100,9 +106,12 @@ router.get("/reserve", async (req, res) => {
       transactionId: linePayResponse.body.info.transactionId,
       paymentAccessToken: linePayResponse.body.info.paymentAccessToken,
     };
+    console.log(reservation);
 
     await updateOrder(JSON.stringify(reservation), reservation.transactionId, orderId);
     
+    console.log("8");
+
     res.redirect(linePayResponse.body.info.paymentUrl.web);
   } catch (error) {
     console.log("發生錯誤", error);
@@ -117,6 +126,10 @@ router.get("/confirm", async (req, res) => {
     const [[dbOrder]] = await getOrderByTid(transactionId);
     if (!dbOrder) {
       return res.status(400).json({ status: "error", message: "無法找到該訂單" });
+    }
+
+    if(dbOrder.return_code === "0000"){
+      return res.json({ status: 'repeat'});
     }
 
     const transaction = JSON.parse(dbOrder.reservation);
@@ -144,7 +157,7 @@ router.get("/confirm", async (req, res) => {
 function getOrder(orderId) {
   return new Promise(async (resolve, reject) => {
     const result = await db.execute(
-      'SELECT * FROM `purchase_order` WHERE `id` = ?',[orderId]
+      'SELECT * FROM `order` WHERE `id` = ?',[orderId]
     );
     if (result) {
       resolve(result)
@@ -157,7 +170,7 @@ function getOrder(orderId) {
 function getOrderByTid(transactionId) {
   return new Promise(async (resolve, reject) => {
     const result = await db.execute(
-      'SELECT * FROM `purchase_order` WHERE `transaction_id` = ?',[transactionId]
+      'SELECT * FROM `order` WHERE `transaction_id` = ?',[transactionId]
     );
     if (result) {
       resolve(result)
@@ -168,11 +181,13 @@ function getOrderByTid(transactionId) {
 }
 
 function updateOrder(reservation, transaction_id, orderId){
-  return db.execute("UPDATE `purchase_order` SET `reservation` = ?, `transaction_id` = ? WHERE `id` =?;",[reservation, transaction_id, orderId])
+  console.log(reservation, transaction_id, orderId);
+
+  return db.execute("UPDATE `order` SET `reservation` = ?, `transaction_id` = ? WHERE `id` =?;",[reservation, transaction_id, orderId])
 }
 
 function updateOrderStatus(status, return_code, confirm, orderId) {
-  return db.execute("UPDATE `purchase_order` SET `status` = ?, `return_code` = ?, `confirm` = ? WHERE `id` = ?;", [status, return_code, confirm, orderId]);
+  return db.execute("UPDATE `order` SET `status` = ?, `return_code` = ?, `confirm` = ? WHERE `id` = ?;", [status, return_code, confirm, orderId]);
 }
 
 function addOrder(dbOrder){
@@ -188,8 +203,8 @@ function addOrder(dbOrder){
   
   return new Promise((resolve, reject) => {
     db.execute(
-      'INSERT INTO `purchase_order`(id, user_id, total_price, payment, shipping, status, order_info, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?);',[
-        dbOrder.id, dbOrder.user_id, dbOrder.total_price, dbOrder.payment, dbOrder.shipping, dbOrder.status, dbOrder.order_info, datetimeNow
+      'INSERT INTO `order`(id, user_id, total_price, payment, shipping, status, receiver, credit_card, order_info, created_at, order_note) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);',[
+        dbOrder.id, dbOrder.user_id, dbOrder.total_price, dbOrder.payment, dbOrder.shipping, dbOrder.status, dbOrder.receiver, dbOrder.credit_card, dbOrder.order_info, datetimeNow ,dbOrder.order_note
       ]
     ).then(([result]) => {
       if (result) {

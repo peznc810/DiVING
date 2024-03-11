@@ -3,7 +3,6 @@ import toast, { Toaster } from 'react-hot-toast'
 
 import CartStep from '@/components/cart/cart-step'
 import AutoTab from '@/components/cart/test'
-import userData from '@/data/cart/user.json'
 import Order from '@/components/cart/order'
 
 import { useRouter } from 'next/router'
@@ -14,6 +13,7 @@ export default function Home() {
 
   const [order, setOrder] = useState({})
   const [cartData, setCartData] = useState(null)
+
   const [userInputs, setUserInputs] = useState({
     user_name: '',
     user_phone: '',
@@ -23,19 +23,20 @@ export default function Home() {
     cCard_name: '',
     cCard_address: '',
     order_note: '',
+    cCard_number1: '',
+    cCard_number2: '',
+    cCard_number3: '',
+    cCard_number4: '',
+    cCard_securityCode: '',
+    cCard_expirationMonth: '',
+    cCard_expirationYear: '',
   })
-  const [result, setResult] = useState({
-    returnCode: '',
-    returnMessage: '',
-  })
+
   const [isDone, setIsDone] = useState(false)
 
   let totalPrice = 0
 
   const user_id = '1'
-  const [cUser] = userData.filter((v) => {
-    return v.user_id === user_id
-  })
 
   //抓取購物車的內容
   useEffect(() => {
@@ -134,7 +135,38 @@ export default function Home() {
         products.push(data)
       })
 
-      const data = { user_id, totalPrice, lineProducts, products }
+      const receiverAddress =
+        userInputs.user_city + userInputs.user_section + userInputs.user_road
+
+      const receiver = {
+        name: userInputs.user_name,
+        phone: userInputs.user_phone,
+        address: receiverAddress,
+      }
+
+      const expirationDate = `${userInputs.cCard_expirationMonth}/${userInputs.cCard_expirationYear}`
+
+      const number = `${userInputs.cCard_number1}-${userInputs.cCard_number2}-${userInputs.cCard_number3}-${userInputs.cCard_number4}`
+
+      const credit_card = {
+        number,
+        securityCode: userInputs.cCard_securityCode,
+        expirationDate,
+        name: userInputs.cCard_name,
+        address: userInputs.cCard_address,
+      }
+
+      const order_note = userInputs.order_note
+
+      const data = {
+        user_id,
+        totalPrice,
+        lineProducts,
+        products,
+        receiver,
+        credit_card,
+        order_note,
+      }
       const url = 'http://localhost:3005/api/line-pay/create-order'
       fetch(url, {
         method: 'POST',
@@ -147,7 +179,6 @@ export default function Home() {
           return res.json()
         })
         .then((data) => {
-          console.log(data)
           if (data.status === 'success') {
             setOrder(data.data.order)
           }
@@ -166,36 +197,6 @@ export default function Home() {
     }
   }
 
-  //處理訂單狀態
-  // const handleConfirm = async (transactionId) => {
-  //   let res
-  //   const url = `http://localhost:3005/api/line-pay/confirm?transactionId=${transactionId}`
-
-  //   await fetch(url, {
-  //     method: 'GET',
-  //   })
-  //     .then((response) => {
-  //       return response.json()
-  //     })
-  //     .then((result) => {
-  //       res = result
-  //     })
-  //     .catch((err) => {
-  //       console.error('An error occurred:', err)
-  //     })
-
-  //   if (res.status === 'success') {
-  //     toast.success('付款成功')
-  //   } else {
-  //     toast.error('付款失敗')
-  //   }
-
-  //   if (res.data) {
-  //     setResult(res.data)
-  //   }
-
-  //   setIsDone(true)
-  // }
   const handleConfirm = async (transactionId) => {
     try {
       const url = `http://localhost:3005/api/line-pay/confirm?transactionId=${transactionId}`
@@ -209,14 +210,14 @@ export default function Home() {
 
       const result = await response.json()
 
+      console.log(result)
+
       if (result.status === 'success') {
         toast.success('付款成功')
+      } else if (result.status === 'repeat') {
+        toast.success('訂單已成立')
       } else {
         toast.error('付款失敗')
-      }
-      W
-      if (result.data) {
-        setResult(result.data)
       }
 
       setIsDone(true)
@@ -234,7 +235,7 @@ export default function Home() {
 
   return (
     <>
-      {isDone && orderId ? (
+      {isDone ? (
         <Order orderIdTest={orderId} />
       ) : (
         <div className="container">
@@ -264,14 +265,6 @@ export default function Home() {
                       productPrice,
                       productDiscount,
                     } = item
-                    {
-                      /* let price = 0
-                    if (productDiscount) {
-                      price = productDiscount * num
-                    } else {
-                      price = (productPrice || lessonPrice) * num
-                    } */
-                    }
                     let price = productDiscount
                       ? productDiscount * num
                       : (productPrice || lessonPrice) * num
@@ -325,201 +318,9 @@ export default function Home() {
           </div>
           <OrderForm
             handleSub={handleSub}
-            cartData={cartData}
-            setOrder={setOrder}
-            totalPrice={totalPrice}
+            userInputs={userInputs}
+            setUserInputs={setUserInputs}
           />
-          {/* <form onSubmit={handleSub}>
-            <div className="container">
-              <div className="w-100 section-name text-center">
-                <h5 className="span">送貨資料</h5>
-              </div>
-              <div className="container">
-                <div className="d-flex mt-3">
-                  <input
-                    type="checkbox"
-                    className="deliver_cb"
-                    onClick={() => t1Change()}
-                  />
-                  <h6 className="fw-bold">收貨人資料與會員資料相同</h6>
-                </div>
-
-                <div className="row justify-content-between spacing">
-                  <div className="col-6">
-                    <p className="fw-bold">收件人名稱</p>
-                    <input
-                      type="text"
-                      className="w-100 form-control user_name"
-                      name="user_name"
-                      defaultValue={userInputs.user_name}
-                    />
-                  </div>
-                  <div className="col-6">
-                    <p className="fw-bold">收件人電話</p>
-                    <input
-                      type="text"
-                      className="w-100 form-control user_phone"
-                      name="user_phone"
-                      defaultValue={userInputs.user_phone}
-                    />
-                  </div>
-                </div>
-                <p className="fw-bold">配送地址</p>
-                <div className="row justify-content-between mb-3">
-                  <div className="col-3">
-                    <select
-                      className="form-select user_city"
-                      value={userInputs.user_city}
-                      onChange={handleInputChange}
-                      name="user_city"
-                    >
-                      <option value="0" disabled>
-                        縣/市
-                      </option>
-                      <option value="1市">1市</option>
-                      <option value="2市">2市</option>
-                      <option value="3市">3市</option>
-                    </select>
-                  </div>
-                  <div className="col-3">
-                    <select
-                      className="form-select user_section"
-                      value={userInputs.user_section}
-                      onChange={() => {}}
-                      name="user_section"
-                    >
-                      <option value="0" disabled>
-                        區
-                      </option>
-                      <option value="1區">1區</option>
-                      <option value="2區">2區</option>
-                      <option value="3區">3區</option>
-                    </select>
-                  </div>
-                  <div className="col-6">
-                    <input
-                      type="text"
-                      className="w-100 form-control user_road"
-                      name="user_road"
-                      value={userInputs.user_road}
-                      onChange={handleInputChange}
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="container">
-              <div className="w-100 section-name text-center">
-                <h5 className="span">訂單備註</h5>
-              </div>
-              <textarea
-                className="form-control spacing"
-                rows="5"
-                maxLength={50}
-              ></textarea>
-            </div>
-            <div className="container credit-card-section">
-              <div className="w-100 section-name text-center mb-3">
-                <h5 className="span">信用卡付款資訊</h5>
-              </div>
-              <h6 className="span my-3">
-                ※ 信用卡交易資訊 Credit Card Information
-              </h6>
-              <div className="row justify-content-between my-3">
-                <p className="col-sm-2 col-3 fw-bold">信用卡卡號</p>
-                <div className="col-2">
-                  <input
-                    type="text"
-                    className="form-control autotab-4"
-                    maxLength={4}
-                  />
-                </div>
-                <div className="col-2">
-                  <input
-                    type="text"
-                    className="form-control autotab-4"
-                    maxLength={4}
-                  />
-                </div>
-                <div className="col-2">
-                  <input
-                    type="text"
-                    className="form-control autotab-4"
-                    maxLength={4}
-                  />
-                </div>
-                <div className="col-2">
-                  <input
-                    type="text"
-                    className="form-control autotab-4"
-                    maxLength={4}
-                  />
-                </div>
-              </div>
-              <div className="row justify-content-between my-3">
-                <p className="col-sm-2 col-3 fw-bold">有效期限</p>
-                <div className="col-2">
-                  <input
-                    type="text"
-                    className="form-control"
-                    maxLength={2}
-                    placeholder="MM"
-                  />
-                </div>
-                <div className="col-2">
-                  <input
-                    type="text"
-                    className="form-control"
-                    maxLength={2}
-                    placeholder="YY"
-                  />
-                </div>
-                <p className="col-2 fw-bold">安全碼</p>
-                <div className="col-2">
-                  <input type="text" className="form-control" maxLength={3} />
-                </div>{' '}
-              </div>
-              <h6 className="span my-3">
-                ※ 持卡人資料 Cardholder Information{' '}
-              </h6>
-              <div className="d-flex my-3">
-                <input
-                  type="checkbox"
-                  className="credit_cb"
-                  onClick={() => t2Change()}
-                />
-                <h6 className="fw-bold">持卡人資料與會員資料相同</h6>
-              </div>
-              <div className="row justify-content-between">
-                <div className="col-6">
-                  <p className="fw-bold">持卡人姓名</p>
-                  <input
-                    type="text"
-                    className="w-100 form-control cCard_name"
-                    name="cCard_name"
-                    defaultValue={userInputs.cCard_name}
-                  />
-                </div>
-                <div className="col-6">
-                  <p className="fw-bold">帳單地址</p>
-                  <input
-                    type="text"
-                    className="w-100 form-control cCard_address"
-                    name="cCard_address"
-                    defaultValue={userInputs.cCard_address}
-                  />
-                </div>
-              </div>
-              <div className="text-end my-3">
-                <button
-                  type="submit"
-                  className="btn next-step-btn text-white px-5"
-                >
-                  <h5 className="fw-bold py-1 px-3">提交訂單</h5>
-                </button>
-              </div>
-            </div>
-          </form> */}
           <button onClick={goLinePay} disabled={!order.orderId}>
             前往付款
           </button>

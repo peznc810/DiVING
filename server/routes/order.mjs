@@ -24,8 +24,8 @@ router.get("/", async(req,res)=>{
   }
 })
 
-router.get("/order/:orderId", async(req,res)=>{
-  const orderId = req.query.orderId
+router.get("/order", async(req,res)=>{
+  const orderId = req.query.orderId;
   let order, error
   await getOrder(orderId).then(result => {
     order = result;
@@ -38,6 +38,7 @@ router.get("/order/:orderId", async(req,res)=>{
   if (order) {
     res.status(200).json(order)
   }
+
 })
 
 router.get("/product", async(req,res)=>{
@@ -100,9 +101,11 @@ function getOrderDetail(req) {
 }
 
 function getOrder(orderId) {
+
   return new Promise(async (resolve, reject) => {
+
     const [result] = await db.execute(
-      'SELECT order_detail.*, product.name, product.price , lesson.name, lesson.price FROM order_detail JOIN product ON product.id = order_detail.product_id JOIN lesson ON lesson.id = order_detail.lesson_id WHERE order_detail.order_id = ?',[orderId]
+      'SELECT order_detail.*, COALESCE(product.name, lesson.name) AS name, COALESCE(product.price, lesson.price) AS price FROM order_detail LEFT JOIN product ON product.id = order_detail.product_id LEFT JOIN lesson ON lesson.id =order_detail.lesson_id WHERE order_detail.order_id = ?',[orderId]
     );
     if (result) {
       resolve(result)
