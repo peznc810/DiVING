@@ -1,7 +1,8 @@
 import React from 'react'
 import styles from './styles.module.scss'
 
-export default function Form() {
+export default function Form({ userProfile = {} }) {
+  console.log(userProfile)
   return (
     <>
       <div className={`col-sm-8 p-0 rounded-end ${styles['form-container']}`}>
@@ -38,6 +39,7 @@ export default function Form() {
                           id="myName"
                           className="form-control"
                           placeholder="王小美"
+                          defaultValue={userProfile.name}
                         />
                       </div>
                       <div className="col-12 col-sm-6">
@@ -48,6 +50,7 @@ export default function Form() {
                           type="date"
                           id="myBirth"
                           className="form-control"
+                          defaultValue={userProfile.birth}
                         />
                       </div>
                       {/* 改的話要再註冊驗證一次 */}
@@ -60,6 +63,7 @@ export default function Form() {
                           id="myEmail"
                           className="form-control"
                           placeholder="xxx@test.com.tw"
+                          defaultValue={userProfile.email}
                         />
                       </div>
                       <div className="col-12 col-sm-6">
@@ -71,6 +75,7 @@ export default function Form() {
                           id="myTel"
                           className="form-control"
                           placeholder="0987654321"
+                          defaultValue={userProfile.tel}
                         />
                       </div>
                       <div className="col-9">
@@ -81,6 +86,7 @@ export default function Form() {
                           type="text"
                           id="address"
                           className="form-control"
+                          defaultValue={userProfile.address}
                         />
                       </div>
                       <div className="col-12 text-end">
