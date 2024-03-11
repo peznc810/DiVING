@@ -7,7 +7,7 @@ export default function SearchProduct({ setFilterSettings }) {
         <div className="input-group position-relative d-inline-flex align-items-center">
           <input
             type="text"
-            className="form-control border-end"
+            className="form-control border-2"
             placeholder="搜尋商品"
             aria-label="from"
             aria-describedby="from"
@@ -21,7 +21,11 @@ export default function SearchProduct({ setFilterSettings }) {
           <i
             className="bi bi-search position-absolute"
             role="presentation"
-            style={{ right: 10, cursor: 'pointer', zIndex: 100 }}
+            style={{
+              right: 12,
+              cursor: 'pointer',
+              zIndex: 100,
+            }}
           ></i>
         </div>
       </form>
