@@ -103,7 +103,7 @@ export default function Filter({ setFilterSettings, clearSettings }) {
                 data-bs-target="#panelsStayOpen-collapseTwo"
                 aria-expanded="false"
                 aria-controls="panelsStayOpen-collapseTwo"
-                onClick={() => 'category'}
+                onClick={() => handleButtonClick('category')}
               >
                 <MdOutlineCategory className="m-1" /> 商品類別
               </button>
@@ -152,7 +152,7 @@ export default function Filter({ setFilterSettings, clearSettings }) {
                 data-bs-target="#panelsStayOpen-collapseThree"
                 aria-expanded="false"
                 aria-controls="panelsStayOpen-collapseThree"
-                onClick={() => 'price'}
+                onClick={() => handleButtonClick('price')}
               >
                 <MdOutlinePriceCheck className="m-1" /> 價格篩選
               </button>
