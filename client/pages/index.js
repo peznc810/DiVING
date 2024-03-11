@@ -6,7 +6,11 @@ import Server from '@/components/home/server'
 import Products from '@/components/home/products'
 import LessonSection from '@/components/home/lesson'
 import MapSection from '@/components/home/map'
-import Coupon from '@/components/coupon/coupon'
+// 因為水和化，前端後端不同步，取消ssr
+import dynamic from 'next/dynamic'
+const Coupon = dynamic(() => import('@/components/coupon/coupon'), {
+  ssr: false,
+})
 import { useEvent } from '@/hooks/use-eventData'
 
 export default function Index() {

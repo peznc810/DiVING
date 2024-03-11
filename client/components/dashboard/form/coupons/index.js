@@ -2,28 +2,104 @@ import React, { useEffect, useState } from 'react'
 import styles from '../styles.module.scss'
 import Image from 'next/image'
 import { useAuth } from '@/hooks/auth'
+import Swal from 'sweetalert2'
 
 export default function Form() {
-  const [couponData, setCouponData] = useState()
+  const [couponData, setCouponData] = useState([])
+  const [inputCode, setInputCode] = useState('')
+  const [errorText, setErrorText] = useState(false)
   const { auth } = useAuth()
+  const authID = auth.id
+
   console.log(auth)
 
-  const url = `http://localhost:3005/api/coupon/25`
+  // 讀取會員的所有coupon
   useEffect(() => {
-    fetch(url, {
-      method: 'get',
-    })
-      .then((response) => {
-        return response.json()
+    if (auth && authID) {
+      const url = `http://localhost:3005/api/coupon/${authID}`
+      fetch(url, {
+        method: 'get',
       })
-      .then((results) => {
-        console.log(results)
-        setCouponData(results)
+        .then((response) => {
+          return response.json()
+        })
+        .then((results) => {
+          console.log(results)
+          setCouponData(results)
+        })
+        .catch((error) => {
+          console.log('連線錯誤')
+        })
+    }
+  }, [auth])
+
+  const input = (e) => {
+    e.preventDefault()
+    const inputValue = e.target.value.toLocaleUpperCase()
+    e.target.value = ''
+    setInputCode(inputValue)
+  }
+
+  // 點擊按鈕把資料傳給後端領取優惠卷
+  const submitBtn = async (inputCode, authID) => {
+    try {
+      // 如果沒有輸入文字顯示錯誤
+      if (inputCode === '') {
+        setErrorText(true)
+        return
+      }
+
+      // 連接API
+      const url = 'http://localhost:3005/api/coupon'
+      const response = await fetch(url, {
+        method: 'post',
+        headers: {
+          //設定 HTTP 請求標頭，告訴伺服器發送的資料是 JSON 格式
+          'Content-type': 'application/json',
+        },
+        body: JSON.stringify({
+          inputCode,
+          authID,
+        }),
       })
-      .catch((error) => {
-        console.log('連線錯誤')
-      })
-  }, [])
+      const results = await response.json()
+      // console.log(results)
+      if (results.status === 'success') {
+        // 領取優惠卷成功後重新讀取會員的有的優惠卷
+        const url = `http://localhost:3005/api/coupon/${authID}`
+        await fetch(url, {
+          method: 'get',
+        })
+          .then((response) => {
+            return response.json()
+          })
+          .then((results) => {
+            setCouponData(results)
+          })
+          .catch(() => {
+            console.log('error')
+          })
+        // 領取成功視窗
+        Swal.fire({
+          position: 'center',
+          icon: 'success',
+          title: '領取成功',
+          showConfirmButton: false,
+          timer: 1500,
+        })
+      } else {
+        Swal.fire({
+          position: 'center',
+          icon: 'error',
+          title: '領取失敗',
+          showConfirmButton: false,
+          timer: 1500,
+        })
+      }
+    } catch {
+      console.log('連線失敗')
+    }
+  }
 
   return (
     <>
@@ -32,6 +108,15 @@ export default function Form() {
           <div className="accordion">
             <div className="accordion-header">
               <h2 className="fw-medium fs-5 d-flex py-3 m-0">優惠券</h2>
+            </div>
+            <div className={` container `}>
+              <div
+                className={` px-4 ${styles.errorBlock} ${
+                  errorText ? 'd-block' : 'd-none'
+                }`}
+              >
+                <p className="p-0">error：請輸入優惠碼！</p>
+              </div>
             </div>
             <div className="accordion-body">
               {/* 篩選＆搜尋，要再調整 */}
@@ -46,9 +131,23 @@ export default function Form() {
                   </button>
                 </div>
                 <div className="d-flex justify-content-end">
-                  <input type="text" className="form-control w-50 h-50 me-2" />
+                  <input
+                    type="text"
+                    className="form-control w-50 h-50 me-2"
+                    value={inputCode}
+                    onChange={(e) => {
+                      // e.preventDefault()
+                      // setInputCode(e.target.value.toLocaleUpperCase())
+                      input(e)
+                    }}
+                    placeholder="輸入優惠碼..."
+                  />
+
                   <button
                     className={`btn btn-sm btn-outline-secondary ${styles['hover-style']}`}
+                    onClick={() => {
+                      submitBtn(inputCode, authID)
+                    }}
                   >
                     領取
                   </button>
@@ -58,7 +157,7 @@ export default function Form() {
               <div className="mb-5">
                 <div className={`row g-3 ${styles.card}`}>
                   {/* 卡片本體 */}
-                  {couponData.map((v, i) => {
+                  {couponData.map((v) => {
                     return (
                       <div className="col-12 col-md-6" key={v.id}>
                         <div className=" d-flex border border-info rounded p-3 h-100">
@@ -73,7 +172,9 @@ export default function Form() {
                           </div>
                           <div className="right flex-grow-1">
                             <h4 className="fs-6">{v.coupon_name}</h4>
-                            <p>Lorem ipsum dolor sit</p>
+                            <p className={`${styles.rule}`}>
+                              {v.coupon_rule_content}
+                            </p>
                           </div>
                         </div>
                       </div>

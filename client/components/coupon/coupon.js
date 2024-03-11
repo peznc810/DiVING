@@ -14,7 +14,7 @@ export default function Coupon() {
   const textRef = useRef(null)
   // const navigate = useNavigate() // 導向路徑
 
-  const url = 'http://localhost:3005/api/coupon/'
+  const url = `http://localhost:3005/api/coupon/`
   // 連接資料庫
   useEffect(() => {
     fetch(url, {
@@ -141,7 +141,7 @@ export default function Coupon() {
         )}
 
         {/* 登入&點擊領取後出現 */}
-        {codeShow && (
+        {couponData && codeShow && (
           <div className={`container`}>
             <div
               className={`${styles.copyCode} d-flex row align-items-center mb-4`}
