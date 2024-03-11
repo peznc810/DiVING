@@ -1,5 +1,5 @@
 import express from 'express';
-import db from '../db.mjs'; // 修改路徑以匹配你的實際結構
+import db from '../db.mjs';
 import { v4 as uuidv4 } from 'uuid';
 
 const router = express.Router();

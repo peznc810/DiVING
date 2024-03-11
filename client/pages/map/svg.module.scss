@@ -30,21 +30,21 @@
       fill: none;
       stroke: var(--bs-gray);
     }
+    .use {
+      //複製出來的svg
+      fill: #000000;
+    }
   }
 }
 
 .same {
-  fill: rgb(47, 172, 47);
-  //想要同時選取的部分 圓形+區
+  //想要同時選取 圓形+區 的時候亮
   &:hover {
-    fill: #ff0707;
+    fill: #74d8ff;
     .diveSvg {
       //潛水伕
       fill: black;
-      animation-name: cloudAni;
-      animation-duration: 2s;
-      animation-iteration-count: infinite;
-      animation-timing-function: linear;
+      animation: cloudAni 2s infinite linear;
     }
   }
 }
@@ -68,32 +68,26 @@
   animation: jump 2s ease-in-out infinite;
   // animation-delay: 200ms;
   cursor: pointer;
-  // &:hover {
-  //   //滑鼠移到圓形
-  //   fill: rgb(247, 249, 219);
-  //   transition: fill 0.8s linear;
-  //   circle {
-  //     //單純圓形
-  //     stroke: #909090;
-  //     fill: #edd5ea1b;
-  //   }
-  // }
+  fill: rgb(189, 199, 239);
   .diveSvg {
     // 裡面的人
     fill: #000;
   }
 }
+
 @keyframes cloudAni {
   0% {
-    transform: translateX(6%);
+    transform: translateX(8%);
   }
   /*可加50%給他loop*/
   50% {
-    transform: translateY(1%);
+    transform: translateY(-1%);
   }
-
+  75% {
+    transform: translateY(0);
+  }
   100% {
-    transform: translateX(-6%); /*最左邊*/
+    transform: translateX(-5%); /*最左邊*/
   }
 }
 @keyframes jump {
@@ -103,7 +97,7 @@
   }
   25%,
   50% {
-    transform: translate(2%, 2%);
+    transform: translate(2%, 1.5%);
   }
 }
 
