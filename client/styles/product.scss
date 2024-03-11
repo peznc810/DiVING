@@ -214,3 +214,13 @@ div.scroll {
 .TbSettingsX{
   font-size: 18px;
 }
+
+.brand-css:hover, .category-css:hover{
+  width: 100px;
+  cursor: pointer;
+  text-decoration: underline;
+  text-decoration-color: #ff9720;
+  text-decoration-thickness: 3px;
+  text-decoration-style: dashed;
+  text-underline-offset: 4.5px;
+}

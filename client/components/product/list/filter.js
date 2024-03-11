@@ -94,7 +94,7 @@ export default function Filter({ setFilterSettings, clearSettings }) {
                       >
                         <div
                           // href="?=brand"
-                          className="form-check-label"
+                          className="form-check-label brand-css"
                           htmlFor="flexCheckDefault"
                           style={{ color: '#303132' }}
                         >
@@ -143,7 +143,7 @@ export default function Filter({ setFilterSettings, clearSettings }) {
                       >
                         <div
                           href={`/product/${v}`}
-                          className="form-check-label"
+                          className="form-check-label category-css"
                           htmlFor="flexCheckDefault"
                           style={{ color: '#303132' }}
                         >
