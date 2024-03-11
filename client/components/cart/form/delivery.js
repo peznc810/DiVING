@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 
 import userData from '@/data/cart/user.json'
 
@@ -8,9 +8,13 @@ const [cUser] = userData.filter((v) => {
   return v.user_id === user_id
 })
 
-export default function OrderForm({ handleSub, userInputs, setUserInputs }) {
+export default function Delivery({
+  handleInputChange,
+  userInputs,
+  setUserInputs,
+}) {
   //勾選資料相同 收貨人
-  const t1Change = () => {
+  const deliveryChange = () => {
     setUserInputs((prevState) => ({
       ...prevState,
       user_name: cUser.name,
@@ -18,15 +22,6 @@ export default function OrderForm({ handleSub, userInputs, setUserInputs }) {
       user_city: cUser.address.split(',')[0],
       user_section: cUser.address.split(',')[1],
       user_road: cUser.address.split(',')[2],
-    }))
-  }
-
-  //處理input更新
-  const handleInputChange = (e) => {
-    const { name, value } = e.target
-    setUserInputs((prevState) => ({
-      ...prevState,
-      [name]: value,
     }))
   }
 
@@ -41,7 +36,7 @@ export default function OrderForm({ handleSub, userInputs, setUserInputs }) {
             <input
               type="checkbox"
               className="deliver_cb"
-              onClick={() => t1Change()}
+              onClick={() => deliveryChange()}
             />
             <h6 className="fw-bold">收貨人資料與會員資料相同</h6>
           </div>

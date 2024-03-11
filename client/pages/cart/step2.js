@@ -340,15 +340,6 @@ export default function Home() {
               font-weight: bold;
             }
 
-            .next-step-btn {
-              background-color: #ff9720;
-            }
-
-            .spacing {
-              margin-top: 1rem;
-              margin-bottom: 1rem;
-            }
-
             .discounted {
               color: #dc5151;
             }
@@ -374,11 +365,6 @@ export default function Home() {
             th {
               padding: 1rem 0;
               text-align: center;
-            }
-
-            @media (max-width: 576px) {
-              .credit-card-section {
-              }
             }
           `}</style>
           <AutoTab className="autotab-4" maxLength={4} />
