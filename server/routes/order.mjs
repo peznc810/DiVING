@@ -99,7 +99,7 @@ function getOrderDetail(req) {
   })
 }
 
-function getOrderDetail(orderId) {
+function getOrder(orderId) {
   return new Promise(async (resolve, reject) => {
     const [result] = await db.execute(
       'SELECT order_detail.*, product.name, product.price , lesson.name, lesson.price FROM order_detail JOIN product ON product.id = order_detail.product_id JOIN lesson ON lesson.id = order_detail.lesson_id WHERE order_detail.order_id = ?',[orderId]

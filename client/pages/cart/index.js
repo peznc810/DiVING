@@ -11,22 +11,22 @@ import CartStep from '@/components/cart/cart-step'
 const userId = '1'
 
 //抓取使用者擁有的優惠券
-let coupon_has
+// let coupon_has
 
-await fetch(`http://localhost:3005/api/order/user-coupon?userId=${userId}`, {
-  method: 'GET',
-})
-  .then((response) => {
-    return response.json()
-  })
-  .then((result) => {
-    coupon_has = result
-  })
-  .catch((err) => {
-    console.error('An error occurred:', err)
-  })
+// await fetch(`http://localhost:3005/api/order/user-coupon?userId=${userId}`, {
+//   method: 'GET',
+// })
+//   .then((response) => {
+//     return response.json()
+//   })
+//   .then((result) => {
+//     coupon_has = result
+//   })
+//   .catch((err) => {
+//     console.error('An error occurred:', err)
+//   })
 
-console.log(coupon_has)
+// console.log(coupon_has)
 
 export default function Home() {
   const [cartData, setCartData] = useState([])
@@ -74,18 +74,6 @@ export default function Home() {
     })
     setTotalPrice(total)
   }
-
-  // const calculateTotalPrice = (data) => {
-  //   let total = 0
-  //   data.forEach((item) => {
-  //     const { productDiscount, num, productPrice, lessonPrice } = item
-  //     const price = productDiscount
-  //       ? productDiscount * num
-  //       : (productPrice || lessonPrice) * num
-  //     total += price
-  //   })
-  //   setTotalPrice(total)
-  // }
 
   //增加商品數量
   const handleIncrement = (index) => {
@@ -244,23 +232,16 @@ export default function Home() {
         <div className="col-sm-7 pay-section">
           <h5 className="mb-3 section-name span">選擇送貨及付款方式</h5>
           <div className="container">
-            <p className="select-dec">送貨地點</p>
-            <select className="form-select">
-              <option value="1">送貨地點1</option>
-              <option value="2">送貨地點2</option>
-              <option value="3">送貨地點3</option>
-            </select>
             <p className="select-dec">送貨方式</p>
-            <select className="form-select">
-              <option value="1">送貨方式1</option>
-              <option value="2">送貨方式2</option>
-              <option value="3">送貨方式3</option>
+            <select className="form-select" id="delivery">
+              <option value="1">宅配</option>
+              <option value="2">7-11</option>
             </select>
             <p className="select-dec">付款方式</p>
-            <select className="form-select">
-              <option value="1">付款方式1</option>
-              <option value="2">付款方式2</option>
-              <option value="3">付款方式3</option>
+            <select className="form-select" id="payment">
+              <option value="1">貨到付款</option>
+              <option value="2">信用卡付款</option>
+              <option value="3">Line Pay</option>
             </select>
           </div>
         </div>
@@ -302,17 +283,6 @@ export default function Home() {
         h6,
         p {
           margin: 0;
-        }
-
-         {
-          /* .order-detail {
-          margin-inline: 0;
-        }
-
-        .spacing {
-          margin-top: 1rem;
-          margin-bottom: 1rem;
-        } */
         }
 
         .order-detail,

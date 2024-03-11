@@ -7,12 +7,7 @@ import userData from '@/data/cart/user.json'
 import Order from '@/components/cart/order'
 
 import { useRouter } from 'next/router'
-
-//抓取使用者
-const user_id = '1'
-const [cUser] = userData.filter((v) => {
-  return v.user_id === user_id
-})
+import OrderForm from '@/components/cart/order-form'
 
 export default function Home() {
   const router = useRouter()
@@ -35,9 +30,12 @@ export default function Home() {
   })
   const [isDone, setIsDone] = useState(false)
 
-  const { orderId } = router.query
-
   let totalPrice = 0
+
+  const user_id = '1'
+  const [cUser] = userData.filter((v) => {
+    return v.user_id === user_id
+  })
 
   //抓取購物車的內容
   useEffect(() => {
@@ -48,8 +46,9 @@ export default function Home() {
   }, [])
 
   //檢查交易是否成功
+  const { transactionId, orderId } = router.query
+
   useEffect(() => {
-    const { transactionId, orderId } = router.query
     const fetchData = async () => {
       if (router.isReady) {
         if (!transactionId || !orderId) {
@@ -62,36 +61,6 @@ export default function Home() {
     }
     fetchData()
   }, [router.isReady])
-
-  //勾選資料相同 收貨人
-  const t1Change = () => {
-    setUserInputs((prevState) => ({
-      ...prevState,
-      user_name: cUser.name,
-      user_phone: cUser.phone,
-      user_city: cUser.address.split(',')[0],
-      user_section: cUser.address.split(',')[1],
-      user_road: cUser.address.split(',')[2],
-    }))
-  }
-
-  //勾選資料相同 持卡人
-  const t2Change = () => {
-    setUserInputs((prevState) => ({
-      ...prevState,
-      cCard_name: cUser.name,
-      cCard_address: cUser.address,
-    }))
-  }
-
-  //處理input更新
-  const handleInputChange = (e) => {
-    const { name, value } = e.target
-    setUserInputs((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }))
-  }
 
   //檢查格式
   const checkFormat = () => {
@@ -158,14 +127,6 @@ export default function Home() {
           price,
         })
       })
-      // cartData.forEach((data) => {
-      //   lineProducts.push({
-      //     id: data.product_id || data.lesson_id,
-      //     name: data.productName || data.lessonName,
-      //     quantity: data.num,
-      //     price: data.productDiscount || data.productPrice || data.lessonPrice,
-      //   })
-      // })
 
       //資料庫的格式 order_detail
       const products = []
@@ -206,34 +167,63 @@ export default function Home() {
   }
 
   //處理訂單狀態
+  // const handleConfirm = async (transactionId) => {
+  //   let res
+  //   const url = `http://localhost:3005/api/line-pay/confirm?transactionId=${transactionId}`
+
+  //   await fetch(url, {
+  //     method: 'GET',
+  //   })
+  //     .then((response) => {
+  //       return response.json()
+  //     })
+  //     .then((result) => {
+  //       res = result
+  //     })
+  //     .catch((err) => {
+  //       console.error('An error occurred:', err)
+  //     })
+
+  //   if (res.status === 'success') {
+  //     toast.success('付款成功')
+  //   } else {
+  //     toast.error('付款失敗')
+  //   }
+
+  //   if (res.data) {
+  //     setResult(res.data)
+  //   }
+
+  //   setIsDone(true)
+  // }
   const handleConfirm = async (transactionId) => {
-    let res
-    const url = `http://localhost:3005/api/line-pay/confirm?transactionId=${transactionId}`
-
-    await fetch(url, {
-      method: 'GET',
-    })
-      .then((response) => {
-        return response.json()
-      })
-      .then((result) => {
-        res = result
-      })
-      .catch((err) => {
-        console.error('An error occurred:', err)
+    try {
+      const url = `http://localhost:3005/api/line-pay/confirm?transactionId=${transactionId}`
+      const response = await fetch(url, {
+        method: 'GET',
       })
 
-    if (res.status === 'success') {
-      toast.success('付款成功')
-    } else {
-      toast.error('付款失敗')
+      if (!response.ok) {
+        throw new Error('Network response was not ok')
+      }
+
+      const result = await response.json()
+
+      if (result.status === 'success') {
+        toast.success('付款成功')
+      } else {
+        toast.error('付款失敗')
+      }
+      W
+      if (result.data) {
+        setResult(result.data)
+      }
+
+      setIsDone(true)
+    } catch (error) {
+      console.error('An error occurred:', error)
+      toast.error('發生錯誤，無法確認付款')
     }
-
-    if (res.data) {
-      setResult(res.data)
-    }
-
-    setIsDone(true)
   }
 
   //格式錯誤通知
@@ -244,8 +234,7 @@ export default function Home() {
 
   return (
     <>
-      {console.log(result.returnCode)}
-      {isDone ? (
+      {isDone && orderId ? (
         <Order orderIdTest={orderId} />
       ) : (
         <div className="container">
@@ -334,7 +323,13 @@ export default function Home() {
             </table>
             <p className="text-end fw-bold my-3">合計: NT${totalPrice}</p>
           </div>
-          <form onSubmit={handleSub}>
+          <OrderForm
+            handleSub={handleSub}
+            cartData={cartData}
+            setOrder={setOrder}
+            totalPrice={totalPrice}
+          />
+          {/* <form onSubmit={handleSub}>
             <div className="container">
               <div className="w-100 section-name text-center">
                 <h5 className="span">送貨資料</h5>
@@ -524,7 +519,7 @@ export default function Home() {
                 </button>
               </div>
             </div>
-          </form>
+          </form> */}
           <button onClick={goLinePay} disabled={!order.orderId}>
             前往付款
           </button>

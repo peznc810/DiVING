@@ -21,6 +21,9 @@ const [oData, pData, lData] = await Promise.all([
 ])
 
 export default async function Home({ orderIdTest }) {
+  console.log('---')
+  console.log(orderIdTest)
+  console.log('---')
   const router = useRouter()
   const { orderId } = router.query
 
