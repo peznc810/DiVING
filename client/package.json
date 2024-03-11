@@ -30,6 +30,8 @@
     "react-infinite-scroll-hook": "^4.1.1",
     "react-paginate": "^8.2.0",
     "react-quill": "^2.0.0",
+    "react-scroll-parallax": "^3.4.5",
+    "react-spinners": "^0.13.8",
     "rsuite": "^5.53.2",
     "sweetalert2": "^11.10.6",
     "sweetalert2-react-content": "^5.0.7",

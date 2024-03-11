@@ -1,0 +1,12 @@
+@import '@/styles/variable.scss';
+
+.loading {
+  width: 100%;
+  height: 100vh;
+  background-color: $primary;
+  letter-spacing: 1px;
+  .loadingInner {
+    .text {
+    }
+  }
+}
