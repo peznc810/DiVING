@@ -1,17 +1,10 @@
 import React from 'react'
 
-import userData from '@/data/cart/user.json'
-
-//抓取使用者
-const user_id = '1'
-const [cUser] = userData.filter((v) => {
-  return v.user_id === user_id
-})
-
 export default function CreditCard({
   handleInputChange,
   userInputs,
   setUserInputs,
+  cUser,
 }) {
   //勾選資料相同 收貨人
   const cardHolderChange = () => {

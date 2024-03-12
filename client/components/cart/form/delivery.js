@@ -1,27 +1,24 @@
 import React from 'react'
 
-import userData from '@/data/cart/user.json'
-
-//抓取使用者
-const user_id = '1'
-const [cUser] = userData.filter((v) => {
-  return v.user_id === user_id
-})
-
 export default function Delivery({
   handleInputChange,
   userInputs,
   setUserInputs,
+  cUser,
 }) {
+  console.log(cUser)
   //勾選資料相同 收貨人
   const deliveryChange = () => {
+    const { name, tel, address } = cUser
     setUserInputs((prevState) => ({
       ...prevState,
-      user_name: cUser.name,
-      user_phone: cUser.phone,
-      user_city: cUser.address.split(',')[0],
-      user_section: cUser.address.split(',')[1],
-      user_road: cUser.address.split(',')[2],
+      user_name: name,
+      user_phone: tel,
+      ...(address && {
+        user_city: address.split(',')[0],
+        user_section: address.split(',')[1],
+        user_road: address.split(',')[2],
+      }),
     }))
   }
 

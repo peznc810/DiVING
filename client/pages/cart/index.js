@@ -4,16 +4,15 @@ import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
 const MySwal = withReactContent(Swal)
 
+import { useAuth } from '@/hooks/auth'
+
 import { FaShoppingCart, FaRegTrashAlt } from 'react-icons/fa'
 import CartStep from '@/components/cart/cart-step'
-
-//抓取使用者id
-const userId = '1'
 
 //抓取使用者擁有的優惠券
 // let coupon_has
 
-// await fetch(`http://localhost:3005/api/order/user-coupon?userId=${userId}`, {
+// await fetch(`http://localhost:3005/api/order/user-coupon?userId=${auth.id}`, {
 //   method: 'GET',
 // })
 //   .then((response) => {
@@ -33,6 +32,8 @@ export default function Home() {
   const [totalPrice, setTotalPrice] = useState(0)
   const [deliveryFee] = useState(50)
   const [discount] = useState(0)
+
+  const { auth } = useAuth()
 
   //抓取購物車內的物品
   useEffect(() => {
@@ -149,6 +150,8 @@ export default function Home() {
                   productName,
                   productPrice,
                   productDiscount,
+                  product_detail,
+                  order_time,
                 } = item
                 let price = 0
                 if (productDiscount) {
@@ -165,7 +168,9 @@ export default function Home() {
                           <h5 className="fw-bold text-start">
                             {productName || lessonName}
                           </h5>
-                          <p className="imperceptible text-start">商品細節</p>
+                          <p className="imperceptible text-start">
+                            {product_detail || order_time}
+                          </p>
                         </div>
                       </div>
                     </td>

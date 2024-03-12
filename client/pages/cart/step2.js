@@ -8,8 +8,12 @@ import Order from '@/components/cart/order'
 import { useRouter } from 'next/router'
 import OrderForm from '@/components/cart/order-form'
 
+import { useAuth } from '@/hooks/auth'
+
 export default function Home() {
   const router = useRouter()
+
+  const payment = 2
 
   const [order, setOrder] = useState({})
   const [cartData, setCartData] = useState(null)
@@ -36,7 +40,9 @@ export default function Home() {
 
   let totalPrice = 0
 
-  const user_id = '1'
+  const { auth } = useAuth()
+
+  const { transactionId, orderId } = router.query
 
   //抓取購物車的內容
   useEffect(() => {
@@ -47,16 +53,19 @@ export default function Home() {
   }, [])
 
   //檢查交易是否成功
-  const { transactionId, orderId } = router.query
 
   useEffect(() => {
+    console.log('bbb')
     const fetchData = async () => {
       if (router.isReady) {
+        if (!transactionId && orderId) {
+          await getOrder(orderId)
+        }
         if (!transactionId || !orderId) {
           return
         }
         if (!isDone) {
-          await handleConfirm(transactionId)
+          await handleConfirmLinePay(transactionId)
         }
       }
     }
@@ -67,7 +76,7 @@ export default function Home() {
   const checkFormat = () => {
     const phone = document.querySelector('.user_phone').value
     const user_name = document.querySelector('.user_name').value
-    const cCard_name = document.querySelector('.cCard_name').value
+    const cCard_name = document.querySelector('.cCard_name')?.value
 
     let emptyInput
 
@@ -103,15 +112,17 @@ export default function Home() {
       return false
     }
 
-    if (!checkCorr(cCard_name, chineseRegex, '持卡人姓名 格式錯誤')) {
-      return false
+    if (cCard_name) {
+      if (!checkCorr(cCard_name, chineseRegex, '持卡人姓名 格式錯誤')) {
+        return false
+      }
     }
 
     return true
   }
 
   //處理送出訂單
-  const handleSub = (e) => {
+  const handleSubLinePay = (e) => {
     e.preventDefault()
     if (checkFormat()) {
       //line pay 所需的格式
@@ -144,27 +155,14 @@ export default function Home() {
         address: receiverAddress,
       }
 
-      const expirationDate = `${userInputs.cCard_expirationMonth}/${userInputs.cCard_expirationYear}`
-
-      const number = `${userInputs.cCard_number1}-${userInputs.cCard_number2}-${userInputs.cCard_number3}-${userInputs.cCard_number4}`
-
-      const credit_card = {
-        number,
-        securityCode: userInputs.cCard_securityCode,
-        expirationDate,
-        name: userInputs.cCard_name,
-        address: userInputs.cCard_address,
-      }
-
       const order_note = userInputs.order_note
 
       const data = {
-        user_id,
+        user_id: auth.id,
         totalPrice,
         lineProducts,
         products,
         receiver,
-        credit_card,
         order_note,
       }
       const url = 'http://localhost:3005/api/line-pay/create-order'
@@ -186,7 +184,83 @@ export default function Home() {
         .catch((err) => {
           console.log(err)
         })
-      // router.push('./step3')
+    }
+  }
+
+  const handleSub = (e) => {
+    e.preventDefault()
+    if (checkFormat()) {
+      //資料庫的格式 order_detail
+      const products = []
+      cartData.forEach((data) => {
+        products.push(data)
+      })
+
+      const receiverAddress =
+        userInputs.user_city + userInputs.user_section + userInputs.user_road
+
+      const receiver = {
+        name: userInputs.user_name,
+        phone: userInputs.user_phone,
+        address: receiverAddress,
+      }
+
+      const expirationDate = `${userInputs.cCard_expirationMonth}/${userInputs.cCard_expirationYear}`
+
+      const number = `${userInputs.cCard_number1}-${userInputs.cCard_number2}-${userInputs.cCard_number3}-${userInputs.cCard_number4}`
+
+      const credit_card = {
+        number,
+        securityCode: userInputs.cCard_securityCode,
+        expirationDate,
+        name: userInputs.cCard_name,
+        address: userInputs.cCard_address,
+      }
+
+      const order_note = userInputs.order_note
+
+      let data
+
+      if (userInputs.cCard_number1) {
+        data = {
+          user_id: auth.id,
+          totalPrice,
+          products,
+          receiver,
+          credit_card,
+          order_note,
+        }
+      } else {
+        data = {
+          user_id: auth.id,
+          totalPrice,
+          products,
+          receiver,
+          order_note,
+        }
+      }
+
+      const url = 'http://localhost:3005/api/order/create-order'
+      fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      })
+        .then((res) => {
+          return res.json()
+        })
+        .then((data) => {
+          if (data.status === 'success') {
+            setOrder(data.data.dbOrder)
+            console.log(data.data.dbOrder.id)
+            window.location.href = `http://localhost:3000/cart/step2?orderId=${data.data.dbOrder.id}`
+          }
+        })
+        .catch((err) => {
+          console.log(err)
+        })
     }
   }
 
@@ -197,7 +271,26 @@ export default function Home() {
     }
   }
 
-  const handleConfirm = async (transactionId) => {
+  const getOrder = async (orderId) => {
+    try {
+      const url = `http://localhost:3005/api/order/order?orderId=${orderId}`
+      const response = await fetch(url, {
+        method: 'GET',
+      })
+
+      const result = await response.json()
+
+      console.log(result)
+
+      setIsDone(true)
+
+      // router.push(`./step2?orderId=${orderId}`)
+    } catch (error) {
+      console.error('An error occurred:', error)
+    }
+  }
+
+  const handleConfirmLinePay = async (transactionId) => {
     try {
       const url = `http://localhost:3005/api/line-pay/confirm?transactionId=${transactionId}`
       const response = await fetch(url, {
@@ -209,8 +302,6 @@ export default function Home() {
       }
 
       const result = await response.json()
-
-      console.log(result)
 
       if (result.status === 'success') {
         toast.success('付款成功')
@@ -264,6 +355,8 @@ export default function Home() {
                       productName,
                       productPrice,
                       productDiscount,
+                      product_detail,
+                      order_time,
                     } = item
                     let price = productDiscount
                       ? productDiscount * num
@@ -279,7 +372,7 @@ export default function Home() {
                                 {productName || lessonName}
                               </h5>
                               <p className="imperceptible text-start">
-                                商品細節
+                                {product_detail || order_time}
                               </p>
                             </div>
                           </div>
@@ -317,13 +410,19 @@ export default function Home() {
             <p className="text-end fw-bold my-3">合計: NT${totalPrice}</p>
           </div>
           <OrderForm
+            handleSubLinePay={handleSubLinePay}
             handleSub={handleSub}
             userInputs={userInputs}
             setUserInputs={setUserInputs}
+            payment={payment}
           />
-          <button onClick={goLinePay} disabled={!order.orderId}>
-            前往付款
-          </button>
+
+          {payment === 2 && (
+            <button onClick={goLinePay} disabled={!order.orderId}>
+              Line Pay
+            </button>
+          )}
+
           <style jsx>{`
             h1,
             h2,

@@ -24,7 +24,7 @@ router.post("/create-order", async(req, res)=>{
   const orderId =uuidv4()
   const packgeId = uuidv4()
 
-  const { totalPrice, lineProducts, products, receiver, credit_card, order_note } = req.body;
+  const { totalPrice, lineProducts, products, receiver, order_note } = req.body;
 
   //傳送給line pay的資料
   const order = {
@@ -50,7 +50,6 @@ router.post("/create-order", async(req, res)=>{
     shipping: "宅配",
     status: "建立成功",
     receiver : JSON.stringify(receiver),
-    credit_card: JSON.stringify(credit_card),
     order_info: JSON.stringify(order),
     order_note,
   }
@@ -74,31 +73,27 @@ router.post("/create-order", async(req, res)=>{
 
 router.get("/reserve", async (req, res) => {
   try {
-    console.log("1");
     if (!req.query.orderId) {
       return res.json({ status: "error", message: "order id不存在" });
     }
-    console.log("2");
 
     const orderId = req.query.orderId;
     const redirectUrls = {
       confirmUrl: process.env.REACT_REDIRECT_CONFIRM_URL,
       cancelUrl: process.env.REACT_REDIRECT_CANCEL_URL,
     };
-    console.log("3");
+
     const [[orderRecord]] = await getOrder(orderId);
     if (!orderRecord) {
       return res.status(400).json({ status: "error", message: "無法找到該訂單" });
     }
-    console.log("4");
 
     const order = JSON.parse(orderRecord.order_info);
-    console.log("5");
 
     const linePayResponse = await linePayClient.request.send({
       body: { ...order, redirectUrls },
     });
-    console.log("6");
+
     const reservation = {
       ...order,
       returnCode: linePayResponse.body.returnCode,
@@ -106,12 +101,9 @@ router.get("/reserve", async (req, res) => {
       transactionId: linePayResponse.body.info.transactionId,
       paymentAccessToken: linePayResponse.body.info.paymentAccessToken,
     };
-    console.log(reservation);
 
     await updateOrder(JSON.stringify(reservation), reservation.transactionId, orderId);
     
-    console.log("8");
-
     res.redirect(linePayResponse.body.info.paymentUrl.web);
   } catch (error) {
     console.log("發生錯誤", error);
@@ -203,8 +195,8 @@ function addOrder(dbOrder){
   
   return new Promise((resolve, reject) => {
     db.execute(
-      'INSERT INTO `order`(id, user_id, total_price, payment, shipping, status, receiver, credit_card, order_info, created_at, order_note) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);',[
-        dbOrder.id, dbOrder.user_id, dbOrder.total_price, dbOrder.payment, dbOrder.shipping, dbOrder.status, dbOrder.receiver, dbOrder.credit_card, dbOrder.order_info, datetimeNow ,dbOrder.order_note
+      'INSERT INTO `order`(id, user_id, total_price, payment, shipping, status, receiver, order_info, created_at, order_note) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);',[
+        dbOrder.id, dbOrder.user_id, dbOrder.total_price, dbOrder.payment, dbOrder.shipping, dbOrder.status, dbOrder.receiver, dbOrder.order_info, datetimeNow ,dbOrder.order_note
       ]
     ).then(([result]) => {
       if (result) {

@@ -13,7 +13,7 @@ export default function Home({ orderIdTest }) {
     const fetchOrder = async () => {
       try {
         await fetch(
-          `http://localhost:3005/api/order/order?orderId=${orderIdTest}`,
+          `http://localhost:3005/api/order/order-detail?orderId=${orderIdTest}`,
           {
             method: 'GET',
           }
