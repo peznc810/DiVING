@@ -1,16 +1,17 @@
 import React from 'react'
 import styles from './styles.module.scss'
+import useFormCheck from '@/hooks/use-form-check'
+
+// password visibility hook
+import useShow from '@/hooks/use-password-visibility'
 
 export default function Form({
   userProfile = {},
-  handleChangeProfile = () => {},
   handleUpdateProfile = () => {},
-  handleChangePWD = () => {},
   handleUpdatePWD = () => {},
-  errorMsg = {},
 }) {
-  // 表單驗證（除email之外，接不可存在特殊符號）
-
+  const { handleChangeProfile, handleChangePWD, errorMsg } = useFormCheck()
+  const { type, icon, handleToggle } = useShow()
   return (
     <>
       <div className={`col-sm-8 p-0 rounded-end ${styles['form-container']}`}>
@@ -39,9 +40,14 @@ export default function Form({
                   <div className="accordion-body">
                     <div className="row gy-4">
                       <div className="col-12 col-sm-6">
-                        <label htmlFor="myName" className="form-label">
-                          <span style={{ color: 'red' }}>*</span> 姓名
-                        </label>
+                        <div className="d-flex justify-content-between">
+                          <label htmlFor="myName" className="form-label">
+                            <span style={{ color: 'red' }}>*</span> 姓名
+                          </label>
+                          <span className="form-text text-danger pe-1 m-0">
+                            {errorMsg.nameErr !== '' && errorMsg.nameErr}
+                          </span>
+                        </div>
                         <input
                           type="text"
                           id="myName"
@@ -49,6 +55,7 @@ export default function Form({
                           name="name"
                           placeholder="王小美"
                           defaultValue={userProfile.name}
+                          onChange={handleChangeProfile}
                         />
                       </div>
                       <div className="col-12 col-sm-6">
@@ -61,6 +68,7 @@ export default function Form({
                           className="form-control"
                           name="birth"
                           defaultValue={userProfile.birth}
+                          onChange={handleChangeProfile}
                         />
                       </div>
                       {/* 改的話要再註冊驗證一次 */}
@@ -75,6 +83,7 @@ export default function Form({
                           name="email"
                           placeholder="xxx@test.com.tw"
                           defaultValue={userProfile.email}
+                          onChange={handleChangeProfile}
                         />
                       </div>
                       <div className="col-12 col-sm-6">
@@ -102,6 +111,7 @@ export default function Form({
                           className="form-control"
                           name="address"
                           defaultValue={userProfile.address}
+                          onChange={handleChangeProfile}
                         />
                       </div>
                       <div className="col-12 text-end">
@@ -145,7 +155,7 @@ export default function Form({
                 <form onSubmit={handleUpdatePWD}>
                   <div className="accordion-body">
                     <div className="row gy-1">
-                      <div className="col-6 me-1 pb-4 position-relative">
+                      <div className="col-md-6 col-12 me-1 pb-4 position-relative">
                         <div className="d-flex justify-content-between">
                           <label htmlFor="origin" className="form-label">
                             舊密碼
@@ -161,35 +171,54 @@ export default function Form({
                           type="password"
                           id="origin"
                           name="origin"
-                          className={`form-control ${
+                          className={`form-control pe-4 ${
                             errorMsg.originErr !== '' && 'border-danger'
                           }`}
                           maxLength={12}
                           onChange={handleChangePWD}
                         />
                       </div>
-                      <div className="col-6 me-1 pb-4">
+                      <div className="col-md-6 col-12 me-1 pb-4 position-relative">
                         <div className="d-flex justify-content-between">
                           <label htmlFor="newPWD" className="form-label">
                             新密碼
                           </label>
-                          <span className="form-text text-danger pe-1 m-0 mb-1">
+                          {/* 警示訊息 */}
+                          <span className="form-text text-danger pe-1 m-0">
                             {errorMsg.newPWDErr !== '' && errorMsg.newPWDErr}
                           </span>
                         </div>
-                        <input
-                          type="password"
-                          id="newPWD"
-                          name="newPWD"
-                          className={`form-control ${
-                            errorMsg.newPWDErr !== '' && 'border-danger'
-                          }`}
-                          placeholder="請輸入8-12位(含大小寫英文字母)"
-                          maxLength={12}
-                          onChange={handleChangePWD}
-                        />
+                        {/* END */}
+                        <div className="position-relative">
+                          <input
+                            type={type}
+                            id="newPWD"
+                            name="newPWD"
+                            className={`form-control ${
+                              errorMsg.newPWDErr !== '' && 'border-danger'
+                            }`}
+                            style={{ paddingRight: '32px' }}
+                            placeholder="請輸入8-12位(含大小寫英文字母)"
+                            maxLength={12}
+                            onChange={handleChangePWD}
+                          />
+                          <button
+                            type="button"
+                            className="fs-5 p-0 pe-1 pb-1 position-absolute"
+                            style={{
+                              transform: 'translateY(-50%)',
+                              top: '50%',
+                              right: '4px',
+                              border: 'none',
+                              background: 'none',
+                            }}
+                            onClick={handleToggle}
+                          >
+                            {icon}
+                          </button>
+                        </div>
                       </div>
-                      <div className="col-6 me-1 pb-4 position-relative">
+                      <div className="col-md-6 col-12 me-1 pb-4 position-relative">
                         <div className="d-flex justify-content-between">
                           <label htmlFor="rePWD" className="form-label">
                             確認密碼

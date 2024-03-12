@@ -5,14 +5,17 @@ import styles from './styles.module.scss'
 // React icon
 import { FcGoogle } from 'react-icons/fc'
 
-// defult auth
+// default auth
 import { useAuth } from '@/hooks/auth'
 // google auth
 import useFirebase from '@/hooks/use-firebase'
+// password visibility hook
+import useShow from '@/hooks/use-password-visibility'
 
 export default function SignUp() {
   const { signUp, signUpGoogle, auth, setMsg, errorMsg } = useAuth()
   const { loginGoogleRedirect, initGoogle, logoutFirebase } = useFirebase()
+  const { type, icon, handleToggle } = useShow()
 
   // 初次渲染時監聽firebase的google登入狀態
   useEffect(() => {
@@ -104,14 +107,31 @@ export default function SignUp() {
                 />
                 <label htmlFor="userEmail">電子郵件</label>
               </div>
-              <div className={`mb-3 ${styles['input-style']}`}>
+              <div
+                className={`position-relative mb-3 ${styles['input-style']}`}
+              >
                 <input
-                  type="password"
+                  type={type}
                   name="userPWD"
                   id="userPWD"
                   placeholder="請輸入8-12位(含大小寫英文字母)"
+                  maxLength={12}
                   onChange={handleVal}
                 />
+                <button
+                  type="button"
+                  className="fs-4 position-absolute pb-3"
+                  style={{
+                    transform: 'translateY(-50%)',
+                    top: '50%',
+                    right: '8px',
+                    border: 'none',
+                    background: 'none',
+                  }}
+                  onClick={handleToggle}
+                >
+                  {icon}
+                </button>
                 <label htmlFor="userPWD">密碼</label>
               </div>
               <div className={styles['input-style']}>

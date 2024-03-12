@@ -1,19 +1,32 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 // 表單使用的錯誤訊息
 export default function useFormCheck() {
   // 初始化
+  const initUserProfile = {
+    name: '',
+    email: '',
+    birth: '',
+    tel: '',
+    address: '',
+  }
+
   const initPWD = {
     origin: '',
     newPWD: '',
     rePWD: '',
   }
+
   const initMsg = {
+    nameErr: '',
+    emailErr: '',
     originErr: '',
     newPWDErr: '',
     rePWDErr: '',
   }
 
+  // 表單驗證的status
+  const [userProfile, setUserProfile] = useState(initUserProfile)
   const [password, setPWD] = useState(initPWD)
   const [errorMsg, setMsg] = useState(initMsg)
 
@@ -24,17 +37,28 @@ export default function useFormCheck() {
   // Error module
   const errText = {
     empty: '*必填欄位',
-    emailSyntax: '輸入格式錯誤',
-    passwordSyntax: '請輸入8-12位數(含大小寫英文字母)',
+    syntax: '輸入格式錯誤',
     different: '密碼不符',
     reuse: '重複使用相同密碼',
   }
 
+  // 抓取改變的欄位
+  const handleChangeProfile = (e) => {
+    setUserProfile({ ...userProfile, [e.target.name]: e.target.value })
+  }
   const handleChangePWD = (e) => {
     setPWD({ ...password, [e.target.name]: e.target.value })
   }
 
-  const handleCheck = () => {
+  // 表單驗證
+  const handleProfileCheck = () => {
+    switch (true) {
+      default:
+        return true
+    }
+  }
+
+  const handlePWDCheck = () => {
     switch (true) {
       case password.origin.trim() === '':
         setMsg({ ...errorMsg, originErr: errText.empty })
@@ -43,7 +67,7 @@ export default function useFormCheck() {
         setMsg({ ...errorMsg, newPWDErr: errText.empty })
         break
       case !passwordRegex.test(password.newPWD):
-        setMsg({ ...errorMsg, newPWDErr: errText.passwordSyntax })
+        setMsg({ ...errorMsg, newPWDErr: errText.syntax })
         break
       case password.origin === password.newPWD:
         setMsg({ ...errorMsg, newPWDErr: errText.reuse })
@@ -58,5 +82,17 @@ export default function useFormCheck() {
         return true
     }
   }
-  return { handleCheck, handleChangePWD, errorMsg, setMsg, initMsg, password }
+
+  return {
+    handleProfileCheck,
+    handlePWDCheck,
+    handleChangeProfile,
+    handleChangePWD,
+    userProfile,
+    setUserProfile,
+    errorMsg,
+    setMsg,
+    initMsg,
+    password,
+  }
 }

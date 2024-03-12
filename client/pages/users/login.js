@@ -5,6 +5,8 @@ import Head from 'next/head'
 
 // login with google
 import useFirebase from '@/hooks/use-firebase'
+// password visibility hook
+import useShow from '@/hooks/use-password-visibility'
 
 // React icon
 import { FcGoogle } from 'react-icons/fc'
@@ -13,6 +15,7 @@ import { useAuth } from '@/hooks/auth'
 export default function Login() {
   const { login, loginGoogle, auth, setMsg, errorMsg } = useAuth()
   const { loginGoogleRedirect, logoutFirebase, initGoogle } = useFirebase()
+  const { type, icon, handleToggle } = useShow()
 
   // 初次渲染時監聽firebase的google登入狀態
   useEffect(() => {
@@ -129,16 +132,31 @@ export default function Login() {
                 />
                 <label htmlFor="userEmail">電子郵件</label>
               </div>
-              <div className={`${styles['input-style']}`}>
+              <div className={`position-relative ${styles['input-style']}`}>
                 <input
-                  type="password"
+                  type={type}
                   name="userPWD"
                   id="userPWD"
                   placeholder="請輸入8-12位(含大小寫英文字母)"
+                  maxLength={12}
                   onChange={(e) =>
                     setVal({ ...inputVal, passwordVal: e.target.value })
                   }
                 />
+                <button
+                  type="button"
+                  className="fs-4 position-absolute pb-3"
+                  style={{
+                    transform: 'translateY(-50%)',
+                    top: '50%',
+                    right: '8px',
+                    border: 'none',
+                    background: 'none',
+                  }}
+                  onClick={handleToggle}
+                >
+                  {icon}
+                </button>
                 <label htmlFor="userPWD">密碼</label>
               </div>
               {/* 記住我＆忘記密碼 */}

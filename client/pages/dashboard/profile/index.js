@@ -1,29 +1,27 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import Head from 'next/head'
 import Menu from '@/components/dashboard/menu'
 import Form from '@/components/dashboard/form/profile'
-import { useAuth } from '@/hooks/auth'
 import { useRouter } from 'next/router'
-import useFormCheck from '@/hooks/form-check'
+// 使用者狀態的hook
+import { useAuth } from '@/hooks/auth'
+// 表單驗證的hook
+import useFormCheck from '@/hooks/use-form-check'
 
 export default function Profile() {
   const { auth, logout } = useAuth()
-  const { handleChangePWD, handleCheck, errorMsg, setMsg, initMsg, password } =
-    useFormCheck()
   const router = useRouter()
+  const {
+    handleProfileCheck,
+    handlePWDCheck,
+    userProfile,
+    setUserProfile,
+    setMsg,
+    initMsg,
+    password,
+  } = useFormCheck()
 
-  // 初始化
-  const initUserProfile = {
-    name: '',
-    email: '',
-    birth: '',
-    tel: '',
-    address: '',
-  }
-
-  const [userProfile, setUserProfile] = useState(initUserProfile)
-
-  // Fetch Profile
+  // GET Profile
   const getUserProfile = async (id) => {
     const token = localStorage.getItem('token')
     const url = `http://localhost:3005/api/users/${id}`
@@ -51,13 +49,12 @@ export default function Profile() {
   }
 
   // 抓取改變的欄位
-  const handleChangeProfile = (e) => {
-    setUserProfile({ ...userProfile, [e.target.name]: e.target.value })
-  }
+  // const handleChangeProfile = (e) => {
+  //   setUserProfile({ ...userProfile, [e.target.name]: e.target.value })
+  // }
 
-  // 更新db（不含密碼）
-  const handleUpdateProfile = async (e) => {
-    e.preventDefault()
+  // Update API (不含密碼)
+  const updateProfile = async (e) => {
     const user = new FormData(e.target)
     user.append('id', auth.id)
     const token = localStorage.getItem('token')
@@ -75,8 +72,17 @@ export default function Profile() {
       .then((result) => console.log(result.msg))
       .catch((err) => console.log(err.msg))
   }
+  // Update Profile（不含密碼）
+  const handleUpdateProfile = async (e) => {
+    e.preventDefault()
+    // 表單驗證
+    const formStatus = handleProfileCheck()
+    if (formStatus) {
+      updateProfile(e)
+    }
+  }
 
-  // Fetch Update API
+  // Update API (password)
   const updatePWD = async (e) => {
     const user = new FormData(e.target)
     user.append('id', auth.id)
@@ -100,12 +106,11 @@ export default function Profile() {
       })
       .catch((err) => console.log(err.msg))
   }
-
-  // 更新密碼
+  // Update password
   const handleUpdatePWD = (e) => {
     e.preventDefault()
     // 表單驗證
-    const formStatus = handleCheck()
+    const formStatus = handlePWDCheck()
     if (formStatus) {
       updatePWD(e)
     }
@@ -130,11 +135,8 @@ export default function Profile() {
       <Menu />
       <Form
         userProfile={userProfile}
-        handleChangeProfile={handleChangeProfile}
         handleUpdateProfile={handleUpdateProfile}
-        handleChangePWD={handleChangePWD}
         handleUpdatePWD={handleUpdatePWD}
-        errorMsg={errorMsg}
       />
     </>
   )
