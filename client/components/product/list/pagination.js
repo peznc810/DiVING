@@ -2,11 +2,7 @@ import React, { useState, useEffect } from 'react'
 
 export default function Pagination({ totalPages, setFilterSettings, page }) {
   const perPage = 6
-  // 目前頁碼
-  // 計算總頁數
-  // const totalPages = Math.ceil(filteredProducts.length / perPage)
 
-  // 換頁處理
   const handlePageChange = (pageNumber) => {
     setFilterSettings((c) => ({ ...c, page: pageNumber }))
   }
