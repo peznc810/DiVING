@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import Head from 'next/head'
 import Menu from '@/components/dashboard/menu'
 import styles from '@/components/dashboard/styles.module.scss'
+import loaderStyles from '@/styles/loader/loader_ripple.module.css'
 
 import { Form, InputGroup, Stack, Container } from 'react-bootstrap'
 import DiButton from '@/components/post/diButton'
@@ -9,6 +10,7 @@ import QuillEditor from '@/components/post/quill'
 import ImageUpload from '@/components/post/imageUpload'
 import TagGenerator from '@/components/post/tagGenerator'
 import { useRouter } from 'next/router'
+import CancelAlert from '@/components/post/cancelAlert'
 
 export default function Edit() {
   const router = useRouter()
@@ -48,9 +50,7 @@ export default function Edit() {
 
   useEffect(() => {
     if (router.isReady) {
-      // 如果isReady是true 確保能得到 query的值
       const { pid } = router.query
-      // 不這樣的話 會有不是pid的情況 會有要不到資料的情況 會變有多餘的請求
       console.log(pid)
       fetchPostData(pid)
     }
@@ -61,6 +61,7 @@ export default function Edit() {
     setEditFormData({ ...editFormData, [fieldName]: newData })
   }
 
+  // 提交事件
   const handleSubmit = async (e) => {
     e.preventDefault()
     console.log('Submitting data:', editFormData)
@@ -84,6 +85,63 @@ export default function Edit() {
     }
   }
 
+  const loader = (
+    <div className={loaderStyles['lds-ripple']}>
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+  )
+
+  const display = (
+    <>
+      <Form className="my-3" onSubmit={handleSubmit}>
+        <InputGroup className="mb-3">
+          <InputGroup.Text id="inputGroup-sizing-default">
+            文章標題
+          </InputGroup.Text>
+          <Form.Control
+            aria-label="title"
+            aria-describedby="inputGroup-sizing-default"
+            onChange={handleFormDataChange('title')}
+            value={editFormData.title} // 設定預設值
+          />
+        </InputGroup>
+        <ImageUpload />
+        <TagGenerator
+          onChange={handleFormDataChange('tags')}
+          value={editFormData.tags}
+        />
+        <br />
+        <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
+          <QuillEditor
+            // value={editedContent || content}
+            onChange={(data) => {
+              setEditFormData(data)
+            }}
+            className="w-full h-[70%] mt-10 bg-white"
+            editorLoaded={editorLoaded}
+            initialContent={editFormData.content}
+          />{' '}
+        </Form.Group>
+        <Stack direction="horizontal" gap={3}>
+          <div className="p-2 mx-auto">
+            <CancelAlert
+              title={'確定取消嗎？'}
+              text={'您的更改將不會保存。'}
+              icon={'warning'}
+              showCancelButton={true}
+              confirmButtonColor={'#3085d6'}
+              cancelButtonColor={'#d33'}
+              href={'/dashboard/posts'}
+            />
+            <DiButton type={'submit'} text={'送出'} color={'#013c64'} />{' '}
+          </div>
+        </Stack>
+      </Form>
+    </>
+  )
+
   return (
     <>
       <Head>
@@ -97,52 +155,7 @@ export default function Edit() {
               <h2 className="fw-medium fs-5 d-flex py-3 m-0">編輯文章</h2>
             </div>
             <div className="accordion-body overflow-auto">
-              <Form className="my-3" onSubmit={handleSubmit}>
-                <InputGroup className="mb-3">
-                  <InputGroup.Text id="inputGroup-sizing-default">
-                    文章標題
-                  </InputGroup.Text>
-                  <Form.Control
-                    aria-label="title"
-                    aria-describedby="inputGroup-sizing-default"
-                    onChange={handleFormDataChange('title')}
-                    value={editFormData.title} // 設定預設值
-                  />
-                </InputGroup>
-                <ImageUpload />
-                <TagGenerator
-                  onChange={handleFormDataChange('tags')}
-                  value={editFormData.tags}
-                />
-                <br />
-                <Form.Group
-                  className="mb-3"
-                  controlId="exampleForm.ControlTextarea1"
-                >
-                  <QuillEditor
-                    // value={editedContent || content}
-                    onChange={(data) => {
-                      setEditFormData(data)
-                    }}
-                    className="w-full h-[70%] mt-10 bg-white"
-                    editorLoaded={editorLoaded}
-                    initialContent={editFormData.content}
-                  />{' '}
-                </Form.Group>
-                <Stack direction="horizontal" gap={3}>
-                  <div className="p-2 mx-auto">
-                    <DiButton text={'取消'} color={'#dc5151'} />
-                    <DiButton
-                      type={'submit'}
-                      text={'送出'}
-                      color={'#013c64'}
-                    />{' '}
-                  </div>
-                </Stack>
-              </Form>
-              <div>
-                <input type="text" value={editFormData.content} />
-              </div>
+              {isLoading ? loader : display}
             </div>
           </div>
         </div>

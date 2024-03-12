@@ -60,7 +60,10 @@ export default function List() {
                 </Link>
                 <Card.Body className="bg-light">
                   <Card.Subtitle className="mb-2 text-primary">
-                    {v.user_id} ﹡ {v.published_at}
+                    {v.user_id} ﹡{' '}
+                    {new Date(v.published_at)
+                      .toLocaleDateString()
+                      .replace(/\//g, '-')}
                   </Card.Subtitle>
                   <Card.Title>{v.title}</Card.Title>
                   <Card.Text>
@@ -98,7 +101,7 @@ export default function List() {
 
   return (
     <>
-      <Container className="mt-5 text-end">
+      <Container className="text-end">
         <div className="my-2">
           Hi UUUUUUUUUUser
           <Link className="ms-3" href={'/'}>

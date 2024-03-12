@@ -28,6 +28,28 @@ export default function Form() {
     getPost()
   }, [])
 
+  const handleDisablePost = async (e, postId) => {
+    try {
+      const res = await fetch(`/api/disable/${postId}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          // 可以添加其他必要的Header，如授權令牌等
+        },
+      })
+
+      if (res.ok) {
+        // 修改成功的處理邏輯，可以刷新頁面或更新前端狀態等
+        console.log('Post disabled successfully')
+      } else {
+        // 修改失敗
+        console.error('Failed to disable post')
+      }
+    } catch (error) {
+      console.error('Error disabling post:', error)
+    }
+  }
+
   return (
     <>
       <div className={`col-sm-8 p-0 rounded-end ${styles['form-container']}`}>
@@ -81,7 +103,12 @@ export default function Form() {
                           >
                             <FaEdit />
                           </Link>
-                          <button type="button" className="btn" onClick={''}>
+                          <button
+                            type="button"
+                            className="btn"
+                            value={v.id}
+                            onClick={(e) => handleDisablePost(e, v.id)}
+                          >
                             <FaTrashCan />
                           </button>
                         </td>

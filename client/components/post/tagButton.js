@@ -5,27 +5,24 @@ export default function TagButton({ type, text, onClick, color }) {
       <style jsx>{`
         button {
           margin: 4px 6px;
-          font-family: 'Heebo', sans-serif;
-          font-size: 0.6rem;
-          font-weight: 400;
-          letter-spacing: 0.025rem;
+          font-size: 0.875rem;
+          letter-spacing: 0.05rem;
           font-style: normal;
           text-transform: capitalize;
           color: #ffffff;
-          background-color: #004080;
-          border-radius: 3.6875rem;
-          -webkit-border-radius: 3.6875rem;
-          -moz-border-radius: 3.6875rem;
-          padding: 0.2rem 0.3rem;
-          border-style: double;
-          border-width: 0.3rem;
-          border-color: #0080c0;
-          -webkit-box-shadow: 3px 3px 0px 0px rgba(51, 51, 51, 0.14);
-          -moz-box-shadow: 3px 3px 0px 0px rgba(51, 51, 51, 0.14);
-          -box-shadow: 3px 3px 0px 0px rgba(51, 51, 51, 0.14);
+          background-color: #013c64;
+          border-radius: 17px;
+          padding: 0.3125rem 0.6875rem;
+          border: 1px solid #0003;
+          border-color: #feebef;
+          -webkit-box-shadow: 3px 4px 15px -6px rgba(51, 51, 51, 0.83);
+          -moz-box-shadow: 3px 4px 15px -6px rgba(51, 51, 51, 0.83);
+          -box-shadow: 3px 4px 15px -6px rgba(51, 51, 51, 0.83);
         }
         button:hover {
-          color: white;
+          color: #013c64;
+          background-color: #0000;
+          border: 1px solid #0003;
         }
       `}</style>
     </button>

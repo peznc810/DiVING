@@ -3,23 +3,25 @@
 import React, { useEffect, useState } from 'react'
 import Head from 'next/head'
 import Menu from '@/components/dashboard/menu'
-
 import styles from '@/components/dashboard/styles.module.scss'
-
 import { Form, InputGroup, Stack, Container } from 'react-bootstrap'
 import DiButton from '@/components/post/diButton'
 import QuillEditor from '@/components/post/quill'
 import ImageUpload from '@/components/post/imageUpload'
 import TagGenerator from '@/components/post/tagGenerator'
+import CancelAlert from '@/components/post/cancelAlert'
+import { useRouter } from 'next/router'
+import Swal from 'sweetalert2'
 
 export default function Quill() {
+  const router = useRouter()
   const [editorLoaded, setEditorLoaded] = useState(false)
 
   const [formData, setFormData] = useState({
     user_id: '有值',
     title: '123',
     image: 'post.jpg',
-    content: '123',
+    content: '',
     tags: '1,2,3',
   })
 
@@ -38,20 +40,43 @@ export default function Quill() {
 
     // 在這裡發送POST請求到後端保存數據
     try {
-      const response = await fetch(
-        'http://localhost:3005/api/post/edit/quill',
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(formData),
-          // body: JSON.stringify(postData),
-        }
-      )
+      const res = await fetch('http://localhost:3005/api/post/new', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+        // body: JSON.stringify(postData),
+      })
 
       // 處理後端返回的響應
-      const result = await response.json()
+      const result = await res.json()
+      if (result) {
+        Swal.fire({
+          title: '新增成功',
+          showClass: {
+            popup: `
+              animate__animated
+              animate__fadeInUp
+              animate__faster
+            `,
+          },
+          hideClass: {
+            popup: `
+              animate__animated
+              animate__fadeOutDown
+              animate__faster
+            `,
+          },
+          backdrop: `
+          rgba(0,0,123,0.4)
+          url("/images/post/swimmingdog.gif")
+          top
+          no-repeat
+        `,
+        })
+        router.push('/dashboard/posts')
+      }
       console.log(result)
     } catch (error) {
       console.error('Error submitting data:', error)
@@ -61,7 +86,7 @@ export default function Quill() {
   return (
     <>
       <Head>
-        <title>編輯文章</title>
+        <title>新增文章</title>
       </Head>
       <Menu />
       <div className={`col-sm-8 p-0 rounded-end ${styles['form-container']}`}>
@@ -99,9 +124,10 @@ export default function Quill() {
                         {' '}
                         <QuillEditor
                           // value={editedContent || content}
-                          onChange={(data) => {
-                            setFormData(data)
-                          }}
+                          // onChange={(data) => {
+                          //   setFormData(data)
+                          // }}
+                          onChange={handleFormDataChange('content')}
                           className="w-full h-[70%] mt-10 bg-white"
                           editorLoaded={editorLoaded}
                         />{' '}
@@ -110,7 +136,15 @@ export default function Quill() {
                   </Form.Group>
                   <Stack direction="horizontal" gap={3}>
                     <div className="p-2 mx-auto">
-                      <DiButton text={'取消'} color={'#dc5151'} />
+                      <CancelAlert
+                        title={'確定取消嗎？'}
+                        text={'您的更改將不會保存。'}
+                        icon={'warning'}
+                        showCancelButton={true}
+                        confirmButtonColor={'#3085d6'}
+                        cancelButtonColor={'#d33'}
+                        href={'/dashboard/posts'}
+                      />
                       <DiButton
                         type={'submit'}
                         text={'送出'}

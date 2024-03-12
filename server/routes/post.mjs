@@ -35,18 +35,30 @@ const router = express.Router();
     res.status(500).json({ error: 'NOOOOOO' });    
   }
 });
+  //讀取登入使用者文章
+  router.get('/', async (req, res) => {
+    try {
+      const [result, field] = await db.execute('SELECT * FROM post');
+
+      console.log(field);
+      res.json(result);
+    } catch (error) {
+      console.error('Error executing database query:', error);
+      res.status(500).json({ error: 'NOOOOOO' });  
+    }
+  });
 
 //dashboard 新增文章
-router.post('/edit/quill', async (req, res) => {
+router.post('/new', async (req, res) => {
   const { user_id, title, image, content, tags} = req.body;
   const id = uuidv4();
   const now = new Date();
 
   try {
-    const [result] = await db.execute('INSERT INTO post (id, user_id, title, image, content, published_at, updated_at,tags , is_published) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)', 
+    const [result] = await db.execute('INSERT INTO post (id, user_id, title, image, content, published_at, updated_at,tags , valid) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)', 
      [id, '001', title, image, content, now, now, tags, 1]);   
 
-    res.status(201).json({ status: 'success', message: '成功寫入'});
+        res.status(201).json({ status: 'success', message: '成功寫入'});
       // res.redirect('http://localhost:3000/dashboard/posts/');
   } catch (error) {
     console.error('Error executing database query:', error);
@@ -77,7 +89,18 @@ router.post('/edit', async (req, res) => {
   }
 });
 
+router.post("/disable/:postId", async(req,res) =>{
+  const post_id = req.params.postId
+  try{
+    const [result] = await db.execute('UPDATE post SET valid = 0 WHERE id = ?', 
+     [post_id]);
 
+     res.status(200).json({ message: 'Post disabled successfully' });
+  } catch{
+    console.error('Error disabling post:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+})
 
 router.post("/test", async(req, res) => {
   const {name, title} = req.body;

@@ -136,7 +136,7 @@ export default function Detail() {
   )
   return (
     <>
-      <Container className="mt-5 p-3">
+      <Container className="p-3">
         <Link href="/post">回列表頁</Link>
       </Container>
       {isLoading ? loader : display}
