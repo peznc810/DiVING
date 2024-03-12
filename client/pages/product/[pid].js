@@ -26,15 +26,46 @@ export default function Detail() {
   const [selectSize, setSelectSize] = useState(null)
 
   useEffect(() => {
-    if (!pid) return
-    fetch(`http://localhost:3000/api/product/${pid}`)
-      .then((res) => {
-        return res.json()
-      })
-      .then((res) => {
-        setProduct(res.data)
-      })
+    const fetchProduct = async () => {
+      try {
+        await fetch(`http://localhost:3005/api/product/id?pid=${pid}`, {
+          method: 'GET',
+        })
+          .then((res) => {
+            return res.json()
+          })
+          .then(([data]) => {
+            setProduct(data ? data : [])
+          })
+      } catch {
+        ;(err) => {
+          console.error('Error fetching data:', err)
+        }
+      }
+    }
+    if (pid) fetchProduct()
   }, [pid])
+  console.log(product)
+
+  // if (product) {
+  //   const [newproduct] = product.filter((o) => {
+  //     return o.id == pid
+  //   })
+  //   setProduct(newproduct)
+  // }
+
+  // console.log(product)
+
+  // useEffect(() => {
+  //   if (!pid) return
+  //   fetch(`http://localhost:3000/api/product/${pid}`)
+  //     .then((res) => {
+  //       return res.json()
+  //     })
+  //     .then((res) => {
+  //       setProduct(res.data)
+  //     })
+  // }, [pid])
 
   const increment = () => {
     setProductCount((prevCount) => {

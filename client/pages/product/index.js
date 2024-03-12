@@ -14,6 +14,7 @@ import { MdScubaDiving } from 'react-icons/md'
 import { MdOutlineCategory } from 'react-icons/md'
 import { GoHeartFill } from 'react-icons/go'
 import { FaCartPlus } from 'react-icons/fa'
+import { method } from 'lodash'
 
 const perPage = 6
 
@@ -140,14 +141,36 @@ export default function List() {
   }, [filteredProducts, filterSettings, sorting])
 
   useEffect(() => {
-    fetch('http://localhost:3000/api/product')
-      .then((res) => {
-        return res.json()
-      })
-      .then((data) => {
-        setProduct(data ? data.data : [])
-      })
+    const fetchProduct = async () => {
+      try {
+        await fetch('http://localhost:3005/api/product', {
+          method: 'GET',
+        })
+          .then((res) => {
+            return res.json()
+          })
+          .then((data) => {
+            console.log(data)
+            setProduct(data ? data : [])
+          })
+      } catch {
+        ;(err) => {
+          console.error('Error fetching data:', err)
+        }
+      }
+    }
+    fetchProduct()
   }, [])
+
+  // useEffect(() => {
+  //   fetch('http://localhost:3000/api/product')
+  //     .then((res) => {
+  //       return res.json()
+  //     })
+  //     .then((data) => {
+  //       setProduct(data ? data.data : [])
+  //     })
+  // }, [])
 
   return (
     <>
