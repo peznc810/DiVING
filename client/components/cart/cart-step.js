@@ -1,19 +1,33 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 
-export default function CartStep() {
+export default function CartStep({ step = 0 }) {
+  useEffect(() => {
+    switch (step) {
+      case 1:
+        document.querySelector('.step1').classList.add('active')
+        break
+      case 2:
+        document.querySelector('.step2').classList.add('active')
+        break
+      case 3:
+        document.querySelector('.step3').classList.add('active')
+        break
+    }
+  })
+
   return (
     <div className="my-3">
       <div className="row justify-content-center step-section">
         <div className="col-3">
-          <h3 className="step active">1</h3>
+          <h3 className="step step1">1</h3>
           <h4 className="step-contain text-center">購物車</h4>
         </div>
         <div className="col-3">
-          <h3 className="step">2</h3>
+          <h3 className="step step2">2</h3>
           <h4 className="step-contain text-center">填寫資料</h4>
         </div>
         <div className="col-3">
-          <h3 className="step">3</h3>
+          <h3 className="step step3">3</h3>
           <h4 className="step-contain text-center">訂單確認</h4>
         </div>
       </div>

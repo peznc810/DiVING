@@ -18,8 +18,11 @@
     width: 100%;
     padding-block: 12px;
     color: $white;
-    transition: background 0.2s ease-in-out;
+    transition: background 0.3s ease-in-out;
     &:hover {
+      background-color: $dark-primary;
+    }
+    &:active {
       background-color: $secondary;
     }
     & svg {
