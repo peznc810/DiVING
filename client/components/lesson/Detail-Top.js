@@ -1,10 +1,9 @@
 import React from 'react'
-import Image from 'react-bootstrap/Image'
 import ImgSlider from './ImgSlider'
+import SliderTest from './sliderTest'
 import { Container, Row, Col } from 'react-bootstrap'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faStar, faHeart } from '@fortawesome/free-solid-svg-icons'
-import Style from '@/styles/lessonStyle/lesson.module.scss'
+import { GiRoundStar } from 'react-icons/gi'
+import { FaHeart } from 'react-icons/fa'
 
 export default function DetailTop() {
   return (
@@ -14,11 +13,7 @@ export default function DetailTop() {
           <Col lg={7}>
             <figure className="">
               <ImgSlider></ImgSlider>
-              {/* <Image
-                className="img-fluid"
-                src="https://fakeimg.pl/730x450/"
-                alt=""
-              /> */}
+              {/* <SliderTest></SliderTest> */}
             </figure>
           </Col>
           <Col lg={5}>
@@ -47,17 +42,17 @@ export default function DetailTop() {
               </Col>
               <Col lg={12}>
                 <div className="d-flex justify-content-between mt-3">
-                  <div>
-                    <FontAwesomeIcon icon={faStar} className="fs4" />
-                    <FontAwesomeIcon icon={faStar} className="fs4" />
-                    <FontAwesomeIcon icon={faStar} className="fs4" />
-                    <FontAwesomeIcon icon={faStar} className="fs4" />
-                    <FontAwesomeIcon icon={faStar} className="fs4" />
-                    <span className="fs-4">評論</span>
+                  <div className="fs-4 d-flex align-items-center">
+                    {/* ---引入資料庫內的 star--- */}
+                    <GiRoundStar />
+                    <GiRoundStar />
+                    <GiRoundStar />
+                    <GiRoundStar />
+                    <GiRoundStar />
+                    <span className="fs-6 ps-3">評論</span>
                   </div>
                   <div className="align-self-center">
-                    <FontAwesomeIcon icon={faHeart} />
-                    <i className="fa-regular fa-heart fs-4"></i>
+                    <FaHeart className="fs-4" />
                   </div>
                 </div>
               </Col>

@@ -3,11 +3,11 @@ import Image from 'react-bootstrap/Image'
 import { Container, Row, Col } from 'react-bootstrap'
 import DetailTop from '@/components/lesson/Detail-Top'
 import Style from '@/styles/lessonStyle/lesson.module.scss'
-
+// 取得lesson data
 export default function Detail() {
   return (
     <>
-      <Container className={Style.bg_color} style={{ paddingTop: '5rem' }}>
+      <Container className={`${Style.bg_color} pt-2`}>
         <DetailTop></DetailTop>
         <hr />
         <Row className="justify-content-end">

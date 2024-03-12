@@ -56,7 +56,7 @@ ul {
     max-width: 100%;
 
     &:hover {
-      border: 4px solid rgba(110, 16, 16, 0.8);
+      border: 2px solid $secondary;
     }
   }
 
@@ -72,21 +72,20 @@ ul {
   }
 
   .slick-thumb {
-    bottom: -3.75rem;
-    > ul {
-      > li {
-        width: 60px;
-        margin: 0 20px;
+    bottom: -3.5rem;
+    height: 50px;
+    > li {
+      width: 35px;
+      margin: 0 10px;
 
-        &.slick-active img {
-          -webkit-filter: grayscale(0);
-          filter: grayscale(0);
-        }
+      &.slick-active img {
+        -webkit-filter: grayscale(0);
+        filter: grayscale(0);
+      }
 
-        img {
-          -webkit-filter: grayscale(100%);
-          filter: grayscale(100%);
-        }
+      img {
+        -webkit-filter: grayscale(100%);
+        filter: grayscale(100%);
       }
     }
   }
@@ -97,4 +96,42 @@ ul {
       filter: grayscale(100%);
     }
   }
+}
+
+#app {
+  height: 100%;
+}
+html,
+body {
+  position: relative;
+  height: 100%;
+}
+
+body {
+  background: #eee;
+  font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  color: #000;
+  margin: 0;
+  padding: 0;
+}
+
+.swiper {
+  width: 300px;
+  height: 300px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  margin-left: -150px;
+  margin-top: -150px;
+}
+
+.swiper-slide {
+  background-position: center;
+  background-size: cover;
+}
+
+.swiper-slide img {
+  display: block;
+  width: 100%;
 }

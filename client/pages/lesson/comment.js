@@ -4,15 +4,21 @@ import CommentList from '@/components/lesson/CommentList'
 import { Container, Row, Col } from 'react-bootstrap'
 import DetailTop from '@/components/lesson/Detail-Top'
 import UserComment from '@/components/lesson/UserComment'
+import { useAuth } from '@/hooks/auth'
 import Style from '@/styles/lessonStyle/lesson.module.scss'
 
 export default function Detail() {
+  const { auth } = useAuth()
+  const getUserState = (auth) => {
+    if (auth.isAuth) {
+      return <UserComment />
+    }
+    return null // 或者返回一個適當的預設值
+  }
+
   return (
     <>
-      <DetailTop
-        className={Style['bg_color']}
-        style={{ paddingTop: '5rem' }}
-      ></DetailTop>
+      <DetailTop className={`${Style['bg_color']} pt-2`}></DetailTop>
       <Container>
         <hr />
         <Row className="justify-content-end">
@@ -24,18 +30,18 @@ export default function Detail() {
                 type="checkbox"
                 name={Style['switch-checkbox']}
               />
-              <div className={Style['switch-label']} htmlFor="switchID1">
+              <label className={Style['switch-label']} htmlFor="switchID1">
                 <span
                   className={Style['switch-txt']}
-                  turnOn="細節"
-                  turnOff="評價"
-                ></span>
-                <span className={Style['switch-Round-btn']}></span>
-              </div>
+                  data-turn-on="細節"
+                  data-turn-off="評價"
+                />
+                <span className={Style['switch-Round-btn']} />
+              </label>
             </div>
           </Col>
         </Row>
-        <UserComment />
+        {getUserState(auth)}
         <Row>
           <Col lg={2}>
             <select

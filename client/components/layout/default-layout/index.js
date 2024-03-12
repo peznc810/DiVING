@@ -9,7 +9,8 @@ export default function DefaultLayout({ currentPage, children }) {
   return (
     <>
       <Navbar background={navBackground} />
-      {children}
+      <div style={{ paddingTop: '4rem' }}>{children}</div>
+
       <Footer />
     </>
   )

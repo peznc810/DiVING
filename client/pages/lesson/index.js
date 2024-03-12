@@ -7,21 +7,22 @@ import Head from 'next/head'
 // ----引入元件----
 import BsCard from '@/components/lesson/Bs-card'
 import AddrCheck from '@/components/lesson/Addrcheck'
-import Difflayout from '@/components/lesson/Diffcheck'
+// import Difflayout from '@/components/lesson/Diffcheck'
 import List from '@/components/lesson/List'
 import Star from '@/components/lesson/star'
 // ----引入Icon----
 import { FaMagnifyingGlass, FaMinus, FaChevronRight } from 'react-icons/fa6'
 // ----引入Scss----
 import Style from '@/styles/lessonStyle/lesson.module.scss'
-import LessonData from '@/data/lesson/lesson'
 
 export default function Test() {
   const fav = Array.from({ length: 5 })
   const LV = ['體驗', '中階', '初級']
-  const difficultys = LessonData
-  const [checkvalue, setCheckvalue] = useState(new Array(LV.length).fill(false))
-
+  const location = ['東北角', '東部海岸', '墾丁', '澎湖', '小琉球', '蘭嶼']
+  const checkDate = [...LV, ...location]
+  const [checkvalue, setCheckvalue] = useState(
+    new Array(checkDate.length).fill(false)
+  )
   return (
     <>
       <Head>
@@ -29,8 +30,7 @@ export default function Test() {
       </Head>
       <DiffCheck.Provider value={{ checkvalue, setCheckvalue }}>
         <Container
-          className={`${Style.bg_color} ${Style.pt} d-none d-lg-block d-md-none d-lg-block lesson`}
-          style={{ paddingTop: '5rem' }}
+          className={`${Style.bg_color} ${Style.pt} d-none d-lg-block d-md-none d-lg-block lesson pt-2`}
         >
           <Row className="">
             <Col lg="3">
@@ -67,14 +67,7 @@ export default function Test() {
                   </div>
                 </div>
               </div>
-              <div className="mb-3">
-                <div className="fs-4">地點</div>
-                <AddrCheck />
-              </div>
-              <div className="mb-3">
-                <div className="fs-4">潛點等級</div>
-                <Difflayout />
-              </div>
+              <AddrCheck />
             </Col>
             <Col
               lg="9"
@@ -122,16 +115,12 @@ export default function Test() {
           className={`{${Style.bg_color} {${Style.pt}} d-lg-none pb-3}`}
           style={{ paddingTop: '5rem' }}
         >
-          <Row className="">
-            <Col sm={6}>
-              <BsCard></BsCard>
-              <BsCard></BsCard>
+          <BsCard></BsCard>
+          {/* <Row className="">
+            <Col xs={6}>
+              
             </Col>
-            <Col sm={6}>
-              <BsCard></BsCard>
-              <BsCard></BsCard>
-            </Col>
-          </Row>
+          </Row> */}
         </Container>
       </DiffCheck.Provider>
     </>
