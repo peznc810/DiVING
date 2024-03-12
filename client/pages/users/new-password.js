@@ -3,9 +3,8 @@ import styles from './styles.module.scss'
 export default function Reset() {
   return (
     <>
-      <header className={styles.header}></header>
-      <main className={`${styles['main-style']} ${styles['main-layout']}`}>
-        <div className="d-flex justify-content-center">
+      <main className={`${styles['main-style']}`}>
+        <div className="d-flex justify-content-center mt-5">
           <div className={`${styles['card-style']} ${styles['card-layout']}`}>
             {/* chrome會有一個自動填入的input功能，但無法修改其樣式，之後還是選用純色做背景較合適 */}
             <form action="" method="post" autoComplete="off">
@@ -41,7 +40,6 @@ export default function Reset() {
           </div>
         </div>
       </main>
-      <footer className={styles.footer}></footer>
     </>
   )
 }

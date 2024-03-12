@@ -4,9 +4,8 @@ import styles from './styles.module.scss'
 export default function DashboardLayout({ children }) {
   return (
     <>
-      {/* 這裡的class之後要拿掉 */}
-      <main className="mt-5 pt-4">
-        <div className="container-xl my-4">
+      <main className="my-3 my-sm-5">
+        <div className="container-xl">
           <div
             className={`row justify-content-center m-auto ${styles['user-container']}`}
           >
