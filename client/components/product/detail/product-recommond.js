@@ -1,6 +1,4 @@
 import { useEffect, useState } from 'react'
-import { useRouter } from 'next/router'
-import shuffle from 'lodash/shuffle'
 
 import Card from 'react-bootstrap/Card'
 import Button from 'react-bootstrap/Button'
@@ -12,23 +10,48 @@ import { FaCartPlus } from 'react-icons/fa'
 import Link from 'next/link'
 
 export default function ProductRecommend() {
-  const router = useRouter()
-  const { pid } = router.query
   const [product, setProduct] = useState([])
 
   useEffect(() => {
-    if (!pid) return
-    fetch(`http://localhost:3000/api/product/`)
-      .then((res) => res.json())
-      .then((res) => {
-        const shuffledProducts = shuffle(res.data)
-        const selectedProducts = shuffledProducts.slice(0, 4)
-        setProduct(selectedProducts)
-      })
-  }, [pid])
+    const fetchProduct = async () => {
+      try {
+        const response = await fetch('http://localhost:3005/api/product', {
+          method: 'GET',
+        })
+        if (!response.ok) {
+          throw new Error('Network response was not ok')
+        }
+        const data = await response.json()
+        // 隨機選擇四個商品
+        const randomProducts = []
+        const selectedIndices = []
+        while (randomProducts.length < 4) {
+          const randomIndex = Math.floor(Math.random() * data.length)
+          if (!selectedIndices.includes(randomIndex)) {
+            selectedIndices.push(randomIndex)
+            randomProducts.push(data[randomIndex])
+          }
+        }
+        setProduct(randomProducts)
+      } catch (error) {
+        console.error('Error fetching data:', error)
+      }
+    }
+    fetchProduct()
+  }, [])
+
+  // useEffect(() => {
+  //   if (!pid) return
+  //   fetch(`http://localhost:3000/api/product/`)
+  //     .then((res) => res.json())
+  //     .then((res) => {
+  //       const shuffledProducts = shuffle(res.data)
+  //       const selectedProducts = shuffledProducts.slice(0, 4)
+  //       setProduct(selectedProducts)
+  //     })
+  // }, [pid])
 
   if (!product || !Array.isArray(product)) return null
-
   return (
     <>
       <div className="container width-1200">

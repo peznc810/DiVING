@@ -4,7 +4,7 @@ import { useRouter } from 'next/router'
 import Star from '@/components/product/star/star'
 import Carousel from '@/components/product/carousel'
 import Switch from '@/components/product/detail/switch'
-import ProductRecommond from '@/components/product/detail/product-recommond'
+import ProductRecommend from '@/components/product/detail/product-recommond'
 
 import Breadcrumb from 'react-bootstrap/Breadcrumb'
 import { FaHome } from 'react-icons/fa'
@@ -300,12 +300,14 @@ export default function Detail() {
           setRating={setRating}
         />
       </div>
+
       <br />
       <br />
       <br />
+
       <div>
         <h3 className="text-center my-5">你可能會喜歡的商品⋯</h3>
-        <ProductRecommond />
+        <ProductRecommend />
       </div>
 
       <style jsx>{`

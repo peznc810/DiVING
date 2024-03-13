@@ -10,11 +10,6 @@ import Pagination from '@/components/product/list/pagination'
 
 import Breadcrumb from 'react-bootstrap/Breadcrumb'
 import { FaHome } from 'react-icons/fa'
-// import { MdScubaDiving } from 'react-icons/md'
-// import { MdOutlineCategory } from 'react-icons/md'
-// import { GoHeartFill } from 'react-icons/go'
-// import { FaCartPlus } from 'react-icons/fa'
-// import { method } from 'lodash'
 
 const perPage = 6
 
