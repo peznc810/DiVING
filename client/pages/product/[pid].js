@@ -8,12 +8,10 @@ import ProductRecommond from '@/components/product/detail/product-recommond'
 
 import Breadcrumb from 'react-bootstrap/Breadcrumb'
 import { FaHome } from 'react-icons/fa'
-import { MdScubaDiving } from 'react-icons/md'
-import { MdOutlineCategory } from 'react-icons/md'
 import { GoHeartFill } from 'react-icons/go'
 import { FaCartPlus } from 'react-icons/fa'
 import toast, { Toaster } from 'react-hot-toast'
-import { set } from 'lodash'
+// import { set } from 'lodash'
 
 export default function Detail() {
   const router = useRouter()
@@ -315,7 +313,7 @@ export default function Detail() {
           max-width: 1200px;
           margin: 0 auto;
           padding: 0;
-          margin-top: 70px;
+          margin-top: 10px;
         }
         @media screen and (max-width: 576px) {
           .width-1200 {

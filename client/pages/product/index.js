@@ -7,21 +7,21 @@ import Order from '@/components/product/list/order'
 import Search from '@/components/product/list/search'
 import Filter from '@/components/product/list/filter'
 import Pagination from '@/components/product/list/pagination'
-import Link from 'next/link'
 
 import Breadcrumb from 'react-bootstrap/Breadcrumb'
 import { FaHome } from 'react-icons/fa'
-import { MdScubaDiving } from 'react-icons/md'
-import { MdOutlineCategory } from 'react-icons/md'
-import { GoHeartFill } from 'react-icons/go'
-import { FaCartPlus } from 'react-icons/fa'
-import { method } from 'lodash'
+// import { MdScubaDiving } from 'react-icons/md'
+// import { MdOutlineCategory } from 'react-icons/md'
+// import { GoHeartFill } from 'react-icons/go'
+// import { FaCartPlus } from 'react-icons/fa'
+// import { method } from 'lodash'
 
 const perPage = 6
 
 export default function List() {
   const router = useRouter()
-  const { productBrand } = router.query
+  // const { productBrand } = router.query
+
   const [product, setProduct] = useState([])
   // console.log(product)
   const [rating, setRating] = useState(0) //評分
@@ -272,7 +272,7 @@ export default function List() {
           max-width: 1200px;
           margin: 0 auto;
           padding: 0;
-          margin-top: 70px;
+          margin-top: 10px;
         }
         @media screen and (max-width: 576px) {
           .width-1200 {
