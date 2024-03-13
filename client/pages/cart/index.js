@@ -6,12 +6,21 @@ const MySwal = withReactContent(Swal)
 
 import { FaShoppingCart, FaRegTrashAlt } from 'react-icons/fa'
 import CartStep from '@/components/cart/cart-step'
+// inchhhhh 新增
+import CouponModal from '@/components/cart/coupon-modal'
+import { useCouponHas } from '@/hooks/use-couponHasData'
+import { set } from 'lodash'
 
 export default function Home() {
   const [cartData, setCartData] = useState([])
   const [totalPrice, setTotalPrice] = useState(0)
+  const [totalTotalPrice, setTotalTotalPrice] = useState(0)
   const [deliveryFee] = useState(50)
-  const [discount] = useState(0)
+  const [discount, setDiscount] = useState(0)
+  // inchhhhh 新增
+  const { couponHas, setCouponHas } = useCouponHas()
+  const [showCoupon, setShowCoupon] = useState(false)
+  const [couponFromChildren, setCouponFromChildren] = useState(null) // modal傳來的資訊
 
   useEffect(() => {
     const data = JSON.parse(localStorage.getItem('cart'))
@@ -87,6 +96,29 @@ export default function Home() {
     calculateTotalPrice(updatedCartData)
   }
 
+  // 收到coupon傳來的資訊
+  const selectedCouponData = (data) => {
+    // console.log(data)
+    if (!data) return totalPrice + deliveryFee
+    const { coupon_discount, coupon_rule } = data
+    // console.log(coupon_discount, coupon_rule)
+    let updateTotalPrice = 0
+    let updateDiscount = 0
+    // 判斷小記金額是否大於coupon_rule
+    if (totalPrice > coupon_rule) {
+      // Number.isInteger()檢查是否為整數
+      if (!Number.isInteger(coupon_discount)) {
+        updateTotalPrice = totalPrice * coupon_discount + deliveryFee
+      } else {
+        updateTotalPrice = totalPrice - coupon_discount + deliveryFee
+      }
+      updateDiscount = updateTotalPrice - totalPrice
+    } else {
+      updateTotalPrice = totalPrice + deliveryFee
+    }
+    setTotalTotalPrice(updateTotalPrice)
+    setDiscount(updateDiscount)
+  }
   return (
     <div className="container">
       <CartStep step={1} />
@@ -268,11 +300,19 @@ export default function Home() {
               <p>NT$ {deliveryFee}</p>
             </div>
             <p className="text-end">優惠 -NT${discount}</p>
-            <a>優惠券</a>
+            <button
+              type="button"
+              className="coupon-btn p-0 my-2"
+              onClick={() => {
+                setShowCoupon(true)
+              }}
+            >
+              選擇優惠券
+            </button>
             <hr />
             <div className="d-flex justify-content-between spacing fw-bold">
               <p>合計:</p>
-              <p>NT$ {totalPrice + deliveryFee - discount}</p>
+              <p>NT$ {totalTotalPrice}</p>
             </div>
             <Link href="./cart/step2">
               <button
@@ -284,6 +324,13 @@ export default function Home() {
             </Link>
           </div>
         </div>
+        <CouponModal
+          showCoupon={showCoupon}
+          setShowCoupon={setShowCoupon}
+          couponHas={couponHas}
+          setCouponHas={setCouponHas}
+          dataForParent={selectedCouponData}
+        />
       </div>
       <style jsx>{`
         h1,
@@ -294,6 +341,10 @@ export default function Home() {
         h6,
         p {
           margin: 0;
+        }
+
+        body {
+          position: relative;
         }
 
         .order-detail {
@@ -366,6 +417,16 @@ export default function Home() {
           padding-top: 1rem;
           padding-bottom: 1rem;
           text-align: center;
+        }
+
+        .coupon-btn {
+          border: none;
+          background-color: transparent;
+          font-size: 14px;
+          color: #265475;
+        }
+        .coupon-btn:hover {
+          border-bottom: 1px solid #265475;
         }
 
         .btn-light {

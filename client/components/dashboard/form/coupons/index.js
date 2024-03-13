@@ -1,37 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import styles from '../styles.module.scss'
 import Image from 'next/image'
-import { useAuth } from '@/hooks/auth'
 import Swal from 'sweetalert2'
+import { useCouponHas } from '@/hooks/use-couponHasData'
 
 export default function Form() {
-  const [couponData, setCouponData] = useState([])
+  const { couponHas, auth, authID, setCouponHas } = useCouponHas()
   const [inputCode, setInputCode] = useState('')
   const [errorText, setErrorText] = useState(false)
-  const { auth } = useAuth()
-  const authID = auth.id
-
-  console.log(auth)
-
-  // 讀取會員的所有coupon
-  useEffect(() => {
-    if (auth && authID) {
-      const url = `http://localhost:3005/api/coupon/${authID}`
-      fetch(url, {
-        method: 'get',
-      })
-        .then((response) => {
-          return response.json()
-        })
-        .then((results) => {
-          console.log(results)
-          setCouponData(results)
-        })
-        .catch((error) => {
-          console.log('連線錯誤')
-        })
-    }
-  }, [auth])
 
   const input = (e) => {
     e.preventDefault()
@@ -74,7 +50,7 @@ export default function Form() {
             return response.json()
           })
           .then((results) => {
-            setCouponData(results)
+            setCouponHas(results)
           })
           .catch(() => {
             console.log('error')
@@ -157,7 +133,7 @@ export default function Form() {
               <div className="mb-5">
                 <div className={`row g-3 ${styles.card}`}>
                   {/* 卡片本體 */}
-                  {couponData.map((v) => {
+                  {couponHas.map((v) => {
                     return (
                       <div className="col-12 col-md-6" key={v.id}>
                         <div className=" d-flex border border-info rounded p-3 h-100">

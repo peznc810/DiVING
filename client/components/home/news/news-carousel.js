@@ -7,8 +7,8 @@ import { IoIosArrowForward } from 'react-icons/io'
 
 export default function NewsCarousel() {
   const eventList = useEvent()
-  const [index, setIndex] = useState(0)
-  const [focusIndex, setFocusIndex] = useState(0)
+  const [index, setIndex] = useState(null)
+  const [focusIndex, setFocusIndex] = useState(null)
   const carouselRef = useRef(null) //輪播每次移動105px
 
   //  點擊按鈕輪播區塊會移動105px，並且focus會換到下一個

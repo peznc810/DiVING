@@ -6,7 +6,7 @@ import { useAuth } from '@/hooks/auth'
 
 export default function Coupon() {
   const [offsetTime, setOffsetTime] = useState(countDownTimer())
-  const [showCoupon, setShowCoupon] = useState(true) //顯示coupon視窗
+  const [showCoupon, setShowCoupon] = useState(false) //顯示coupon視窗
   const [couponData, setCouponData] = useState(false) //顯示coupon資訊
   const [codeShow, setCodeShow] = useState(false) // 顯示code
 
@@ -31,13 +31,45 @@ export default function Coupon() {
         console.log('連接錯誤')
       })
   }, [showCoupon, codeShow])
+
   // 複製文字
-  const copyText = () => {
+  function copyText() {
     const text = textRef.current.innerText
     navigator.clipboard
       .writeText(text)
-      .then(() => alert('复制成功'))
+      .then(() => alert('複製成功'))
       .catch((err) => console.error('複製失敗:', err))
+  }
+
+  // 滑鼠滾動coupon才出現
+  useEffect(() => {
+    // 檢查 localStorage 中是否存在標誌，如果存在不要顯示coupon
+    const couponClosedFlag = localStorage.getItem('couponClosed')
+    if (couponClosedFlag) {
+      setShowCoupon(false)
+    }
+
+    // 監聽滑鼠滾動
+    const handleScroll = () => {
+      const scrollPosition = window.scrollY
+      const position = 300
+      // 如沒有couponClosedFlag且滾動超過300，coupon顯示
+      if (!couponClosedFlag && scrollPosition > position) {
+        setShowCoupon(true)
+      }
+    }
+
+    window.addEventListener('scroll', handleScroll)
+    return () => {
+      window.removeEventListener('scroll', handleScroll)
+    }
+  }, [])
+
+  // closeBtn
+  const closeCouponBtn = () => {
+    // 把關閉優惠卷的結果存在localStorage
+    localStorage.setItem('couponClosed', true)
+    setShowCoupon(false)
   }
 
   // 計時器
@@ -66,9 +98,7 @@ export default function Coupon() {
             type="button"
             className={`p-0 `}
             aria-label="Close"
-            onClick={() => {
-              setShowCoupon(false)
-            }}
+            onClick={closeCouponBtn}
           >
             <i className="bi bi-x-lg fs-4"></i>
           </button>
@@ -172,6 +202,7 @@ export default function Coupon() {
   )
 }
 
+// 倒數計時
 function countDownTimer() {
   let year = new Date().getFullYear()
   let month = new Date().getMonth()
