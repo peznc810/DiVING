@@ -7,6 +7,7 @@ import DefaultLayout from '@/components/layout/default-layout'
 import DashboardLayout from '@/components/dashboard/layout'
 // 會員驗證專用provider component
 import { AuthProvider } from '@/hooks/auth'
+import { CartProvider } from '@/hooks/cart'
 
 export default function App({ Component, pageProps }) {
   // 獲取當前頁面路徑
@@ -23,18 +24,22 @@ export default function App({ Component, pageProps }) {
     // 會員中心的預設樣式
     if (currentPage.startsWith('/dashboard')) {
       return (
-        <AuthProvider>
-          <DefaultLayout currentPage={currentPage}>
-            <DashboardLayout>{children}</DashboardLayout>
-          </DefaultLayout>
-        </AuthProvider>
+        <CartProvider>
+          <AuthProvider>
+            <DefaultLayout currentPage={currentPage}>
+              <DashboardLayout>{children}</DashboardLayout>
+            </DefaultLayout>
+          </AuthProvider>
+        </CartProvider>
       )
     } else {
       // 其他所有頁面的預設樣式
       return (
-        <AuthProvider>
-          <DefaultLayout currentPage={currentPage}>{children}</DefaultLayout>
-        </AuthProvider>
+        <CartProvider>
+          <AuthProvider>
+            <DefaultLayout currentPage={currentPage}>{children}</DefaultLayout>
+          </AuthProvider>
+        </CartProvider>
       )
     }
   }

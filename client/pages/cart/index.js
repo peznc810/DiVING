@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import Link from 'next/link'
+
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
 const MySwal = withReactContent(Swal)
 
 import { useAuth } from '@/hooks/auth'
+import { useCart } from '@/hooks/cart'
 
 import { FaShoppingCart, FaRegTrashAlt } from 'react-icons/fa'
 import CartStep from '@/components/cart/cart-step'
@@ -28,27 +30,18 @@ import CartStep from '@/components/cart/cart-step'
 // console.log(coupon_has)
 
 export default function Home() {
-  const [cartData, setCartData] = useState([])
-  const [totalPrice, setTotalPrice] = useState(0)
-  const [deliveryFee] = useState(50)
-  const [discount] = useState(0)
-
+  const { items, updateItemQty, increment, decrement, removeItem, cart } =
+    useCart()
   const { auth } = useAuth()
-
-  //抓取購物車內的物品
-  useEffect(() => {
-    const data = JSON.parse(localStorage.getItem('cart'))
-    if (data) {
-      setCartData(data)
-      calculateTotalPrice(data)
-    }
-  }, [])
+  const [discount] = useState(0)
+  const [payment, setPayment] = useState(1)
+  const [delivery, setDelivery] = useState(1)
 
   //刪除通知
-  const notifySA = (productName, i) => {
+  const notifySA = (name, id, isProduct) => {
     MySwal.fire({
       icon: 'question',
-      title: <>{`確認要刪除${productName}嗎?`}</>,
+      title: <>{`確認要刪除${name}嗎?`}</>,
       showConfirmButton: true,
       confirmButtonText: '確認',
       showDenyButton: true,
@@ -59,68 +52,17 @@ export default function Home() {
           title: '已成功刪除!',
           icon: 'success',
         })
-        handleDeleteItem(i)
+        removeItem(id, isProduct)
       }
     })
   }
 
-  //計算價格
-  const calculateTotalPrice = (data) => {
-    let total = 0
-    data.forEach(({ productDiscount, num, productPrice, lessonPrice }) => {
-      const price = productDiscount
-        ? productDiscount * num
-        : (productPrice || lessonPrice) * num
-      total += price
-    })
-    setTotalPrice(total)
+  const handleSelectChange = (e) => {
+    const { name, value } = e.target
+    name === 'payment' ? setPayment(value) : setDelivery(value)
   }
 
-  //增加商品數量
-  const handleIncrement = (index) => {
-    const updatedCartData = [...cartData]
-    updatedCartData[index].num += 1
-    setCartData(updatedCartData)
-    localStorage.setItem('cart', JSON.stringify(updatedCartData))
-    // calculateTotalPrice(updatedCartData)
-  }
-
-  //減少商品數量
-  const handleDecrement = (index) => {
-    const updatedCartData = [...cartData]
-    if (updatedCartData[index].num > 1) {
-      updatedCartData[index].num -= 1
-      setCartData(updatedCartData)
-      localStorage.setItem('cart', JSON.stringify(updatedCartData))
-      // calculateTotalPrice(updatedCartData)
-    }
-  }
-
-  //更改商品數量
-  const handleInputChange = (index, event) => {
-    const updatedCartData = [...cartData]
-    const newValue = parseInt(event.target.value)
-    if (!isNaN(newValue) && newValue > 0) {
-      updatedCartData[index].num = newValue
-      setCartData(updatedCartData)
-      localStorage.setItem('cart', JSON.stringify(updatedCartData))
-      // calculateTotalPrice(updatedCartData)
-    }
-  }
-
-  //刪除商品
-  const handleDeleteItem = (index) => {
-    const updatedCartData = [...cartData]
-    updatedCartData.splice(index, 1)
-    setCartData(updatedCartData)
-    localStorage.setItem('cart', JSON.stringify(updatedCartData))
-    // calculateTotalPrice(updatedCartData)
-  }
-
-  //購物車更動後 更新價格
-  useEffect(() => {
-    calculateTotalPrice(cartData)
-  }, [cartData])
+  const { totalPrice, deliveryFee } = cart
 
   return (
     <div className="container">
@@ -128,7 +70,7 @@ export default function Home() {
       <div className="container">
         <div className="section-name d-flex">
           <FaShoppingCart size={20} color="#013C64" />
-          <h5 className="ms-2 span">X項商品</h5>
+          <h5 className="ms-2 span">{items.length}項商品</h5>
         </div>
         <table>
           <thead>
@@ -141,23 +83,26 @@ export default function Home() {
             </tr>
           </thead>
           <tbody>
-            {cartData ? (
-              cartData.map((item, i) => {
+            {items ? (
+              items.map((item, i) => {
                 const {
-                  lessonName,
-                  lessonPrice,
+                  product_id,
+                  lesson_id,
+                  price,
                   num,
-                  productName,
-                  productPrice,
-                  productDiscount,
+                  name,
+                  discount_price,
                   product_detail,
                   order_time,
                 } = item
-                let price = 0
-                if (productDiscount) {
-                  price = productDiscount * num
+                const id = product_id || lesson_id
+                const detail = product_detail || order_time
+                const isProduct = item.product_id ? true : false
+                let totalPrice
+                if (discount_price) {
+                  totalPrice = discount_price * num
                 } else {
-                  price = (productPrice || lessonPrice) * num
+                  totalPrice = price * num
                 }
                 return (
                   <tr key={i}>
@@ -165,30 +110,24 @@ export default function Home() {
                       <div className="row">
                         <img />
                         <div>
-                          <h5 className="fw-bold text-start">
-                            {productName || lessonName}
-                          </h5>
-                          <p className="imperceptible text-start">
-                            {product_detail || order_time}
-                          </p>
+                          <h5 className="fw-bold text-start">{name}</h5>
+                          <p className="imperceptible text-start">{detail}</p>
                         </div>
                       </div>
                     </td>
                     <td>
-                      {productDiscount ? (
+                      {discount_price ? (
                         <>
                           <h5 className="fw-bold discounted">
-                            NT${productDiscount}
+                            NT${discount_price}
                           </h5>
                           <p className="imperceptible text-decoration-line-through">
-                            NT${productPrice || lessonPrice}
+                            NT${price}
                           </p>
                         </>
                       ) : (
                         <>
-                          <h5 className="fw-bold">
-                            NT${productPrice || lessonPrice}
-                          </h5>
+                          <h5 className="fw-bold">NT${price}</h5>
                         </>
                       )}
                     </td>
@@ -196,7 +135,9 @@ export default function Home() {
                       <button
                         type="button"
                         className="btn btn-light"
-                        onClick={() => handleDecrement(i)}
+                        onClick={() => {
+                          decrement(id, isProduct)
+                        }}
                       >
                         <i className="bi bi-dash-lg"></i>
                       </button>
@@ -204,23 +145,27 @@ export default function Home() {
                         type="text"
                         className={`w-25 text-center input${i}`}
                         value={num}
-                        onChange={(event) => handleInputChange(i, event)}
+                        onChange={(e) => {
+                          updateItemQty(id, parseInt(e.target.value), isProduct)
+                        }}
                       />
                       <button
                         type="button"
                         className="btn btn-light"
-                        onClick={() => handleIncrement(i)}
+                        onClick={() => {
+                          increment(id, isProduct)
+                        }}
                       >
                         <i className="bi bi-plus-lg"></i>
                       </button>
                     </td>
                     <td>
-                      <p className={`Price${i}`}>NT${price}</p>
+                      <p className={`price${i}`}>NT${totalPrice}</p>
                     </td>
                     <td>
                       <FaRegTrashAlt
                         size={22}
-                        onClick={() => notifySA(productName || lessonName, i)}
+                        onClick={() => notifySA(name, id, isProduct)}
                         style={{ cursor: 'pointer' }}
                       />
                     </td>
@@ -238,12 +183,22 @@ export default function Home() {
           <h5 className="mb-3 section-name span">選擇送貨及付款方式</h5>
           <div className="container">
             <p className="select-dec">送貨方式</p>
-            <select className="form-select" id="delivery">
+            <select
+              className="form-select"
+              name="delivery"
+              value={delivery}
+              onChange={handleSelectChange}
+            >
               <option value="1">宅配</option>
               <option value="2">7-11</option>
             </select>
             <p className="select-dec">付款方式</p>
-            <select className="form-select" id="payment">
+            <select
+              className="form-select"
+              name="payment"
+              value={payment}
+              onChange={handleSelectChange}
+            >
               <option value="1">貨到付款</option>
               <option value="2">信用卡付款</option>
               <option value="3">Line Pay</option>
@@ -268,12 +223,25 @@ export default function Home() {
               <p>合計:</p>
               <p>NT$ {totalPrice + deliveryFee - discount}</p>
             </div>
-            <Link href="./cart/step2">
+            <Link
+              href={
+                auth.isAuth && !cart.isEmpty
+                  ? `./cart/step2?payment=${payment}&delivery=${delivery}`
+                  : ''
+              }
+            >
               <button
                 type="button"
                 className="btn next-step-btn w-100 text-white"
+                disabled={!auth.isAuth || cart.isEmpty}
               >
-                <h5 className="fw-bold py-1">前往結帳</h5>
+                <h5 className="fw-bold py-1">
+                  {auth.isAuth && !cart.isEmpty
+                    ? '前往結帳'
+                    : cart.isEmpty
+                    ? '購物車內尚無商品'
+                    : '尚未登入'}
+                </h5>
               </button>
             </Link>
           </div>
@@ -322,18 +290,6 @@ export default function Home() {
         .section-name {
           background-color: #f5f5f5;
           padding: 0.5rem;
-        }
-
-         {
-          /* .pay-section {
-          border: 1px solid #f5f5f5;
-          padding: 0;
-        }
-
-        .order-section {
-          border: 1px solid #f5f5f5;
-          padding: 0;
-        } */
         }
 
         .pay-section,

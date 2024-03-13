@@ -11,9 +11,11 @@ import OrderForm from '@/components/cart/order-form'
 import { useAuth } from '@/hooks/auth'
 
 export default function Home() {
+  const { auth } = useAuth()
+
   const router = useRouter()
 
-  const payment = 2
+  const { payment, delivery } = router.query
 
   const [order, setOrder] = useState({})
   const [cartData, setCartData] = useState(null)
@@ -40,8 +42,6 @@ export default function Home() {
 
   let totalPrice = 0
 
-  const { auth } = useAuth()
-
   const { transactionId, orderId } = router.query
 
   //抓取購物車的內容
@@ -55,7 +55,6 @@ export default function Home() {
   //檢查交易是否成功
 
   useEffect(() => {
-    console.log('bbb')
     const fetchData = async () => {
       if (router.isReady) {
         if (!transactionId && orderId) {
@@ -283,8 +282,6 @@ export default function Home() {
       console.log(result)
 
       setIsDone(true)
-
-      // router.push(`./step2?orderId=${orderId}`)
     } catch (error) {
       console.error('An error occurred:', error)
     }
@@ -323,7 +320,6 @@ export default function Home() {
     const msgBox = <p style={{ margin: 0 }}>{msg}</p>
     toast.error(msgBox)
   }
-
   return (
     <>
       {isDone ? (
@@ -415,9 +411,10 @@ export default function Home() {
             userInputs={userInputs}
             setUserInputs={setUserInputs}
             payment={payment}
+            delivery={delivery}
           />
-
-          {payment === 2 && (
+          {console.log(payment)}
+          {payment === '2' && (
             <button onClick={goLinePay} disabled={!order.orderId}>
               Line Pay
             </button>

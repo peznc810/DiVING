@@ -11,6 +11,7 @@ export default function OrderForm({
   userInputs,
   setUserInputs,
   payment,
+  delivery,
 }) {
   const [cUser, setCUser] = useState()
   const { auth } = useAuth()
@@ -38,8 +39,6 @@ export default function OrderForm({
     }
   }, [auth])
 
-  const delivery = 1
-
   //處理input更新
   const handleInputChange = (e) => {
     const { name, value } = e.target
@@ -53,7 +52,7 @@ export default function OrderForm({
     <>
       <div className="container">
         <form onSubmit={payment === 2 ? handleSubLinePay : handleSub}>
-          {delivery === 1 ? (
+          {delivery === '1' ? (
             <>
               <Delivery
                 handleInputChange={handleInputChange}

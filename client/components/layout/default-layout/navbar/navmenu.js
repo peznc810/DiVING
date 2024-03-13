@@ -5,16 +5,18 @@ import { menuItems } from '@/config/nav-menu'
 import Image from 'next/image'
 // 會員狀態的hook
 import { useAuth } from '@/hooks/auth'
+import { useCart } from '@/hooks/cart'
 
 export default function NavMenu() {
   // const [hover, setHover] = useState(false)
   const [openIndex, setOpeIndex] = useState(false)
-  const [cartData, setCartData] = useState(null)
+  const { items } = useCart()
+  // const [cartData, setCartData] = useState(null)
 
-  useEffect(() => {
-    const data = JSON.parse(localStorage.getItem('cart'))
-    setCartData(data)
-  }, [])
+  // useEffect(() => {
+  //   const data = JSON.parse(localStorage.getItem('cart'))
+  //   setCartData(data)
+  // }, [])
   // 帶入會員登入狀態專用
   const { auth } = useAuth()
 
@@ -142,7 +144,7 @@ export default function NavMenu() {
             <span
               className={`${styles.cartDot} position-absolute translate-middle badge rounded-pill bg-danger`}
             >
-              {cartData ? cartData.length : 0}
+              {items ? items.length : 0}
             </span>
           </button>
         </li>

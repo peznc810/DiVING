@@ -6,7 +6,6 @@ export default function Delivery({
   setUserInputs,
   cUser,
 }) {
-  console.log(cUser)
   //勾選資料相同 收貨人
   const deliveryChange = () => {
     const { name, tel, address } = cUser
