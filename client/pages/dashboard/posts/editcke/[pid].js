@@ -6,15 +6,16 @@ import loaderStyles from '@/styles/loader/loader_ripple.module.css'
 
 import { Form, InputGroup, Stack } from 'react-bootstrap'
 import DiButton from '@/components/post/diButton'
-import QuillEditor from '@/components/post/quill'
 import ImageUpload from '@/components/post/imageUpload'
 import TagGenerator from '@/components/post/tagGenerator'
 import { useRouter } from 'next/router'
 import CancelAlert from '@/components/post/cancelAlert'
+import Ckeditor from '@/components/post/ckeditor'
 
 export default function Edit() {
   const router = useRouter()
   const [editorLoaded, setEditorLoaded] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
 
   const [editFormData, setEditFormData] = useState({
     user_id: '',
@@ -24,7 +25,6 @@ export default function Edit() {
     tags: '',
   })
 
-  const [isLoading, setIsLoading] = useState(true)
   const fetchPostData = async (pid) => {
     try {
       const res = await fetch(`http://localhost:3005/api/post/${pid}`)
@@ -33,10 +33,10 @@ export default function Edit() {
       if (data.title) {
         setEditFormData({
           user_id: data.user_id,
-          title: data.title,
+          title: data.title || '',
           image: data.image,
           content: data.content,
-          tags: data.tags || '',
+          tags: data.tags,
         })
 
         setTimeout(() => {
@@ -53,6 +53,7 @@ export default function Edit() {
       const { pid } = router.query
       console.log(pid)
       fetchPostData(pid)
+      // setEditorLoaded(true)
     }
   }, [router.isReady]) // 確保只在 component 首次渲染時執行
 
@@ -115,15 +116,14 @@ export default function Edit() {
         />
         <br />
         <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
-          <QuillEditor
-            // value={editedContent || content}
-            onChange={(value) => {
-              setEditFormData(value)
+          <Ckeditor
+            onChange={(data) => {
+              setEditFormData(data)
             }}
             className="w-full h-[70%] mt-10 bg-white"
             editorLoaded={editorLoaded}
-            initialContent={editFormData.content}
-          />{' '}
+            value={editFormData.content}
+          />
         </Form.Group>
         <Stack direction="horizontal" gap={3}>
           <div className="p-2 mx-auto">

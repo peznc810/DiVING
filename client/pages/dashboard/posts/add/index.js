@@ -1,20 +1,15 @@
-// npm i @ckeditor/ckeditor5-react
-// npm i @ckeditor/ckeditor5-build-classic
+// npm install quill react-quill 應該會改用CKEditor
 
-//"@ckeditor/ckeditor5-build-classic": "^41.1.0",
-//"@ckeditor/ckeditor5-react": "^6.2.0",
-
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Head from 'next/head'
 import Menu from '@/components/dashboard/menu'
-import styles from '@/components/dashboard/styles.module.scss'
-import CKeditor from '@/components/post/ckeditor'
+import styles from '@/components/dashboard/form/styles.module.scss'
 import { Form, InputGroup, Stack, Container } from 'react-bootstrap'
 import DiButton from '@/components/post/diButton'
+import QuillEditor from '@/components/post/quill'
 import ImageUpload from '@/components/post/imageUpload'
 import TagGenerator from '@/components/post/tagGenerator'
-import DOMPurify from 'dompurify'
-import Link from 'next/link'
+import CancelAlert from '@/components/post/cancelAlert'
 import { useRouter } from 'next/router'
 import Swal from 'sweetalert2'
 
@@ -26,7 +21,7 @@ export default function Index() {
     user_id: '有值',
     title: '123',
     image: 'post.jpg',
-    content: '123',
+    content: '',
     tags: '1,2,3',
   })
 
@@ -34,29 +29,34 @@ export default function Index() {
     setEditorLoaded(true)
   }, [])
 
-  const handleFormDataChange = (fieldName) => (e) => {
-    const newData = e.target.value
-    setFormData({ ...formData, [fieldName]: newData })
+  const handleFormDataChange = (fieldName) => (value) => {
+    // const newData = e.target.value
+    setFormData({ ...formData, [fieldName]: value })
+    console.log(formData)
   }
 
   const handleSubmit = async (e) => {
     e.preventDefault()
     console.log('Submitting data:', formData)
+    // 将标签数组转换为以逗号分隔的字符串
+    // const tagsString = formData.tags.join(',')
+
+    // 更新 formData 对象中的 tags 属性为字符串
+    // const updatedFormData = { ...formData, tags: tagsString }
 
     // 在這裡發送POST請求到後端保存數據
     try {
-      const res = await fetch('http://localhost:3005/api/post/edit/new', {
+      const res = await fetch('http://localhost:3005/api/post/new', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          // 'Content-Type': 'multipart/form-data',
         },
         body: JSON.stringify(formData),
-        // body: JSON.stringify(postData),
       })
 
       // 處理後端返回的響應
-      const result = await res.json()
-      if (result) {
+      if (res.status === 201) {
         Swal.fire({
           title: '新增成功',
           showClass: {
@@ -82,7 +82,6 @@ export default function Index() {
         })
         router.push('/dashboard/posts')
       }
-      console.log(result)
     } catch (error) {
       console.error('Error submitting data:', error)
     }
@@ -103,24 +102,31 @@ export default function Index() {
             <div className="accordion-body overflow-auto">
               <Container>
                 <Form className="my-3" onSubmit={handleSubmit}>
-                  <Form.Label>文字編輯器 CKEditor</Form.Label>{' '}
+                  <Form.Label>文字編輯器 Quill Rich Text Editor</Form.Label>{' '}
                   <InputGroup className="mb-3">
                     <InputGroup.Text id="inputGroup-sizing-default">
                       文章標題
                     </InputGroup.Text>
                     <Form.Control
-                      name="title"
                       aria-label="title"
                       aria-describedby="inputGroup-sizing-default"
-                      onChange={handleFormDataChange('title')}
+                      onChange={(e) =>
+                        handleFormDataChange('title')(e.target.value)
+                      }
                     />
                   </InputGroup>
                   <div className="board">
                     <ImageUpload />
                   </div>
                   <TagGenerator
-                    value={'value'}
-                    onChange={handleFormDataChange('tags')}
+                    // onChange={(e) => {
+                    //   handleFormDataChange('tags')(e)
+                    //   console.log(e)
+                    // }}
+                    onTagsChange={(newTags) => {
+                      handleFormDataChange('tags')(newTags.join(','))
+                      console.log(newTags)
+                    }}
                   />
                   <br />
                   <Form.Group
@@ -128,35 +134,34 @@ export default function Index() {
                     controlId="exampleForm.ControlTextarea1"
                   >
                     <div className="h-screen w-screen flex items-center flex-col">
-                      {' '}
-                      <div className="h-full w-[90vw]">
-                        <CKeditor
-                          name="content"
-                          onChange={(data) => {
-                            const purifyData = DOMPurify.sanitize(data)
-                            // 將 CKEditor 中的 HTML 內容存儲到 formData.content
-                            setFormData({ ...formData, content: purifyData })
-                            console.log(purifyData)
-                          }}
-                          editorLoaded={editorLoaded}
-                        />
-                      </div>
+                      <QuillEditor
+                        // value={editedContent || content}
+                        // onChange={(data) => {
+                        //   setFormData(data)
+                        // }}
+                        editorLoaded={editorLoaded}
+                        onChange={(value) =>
+                          handleFormDataChange('content')(value)
+                        }
+                      />
                     </div>
                   </Form.Group>
                   <Stack direction="horizontal" gap={3}>
                     <div className="p-2 mx-auto">
-                      <Link href={'/dashboard/posts'}>
-                        <DiButton
-                          text={'取消'}
-                          color={'#dc5151'}
-                          // onClick={handleCancle}
-                        />
-                      </Link>
+                      <CancelAlert
+                        title={'確定取消嗎？'}
+                        text={'您的更改將不會保存。'}
+                        icon={'warning'}
+                        showCancelButton={true}
+                        confirmButtonColor={'#3085d6'}
+                        cancelButtonColor={'#d33'}
+                        href={'/dashboard/posts'}
+                      />
                       <DiButton
                         type={'submit'}
                         text={'送出'}
                         color={'#013c64'}
-                      />
+                      />{' '}
                     </div>
                   </Stack>
                 </Form>

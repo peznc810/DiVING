@@ -1,6 +1,8 @@
 import express from 'express';
 import db from '../db.mjs';
 import { v4 as uuidv4 } from 'uuid';
+import multer from 'multer';
+const upload = multer();
 
 const router = express.Router();
 
@@ -36,27 +38,28 @@ const router = express.Router();
   }
 });
   //讀取登入使用者文章
-  router.get('/', async (req, res) => {
-    try {
-      const [result, field] = await db.execute('SELECT * FROM post');
+  // router.get('/', async (req, res) => {
+  //   try {
+  //     const [result, field] = await db.execute('SELECT * FROM post');
 
-      console.log(field);
-      res.json(result);
-    } catch (error) {
-      console.error('Error executing database query:', error);
-      res.status(500).json({ error: 'NOOOOOO' });  
-    }
-  });
+  //     console.log(field);
+  //     res.json(result);
+  //   } catch (error) {
+  //     console.error('Error executing database query:', error);
+  //     res.status(500).json({ error: 'NOOOOOO' });  
+  //   }
+  // });
 
 //dashboard 新增文章
-router.post('/new', async (req, res) => {
+router.post('/new', upload.none(), async (req, res) => {
   const { user_id, title, image, content, tags} = req.body;
   const id = uuidv4();
   const now = new Date();
 
   try {
+    // const tagsValue = tags !== undefined ? tags : null;
     const [result] = await db.execute('INSERT INTO post (id, user_id, title, image, content, published_at, updated_at,tags , valid) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)', 
-     [id, '001', title, image, content, now, now, tags, 1]);   
+     [id, '戴夫', title, image, content, now, now, tags, 1]);   
 
         res.status(201).json({ status: 'success', message: '成功寫入'});
       // res.redirect('http://localhost:3000/dashboard/posts/');
@@ -78,7 +81,6 @@ router.post('/edit', async (req, res) => {
 
      if (result.affectedRows > 0) {
     res.status(200).json({ status: 'success', message: '成功更新'});
-      // res.redirect('http://localhost:3000/dashboard/posts/');
     } else {
       res.status(404).json({ error: '找不到要更新的資料' });
     }

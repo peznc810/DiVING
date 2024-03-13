@@ -7,14 +7,13 @@ import { FaTrashCan } from 'react-icons/fa6'
 import { MdOutlineLibraryAdd } from 'react-icons/md'
 import { FaEdit } from 'react-icons/fa'
 
-export default function Form() {
+export default function Index() {
   const [postList, setPostList] = useState([])
 
   const getPost = async () => {
     try {
       const res = await fetch('http://localhost:3005/api/post')
       const data = await res.json()
-      console.log(data)
 
       if (Array.isArray(data)) {
         setPostList(data)
@@ -79,41 +78,39 @@ export default function Form() {
                 <tbody>
                   {/* 之後改用map */}
                   {postList.map((v, i) => (
-                    <>
-                      <tr className="align-middle" key={v.id}>
-                        <td>{i + 1}</td>
-                        <td>
-                          <Link
-                            href={`/post/${v.id}`}
-                            className={`text-black ${styles['text-hover']}`}
-                          >
-                            {v.title}
-                          </Link>
-                        </td>
-                        <td>
-                          {new Date(v.published_at)
-                            .toLocaleDateString()
-                            .toString()
-                            .replace(/\//g, '-')}
-                        </td>
-                        <td>
-                          <Link
-                            href={`/dashboard/posts/edit/${v.id}`}
-                            className="btn"
-                          >
-                            <FaEdit />
-                          </Link>
-                          <button
-                            type="button"
-                            className="btn"
-                            value={v.id}
-                            onClick={(e) => handleDisablePost(e, v.id)}
-                          >
-                            <FaTrashCan />
-                          </button>
-                        </td>
-                      </tr>
-                    </>
+                    <tr className="align-middle" key={v.id}>
+                      <td>{i + 1}</td>
+                      <td>
+                        <Link
+                          href={`/post/${v.id}`}
+                          className={`text-black ${styles['text-hover']}`}
+                        >
+                          {v.title}
+                        </Link>
+                      </td>
+                      <td>
+                        {new Date(v.published_at)
+                          .toLocaleDateString()
+                          .toString()
+                          .replace(/\//g, '-')}
+                      </td>
+                      <td>
+                        <Link
+                          href={`/dashboard/posts/edit/${v.id}`}
+                          className="btn"
+                        >
+                          <FaEdit />
+                        </Link>
+                        <button
+                          type="button"
+                          className="btn"
+                          value={v.id}
+                          onClick={(e) => handleDisablePost(e, v.id)}
+                        >
+                          <FaTrashCan />
+                        </button>
+                      </td>
+                    </tr>
                   ))}
                 </tbody>
               </table>

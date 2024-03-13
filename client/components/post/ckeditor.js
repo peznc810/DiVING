@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react'
 
-export default function Ckeditor({ onChange, editorLoaded, name, value }) {
+export default function CKeditor({ onChange, editorLoaded, name, value }) {
   const editorRef = useRef()
   const { CKEditor, ClassicEditor } = editorRef.current || {}
   useEffect(() => {
@@ -16,16 +16,21 @@ export default function Ckeditor({ onChange, editorLoaded, name, value }) {
           type=""
           name={name}
           editor={ClassicEditor}
-          data={value}
+          data={value} //會出現在編輯器裡面的內容
           onChange={(event, editor) => {
+            //變更時事件
             const data = editor.getData()
             onChange(data)
+            // console.log(event)
           }}
           // onBlur={(event, editor) => {
           //   console.log('Blur.', editor)
           // }}
           // onFocus={(event, editor) => {
           //   console.log('Focus.', editor)
+          // }}
+          // config={{
+          //   plugins: [Image],
           // }}
         />
       ) : (

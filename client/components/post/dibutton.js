@@ -1,4 +1,4 @@
-export default function DiButton({ type, text, onClick, color }) {
+export default function PostButton({ type, text, onClick, color }) {
   return (
     <button type={type} onClick={onClick} color={color}>
       {text}

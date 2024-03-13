@@ -1,15 +1,17 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Badge, Col, Form, InputGroup, Row, Button } from 'react-bootstrap'
 // import DiButton from './dibutton'
 
-export default function TagGenerator() {
+export default function TagGenerator({ onTagsChange }) {
   const [tags, setTags] = useState([])
   const [newTag, setNewTag] = useState('')
 
   const handleAddTag = (e) => {
     e.preventDefault()
     if (newTag.trim() !== '' && !tags.includes(newTag)) {
-      setTags([...tags, newTag])
+      const updatedTags = [...tags, newTag]
+      setTags(updatedTags)
+      onTagsChange(updatedTags)
       setNewTag('')
     }
   }
@@ -17,6 +19,7 @@ export default function TagGenerator() {
   const handleRemoveTag = (tagToRemove) => {
     const updatedTags = tags.filter((tag) => tag !== tagToRemove)
     setTags(updatedTags)
+    onTagsChange(updatedTags)
   }
 
   return (

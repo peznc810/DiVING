@@ -3,7 +3,7 @@ import 'react-quill/dist/quill.snow.css' // Import Quill styles
 import dynamic from 'next/dynamic'
 const QuillEditor = dynamic(() => import('react-quill'), { ssr: false })
 
-export default function Quill({ initialContent }) {
+export default function Quill({ initialContent, onChange }) {
   const [content, setContent] = useState('')
 
   useEffect(() => {
@@ -40,15 +40,22 @@ export default function Quill({ initialContent }) {
     'code-block',
   ]
 
+  const handleContentChange = (newContent) => {
+    setContent(newContent)
+    // 调用父组件传递的回调函数，将新内容传递给父组件
+    onChange(newContent)
+  }
+
   return (
     <>
       <QuillEditor
         modules={quillModules}
         formats={quillFormats}
         value={content}
-        onChange={(data) => {
-          console.log(data)
-        }}
+        // onChange={(data) => {
+        //   console.log(data)
+        // }}
+        onChange={handleContentChange}
       />
     </>
   )

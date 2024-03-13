@@ -1,19 +1,24 @@
-// npm install quill react-quill 應該會改用CKEditor
+// npm i @ckeditor/ckeditor5-react
+// npm i @ckeditor/ckeditor5-build-classic
 
-import React, { useEffect, useState } from 'react'
+//"@ckeditor/ckeditor5-build-classic": "^41.1.0",
+//"@ckeditor/ckeditor5-react": "^6.2.0",
+
+import { useEffect, useState } from 'react'
 import Head from 'next/head'
 import Menu from '@/components/dashboard/menu'
-import styles from '@/components/dashboard/styles.module.scss'
+import styles from '@/components/dashboard/form/styles.module.scss'
+import CKeditor from '@/components/post/ckeditor'
 import { Form, InputGroup, Stack, Container } from 'react-bootstrap'
 import DiButton from '@/components/post/diButton'
-import QuillEditor from '@/components/post/quill'
 import ImageUpload from '@/components/post/imageUpload'
 import TagGenerator from '@/components/post/tagGenerator'
-import CancelAlert from '@/components/post/cancelAlert'
+import DOMPurify from 'dompurify'
+import Link from 'next/link'
 import { useRouter } from 'next/router'
 import Swal from 'sweetalert2'
 
-export default function Quill() {
+export default function Cke() {
   const router = useRouter()
   const [editorLoaded, setEditorLoaded] = useState(false)
 
@@ -21,7 +26,7 @@ export default function Quill() {
     user_id: '有值',
     title: '123',
     image: 'post.jpg',
-    content: '',
+    content: '123',
     tags: '1,2,3',
   })
 
@@ -40,7 +45,7 @@ export default function Quill() {
 
     // 在這裡發送POST請求到後端保存數據
     try {
-      const res = await fetch('http://localhost:3005/api/post/new', {
+      const res = await fetch('http://localhost:3005/api/post/edit/new', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -98,12 +103,13 @@ export default function Quill() {
             <div className="accordion-body overflow-auto">
               <Container>
                 <Form className="my-3" onSubmit={handleSubmit}>
-                  <Form.Label>文字編輯器 Quill Rich Text Editor</Form.Label>{' '}
+                  <Form.Label>文字編輯器 CKEditor</Form.Label>{' '}
                   <InputGroup className="mb-3">
                     <InputGroup.Text id="inputGroup-sizing-default">
                       文章標題
                     </InputGroup.Text>
                     <Form.Control
+                      name="title"
                       aria-label="title"
                       aria-describedby="inputGroup-sizing-default"
                       onChange={handleFormDataChange('title')}
@@ -112,7 +118,10 @@ export default function Quill() {
                   <div className="board">
                     <ImageUpload />
                   </div>
-                  <TagGenerator onChange={handleFormDataChange('tags')} />
+                  <TagGenerator
+                    value={'value'}
+                    onChange={handleFormDataChange('tags')}
+                  />
                   <br />
                   <Form.Group
                     className="mb-3"
@@ -121,35 +130,36 @@ export default function Quill() {
                     <div className="h-screen w-screen flex items-center flex-col">
                       {' '}
                       <div className="h-full w-[90vw]">
-                        {' '}
-                        <QuillEditor
-                          // value={editedContent || content}
+                        <CKeditor
+                          onChange={(data) => {
+                            const purifyData = DOMPurify.sanitize(data)
+                            //  將 CKEditor 中的 HTML 內容存儲到 formData.content
+                            setFormData({ ...formData, content: purifyData })
+                            console.log(formData)
+                          }}
                           // onChange={(data) => {
-                          //   setFormData(data)
+                          //   setFormData({ ...formData, content: data })
+                          //   console.log(formData)
                           // }}
-                          onChange={handleFormDataChange('content')}
-                          className="w-full h-[70%] mt-10 bg-white"
                           editorLoaded={editorLoaded}
-                        />{' '}
-                      </div>{' '}
-                    </div>{' '}
+                        />
+                      </div>
+                    </div>
                   </Form.Group>
                   <Stack direction="horizontal" gap={3}>
                     <div className="p-2 mx-auto">
-                      <CancelAlert
-                        title={'確定取消嗎？'}
-                        text={'您的更改將不會保存。'}
-                        icon={'warning'}
-                        showCancelButton={true}
-                        confirmButtonColor={'#3085d6'}
-                        cancelButtonColor={'#d33'}
-                        href={'/dashboard/posts'}
-                      />
+                      <Link href={'/dashboard/posts'}>
+                        <DiButton
+                          text={'取消'}
+                          color={'#dc5151'}
+                          // onClick={handleCancle}
+                        />
+                      </Link>
                       <DiButton
                         type={'submit'}
                         text={'送出'}
                         color={'#013c64'}
-                      />{' '}
+                      />
                     </div>
                   </Stack>
                 </Form>
