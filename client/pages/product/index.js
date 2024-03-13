@@ -1,6 +1,7 @@
 import { useMemo, useEffect, useState } from 'react'
+import { Router, useRouter } from 'next/router'
 
-import Stars from '@/components/product/star/star'
+import Star from '@/components/product/star/star'
 import Card from '@/components/product/list/card'
 import Order from '@/components/product/list/order'
 import Search from '@/components/product/list/search'
@@ -19,8 +20,26 @@ import { method } from 'lodash'
 const perPage = 6
 
 export default function List() {
+  const router = useRouter()
+  const { productBrand } = router.query
   const [product, setProduct] = useState([])
-  console.log(product)
+  // console.log(product)
+  const [rating, setRating] = useState(0) //評分
+
+  // useEffect(() => {
+  //   if (productBrand) {
+  //     if (productBrand === 'ADISI') {
+  //       setProduct(
+  //         product.filter((v) => {
+  //           v.brand === productBrand
+  //         })
+  //       )
+  //     }
+  //   }
+  // }, [productBrand])
+
+  // console.log()
+  // console.log(product)
 
   // Toggle the side navigation
   useEffect(() => {
@@ -231,6 +250,8 @@ export default function List() {
                           key={value}
                           value={value}
                           setProduct={setProduct}
+                          rating={rating}
+                          setRating={setRating}
                         />
                       ))}
                   </div>

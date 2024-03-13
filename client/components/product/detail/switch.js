@@ -1,10 +1,17 @@
 import { useState } from 'react'
 
-import Stars from '@/components/product/star/star'
+import Star from '@/components/product/star/star'
 import ProductRecommond from '@/components/product/detail/product-recommond'
 import Link from 'next/link'
 
-export default function Switch({ imgDetails, id, category, detail }) {
+export default function Switch({
+  imgDetails,
+  id,
+  category,
+  detail,
+  rating,
+  setRating,
+}) {
   const [isSwitchOn, setIsSwitchOn] = useState(false)
 
   const handleSwitchToggle = () => {
@@ -35,7 +42,7 @@ export default function Switch({ imgDetails, id, category, detail }) {
                 <label className="mx-2" for="exampleFormControlTextarea1">
                   來為 --- 評價吧～
                 </label>
-                <Stars />
+                <Star rating={rating} setRating={setRating} />
                 <textarea
                   className="form-control"
                   id="exampleFormControlTextarea1"
@@ -61,7 +68,7 @@ export default function Switch({ imgDetails, id, category, detail }) {
                 </div>
                 <div className="content">
                   <h6>安妮雅 2024/01/01</h6>
-                  <Stars />
+                  <Star rating={rating} setRating={setRating} />
                   <p>
                     若沒有潛水的存在，那麼後果可想而知。亦舒曾經說過，人生短短數十載，最要緊的是滿足自己，不是討好他人。這影響了我的價值觀。
                   </p>

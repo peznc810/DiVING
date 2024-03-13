@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 
-import Stars from '@/components/product/star/star'
+import Star from '@/components/product/star/star'
 import Carousel from '@/components/product/carousel'
 import Switch from '@/components/product/detail/switch'
 import ProductRecommond from '@/components/product/detail/product-recommond'
@@ -13,6 +13,7 @@ import { MdOutlineCategory } from 'react-icons/md'
 import { GoHeartFill } from 'react-icons/go'
 import { FaCartPlus } from 'react-icons/fa'
 import toast, { Toaster } from 'react-hot-toast'
+import { set } from 'lodash'
 
 export default function Detail() {
   const router = useRouter()
@@ -24,6 +25,8 @@ export default function Detail() {
 
   const [selectColor, setSelectColor] = useState(null)
   const [selectSize, setSelectSize] = useState(null)
+
+  const [rating, setRating] = useState(0) //評分
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -45,7 +48,7 @@ export default function Detail() {
     }
     if (pid) fetchProduct()
   }, [pid])
-  console.log(product)
+  // console.log(product)
 
   // if (product) {
   //   const [newproduct] = product.filter((o) => {
@@ -117,7 +120,8 @@ export default function Detail() {
 
           <div className="col-sm-5">
             <h3>{product.name}</h3>
-            <Stars />
+            <Star rating={rating} setRating={setRating} />
+            {/* {console.log(rating)} */}
             <h6 className="my-1">4.0分 | 8則評價</h6>
             {product.discount ? (
               <>
@@ -294,6 +298,8 @@ export default function Detail() {
           id={product.id}
           category={product.category}
           detail={product.detail}
+          rating={rating}
+          setRating={setRating}
         />
       </div>
       <br />

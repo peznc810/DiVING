@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
-import shuffle from 'lodash/shuffle' // 引入洗牌函式
+import shuffle from 'lodash/shuffle'
 
 import Card from 'react-bootstrap/Card'
 import Button from 'react-bootstrap/Button'
@@ -10,8 +10,6 @@ import Stack from 'react-bootstrap/Stack'
 import { GoHeartFill } from 'react-icons/go'
 import { FaCartPlus } from 'react-icons/fa'
 import Link from 'next/link'
-
-// import Products from '@/components/home/products'
 
 export default function ProductRecommend() {
   const router = useRouter()

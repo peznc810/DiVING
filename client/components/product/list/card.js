@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import Stars from '@/components/product/star/star'
+import Star from '@/components/product/star/star'
 import Pagination from '@/components/product/list/pagination'
 import Link from 'next/link'
 
@@ -8,7 +8,7 @@ import Stack from 'react-bootstrap/Stack'
 import { GoHeartFill } from 'react-icons/go'
 import { FaCartPlus } from 'react-icons/fa'
 
-export default function Card({ setProduct, value }) {
+export default function Card({ setProduct, value, rating, setRating }) {
   // console.log(value)
 
   const handleMouseEnter = () => {
@@ -74,7 +74,7 @@ export default function Card({ setProduct, value }) {
               </div>
             ) : (
               <div className="p-2 card-text">
-                <Stars />
+                <Star setRating={setRating} />
                 <p className="card-text">{value.brand}</p>
                 <p className="card-text type-text h-now">{value.name}</p>
                 {value.discount ? (
