@@ -1,14 +1,44 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
+import { useRouter } from 'next/router'
 import Image from 'react-bootstrap/Image'
 import { Container, Row, Col } from 'react-bootstrap'
 import DetailTop from '@/components/lesson/Detail-Top'
 import Style from '@/styles/lessonStyle/lesson.module.scss'
 // 取得lesson data
 export default function Detail() {
+  const router = useRouter()
+  const [lessonid, setLessonId] = useState({
+    id: '',
+    tag: '',
+    info: '',
+    title: '',
+    features: '',
+    price: 0,
+    content: '',
+    processDetail: '',
+    time: '',
+    LV: '',
+    location: '',
+    locationDetail: '',
+  })
+  const getlessonListId = async (lid) => {
+    const res = await fetch(`http://localhost:3005/api/lesson/getlist/${lid}`)
+
+    const data = await res.json()
+    const [lessonObj] = data
+    setLessonId(lessonObj)
+  }
+
+  useEffect(() => {
+    if (router.isReady) {
+      const { lid } = router.query
+      getlessonListId(lid)
+    }
+  }, [router.isReady])
   return (
     <>
       <Container className={`${Style.bg_color} pt-2`}>
-        <DetailTop></DetailTop>
+        <DetailTop selectData={lessonid}></DetailTop>
         <hr />
         <Row className="justify-content-end">
           <Col lg={1}>
@@ -33,35 +63,19 @@ export default function Detail() {
         <Row>
           <Col lg={12}>
             <div className="fs-4 fw-bold mb-3">報名須知</div>
-            <p className="fs-5">報名資格：12歲以上 需健康狀況良好。</p>
-            <ul>
-              <li className="fs-5">費用：NTD8,500</li>
-              <div className="fs-5">內容:</div>
-              <li className="fs-5">自由潛水教材、教練費、場地費用</li>
-              <li className="fs-5">上課期間裝備使用</li>
-              <li className="fs-5">上課期間公共意外責任險</li>
-            </ul>
+            <p className="fs-5">{lessonid.content}</p>
           </Col>
           <Col lg={12}>
             <div className="fs-4 fw-bold mb-3">注意事項</div>
-            <p className="fs-5">
-              請攜帶泳衣及個人換洗衣物，潛水中心提供盥洗浴室及用品
-              潛水活動前請勿飲酒、宿醉、熬夜、感冒都會影響潛水狀況，請保持充足睡眠
-              若海況或氣候不適合潛水，我們會在活動前通知你
-              如需搭乘飛機請注意單次潛水後的12小時內，重複潛水後的18小時內，禁止搭乘飛機
-            </p>
+            <p className="fs-5">{lessonid.processDetail}</p>
           </Col>
           <Col lg={12}>
             <div className="fs-4 fw-bold mb-3">活動流程</div>
-            <p className="fs-5">
-              室內講解裝備使用練習及水下手勢溝通 換裝出發海邊
-              平靜水域淺水區練習（水深及腰處）
-              前往大海探索海底世界與可愛的海龜合照 回到店裡進行盥洗更衣
-            </p>
+            <p className="fs-5">{lessonid.features}</p>
           </Col>
           <Col lg={12}>
             <div className="fs-4 fw-bold mb-3">上課地點</div>
-            <p className="fs-5">946屏東縣恆春鎮大光路 後壁湖</p>
+            <p className="fs-5">{lessonid.locationDetail}</p>
           </Col>
         </Row>
         <figure>

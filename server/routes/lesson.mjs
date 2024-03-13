@@ -15,32 +15,44 @@ app.use(express.urlencoded({ extended: true }))
 
 
 // get list
-router.get('/d/:date', function (req, res, next) {
+router.get('/getlist', function (req, res, next) {
     (async () => {
-     
-        
-        let [sort] = await db.execute("SELECT * FROM `sort`").catch(() => {
-            return [undefined];
-        })
-
-        let [dateData] = await db.execute(
-            "SELECT * FROM `expense` WHERE `date` = ?",
-            [date]
-        );
-        if (sort && dateData) {
-            res.render("index", { date, sort, dateData });
-            // console.log(sort);
-        } else {
-            res.send("錯誤")
-        };
+        let [lesson] = await db
+        .execute('SELECT * FROM `lesson`')
+        .catch(() => [undefined])
+        res.send(lesson)
     })();
 
 });
 
-// 登出
+// get id
+router.get('/getlist/:id', function (req, res, next) {
+    (async () => {
+        const lid = req.params.id
+        let [lesson] = await db
+        .execute('SELECT * FROM `lesson` WHERE id = ?', [lid])
+        .catch((err) => {
+            console.error(err)
+            return [undefined]
+        })
+        res.send(lesson)
+    })();
+});
 
+//get star
 
-// 常駐登入狀態
+router.get('/getstar/:id', function (req, res, next) {
+    (async () => {
+        const Sid = req.params.id
+        let [star] = await db
+        .execute('SELECT lesson.title, star.score FROM lesson INNER JOIN star ON lesson.id = ? AND star.lesson_id = ?', [Sid, Sid])
+        .catch((err) => {
+            console.error(err)
+            return [undefined]
+        })
+        res.send(star)
+    })();
+});
 
 
 // 註冊

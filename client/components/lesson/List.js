@@ -1,4 +1,4 @@
-import React, { useContext, Fragment, useState } from 'react'
+import React, { useContext, Fragment, useState, useEffect } from 'react'
 import { DiffCheck } from '@/context/value'
 import Image from 'react-bootstrap/Image'
 import Link from 'next/link'
@@ -7,11 +7,7 @@ import { Col } from 'react-bootstrap'
 import { FaLocationDot } from 'react-icons/fa6'
 import Style from '@/styles/lessonStyle/lesson.module.scss'
 
-import LessonData from '@/data/lesson/lesson'
-
 export default function List() {
-  let lessons = LessonData
-
   // 引入index state textcontent
   const { checkvalue } = useContext(DiffCheck)
 
@@ -19,12 +15,24 @@ export default function List() {
   const ArrLV = checkvalue.filter((item) => item !== false)
   //list 狀態
   const [lesson, setLesson] = useState([])
+
+  const getlessonList = async () => {
+    const res = await fetch('http://localhost:3005/api/lesson/getlist')
+
+    const data = await res.json()
+    setLesson(data)
+  }
+
+  useEffect(() => {
+    getlessonList()
+  }, [])
   //fav state setting
-  const favState = lessons.map((v, i) => {
+  const favState = lesson.map((v, i) => {
     return { ...v, favState: false }
   })
+  console.log(favState)
 
-  const showSelectList = lessons.map((Stag) => {
+  const showSelectList = lesson.map((Stag) => {
     if (
       ArrLV.length === 0 ||
       ArrLV.indexOf(Stag.LV) !== -1 ||
@@ -45,43 +53,45 @@ export default function List() {
               </div>
             </Col>
             <Col lg={8} className={`p-3`}>
-              <Row className={Style['hover-none']}>
-                <Col lg={9} className={`fs-4`} style={{ height: '2rem' }}>
-                  <div className="d-flex align-items-center">{Stag.title}</div>
-                </Col>
-                <Col lg={3} className={`${Style['hover-none']} text-end`}>
-                  <div className="fs-5">
-                    <FaLocationDot className="pe-1" />
-                    {Stag.location}
-                  </div>
-                </Col>
-              </Row>
-              <Row className={`${Style['hover-none']} mt-4`}>
-                <Col
-                  lg={12}
-                  className={`px-3 ${Style['text-area']}`}
-                  style={{ height: '3rem' }}
-                >
-                  {Stag.content}
-                </Col>
-                <Col lg={12} className="text-end">
-                  <Link className="" href="/">
-                    閱讀更多..
-                  </Link>
-                </Col>
-              </Row>
-              <Row className={`${Style['hover-none']} mt-2`}>
-                <Col lg={3}>
-                  <div
-                    className={`rounded-pill border border-primary-subtle text-center`}
+              <Link className="" href={`/lesson/${Stag.id}`}>
+                <Row className={Style['hover-none']}>
+                  <Col lg={9} className={`fs-4`} style={{ height: '2rem' }}>
+                    <div className="d-flex align-items-center">
+                      {Stag.title}
+                    </div>
+                  </Col>
+                  <Col lg={3} className={`${Style['hover-none']} text-end`}>
+                    <div className="fs-5">
+                      <FaLocationDot className="pe-1" />
+                      {Stag.location}
+                    </div>
+                  </Col>
+                </Row>
+                <Row className={`${Style['hover-none']} mt-4`}>
+                  <Col
+                    lg={12}
+                    className={`px-3 ${Style['text-area']}`}
+                    style={{ height: '3rem' }}
                   >
-                    {Stag.tag}
-                  </div>
-                </Col>
-                <Col className="text-end">
-                  <div className="text-danger">NT$ {Stag.price}/人含裝備</div>
-                </Col>
-              </Row>
+                    {Stag.content}
+                  </Col>
+                  <Col lg={12} className="text-end">
+                    閱讀更多..
+                  </Col>
+                </Row>
+                <Row className={`${Style['hover-none']} mt-2`}>
+                  <Col lg={3}>
+                    <div
+                      className={`rounded-pill border border-primary-subtle text-center`}
+                    >
+                      {Stag.tag}
+                    </div>
+                  </Col>
+                  <Col className="text-end">
+                    <div className="text-danger">NT$ {Stag.price}/人含裝備</div>
+                  </Col>
+                </Row>
+              </Link>
             </Col>
           </Row>
         </Fragment>

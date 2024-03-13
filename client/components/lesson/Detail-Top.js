@@ -1,68 +1,107 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
+import { useRouter } from 'next/router'
 import ImgSlider from './ImgSlider'
-import SliderTest from './sliderTest'
-import { Container, Row, Col } from 'react-bootstrap'
-import { GiRoundStar } from 'react-icons/gi'
+import { Row, Col } from 'react-bootstrap'
 import { FaHeart } from 'react-icons/fa'
+import { GiRoundStar } from 'react-icons/gi'
+import Style from '@/styles/lessonStyle/star.module.css'
 
-export default function DetailTop() {
+export default function DetailTop({ selectData }) {
+  const router = useRouter()
+  const [star, setStar] = useState([])
+  const lesson = selectData
+  const pid = selectData.id
+  console.log(pid)
+
+  //取得資料庫 star內容
+  const getStar = async (pid) => {
+    const res = await fetch(`http://localhost:3005/api/lesson/getstar/${pid}`)
+
+    const data = await res.json()
+    const [starcomment] = data
+    setStar(starcomment)
+  }
+  // 取課程 星星平均值
+  const Starlist = () => {
+    if (star) {
+      return Array(5)
+        .fill(star.score)
+        .map((v, i) => {
+          return (
+            <button className={Style['star-btn']} key={i}>
+              <GiRoundStar className={i < v ? Style['on'] : Style['off']} />
+            </button>
+          )
+        })
+    } else {
+      return [
+        Array(5)
+          .fill(0)
+          .map((v, i) => {
+            return (
+              <button className={Style['star-btn']} key={i}>
+                <GiRoundStar className={i < v ? Style['on'] : Style['off']} />
+              </button>
+            )
+          }),
+      ]
+    }
+  }
+  const buttonStyle = lesson.tag
+
+  useEffect(() => {
+    Starlist()
+    getStar(pid)
+    console.log(pid)
+  }, [router.isReady, selectData])
+
   return (
     <>
-      <Container>
-        <Row>
-          <Col lg={7}>
-            <figure className="">
-              <ImgSlider></ImgSlider>
-              {/* <SliderTest></SliderTest> */}
-            </figure>
-          </Col>
-          <Col lg={5}>
-            <Row>
-              <Col lg={12} style={{ hight: '10rem' }}>
-                <div className="fs-4 fw-bold">課程說明</div>
-                <p className="fs-5 mt-3">
-                  學習自由潛水的生理學與呼吸法，深度與壓力的關係，認識自由潛水裝備，自由潛水規則，自由潛水安全與救援
-                  （潛水暈厥 BO 與身體失控顫抖 LMC），自由潛水與環境保護等。
-                  練習肢體拉伸呼吸調節，正確的水面呼吸和恢復呼吸方法，耳部壓力平衡（法蘭佐耳壓平衡），
-                  鴨式入水 / 身體姿勢 / 踢腿方式，潛伴制度和模擬救援。
-                </p>
-                <div
-                  className="btn border rounded-pill me-1 text-white"
-                  style={{ backgroundColor: '#265475' }}
-                >
-                  # 水肺潛水
-                </div>
-                <div
-                  className="btn border rounded-pill"
-                  style={{ color: '#265475' }}
-                >
-                  #自由潛水
-                </div>
-                <div className="fs-5 text-danger mt-3">NT$1,500</div>
-              </Col>
-              <Col lg={12}>
-                <div className="d-flex justify-content-between mt-3">
-                  <div className="fs-4 d-flex align-items-center">
-                    {/* ---引入資料庫內的 star--- */}
-                    <GiRoundStar />
-                    <GiRoundStar />
-                    <GiRoundStar />
-                    <GiRoundStar />
-                    <GiRoundStar />
-                    <span className="fs-6 ps-3">評論</span>
-                  </div>
-                  <div className="align-self-center">
-                    <FaHeart className="fs-4" />
-                  </div>
-                </div>
-              </Col>
-              <div className="btn btn-warning mt-3" type="button">
-                立即預約
+      <Row>
+        <Col lg={7}>
+          <figure className="">
+            <ImgSlider></ImgSlider>
+            {/* <SliderTest></SliderTest> */}
+          </figure>
+        </Col>
+        <Col lg={5}>
+          <Row>
+            <Col lg={12}>
+              <div className="fs-4 fw-bold">課程說明</div>
+              <p className="fs-5 mt-3 lh-lg" style={{ height: '10rem' }}>
+                {lesson.info}
+              </p>
+              {}
+              <div
+                className={`btn border rounded-pill me-1 text-white ${
+                  buttonStyle == '專業科目' ? 'bg-danger' : 'bg-success'
+                } `}
+                style={{ buttonStyle }}
+              >
+                {lesson.tag}
               </div>
-            </Row>
-          </Col>
-        </Row>
-      </Container>
+              <div className="fs-5 text-danger mt-3">NT$ {lesson.price}</div>
+            </Col>
+            <Col lg={12}>
+              <div className="d-flex justify-content-between mt-3">
+                <div className="fs-4 d-flex align-items-center">
+                  {/* ---引入資料庫內的 star--- */}
+                  {Starlist()}
+                  {/* <GiRoundStar></GiRoundStar> */}
+                  {/* ---引入資料庫內的 star--- */}
+                  <span className="fs-6 ps-3">評論</span>
+                </div>
+                <div className="align-self-center">
+                  <FaHeart className="fs-4" />
+                </div>
+              </div>
+            </Col>
+            <div className="btn btn-warning mt-3" type="button">
+              立即預約
+            </div>
+          </Row>
+        </Col>
+      </Row>
     </>
   )
 }
