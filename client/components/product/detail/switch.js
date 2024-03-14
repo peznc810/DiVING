@@ -208,7 +208,7 @@ export default function Switch({
         /*開關鈕底色(開啟時)*/
         .switch-txt::after {
           content: attr(turnOn);
-          padding-left: 18px;
+          padding-left: 19px;
           background: #265475;
           color: #fff;
           text-align: left;
@@ -216,7 +216,7 @@ export default function Switch({
         /*開關鈕底色(關閉時)*/
         .switch-txt::before {
           content: attr(turnOff);
-          padding-right: 18px;
+          padding-right: 19px;
           background: #265475;
           color: #fff;
           text-align: right;
