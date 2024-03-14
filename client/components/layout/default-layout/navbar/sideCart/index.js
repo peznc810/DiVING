@@ -1,15 +1,12 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import Link from 'next/link'
 import styles from './index.module.scss'
 import MyProduct from './myProduct'
 
-export default function SideCart() {
-  const [cartData, setCartData] = useState(null)
+import { useCart } from '@/hooks/cart'
 
-  useEffect(() => {
-    const data = JSON.parse(localStorage.getItem('cart'))
-    setCartData(data)
-  }, [])
+export default function SideCart() {
+  const { items, cart } = useCart()
 
   return (
     <>
@@ -39,26 +36,30 @@ export default function SideCart() {
         {/* 購買商品列表 */}
         <div className={`offcanvas-body ${styles.myProducts}`}>
           {/* 加入商品後會消失 */}
-          <p className={`${styles.text}`}>{!cartData && '你的購物車是空的'}</p>
-          {cartData &&
-            cartData.map((v, i) => {
+          <p className={`${styles.text}`}>{!cart && '你的購物車是空的'}</p>
+          {items &&
+            items.map((item, i) => {
               const {
-                lessonName,
-                lessonPrice,
+                name,
+                price,
                 num,
-                productName,
-                productPrice,
-                productDiscount,
-              } = v
+                discount_price,
+                product_detail,
+                order_time,
+                product_id,
+                lesson_id,
+              } = item
               return (
                 <MyProduct
                   key={i}
-                  name={lessonName || productName}
-                  detail={'detail'}
-                  price={lessonPrice || productPrice}
-                  discountPrice={productDiscount}
+                  name={name}
+                  detail={product_detail || order_time}
+                  price={price}
+                  discountPrice={discount_price}
                   num={num}
                   index={i}
+                  isProduct={item.product_id ? true : false}
+                  id={product_id || lesson_id}
                 />
               )
             })}
@@ -76,10 +77,10 @@ export default function SideCart() {
 
         {/* <Link {{cartData} ? "./cart" : "./product" } href={'./cart'} className={`${styles.cartLink}`}> */}
         <Link
-          href={cartData ? './cart' : './product'}
+          href={items.length > 1 ? './cart' : './product'}
           className={`${styles.cartLink}`}
         >
-          {cartData ? '立即結帳' : '開始購物'}
+          {items.length > 1 ? '立即結帳' : '開始購物'}
         </Link>
       </div>
     </>
