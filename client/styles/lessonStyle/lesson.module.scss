@@ -19,7 +19,7 @@
 
   .switch-checkbox {
     position: absolute;
-    display: none;
+    opacity: 0;
   }
 
   .switch-label {
@@ -34,8 +34,8 @@
       margin-left: -100%;
       transition: margin 0.3s ease-in 0s;
 
-      &::before,
-      &::after {
+      &:before,
+      &:after {
         display: block;
         float: right;
         width: 50%;
@@ -45,16 +45,16 @@
         box-sizing: border-box;
       }
 
-      &::after {
-        content: attr(turnOn);
+      &:after {
+        content: attr(turnon);
         padding-left: 10px;
         background: $primary;
         color: $super-light-gray;
         text-align: left;
       }
 
-      &::before {
-        content: attr(turnOff);
+      &:before {
+        content: attr(turnoff);
         padding-right: 10px;
         background: $primary;
         color: $super-light-gray;

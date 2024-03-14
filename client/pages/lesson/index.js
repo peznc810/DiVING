@@ -16,7 +16,6 @@ import { FaMagnifyingGlass, FaMinus, FaChevronRight } from 'react-icons/fa6'
 import Style from '@/styles/lessonStyle/lesson.module.scss'
 
 export default function Test() {
-  const fav = Array.from({ length: 5 })
   const LV = ['體驗', '中階', '初級']
   const location = ['東北角', '東部海岸', '墾丁', '澎湖', '小琉球', '蘭嶼']
   const checkDate = [...LV, ...location]

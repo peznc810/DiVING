@@ -11,7 +11,6 @@ export default function DetailTop({ selectData }) {
   const [star, setStar] = useState([])
   const lesson = selectData
   const pid = selectData.id
-  console.log(pid)
 
   //取得資料庫 star內容
   const getStar = async (pid) => {
@@ -50,10 +49,11 @@ export default function DetailTop({ selectData }) {
   const buttonStyle = lesson.tag
 
   useEffect(() => {
-    Starlist()
-    getStar(pid)
-    console.log(pid)
-  }, [router.isReady, selectData])
+    if (router.isReady && pid) {
+      Starlist()
+      getStar(pid)
+    }
+  }, [router.isReady, pid])
 
   return (
     <>

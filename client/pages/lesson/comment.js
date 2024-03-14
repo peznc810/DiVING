@@ -7,7 +7,7 @@ import UserComment from '@/components/lesson/UserComment'
 import { useAuth } from '@/hooks/auth'
 import Style from '@/styles/lessonStyle/lesson.module.scss'
 
-export default function Detail() {
+export default function Detail1() {
   const { auth } = useAuth()
   const getUserState = (auth) => {
     if (auth.isAuth) {
@@ -18,7 +18,10 @@ export default function Detail() {
 
   return (
     <>
-      <DetailTop className={`${Style['bg_color']} pt-2`}></DetailTop>
+      <DetailTop
+        selectData={lessonid}
+        className={`${Style['bg_color']} pt-2`}
+      ></DetailTop>
       <Container>
         <hr />
         <Row className="justify-content-end">

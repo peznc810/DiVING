@@ -15,7 +15,6 @@ const settings = {
   slidesToScroll: 1,
   dotsClass: 'slick-dots slick-thumb',
   customPaging: (i) => {
-    console.log(i)
     return (
       <a>
         <img className="img" src={imageDots[i]} />

@@ -1,12 +1,25 @@
 import React, { useState, useEffect } from 'react'
-import { useRouter } from 'next/router'
-import Image from 'react-bootstrap/Image'
 import { Container, Row, Col } from 'react-bootstrap'
+import Image from 'react-bootstrap/Image'
+import { useRouter } from 'next/router'
+import { useAuth } from '@/hooks/auth'
+import Test from '@/components/lesson/test'
+import CommentList from '@/components/lesson/CommentList'
+import UserComment from '@/components/lesson/UserComment'
 import DetailTop from '@/components/lesson/Detail-Top'
 import Style from '@/styles/lessonStyle/lesson.module.scss'
 // 取得lesson data
 export default function Detail() {
+  // ---確認是否登入 state---
+  const { auth } = useAuth()
+  const getUserState = (auth) => {
+    if (auth.isAuth) {
+      return <UserComment />
+    }
+    return null // 或者返回一個適當的預設值
+  }
   const router = useRouter()
+  // ---取得lessonid state---
   const [lessonid, setLessonId] = useState({
     id: '',
     tag: '',
@@ -21,6 +34,13 @@ export default function Detail() {
     location: '',
     locationDetail: '',
   })
+  // ---使用switch---
+  const [switchOn, setSwitchOn] = useState(false)
+  const handleSwitchChange = () => {
+    setSwitchOn(!switchOn)
+    console.log(switchOn)
+  }
+  // ---連接lesson id API---
   const getlessonListId = async (lid) => {
     const res = await fetch(`http://localhost:3005/api/lesson/getlist/${lid}`)
 
@@ -28,8 +48,9 @@ export default function Detail() {
     const [lessonObj] = data
     setLessonId(lessonObj)
   }
-
+  // ---state 同步---
   useEffect(() => {
+    console.log(switchOn)
     if (router.isReady) {
       const { lid } = router.query
       getlessonListId(lid)
@@ -42,22 +63,25 @@ export default function Detail() {
         <hr />
         <Row className="justify-content-end">
           <Col lg={1}>
-            <div className="switch text-center">
+            {/* <div className={`${Style['switch']} text-center`}>
               <input
-                className="switch-checkbox"
+                className={Style['switch-checkbox']}
                 id="switchID1"
                 type="checkbox"
                 name="switch-checkbox"
+                checked={switchOn}
+                onChange={handleSwitchChange}
               />
-              <div className="switch-label" htmlFor="switchID1">
+              <div className={Style['switch-label']} htmlFor="switchID1">
                 <span
-                  className="switch-txt"
-                  turnOn="細節"
-                  turnOff="評價"
+                  className={Style['switch-txt']}
+                  turnon="細節"
+                  turnoff="評價"
                 ></span>
-                <span className="switch-Round-btn"></span>
+                <span className={Style['switch-Round-btn']}></span>
               </div>
-            </div>
+            </div> */}
+            <Test></Test>
           </Col>
         </Row>
         <Row>
@@ -85,7 +109,6 @@ export default function Detail() {
             alt=""
           />
         </figure>
-
         <figure className="m-0 pb-2">
           <Image
             className="img-fluid"
@@ -93,6 +116,49 @@ export default function Detail() {
             alt=""
           />
         </figure>
+        {/* ----comment----- */}
+        <hr />
+        <Row className="justify-content-end">
+          <Col lg={1}>
+            {/* <div className={`${Style['switch']} text-center`}>
+              <input
+                className={`${Style['switch-checkbox']}`}
+                id="switchID1"
+                type="checkbox"
+                name={Style['switch-checkbox']}
+              />
+              <label className={Style['switch-label']} htmlFor="switchID1">
+                <span
+                  className={Style['switch-txt']}
+                  data-turn-on="細節"
+                  data-turn-off="評價"
+                />
+                <span className={Style['switch-Round-btn']} />
+              </label>
+            </div> */}
+          </Col>
+        </Row>
+        {getUserState(auth)}
+        <Row>
+          <Col lg={2}>
+            <select
+              className="form-select form-select-sm"
+              value={'ss'}
+              onChange={() => {}}
+            >
+              <option value="評價高到低">評價高到低</option>
+              <option value="ss">Open this select menu</option>
+              <option value="1">One</option>
+              <option value="2">Two</option>
+              <option value="3">Three</option>
+            </select>
+          </Col>
+        </Row>
+        <div className="my-3">
+          <CommentList></CommentList>
+          <CommentList></CommentList>
+          <CommentList></CommentList>
+        </div>
       </Container>
     </>
   )

@@ -11,7 +11,7 @@ export function AuthProvider({ children }) {
     userName: '',
     tel: '',
     avatar: '',
-    isAuth: false,
+    isAuth: true,
   })
 
   // 表單使用的錯誤訊息

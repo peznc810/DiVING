@@ -20,7 +20,7 @@ router.get('/getlist', function (req, res, next) {
         let [lesson] = await db
         .execute('SELECT * FROM `lesson`')
         .catch(() => [undefined])
-        res.send(lesson)
+        res.json(lesson)
     })();
 
 });
@@ -35,7 +35,7 @@ router.get('/getlist/:id', function (req, res, next) {
             console.error(err)
             return [undefined]
         })
-        res.send(lesson)
+        res.json(lesson)
     })();
 });
 
@@ -50,7 +50,7 @@ router.get('/getstar/:id', function (req, res, next) {
             console.error(err)
             return [undefined]
         })
-        res.send(star)
+        res.json(star)
     })();
 });
 
