@@ -14,6 +14,7 @@ const Coupon = dynamic(() => import('@/components/coupon/coupon'), {
   ssr: false,
 })
 import { useEvent } from '@/hooks/use-eventData'
+import { createPortal } from 'react-dom'
 
 export default function Index() {
   const router = useRouter()
