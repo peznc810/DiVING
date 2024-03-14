@@ -19,13 +19,6 @@ export default function List() {
   // const { productBrand } = router.query
   const [loading, setLoading] = useState(false)
 
-  useEffect(() => {
-    setLoading(true)
-    setTimeout(() => {
-      setLoading(false)
-    }, 1500)
-  }, [])
-
   const [product, setProduct] = useState([])
   // console.log(product)
   const [rating, setRating] = useState(0) //評分
@@ -69,6 +62,14 @@ export default function List() {
       }
     }
   }, [])
+
+  //Loading跳轉頁面
+  // useEffect(() => {
+  //   setLoading(true)
+  //   setTimeout(() => {
+  //     setLoading(false)
+  //   }, 1500)
+  // }, [])
 
   const [filterSettings, setFilterSettings] = useState({
     brand: '',

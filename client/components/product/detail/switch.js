@@ -146,7 +146,7 @@ export default function Switch({
                 {imgDetails.map((imgDetail) => {
                   return (
                     <div key={imgDetail}>
-                      <div className="p-2 my-3 custom-image-container">
+                      <div className="p-2 my-2 custom-image-container">
                         <img
                           className="my-2"
                           src={`/images/product/images/${category}/${id}/${imgDetail}`}

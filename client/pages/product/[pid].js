@@ -232,7 +232,7 @@ export default function Detail() {
                       data-bs-target="#panelsStayOpen-collapseOne"
                       aria-controls="panelsStayOpen-collapseOne"
                     >
-                      <GiClothes />
+                      <GiClothes className="GiClothes" />
                       尺寸與版型
                     </button>
                   </h4>
@@ -259,7 +259,7 @@ export default function Detail() {
                       aria-expanded="false"
                       aria-controls="panelsStayOpen-collapseTwo"
                     >
-                      <FaShuttleVan />
+                      <FaShuttleVan className="FaShuttleVan" />
                       免運及退貨
                     </button>
                   </h2>
@@ -302,7 +302,6 @@ export default function Detail() {
           setRating={setRating}
         />
       </div>
-
       <br />
       <br />
       <br />
@@ -362,43 +361,6 @@ export default function Detail() {
           background-color: #f5f5f5;
           font-size: 15.5px;
           background-color: transparent;
-        }
-         {
-          /* .circle-container {
-          display: flex;
-          align-items: center;
-        } */
-        }
-         {
-          /* .custom-image-container {
-          margin: 0 auto;
-          width: 600px;
-          height: 480px;
-        }
-        .custom-image-container img {
-          width: 100%;
-          height: 100%;
-          object-fit: cover;
-        } */
-        }
-         {
-          /* .content {
-          height: 80px;
-        } */
-        }
-         {
-          /* .avatar {
-          width: 70px;
-          height: 70px;
-          border-radius: 50%;
-          overflow: hidden;
-          margin: 15px;
-        }
-        .avatar img {
-          width: 100%;
-          height: 100%;
-          object-fit: cover;
-        } */
         }
       `}</style>
     </>
