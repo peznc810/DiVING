@@ -21,11 +21,15 @@ export default function SignUp() {
   }, [])
 
   const [inputVal, setVal] = useState({
-    nameVal: '',
-    emailVal: '',
-    passwordVal: '',
-    repasswordVal: '',
+    userName: '',
+    userEmail: '',
+    userPWD: '',
+    rePWD: '',
   })
+
+  const handleVal = (e) => {
+    setVal({ ...inputVal, [e.target.name]: e.target.value })
+  }
 
   useEffect(() => {
     setMsg('')
@@ -36,25 +40,25 @@ export default function SignUp() {
     const emailRegex = /^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/
     const passwordRegex = /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,12}/
     switch (true) {
-      case inputVal.nameVal.trim() === '':
+      case inputVal.userName.trim() === '':
         setMsg('姓名為必填欄位')
         break
-      case inputVal.emailVal.trim() === '':
+      case inputVal.userEmail.trim() === '':
         setMsg('電子郵件為必填欄位')
         break
-      case !emailRegex.test(inputVal.emailVal):
+      case !emailRegex.test(inputVal.userEmail):
         setMsg('電子郵件格式錯誤')
         break
-      case inputVal.passwordVal.trim() === '':
+      case inputVal.userPWD.trim() === '':
         setMsg('密碼不得為空')
         break
-      case !passwordRegex.test(inputVal.passwordVal):
+      case !passwordRegex.test(inputVal.userPWD):
         setMsg('請輸入8-12位數(含英文大小寫)')
         break
-      case inputVal.repasswordVal.trim() === '':
+      case inputVal.rePWD.trim() === '':
         setMsg('請再確認一次密碼')
         break
-      case inputVal.passwordVal !== inputVal.repasswordVal:
+      case inputVal.userPWD !== inputVal.rePWD:
         setMsg('密碼不符')
         break
       default:
@@ -86,9 +90,7 @@ export default function SignUp() {
                   name="userName"
                   id="userName"
                   placeholder="姓名"
-                  onChange={(e) =>
-                    setVal({ ...inputVal, nameVal: e.target.value })
-                  }
+                  onChange={handleVal}
                 />
                 <label htmlFor="userName">姓名</label>
               </div>
@@ -98,9 +100,7 @@ export default function SignUp() {
                   name="userEmail"
                   id="userEmail"
                   placeholder="電子郵件"
-                  onChange={(e) =>
-                    setVal({ ...inputVal, emailVal: e.target.value })
-                  }
+                  onChange={handleVal}
                 />
                 <label htmlFor="userEmail">電子郵件</label>
               </div>
@@ -110,9 +110,7 @@ export default function SignUp() {
                   name="userPWD"
                   id="userPWD"
                   placeholder="請輸入8-12位(含大小寫英文字母)"
-                  onChange={(e) =>
-                    setVal({ ...inputVal, passwordVal: e.target.value })
-                  }
+                  onChange={handleVal}
                 />
                 <label htmlFor="userPWD">密碼</label>
               </div>
@@ -122,9 +120,7 @@ export default function SignUp() {
                   name="rePWD"
                   id="rePWD"
                   placeholder="請再輸入一次"
-                  onChange={(e) =>
-                    setVal({ ...inputVal, repasswordVal: e.target.value })
-                  }
+                  onChange={handleVal}
                 />
                 <label htmlFor="rePWD">確認密碼</label>
               </div>

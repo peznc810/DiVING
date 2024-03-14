@@ -116,7 +116,6 @@ export default function Login() {
       <main className={`${styles['main-style']}`}>
         <div className="d-flex justify-content-center mt-5">
           <div className={`${styles['card-style']}`}>
-            {/* login的訊息會慢一拍過來 */}
             <form onSubmit={handleLogin}>
               <h2 className="fs-3 mb-4 text-center">會員登入</h2>
               <div className={`mb-3 ${styles['input-style']}`}>

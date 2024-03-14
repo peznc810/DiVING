@@ -1,4 +1,3 @@
-import { useEffect } from 'react'
 import Navbar from './navbar'
 import Footer from './footer'
 
@@ -9,8 +8,9 @@ export default function DefaultLayout({ currentPage, children }) {
   return (
     <>
       <Navbar background={navBackground} />
-      <div style={{ paddingTop: '4rem' }}>{children}</div>
-
+      <div style={{ paddingTop: `${currentPage === '/' ? '0px' : '60px'}` }}>
+        {children}
+      </div>
       <Footer />
     </>
   )

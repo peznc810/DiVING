@@ -6,8 +6,9 @@ export default function Star({
   startRating = 0,
   onRatingChange = () => {},
   color = 'gold',
+  rating,
+  setRating,
 }) {
-  const [rating, setRating] = useState(0)
   const [hoverRating, setHoverRating] = useState(0)
 
   useEffect(() => {

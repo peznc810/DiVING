@@ -6,28 +6,28 @@ import multer from 'multer'
 const router = express.Router()
 const upload = multer()
 
-router.get('/', function (req, res, next) {
-  // 取得日期、設定格式
-  let time = moment().format('YYYY-MM-DD')
-  //   res.send('導向有今天日期的網址');
-  res.redirect('/expense/d/' + time)
-})
+router.get('/', (req, res, next) => {
+    // 取得日期、設定格式
+    let time = moment().format("YYYY-MM-DD");
+    //   res.send('導向有今天日期的網址');
+    res.redirect("/expense/d/" + time);
+});
 
 // 讀取
-router.get('/d/:date', function (req, res, next) {
-  ;(async () => {
-    // res.send("讀取指定日期的所有消費")
-    // 取得url參數中的date
-    let date = req.params.date
-    // 讀取分類
-    // let sort = await getSort().then((data) => {
-    //   return data.sort;
-    // }).catch((err) => {
-    //   return undefined;
-    // });
-    let [sort] = await db
-      .execute('SELECT * FROM `sort`')
-      .catch(() => [undefined])
+router.get('/d/:date', async (req, res, next) => {
+    (async () => {
+        // res.send("讀取指定日期的所有消費")
+        // 取得url參數中的date
+        let date = req.params.date;
+        // 讀取分類
+        // let sort = await getSort().then((data) => {
+        //   return data.sort;
+        // }).catch((err) => {
+        //   return undefined;
+        // });
+        let [sort] = await db.execute("SELECT * FROM `sort`").catch(() => {
+            return [undefined];
+        })
 
     //   // 讀取消費日期
     // let dateData = await getDateData(date).then((data) => {

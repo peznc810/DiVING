@@ -1,7 +1,19 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import styles from './myProduct.module.scss'
 
-export default function MyProduct() {
+import { useCart } from '@/hooks/cart'
+
+export default function MyProduct({
+  name = '',
+  detail = '',
+  price = 0,
+  discountPrice = 0,
+  num = 0,
+  isProduct,
+  id,
+}) {
+  const { increment, decrement, removeItem } = useCart()
+
   return (
     <>
       <div className={`d-flex p-3 ${styles.myProduct}`}>
@@ -9,15 +21,25 @@ export default function MyProduct() {
           <img src="" alt="" />
         </div>
         <div className={`${styles.info}`}>
-          <h6 className="m-0">高彈性防寒衣 (連身式)-女</h6>
-          <span>黑色, M</span>
+          <h6 className="m-0">{name}</h6>
+          <span>{detail}</span>
           <div className={`d-flex my-2 align-items-center`}>
-            <p className={`m-0 me-2 ${styles.specialPrice}`}>NT$350</p>
-            <p
-              className={`m-0 text-decoration-line-through ${styles.originalPrice}`}
-            >
-              NT$400
-            </p>
+            {discountPrice ? (
+              <>
+                <p className={`m-0 me-2 ${styles.specialPrice}`}>
+                  NT${discountPrice}
+                </p>
+                <p
+                  className={`m-0 text-decoration-line-through ${styles.originalPrice}`}
+                >
+                  NT${price}
+                </p>
+              </>
+            ) : (
+              <>
+                <p className={`m-0 ${styles.originalPrice}`}>NT${price}</p>
+              </>
+            )}
           </div>
 
           <div className={`${styles.btns}`}>
@@ -26,17 +48,36 @@ export default function MyProduct() {
               role="group"
               aria-label="Second group"
             >
-              <button type="button" className="btn ">
+              <button
+                type="button"
+                className="btn"
+                onClick={() => {
+                  decrement(id, isProduct)
+                }}
+              >
                 <i className="bi bi-dash-lg"></i>
               </button>
               <button type="button" className="btn" disabled>
-                1
+                {num}
               </button>
-              <button type="button" className="btn ">
+              <button
+                type="button"
+                className="btn"
+                onClick={() => {
+                  increment(id, isProduct)
+                }}
+              >
                 <i className="bi bi-plus-lg"></i>
               </button>
             </div>
-            <button className={`btn ${styles.delete}`}>移除</button>
+            <button
+              className={`btn ${styles.delete}`}
+              onClick={() => {
+                removeItem(id, isProduct)
+              }}
+            >
+              移除
+            </button>
           </div>
         </div>
       </div>

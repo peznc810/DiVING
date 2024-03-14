@@ -1,7 +1,12 @@
 import React from 'react'
 import styles from './styles.module.scss'
 
-export default function Form() {
+export default function Form({
+  userProfile = {},
+  handleChangeProfile = () => {},
+  newProfile = {},
+  updateProfile = (id = 0, profile) => {},
+}) {
   return (
     <>
       <div className={`col-sm-8 p-0 rounded-end ${styles['form-container']}`}>
@@ -26,7 +31,7 @@ export default function Form() {
                 className="accordion-collapse collapse"
                 data-bs-parent="#accordionFlushExample"
               >
-                <form action="">
+                <form onSubmit={updateProfile}>
                   <div className="accordion-body">
                     <div className="row gy-4">
                       <div className="col-12 col-sm-6">
@@ -37,7 +42,10 @@ export default function Form() {
                           type="text"
                           id="myName"
                           className="form-control"
+                          name="name"
                           placeholder="王小美"
+                          defaultValue={userProfile.name}
+                          onChange={handleChangeProfile}
                         />
                       </div>
                       <div className="col-12 col-sm-6">
@@ -48,6 +56,9 @@ export default function Form() {
                           type="date"
                           id="myBirth"
                           className="form-control"
+                          name="birth"
+                          defaultValue={userProfile.birth}
+                          onChange={handleChangeProfile}
                         />
                       </div>
                       {/* 改的話要再註冊驗證一次 */}
@@ -59,7 +70,10 @@ export default function Form() {
                           type="email"
                           id="myEmail"
                           className="form-control"
+                          name="email"
                           placeholder="xxx@test.com.tw"
+                          defaultValue={userProfile.email}
+                          onChange={handleChangeProfile}
                         />
                       </div>
                       <div className="col-12 col-sm-6">
@@ -70,10 +84,16 @@ export default function Form() {
                           type="tel"
                           id="myTel"
                           className="form-control"
+                          name="tel"
                           placeholder="0987654321"
+                          maxLength={10}
+                          defaultValue={
+                            userProfile.tel ? `0${userProfile.tel}` : ''
+                          }
+                          onChange={handleChangeProfile}
                         />
                       </div>
-                      <div className="col-9">
+                      <div className="col-12">
                         <label htmlFor="address" className="form-label">
                           聯絡地址
                         </label>
@@ -81,12 +101,16 @@ export default function Form() {
                           type="text"
                           id="address"
                           className="form-control"
+                          name="address"
+                          defaultValue={userProfile.address}
+                          onChange={handleChangeProfile}
                         />
                       </div>
                       <div className="col-12 text-end">
                         <button
                           type="button"
-                          className={`btn btn-outline-secondary me-3 ${styles['hover-style']}`}
+                          className={`btn btn-outline-secondary me-3 ${styles['hover-style']}  d-none`}
+                          // onClick={handleClear}
                         >
                           取消
                         </button>
@@ -132,13 +156,15 @@ export default function Form() {
                           id="password"
                           className="form-control"
                         />
+                        {/* 警示訊息 */}
                         {/* 還是改成紅色border + 叉叉icon？ */}
                         <div
                           id="emailHelp"
-                          className="form-text text-danger ps-1 position-absolute bottom-0"
+                          className="form-text text-danger ps-1 position-absolute bottom-0 d-none"
                         >
                           密碼錯誤
                         </div>
+                        {/* END */}
                       </div>
                       <div className="col-6 me-1 pb-4">
                         <label htmlFor="newPassword" className="form-label">

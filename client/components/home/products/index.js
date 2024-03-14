@@ -21,7 +21,6 @@ export default function Products() {
             <ProductCard />
             <ProductCard />
             <ProductCard />
-            <ProductCard />
           </div>
           <div className={`text-center my-5`}>
             <Link href={'./product'} className={`d-inline-block `}>
