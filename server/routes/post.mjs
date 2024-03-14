@@ -1,24 +1,59 @@
 import express from 'express';
 import db from '../db.mjs';
 import { v4 as uuidv4 } from 'uuid';
-import multer from 'multer';
-const upload = multer();
+// import multer from 'multer';
+// const path = 'path';
+// const upload = multer({ storage: storage }); // 初始化 Multer
+import { dirname, extname, resolve } from "path";
+import { fileURLToPath } from "url";
+import formidable from "formidable";
+const __dirname = dirname(fileURLToPath(import.meta.url));
 
 const router = express.Router();
 
 // 定義處理 `/api/post` 請求的路由
-  //讀取所有文章
+  //讀取所有文章-list
   router.get('/', async (req, res) => {
+  const { sort, searchText } = req.query; 
+  // 排序用
+  const orderDirection = sort === 'desc' ? 'DESC' : 'ASC'; // 根據排序方式設置排序方向
     try {
-      const [result, field] = await db.execute('SELECT * FROM post');
+      // let queryString = `SELECT * FROM post`;
+      // if (searchText) {
+      //   queryString += ` WHERE title LIKE ? OR content LIKE ?`;
+      //   queryParams = [`%${searchText}%`, `%${searchText}%`];
+      // }
+      // const [result, field] = await db.execute(queryString + ` ORDER BY published_at ${orderDirection}`, queryParams);
 
-      console.log(field);
+      let queryString = `SELECT * FROM post ORDER BY published_at ${orderDirection}`;
+      let queryParams = [];
+  
+      if (searchText) {
+        queryString += ` WHERE title LIKE ? OR content LIKE ?`;
+        queryParams = [`%${searchText}%`, `%${searchText}%`];
+      }
+
+      const [result, field] = await db.execute('SELECT * FROM post WHERE title LIKE ? OR content LIKE ? ORDER BY published_at DESC', ['%' + searchText + '%', '%' + searchText + '%']);
+
       res.json(result);
     } catch (error) {
       console.error('Error executing database query:', error);
       res.status(500).json({ error: 'NOOOOOO' });  
     }
   });
+
+    //讀取所有文章-dashboard
+    router.get('/posts', async (req, res) => {
+      try {
+        const [result, field] = await db.execute('SELECT * FROM post');
+  
+        console.log(field);
+        res.json(result);
+      } catch (error) {
+        console.error('Error executing database query:', error);
+        res.status(500).json({ error: 'NOOOOOO' });  
+      }
+    });
 
   //讀取動態文章
   router.get('/:pid', async (req, res) => {
@@ -51,7 +86,7 @@ const router = express.Router();
   // });
 
 //dashboard 新增文章
-router.post('/new', upload.none(), async (req, res) => {
+router.post('/new', async (req, res) => {
   const { user_id, title, image, content, tags} = req.body;
   const id = uuidv4();
   const now = new Date();
@@ -70,7 +105,7 @@ router.post('/new', upload.none(), async (req, res) => {
   }
 });
 
-//編輯文章的更新
+//dashboard 編輯文章
 router.post('/edit', async (req, res) => {
   const { post_id, title, image, content, tags} = req.body;
   const now = new Date();
@@ -121,5 +156,21 @@ router.post("/test", async(req, res) => {
   }
 })
 
+// --BEN--
+
+router.post("/upload", (req, res, next) => { //ESline 嚴格 => 要空格
+  const form = formidable({
+      uploadDir: resolve(__dirname, "public/upload"), //路徑
+      keepExtensions: true //保留副檔名
+  }); //也有很多設定所以用物件的方式來設定參數
+
+  form.parse(req, (error, fields, files) => { //()裡面 錯誤 欄位 檔案
+      if (error) {
+          next(); //把錯誤往下傳
+          return false;
+      }
+      res.json({ fields, files }) //不曉得有什麼格式 所以直接列出來
+  })
+});
 
 export default router;

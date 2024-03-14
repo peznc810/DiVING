@@ -7,6 +7,7 @@ import styles from '@/styles/loader/loader_ripple.module.css'
 import postData from '@/data/post/post.json'
 import TagButton from '@/components/post/tagButton'
 import { Container, Card, Col, Row, Stack } from 'react-bootstrap'
+import DOMPurify from 'dompurify'
 
 export default function Detail() {
   const router = useRouter()
@@ -115,7 +116,7 @@ export default function Detail() {
             <div className="p-2">
               {' '}
               {getTagsArray(post.tags).map((tag, index) => (
-                <Link key={index} href="/post/list" target="_blank">
+                <Link key={index} href="/post" target="_blank">
                   <TagButton text={`# ${tag}`} />
                 </Link>
               ))}
@@ -124,8 +125,11 @@ export default function Detail() {
             <p>
               <div
                 className="m-4"
+                // dangerouslySetInnerHTML={{
+                //   __html: post.content,
+                // }}
                 dangerouslySetInnerHTML={{
-                  __html: post.content,
+                  __html: DOMPurify.sanitize(post.content),
                 }}
               ></div>
             </p>

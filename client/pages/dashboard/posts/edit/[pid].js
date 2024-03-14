@@ -29,6 +29,7 @@ export default function Edit() {
     try {
       const res = await fetch(`http://localhost:3005/api/post/${pid}`)
       const data = await res.json()
+      console.log('Fetched post data:', data)
 
       if (data.title) {
         setEditFormData({
@@ -118,7 +119,7 @@ export default function Edit() {
           <QuillEditor
             // value={editedContent || content}
             onChange={(value) => {
-              setEditFormData(value)
+              setEditFormData({ ...editFormData, content: value })
             }}
             className="w-full h-[70%] mt-10 bg-white"
             editorLoaded={editorLoaded}

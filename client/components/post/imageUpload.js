@@ -34,6 +34,7 @@ export default function ImageUpload() {
       setIsFilePicked(true)
       setSelectedFile(file)
       setImgServerUrl('')
+      handleSubmission()
     } else {
       setIsFilePicked(false)
       setSelectedFile(null)
@@ -47,27 +48,25 @@ export default function ImageUpload() {
     // 對照server上的檔案名稱 req.files.avatar
     formData.append('avatar', selectedFile)
 
-    fetch(
-      'http://localhost:3005//post/upload-avatar', //server url
-      {
-        method: 'POST',
-        body: formData,
-      }
-    )
+    fetch('http://localhost:3005/post/upload', {
+      method: 'POST',
+      body: formData,
+    })
       .then((response) => response.json())
       .then((result) => {
         console.log('Success:', result)
         setImgServerUrl(
-          'http://localhost:3005/public/uploads/' + result.data.name
+          'http://localhost:3005/public/upload/' + result.data.name
         )
       })
       .catch((error) => {
         console.error('Error:', error)
       })
+    console.log(formData)
   }
 
   return (
-    <div>
+    <>
       <input type="file" name="file" onChange={changeHandler} />
       {selectedFile && (
         <div>
@@ -75,20 +74,23 @@ export default function ImageUpload() {
         </div>
       )}
       {isFilePicked ? (
-        <div>
+        <>
           <p>Filename: {selectedFile.name}</p>
           <p>Filetype: {selectedFile.type}</p>
           <p>Size in bytes: {selectedFile.size}</p>
-        </div>
+        </>
       ) : (
         <p>選擇檔案觀看詳細資料</p>
       )}
+      {/* <div>
+        <button onClick={handleSubmission}>送出</button>
+      </div> */}
       <div>
         伺服器圖片網址:
         <a href={imgServerUrl} target="_blank" rel="noreferrer">
           {imgServerUrl}
         </a>
       </div>
-    </div>
+    </>
   )
 }

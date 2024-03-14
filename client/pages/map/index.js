@@ -74,7 +74,6 @@ export default function Test() {
         path.classList.remove('same')
         // console.log(path)
       })
-      handleWeatherClick()
     }
     // 將點擊的path設置為active
     e.target.classList.add('same')
@@ -119,65 +118,71 @@ export default function Test() {
     DateTime: '',
   })
 
-  const handleWeatherClick = () => {
-    fetch(
-      `https://opendata.cwa.gov.tw/api/v1/rest/datastore/O-B0075-001?Authorization=${AUTHORIZATION_KEY}&format=JSON&StationID=${currentWeather.StationID}&WeatherElement=&sort=StationID`
-    )
-      .then((response) => response.json())
-      .then((data) => {
-        console.log('data', data)
+  useEffect(() => {
+    const handleWeatherClick = () => {
+      fetch(
+        `https://opendata.cwa.gov.tw/api/v1/rest/datastore/O-B0075-001?Authorization=${AUTHORIZATION_KEY}&format=JSON&StationID=${currentWeather.StationID}&WeatherElement=&sort=StationID`
+      )
+        .then((response) => response.json())
+        .then((data) => {
+          console.log('data', data)
 
-        // 取得 SeaSurfaceObs 的資料
-        const seaSurfaceObs = data?.Records?.SeaSurfaceObs
+          // 取得 SeaSurfaceObs 的資料
+          const seaSurfaceObs = data?.Records?.SeaSurfaceObs
 
-        if (seaSurfaceObs) {
-          // 取得第一個位置的氣象觀測時間資料
-          const observationTimes =
-            seaSurfaceObs.Location[0]?.StationObsTimes?.StationObsTime
+          if (seaSurfaceObs) {
+            // 取得第一個位置的氣象觀測時間資料
+            const observationTimes =
+              seaSurfaceObs.Location[0]?.StationObsTimes?.StationObsTime
 
-          if (observationTimes && observationTimes.length > 0) {
-            // 取得第一個觀測時間點的氣象元素資料
-            const weatherElements = observationTimes[0]?.WeatherElements
+            if (observationTimes && observationTimes.length > 0) {
+              // 取得第一個觀測時間點的氣象元素資料
+              const weatherElements = observationTimes[0]?.WeatherElements
 
-            if (weatherElements) {
-              // 取得風速和波高資訊
-              // const dateTime = observationTimes[0]?.DateTime
-              const windSpeed = weatherElements?.PrimaryAnemometer?.WindSpeed
-              const WindDirectionDescription =
-                weatherElements?.PrimaryAnemometer?.WindDirectionDescription
+              if (weatherElements) {
+                // 取得風速和波高資訊
+                // const dateTime = observationTimes[0]?.DateTime
+                const windSpeed = weatherElements?.PrimaryAnemometer?.WindSpeed
+                const WindDirectionDescription =
+                  weatherElements?.PrimaryAnemometer?.WindDirectionDescription
 
-              const waveHeight = weatherElements?.WaveHeight
-              const SeaTemperature = weatherElements?.SeaTemperature
+                const waveHeight = weatherElements?.WaveHeight
+                const SeaTemperature = weatherElements?.SeaTemperature
 
-              // 解析並重新格式化日期
-              const dateTimeString = observationTimes[0]?.DateTime
-              const formattedDateTime = dateTimeString
-                .toString()
-                .replace(/T/, ' ')
-                .replace(/:00\+08:00/, '')
+                // 解析並重新格式化日期
+                const dateTimeString = observationTimes[0]?.DateTime
+                const formattedDateTime = dateTimeString
+                  .toString()
+                  .replace(/T/, ' ')
+                  .replace(/:00\+08:00/, '')
 
-              setCurrentWeather((prevWeather) => ({
-                ...prevWeather,
-                DateTime: formattedDateTime,
-                WindSpeed: windSpeed,
-                WaveHeight: waveHeight,
-                SeaTemperature: SeaTemperature,
-                WindDirection: WindDirectionDescription,
-              }))
+                setCurrentWeather((prevWeather) => ({
+                  ...prevWeather,
+                  DateTime: formattedDateTime,
+                  WindSpeed: windSpeed,
+                  WaveHeight: waveHeight,
+                  SeaTemperature: SeaTemperature,
+                  WindDirection: WindDirectionDescription,
+                }))
+              } else {
+                console.error('找不到氣象元素資訊')
+              }
             } else {
-              console.error('找不到氣象元素資訊')
+              console.error('找不到氣象觀測時間資訊')
             }
           } else {
-            console.error('找不到氣象觀測時間資訊')
+            console.error('找不到 SeaSurfaceObs 資訊')
           }
-        } else {
-          console.error('找不到 SeaSurfaceObs 資訊')
-        }
-      })
-      .catch((error) => {
-        console.error('發生錯誤：', error)
-      })
-  }
+        })
+        .catch((error) => {
+          console.error('Error:', error)
+        })
+    }
+
+    if (currentWeather.StationID) {
+      handleWeatherClick()
+    }
+  }, [currentWeather.StationID])
 
   return (
     <>
@@ -209,7 +214,6 @@ export default function Test() {
                     <g
                       className={styles['district']}
                       onClick={(e) => handleMapClick(e)}
-                      onChange={handleWeatherClick}
                     >
                       {/* 1墾丁 */}
                       <path

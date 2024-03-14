@@ -12,7 +12,7 @@ export default function Index() {
 
   const getPost = async () => {
     try {
-      const res = await fetch('http://localhost:3005/api/post')
+      const res = await fetch('http://localhost:3005/api/post/posts')
       const data = await res.json()
 
       if (Array.isArray(data)) {
