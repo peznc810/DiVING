@@ -39,7 +39,7 @@ export default function LessonSection() {
     <>
       <section className={`${styles.LessonSection}`}>
         <div className={`container-fluid `}>
-          <div className={` ps-5  ${styles.titleBlock}`}>
+          <div className={` ${styles.titleBlock}`}>
             <div className={`ps-4 d-flex align-items-end ${styles.title}`}>
               <h3 className="me-3 mb-0 text-light">
                 OUR <br /> LESSON
@@ -66,15 +66,17 @@ export default function LessonSection() {
                   <Link href={'#'} className={`${styles.lessonLink} `}>
                     <div className={`${styles.info} text-center`}>
                       <h5>{v.name}</h5>
-                      <p>{v.enName}</p>
+                      <p className="m-0">{v.enName}</p>
                     </div>
-                    <Image
-                      src={v.img}
-                      alt=""
-                      fill
-                      object-fit="cover"
-                      priority
-                    ></Image>
+                    <div className={`${styles.imgDiv}`}>
+                      <Image
+                        src={v.img}
+                        alt=""
+                        fill
+                        style={{ objectFit: 'cover' }}
+                        priority
+                      ></Image>
+                    </div>
                     <div className={`${styles.divHover}`}>
                       <p>{v.content}</p>
                     </div>

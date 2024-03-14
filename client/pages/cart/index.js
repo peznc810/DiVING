@@ -1,28 +1,57 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import Link from 'next/link'
+
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
 const MySwal = withReactContent(Swal)
 
+import { useAuth } from '@/hooks/auth'
+import { useCart } from '@/hooks/cart'
+
 import { FaShoppingCart, FaRegTrashAlt } from 'react-icons/fa'
 import CartStep from '@/components/cart/cart-step'
+// inchhhhh 新增
+import CouponModal from '@/components/cart/coupon-modal'
+import { useCouponHas } from '@/hooks/use-couponHasData'
+import { set } from 'lodash'
+
+//抓取使用者擁有的優惠券
+// let coupon_has
+
+// await fetch(`http://localhost:3005/api/order/user-coupon?userId=${auth.id}`, {
+//   method: 'GET',
+// })
+//   .then((response) => {
+//     return response.json()
+//   })
+//   .then((result) => {
+//     coupon_has = result
+//   })
+//   .catch((err) => {
+//     console.error('An error occurred:', err)
+//   })
+
+// console.log(coupon_has)
 
 export default function Home() {
-  const [cartData, setCartData] = useState([])
-  const [totalPrice, setTotalPrice] = useState(0)
-  const [deliveryFee] = useState(50)
-  const [discount] = useState(0)
+  const [totalTotalPrice, setTotalTotalPrice] = useState(0)
 
-  useEffect(() => {
-    const data = JSON.parse(localStorage.getItem('cart'))
-    setCartData(data)
-    calculateTotalPrice(data)
-  }, [])
+  const [discount, setDiscount] = useState(0)
+  // inchhhhh 新增
+  const { couponHas, setCouponHas } = useCouponHas()
+  const [showCoupon, setShowCoupon] = useState(false)
+  const { items, updateItemQty, increment, decrement, removeItem, cart } =
+    useCart()
+  const { auth } = useAuth()
 
-  const notifySA = (productName, i) => {
+  const [payment, setPayment] = useState(1)
+  const [delivery, setDelivery] = useState(1)
+
+  //刪除通知
+  const notifySA = (name, id, isProduct) => {
     MySwal.fire({
       icon: 'question',
-      title: <>{`確認要刪除${productName}嗎?`}</>,
+      title: <>{`確認要刪除${name}嗎?`}</>,
       showConfirmButton: true,
       confirmButtonText: '確認',
       showDenyButton: true,
@@ -33,67 +62,50 @@ export default function Home() {
           title: '已成功刪除!',
           icon: 'success',
         })
-        handleDeleteItem(i)
+        removeItem(id, isProduct)
       }
     })
   }
 
-  const calculateTotalPrice = (data) => {
-    let total = 0
-    data.forEach((item) => {
-      const { productDiscount, num, productPrice, lessonPrice } = item
-      const price = productDiscount
-        ? productDiscount * num
-        : (productPrice || lessonPrice) * num
-      total += price
-    })
-    setTotalPrice(total)
+  const handleSelectChange = (e) => {
+    const { name, value } = e.target
+    name === 'payment' ? setPayment(value) : setDelivery(value)
   }
 
-  const handleIncrement = (index) => {
-    const updatedCartData = [...cartData]
-    updatedCartData[index].num += 1
-    setCartData(updatedCartData)
-    localStorage.setItem('cart', JSON.stringify(updatedCartData))
-    calculateTotalPrice(updatedCartData)
-  }
+  const { totalPrice, deliveryFee } = cart
 
-  const handleDecrement = (index) => {
-    const updatedCartData = [...cartData]
-    if (updatedCartData[index].num > 1) {
-      updatedCartData[index].num -= 1
-      setCartData(updatedCartData)
-      localStorage.setItem('cart', JSON.stringify(updatedCartData))
-      calculateTotalPrice(updatedCartData)
+  // 收到coupon傳來的資訊
+  const selectedCouponData = (data) => {
+    console.log(data)
+    if (!data) return totalPrice + deliveryFee
+    const { coupon_discount, coupon_rule } = data
+    // console.log(coupon_discount, coupon_rule)
+    let updateTotalPrice = 0
+    let updateDiscount = 0
+    // 判斷小記金額是否大於coupon_rule
+    if (totalPrice > coupon_rule) {
+      // Number.isInteger()檢查是否為整數
+      if (!Number.isInteger(coupon_discount)) {
+        console.log('object')
+        updateTotalPrice = totalPrice * coupon_discount + deliveryFee
+      } else {
+        updateTotalPrice = totalPrice - coupon_discount + deliveryFee
+        console.log(coupon_discount)
+      }
+      updateDiscount = (updateTotalPrice - totalPrice - deliveryFee) * -1
+    } else {
+      updateTotalPrice = totalPrice + deliveryFee
     }
+    setTotalTotalPrice(updateTotalPrice)
+    setDiscount(updateDiscount)
   }
-
-  const handleInputChange = (index, event) => {
-    const updatedCartData = [...cartData]
-    const newValue = parseInt(event.target.value)
-    if (!isNaN(newValue) && newValue > 0) {
-      updatedCartData[index].num = newValue
-      setCartData(updatedCartData)
-      localStorage.setItem('cart', JSON.stringify(updatedCartData))
-      calculateTotalPrice(updatedCartData)
-    }
-  }
-
-  const handleDeleteItem = (index) => {
-    const updatedCartData = [...cartData]
-    updatedCartData.splice(index, 1)
-    setCartData(updatedCartData)
-    localStorage.setItem('cart', JSON.stringify(updatedCartData))
-    calculateTotalPrice(updatedCartData)
-  }
-
   return (
     <div className="container">
       <CartStep step={1} />
       <div className="container">
         <div className="section-name d-flex">
           <FaShoppingCart size={20} color="#013C64" />
-          <h5 className="ms-2 span">X項商品</h5>
+          <h5 className="ms-2 span">{items.length}項商品</h5>
         </div>
         <table>
           <thead>
@@ -106,21 +118,26 @@ export default function Home() {
             </tr>
           </thead>
           <tbody>
-            {cartData ? (
-              cartData.map((item, i) => {
+            {items ? (
+              items.map((item, i) => {
                 const {
-                  lessonName,
-                  lessonPrice,
+                  product_id,
+                  lesson_id,
+                  price,
                   num,
-                  productName,
-                  productPrice,
-                  productDiscount,
+                  name,
+                  discount_price,
+                  product_detail,
+                  order_time,
                 } = item
-                let price = 0
-                if (productDiscount) {
-                  price = productDiscount * num
+                const id = product_id || lesson_id
+                const detail = product_detail || order_time
+                const isProduct = item.product_id ? true : false
+                let totalPrice
+                if (discount_price) {
+                  totalPrice = discount_price * num
                 } else {
-                  price = (productPrice || lessonPrice) * num
+                  totalPrice = price * num
                 }
                 return (
                   <tr key={i}>
@@ -128,40 +145,34 @@ export default function Home() {
                       <div className="row">
                         <img />
                         <div>
-                          <h5 className="fw-bold text-start">
-                            {productName || lessonName}
-                          </h5>
-                          <p className="imperceptible text-start">商品細節</p>
+                          <h5 className="fw-bold text-start">{name}</h5>
+                          <p className="imperceptible text-start">{detail}</p>
                         </div>
                       </div>
                     </td>
                     <td>
-                      {productDiscount ? (
+                      {discount_price ? (
                         <>
                           <h5 className="fw-bold discounted">
-                            NT${productDiscount}
+                            NT${discount_price}
                           </h5>
                           <p className="imperceptible text-decoration-line-through">
-                            NT${productPrice || lessonPrice}
+                            NT${price}
                           </p>
                         </>
                       ) : (
                         <>
-                          <h5 className="fw-bold">
-                            NT${productPrice || lessonPrice}
-                          </h5>
+                          <h5 className="fw-bold">NT${price}</h5>
                         </>
                       )}
-                      {/* <h5 className="fw-bold discounted">打折後</h5>
-                      <p className="imperceptible text-decoration-line-through">
-                        {productPrice || lessonPrice}
-                      </p> */}
                     </td>
                     <td>
                       <button
                         type="button"
                         className="btn btn-light"
-                        onClick={() => handleDecrement(i)}
+                        onClick={() => {
+                          decrement(id, isProduct)
+                        }}
                       >
                         <i className="bi bi-dash-lg"></i>
                       </button>
@@ -169,23 +180,27 @@ export default function Home() {
                         type="text"
                         className={`w-25 text-center input${i}`}
                         value={num}
-                        onChange={(event) => handleInputChange(i, event)}
+                        onChange={(e) => {
+                          updateItemQty(id, parseInt(e.target.value), isProduct)
+                        }}
                       />
                       <button
                         type="button"
                         className="btn btn-light"
-                        onClick={() => handleIncrement(i)}
+                        onClick={() => {
+                          increment(id, isProduct)
+                        }}
                       >
                         <i className="bi bi-plus-lg"></i>
                       </button>
                     </td>
                     <td>
-                      <p className={`Price${i}`}>NT${price}</p>
+                      <p className={`price${i}`}>NT${totalPrice}</p>
                     </td>
                     <td>
                       <FaRegTrashAlt
                         size={22}
-                        onClick={() => notifySA(productName || lessonName, i)}
+                        onClick={() => notifySA(name, id, isProduct)}
                         style={{ cursor: 'pointer' }}
                       />
                     </td>
@@ -195,40 +210,6 @@ export default function Home() {
             ) : (
               <></>
             )}
-            {/* <tr>
-              <td>
-                <div className="row">
-                  <img />
-                  <div>
-                    <h5 className="fw-bold text-start">商品名</h5>
-                    <p className="imperceptible text-start">商品細節</p>
-                  </div>
-                </div>
-              </td>
-              <td>
-                <h5 className="fw-bold discounted">打折後</h5>
-                <p className="imperceptible text-decoration-line-through">
-                  打折前
-                </p>
-              </td>
-              <td>
-                <button type="button" className="btn btn-light">
-                  +
-                </button>
-                <input
-                  type="text"
-                  className="w-25 text-center"
-                  placeholder="1"
-                />
-                <button type="button" className="btn btn-light">
-                  -
-                </button>
-              </td>
-              <td>NT$XXX</td>
-              <td>
-                <FaRegTrashAlt size={22} />
-              </td>
-            </tr> */}
           </tbody>
         </table>
       </div>
@@ -236,23 +217,26 @@ export default function Home() {
         <div className="col-sm-7 pay-section">
           <h5 className="mb-3 section-name span">選擇送貨及付款方式</h5>
           <div className="container">
-            <p className="select-dec">送貨地點</p>
-            <select className="form-select">
-              <option value="1">送貨地點1</option>
-              <option value="2">送貨地點2</option>
-              <option value="3">送貨地點3</option>
-            </select>
             <p className="select-dec">送貨方式</p>
-            <select className="form-select">
-              <option value="1">送貨方式1</option>
-              <option value="2">送貨方式2</option>
-              <option value="3">送貨方式3</option>
+            <select
+              className="form-select"
+              name="delivery"
+              value={delivery}
+              onChange={handleSelectChange}
+            >
+              <option value="1">宅配</option>
+              <option value="2">7-11</option>
             </select>
             <p className="select-dec">付款方式</p>
-            <select className="form-select">
-              <option value="1">付款方式1</option>
-              <option value="2">付款方式2</option>
-              <option value="3">付款方式3</option>
+            <select
+              className="form-select"
+              name="payment"
+              value={payment}
+              onChange={handleSelectChange}
+            >
+              <option value="1">貨到付款</option>
+              <option value="2">信用卡付款</option>
+              <option value="3">Line Pay</option>
             </select>
           </div>
         </div>
@@ -268,22 +252,50 @@ export default function Home() {
               <p>NT$ {deliveryFee}</p>
             </div>
             <p className="text-end">優惠 -NT${discount}</p>
-            <a>優惠券</a>
+            <button
+              type="button"
+              className="coupon-btn p-0 my-2"
+              onClick={() => {
+                setShowCoupon(true)
+              }}
+            >
+              選擇優惠券
+            </button>
             <hr />
             <div className="d-flex justify-content-between spacing fw-bold">
               <p>合計:</p>
-              <p>NT$ {totalPrice + deliveryFee - discount}</p>
+              <p>NT$ {totalTotalPrice}</p>
             </div>
-            <Link href="./cart/step2">
+            <Link
+              href={
+                auth.isAuth && !cart.isEmpty
+                  ? `./cart/step2?payment=${payment}&delivery=${delivery}`
+                  : ''
+              }
+            >
               <button
                 type="button"
                 className="btn next-step-btn w-100 text-white"
+                disabled={!auth.isAuth || cart.isEmpty}
               >
-                <h5 className="fw-bold py-1">前往結帳</h5>
+                <h5 className="fw-bold py-1">
+                  {auth.isAuth && !cart.isEmpty
+                    ? '前往結帳'
+                    : cart.isEmpty
+                    ? '購物車內尚無商品'
+                    : '尚未登入'}
+                </h5>
               </button>
             </Link>
           </div>
         </div>
+        <CouponModal
+          showCoupon={showCoupon}
+          setShowCoupon={setShowCoupon}
+          couponHas={couponHas}
+          setCouponHas={setCouponHas}
+          dataForParent={selectedCouponData}
+        />
       </div>
       <style jsx>{`
         h1,
@@ -296,11 +308,9 @@ export default function Home() {
           margin: 0;
         }
 
-        .order-detail {
-          margin-inline: 0;
-        }
-
+        .order-detail,
         .spacing {
+          margin-inline: 0;
           margin-top: 1rem;
           margin-bottom: 1rem;
         }
@@ -329,16 +339,10 @@ export default function Home() {
 
         .section-name {
           background-color: #f5f5f5;
-          padding-left: 0.5rem;
-          padding-top: 0.5rem;
-          padding-bottom: 0.5rem;
+          padding: 0.5rem;
         }
 
-        .pay-section {
-          border: 1px solid #f5f5f5;
-          padding: 0;
-        }
-
+        .pay-section,
         .order-section {
           border: 1px solid #f5f5f5;
           padding: 0;
@@ -368,9 +372,18 @@ export default function Home() {
           text-align: center;
         }
 
+        .coupon-btn {
+          border: none;
+          background-color: transparent;
+          font-size: 14px;
+          color: #265475;
+        }
+        .coupon-btn:hover {
+          border-bottom: 1px solid #265475;
+        }
+
         .btn-light {
-          padding-block: 2px;
-          padding-inline: 6px;
+          padding: 2px 6px;
         }
 
         @media (max-width: 576px) {
