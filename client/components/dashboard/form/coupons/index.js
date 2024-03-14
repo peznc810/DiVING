@@ -63,6 +63,14 @@ export default function Form() {
           showConfirmButton: false,
           timer: 1500,
         })
+      } else if (results.status === 'existed') {
+        Swal.fire({
+          position: 'center',
+          icon: 'error',
+          title: '已領取過',
+          showConfirmButton: false,
+          timer: 1500,
+        })
       } else {
         Swal.fire({
           position: 'center',

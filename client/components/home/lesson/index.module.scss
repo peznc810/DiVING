@@ -1,11 +1,19 @@
 @import '@/styles/variable.scss';
 
 .LessonSection {
-  background-color: $info;
+  // background-color: $info;
   box-sizing: border-box;
-  padding-top: 60px;
-  padding-bottom: 100px;
+  padding-top: 70px;
+  padding-bottom: 120px;
   letter-spacing: 1px;
+  background-image: linear-gradient(
+    to top,
+    rgba(1, 60, 100, 0) 0%,
+    #265475bc 3%,
+    #2654756f 97%,
+    rgba(1, 60, 100, 0) 100%
+  );
+  filter: blur(10);
   .titleBlock {
     position: relative;
     margin-bottom: 70px;

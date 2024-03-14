@@ -36,18 +36,28 @@
   }
 
   .homeContainer {
-    padding-top: 240px;
+    padding-top: 200px;
     text-align: center;
     animation: sloganAni 3s linear;
     h2 {
       color: $secondary;
       font-family: Noto Serif TC;
-      font-weight: bold;
+      font-weight: bolder;
       font-size: 110px;
     }
-    h4 {
+    ul {
       margin-top: 50px;
+      li {
+        padding-inline: 20px;
+        &:nth-child(-n + 2) {
+          border-right: 1px solid #fff;
+        }
+      }
+    }
+    h4 {
       color: #fff;
+      margin: 0;
+      font-weight: lighter;
     }
   }
 }
@@ -95,17 +105,28 @@
 @media screen and (max-width: 390px) {
   .homeHeader {
     .homeContainer {
-      padding-top: 140px;
+      padding-top: 180px;
       padding-inline: 0;
       h2 {
-        font-size: 70px;
+        font-size: 60px;
         text-align: center;
+        padding-inline: 70px;
+      }
+      ul {
+        flex-direction: column;
+        li {
+          padding-inline: 0px;
+          padding-block: 10px;
+          &:nth-child(-n + 2) {
+            border-right: none;
+            // border-bottom: 1px solid #fff;
+          }
+        }
       }
       h4 {
         font-size: 18px;
-        margin-top: 30px;
-        padding: 0;
         text-align: center;
+        font-weight: lighter;
       }
     }
 

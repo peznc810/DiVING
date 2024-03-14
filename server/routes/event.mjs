@@ -11,8 +11,8 @@ router.get('/', async (req, res) => {
     .catch(() => {
       return [undefined]
     })
-  
-  res.send(result)
+  // console.log(result);
+  res.json(result)
 })
 
 

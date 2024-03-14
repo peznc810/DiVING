@@ -1,5 +1,7 @@
 import { useEffect } from 'react'
 import { useRouter } from 'next/router'
+import { Parallax, ParallaxProvider } from 'react-scroll-parallax'
+
 import HomeHeader from '@/components/home/header'
 import News from '@/components/home/news'
 import Server from '@/components/home/server'
@@ -17,6 +19,7 @@ export default function Index() {
   const router = useRouter()
   const currentPage = router.pathname
   const eventList = useEvent()
+
   // 改變頁面body的顏色
   useEffect(() => {
     if (currentPage === '/') {
@@ -31,13 +34,17 @@ export default function Index() {
 
   return (
     <>
-      <HomeHeader />
-      <News eventList={eventList} />
-      <Server />
-      <LessonSection />
-      <Products />
-      <MapSection />
-      <Coupon />
+      <ParallaxProvider>
+        <HomeHeader />
+        <Server />
+        <News eventList={eventList} />
+        <Parallax>
+          <LessonSection />
+          <Products />
+        </Parallax>
+        <MapSection />
+        <Coupon />
+      </ParallaxProvider>
     </>
   )
 }

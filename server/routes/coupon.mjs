@@ -5,7 +5,7 @@ import multer from 'multer'
 const router = express.Router()
 const update = multer()
 
-//在首頁取得coupon2資訊
+//在首頁取得coupon5資訊
 router.get('/', async (req, res) => {
   // 產生亂碼
   const couponCode = generateRandomCode(6)
@@ -15,11 +15,11 @@ router.get('/', async (req, res) => {
   ])
   // [[coupon]] 雙重解構賦值 => [{}] => {}
   const [[coupon]] = await connection
-    .execute('SELECT * FROM `coupon` WHERE `id` = 2 ')
+    .execute('SELECT * FROM `coupon` WHERE `id` = 5 ')
     .catch(() => {
       return [undefined]
     })
-  console.log(coupon);
+  // console.log(coupon);
   res.json(coupon)
 })
 
@@ -39,7 +39,7 @@ router.get('/:id', async (req, res) => {
       [userID],
     )
 
-    console.log(userCoupons)
+    // console.log(userCoupons)
     res.status(200).json(userCoupons)
   } catch (error) {
     console.error('Error fetching user coupons:', error)
@@ -61,8 +61,9 @@ router.post('/', async (req, res) => {
       'SELECT * FROM `coupon` WHERE `code` = ?',
       [inputCode],
     )
+      console.log(couponCode);
     // 如果輸入優惠碼正確
-    if (couponCode) {
+    if (inputCode === couponCode.code) {
       // 判斷是否已領取過
       const [existingCoupon] = await connection.execute(
         'SELECT * FROM `coupon_has` WHERE `coupon_id`=? AND `user_id`=?',
@@ -70,7 +71,7 @@ router.post('/', async (req, res) => {
       )
         // console.log(existingCoupon);
       if (existingCoupon.length > 0) {
-        res.json({msg:"已領取過該優惠卷"})
+        res.json({status:"existed"})
       } else {
         await connection.execute(
           'INSERT INTO `coupon_has` (`coupon_id`, `user_id`, valid) VALUES (?, ?,1)',
@@ -79,6 +80,8 @@ router.post('/', async (req, res) => {
         .then(()=>res.status(200).json({status:"success"}))
         .catch(()=> res.status(401).json({status:"error"}))
       }
+    }else if (couponCode === undefined){
+      res.status(401).json({status:"fail"})
     }
   } catch (error) {
     res.json({ msg: '領取失敗' })

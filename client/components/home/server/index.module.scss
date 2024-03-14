@@ -45,18 +45,18 @@
       overflow: hidden;
       width: 450px;
       height: 520px;
+      animation: opaAni 2s linear;
     }
     .content {
       padding-top: 100px;
       padding-left: 80px;
       width: 60%;
-      height: 420px;
     }
   }
 
   .sevProduct {
     padding-inline: 80px;
-    padding-block: 100px;
+    padding-block: 120px;
     .imgDiv {
       position: relative;
       border-radius: 6px;
@@ -68,21 +68,32 @@
       padding-top: 50px;
       padding-right: 80px;
       width: 60%;
-      height: 420px;
     }
+  }
+}
+
+@keyframes opaAni {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 1;
   }
 }
 
 @media screen and (max-width: 768px) {
   .server {
-    margin-block: 100px;
+    margin-block: 30px;
 
     .severContent {
       text-align: start;
 
       h4 {
         font-size: 24px;
-        line-height: 25px;
+        line-height: 30px;
         padding: 16px 24px;
         border-radius: 30px 30px 0 30px;
       }
@@ -94,7 +105,7 @@
     }
 
     .sevLesson {
-      padding-inline: 10px;
+      padding-inline: 20px;
       flex-direction: column;
       align-items: center;
       .imgDiv {
@@ -108,15 +119,14 @@
       .content {
         padding-top: 40px;
         padding-inline: 0px;
-        width: 95%;
-        height: 420px;
+        width: 100%;
       }
     }
 
     .sevProduct {
       flex-direction: column;
       align-items: center;
-      padding-inline: 10px;
+      padding-inline: 20px;
       padding-block: 0px;
       .imgDiv {
         margin-top: 130px;
@@ -130,8 +140,7 @@
       .content {
         padding-top: 30px;
         padding-right: 0px;
-        width: 95%;
-        height: 300px;
+        width: 100%;
       }
     }
   }

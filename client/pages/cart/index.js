@@ -98,7 +98,7 @@ export default function Home() {
 
   // 收到coupon傳來的資訊
   const selectedCouponData = (data) => {
-    // console.log(data)
+    console.log(data)
     if (!data) return totalPrice + deliveryFee
     const { coupon_discount, coupon_rule } = data
     // console.log(coupon_discount, coupon_rule)
@@ -108,11 +108,13 @@ export default function Home() {
     if (totalPrice > coupon_rule) {
       // Number.isInteger()檢查是否為整數
       if (!Number.isInteger(coupon_discount)) {
+        console.log('object')
         updateTotalPrice = totalPrice * coupon_discount + deliveryFee
       } else {
         updateTotalPrice = totalPrice - coupon_discount + deliveryFee
+        console.log(coupon_discount)
       }
-      updateDiscount = updateTotalPrice - totalPrice
+      updateDiscount = (updateTotalPrice - totalPrice - deliveryFee) * -1
     } else {
       updateTotalPrice = totalPrice + deliveryFee
     }

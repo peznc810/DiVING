@@ -1,18 +1,33 @@
-import { useState, useEffect, useNavigate, useRef } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
 import styles from './coupon.module.scss'
 // 會員登入狀態
 import { useAuth } from '@/hooks/auth'
+import toast, { Toaster } from 'react-hot-toast'
 
 export default function Coupon() {
   const [offsetTime, setOffsetTime] = useState(countDownTimer())
-  const [showCoupon, setShowCoupon] = useState(false) //顯示coupon視窗
+  const [showCoupon, setShowCoupon] = useState(true) //顯示coupon視窗
   const [couponData, setCouponData] = useState(false) //顯示coupon資訊
   const [codeShow, setCodeShow] = useState(false) // 顯示code
 
   const { auth } = useAuth()
   const textRef = useRef(null)
-  // const navigate = useNavigate() // 導向路徑
+
+  const copyOK = () => {
+    toast.success('複製成功', {
+      style: {
+        border: '1px solid #ff9720',
+        padding: '16px',
+        color: '#ff9720',
+      },
+      iconTheme: {
+        primary: '#ff9720',
+        secondary: '#FFFAEE',
+      },
+      onClose: setShowCoupon(false),
+    })
+  }
 
   const url = `http://localhost:3005/api/coupon/`
   // 連接資料庫
@@ -37,40 +52,40 @@ export default function Coupon() {
     const text = textRef.current.innerText
     navigator.clipboard
       .writeText(text)
-      .then(() => alert('複製成功'))
+      .then(() => copyOK())
       .catch((err) => console.error('複製失敗:', err))
   }
 
   // 滑鼠滾動coupon才出現
-  useEffect(() => {
-    // 檢查 localStorage 中是否存在標誌，如果存在不要顯示coupon
-    const couponClosedFlag = localStorage.getItem('couponClosed')
-    if (couponClosedFlag) {
-      setShowCoupon(false)
-    }
+  // useEffect(() => {
+  //   // 檢查 localStorage 中是否存在標誌，如果存在不要顯示coupon
+  //   const couponClosedFlag = localStorage.getItem('couponClosed')
+  //   if (couponClosedFlag) {
+  //     setShowCoupon(false)
+  //   }
 
-    // 監聽滑鼠滾動
-    const handleScroll = () => {
-      const scrollPosition = window.scrollY
-      const position = 300
-      // 如沒有couponClosedFlag且滾動超過300，coupon顯示
-      if (!couponClosedFlag && scrollPosition > position) {
-        setShowCoupon(true)
-      }
-    }
+  //   // 監聽滑鼠滾動
+  //   const handleScroll = () => {
+  //     const scrollPosition = window.scrollY
+  //     const position = 300
+  //     // 如沒有couponClosedFlag且滾動超過300，coupon顯示
+  //     if (!couponClosedFlag && scrollPosition > position) {
+  //       setShowCoupon(true)
+  //     }
+  //   }
 
-    window.addEventListener('scroll', handleScroll)
-    return () => {
-      window.removeEventListener('scroll', handleScroll)
-    }
-  }, [])
+  //   window.addEventListener('scroll', handleScroll)
+  //   return () => {
+  //     window.removeEventListener('scroll', handleScroll)
+  //   }
+  // }, [])
 
   // closeBtn
-  const closeCouponBtn = () => {
-    // 把關閉優惠卷的結果存在localStorage
-    localStorage.setItem('couponClosed', true)
-    setShowCoupon(false)
-  }
+  // const closeCouponBtn = () => {
+  //   // 把關閉優惠卷的結果存在localStorage
+  //   // localStorage.setItem('couponClosed', 'true')
+  //   setShowCoupon(false)
+  // }
 
   // 計時器
   useEffect(() => {
@@ -86,7 +101,7 @@ export default function Coupon() {
     <>
       <div
         className={`p-4  ${styles.couponBlock} ${
-          showCoupon === false ? 'd-none' : 'd-block'
+          showCoupon ? 'd-block' : 'd-none'
         }`}
       >
         <div
@@ -98,7 +113,9 @@ export default function Coupon() {
             type="button"
             className={`p-0 `}
             aria-label="Close"
-            onClick={closeCouponBtn}
+            onClick={() => {
+              setShowCoupon(false)
+            }}
           >
             <i className="bi bi-x-lg fs-4"></i>
           </button>
@@ -198,6 +215,7 @@ export default function Coupon() {
           </div>
         )}
       </div>
+      <Toaster position="bottom-right" reverseOrder={false} />
     </>
   )
 }

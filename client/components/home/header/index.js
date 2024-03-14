@@ -12,10 +12,6 @@ export default function HomeHeader() {
   return (
     <>
       <header className={` ${styles.homeHeader}`}>
-        <div className={`${styles.homeContainer}`}>
-          <h2>{`Let's Go DiVING`}</h2>
-          <h4 className="">精選品牌｜專業教練｜探索海洋世界</h4>
-        </div>
         <div className={`${styles.videoBg}`}>
           <video
             ref={videoRef}
@@ -25,6 +21,25 @@ export default function HomeHeader() {
             loop
           ></video>
           <div className={`${styles.videoOverlay}`}></div>
+        </div>
+
+        <div className={`${styles.homeContainer}`}>
+          <h2>
+            LET'S GO <br /> DiVING
+          </h2>
+          <ul
+            className={`d-flex justify-content-center align-items-center p-0`}
+          >
+            <li>
+              <h4 className="">嚴選品牌</h4>
+            </li>
+            <li>
+              <h4 className="">專業教練</h4>
+            </li>
+            <li>
+              <h4 className="">海洋環保</h4>
+            </li>
+          </ul>
         </div>
       </header>
     </>
