@@ -1,270 +1,282 @@
-import React from 'react'
-import Link from 'next/link'
+import { useEffect, useState } from 'react'
 
-export default function Filter() {
+import { MdScubaDiving } from 'react-icons/md'
+import { MdOutlineCategory } from 'react-icons/md'
+import { MdOutlinePriceCheck } from 'react-icons/md'
+import { TbSettingsX } from 'react-icons/tb'
+
+export default function Filter({ setFilterSettings, clearSettings }) {
+  const [buttonStyles, setButtonStyles] = useState({
+    brand: '',
+    category: '',
+    price: '',
+  })
+
+  const allBrand = [
+    'ADISI',
+    'Unidive',
+    'AROPEC',
+    'PrincetonTec',
+    'MYSTIC',
+    'HeleiWaho',
+    'OceanMax',
+  ]
+
+  const allCategory = ['防寒衣', '面鏡', '呼吸管', '蛙鞋', '配件']
+
+  //價格篩選
+  const [selectedPrice, setSelectedPrice] = useState('')
+
+  const [priceFilter, setPriceFilter] = useState({
+    $1000以下: false,
+    '$1001-$3500': false,
+    '$3501-$6500': false,
+    $6501以上: false,
+  })
+
+  const handlePriceChange = (priceRange) => {
+    setFilterSettings((prevFilterSettings) => ({
+      ...prevFilterSettings,
+      price: priceRange,
+    }))
+  }
+
+  const handlePriceRadioChange = (priceRange) => {
+    handlePriceChange(priceRange)
+    setSelectedPrice(priceRange)
+  }
+
+  //css樣式
+  const handleButtonClick = (buttonName) => {
+    setButtonStyles({
+      ...buttonStyles,
+      [buttonName]: buttonStyles[buttonName] ? '' : 'active',
+    })
+  }
+
   return (
     <>
-      {/* 品牌 */}
-      <div className="accordion-item">
-        <h2 className="accordion-header">
-          <button
-            className="accordion-button collapsed"
-            type="button"
-            data-bs-toggle="collapse"
-            aria-expanded="false"
-            data-bs-target="#panelsStayOpen-collapseOne"
-            aria-controls="panelsStayOpen-collapseOne"
-          >
-            品牌
-          </button>
-        </h2>
-        <div
-          id="panelsStayOpen-collapseOne"
-          className="accordion-collapse collapse"
-        >
-          <div className="accordion-body px-1">
-            <div className="form-check">
-              <Link
-                href="/product/list"
-                className="form-check-label"
-                htmlFor="flexCheckDefault"
-                style={{ color: '#303132' }}
+      <div className="my-4">
+        <div className="accordion accordion-flush" id="accordionFlushExample">
+          {/* 品牌 */}
+          <div className="accordion-item">
+            <h4 className="accordion-header">
+              <button
+                className={`accordion-button collapsed ${buttonStyles.brand}`}
+                type="button"
+                data-bs-toggle="collapse"
+                aria-expanded="false"
+                data-bs-target="#panelsStayOpen-collapseOne"
+                aria-controls="panelsStayOpen-collapseOne"
+                onClick={() => handleButtonClick('brand')}
               >
-                HeleiWaho
-              </Link>
-            </div>
-
-            <div className="form-check">
-              <Link
-                href="/product/list"
-                className="form-check-label"
-                htmlFor="flexCheckDefault"
-                style={{ color: '#303132' }}
-              >
-                OceanMax
-              </Link>
-            </div>
-
-            <div className="form-check">
-              <Link
-                href="/product/list"
-                className="form-check-label"
-                htmlFor="flexCheckDefault"
-                style={{ color: '#303132' }}
-              >
-                MYSTIC
-              </Link>
-            </div>
-
-            <div className="form-check">
-              <Link
-                href="/product/list"
-                className="form-check-label"
-                htmlFor="flexCheckDefault"
-                style={{ color: '#303132' }}
-              >
-                ADISI
-              </Link>
-            </div>
-
-            <div className="form-check">
-              <Link
-                href="/product/list"
-                className="form-check-label"
-                htmlFor="flexCheckDefault"
-                style={{ color: '#303132' }}
-              >
-                AROPEC
-              </Link>
-            </div>
-
-            <div className="form-check">
-              <Link
-                href="/product/list"
-                className="form-check-label"
-                htmlFor="flexCheckDefault"
-                style={{ color: '#303132' }}
-              >
-                PrincetonTec
-              </Link>
-            </div>
-
-            <div className="form-check">
-              <Link
-                href="/product/list"
-                className="form-check-label"
-                htmlFor="flexCheckDefault"
-                style={{ color: '#303132' }}
-              >
-                Unidive
-              </Link>
-            </div>
-
-            <div className="form-check">
-              <Link
-                href="/product/list"
-                className="form-check-label"
-                htmlFor="flexCheckDefault"
-                style={{ color: '#303132' }}
-              >
-                EXQUIS
-              </Link>
+                <MdScubaDiving className="m-1" /> 品牌
+              </button>
+            </h4>
+            <div
+              id="panelsStayOpen-collapseOne"
+              className="accordion-collapse collapse"
+            >
+              <div className="accordion-body px-1">
+                <div className="form-check">
+                  {allBrand.map((v) => {
+                    return (
+                      <div
+                        key={v}
+                        className="form-check"
+                        onClick={() => {
+                          setFilterSettings((c) => ({
+                            ...c,
+                            brand: v,
+                          }))
+                        }}
+                      >
+                        <div
+                          // href="?=brand"
+                          className="form-check-label brand-css"
+                          htmlFor="flexCheckDefault"
+                          style={{ color: '#303132' }}
+                        >
+                          {v}
+                        </div>
+                      </div>
+                    )
+                  })}
+                </div>
+              </div>
             </div>
           </div>
-        </div>
-      </div>
 
-      {/* 商品類別 */}
-      <div className="accordion-item">
-        <h2 className="accordion-header">
-          <button
-            className="accordion-button collapsed"
-            type="button"
-            data-bs-toggle="collapse"
-            aria-expanded="false"
-            data-bs-target="#panelsStayOpen-collapseOne"
-            aria-controls="panelsStayOpen-collapseOne"
-          >
-            商品類別
-          </button>
-        </h2>
-        <div
-          id="panelsStayOpen-collapseOne"
-          className="accordion-collapse collapse"
-        >
-          <div className="accordion-body px-1">
-            <div className="form-check">
-              <Link
-                href="/product/list"
-                className="form-check-label"
-                htmlFor="flexCheckDefault"
-                style={{ color: '#303132' }}
+          {/* 商品類別 */}
+          <div className="accordion-item">
+            <h2 className="accordion-header">
+              <button
+                className={`accordion-button collapsed ${buttonStyles.category}`}
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#panelsStayOpen-collapseTwo"
+                aria-expanded="false"
+                aria-controls="panelsStayOpen-collapseTwo"
+                onClick={() => handleButtonClick('category')}
               >
-                防寒衣
-              </Link>
-            </div>
-
-            <div className="form-check">
-              <Link
-                href="/product/list"
-                className="form-check-label"
-                htmlFor="flexCheckDefault"
-                style={{ color: '#303132' }}
-              >
-                面鏡
-              </Link>
-            </div>
-
-            <div className="form-check">
-              <Link
-                href="/product/list"
-                className="form-check-label"
-                htmlFor="flexCheckDefault"
-                style={{ color: '#303132' }}
-              >
-                呼吸管
-              </Link>
-            </div>
-
-            <div className="form-check">
-              <Link
-                href="/product/list"
-                className="form-check-label"
-                htmlFor="flexCheckDefault"
-                style={{ color: '#303132' }}
-              >
-                蛙鞋
-              </Link>
-            </div>
-
-            <div className="form-check">
-              <Link
-                href="/product/list"
-                className="form-check-label"
-                htmlFor="flexCheckDefault"
-                style={{ color: '#303132' }}
-              >
-                手套&襪套
-              </Link>
-            </div>
-
-            <div className="form-check">
-              <Link
-                href="/product/list"
-                className="form-check-label"
-                htmlFor="flexCheckDefault"
-                style={{ color: '#303132' }}
-              >
-                配件
-              </Link>
-            </div>
-
-            <div className="form-check">
-              <Link
-                href="/product/list"
-                className="form-check-label"
-                htmlFor="flexCheckDefault"
-                style={{ color: '#303132' }}
-              >
-                潛水裝備{' '}
-              </Link>
+                <MdOutlineCategory className="m-1" /> 商品類別
+              </button>
+            </h2>
+            <div
+              id="panelsStayOpen-collapseTwo"
+              className="accordion-collapse collapse"
+            >
+              <div className="accordion-body px-1">
+                <div className="form-check">
+                  {allCategory.map((v) => {
+                    return (
+                      <div
+                        key={v}
+                        className="form-check"
+                        onClick={() => {
+                          setFilterSettings((c) => ({
+                            ...c,
+                            category: v,
+                          }))
+                        }}
+                      >
+                        <div
+                          href={`/product/${v}`}
+                          className="form-check-label category-css"
+                          htmlFor="flexCheckDefault"
+                          style={{ color: '#303132' }}
+                        >
+                          {v}
+                        </div>
+                      </div>
+                    )
+                  })}
+                </div>
+              </div>
             </div>
           </div>
-        </div>
-      </div>
 
-      {/* 價格篩選 */}
-      <div className="accordion-item">
-        <h2 className="accordion-header">
-          <button
-            className="accordion-button collapsed"
-            type="button"
-            data-bs-toggle="collapse"
-            data-bs-target="#panelsStayOpen-collapseThree"
-            aria-expanded="false"
-            aria-controls="panelsStayOpen-collapseThree"
-          >
-            價格篩選
-          </button>
-        </h2>
-      </div>
-      <div
-        id="panelsStayOpen-collapseThree"
-        className="accordion-collapse collapse"
-      >
-        <div className="accordion-body px-1">
-          <div className="form-check">
-            <input
-              className="form-check-input"
-              type="checkbox"
-              value=""
-              id="flexCheckDefault"
-            />
-            <label className="form-check-label" htmlFor="flexCheckDefault">
-              $5,000以下
-            </label>
+          {/* 價格篩選 */}
+          <div className="accordion-item">
+            <h2 className="accordion-header">
+              <button
+                className={`accordion-button collapsed ${buttonStyles.price}`}
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#panelsStayOpen-collapseThree"
+                aria-expanded="false"
+                aria-controls="panelsStayOpen-collapseThree"
+                onClick={() => handleButtonClick('price')}
+              >
+                <MdOutlinePriceCheck className="m-1" /> 價格篩選
+              </button>
+            </h2>
+            <div
+              id="panelsStayOpen-collapseThree"
+              className="accordion-collapse collapse"
+            >
+              <div className="accordion-body ">
+                <div className="form-check">
+                  <input
+                    className="form-check-input"
+                    type="radio"
+                    value=""
+                    id="flexCheckDefault"
+                    checked={selectedPrice === '$1000以下'}
+                    onChange={() => {
+                      setFilterSettings((c) => ({
+                        ...c,
+                        price: '$1000以下',
+                      }))
+                      setSelectedPrice('$1000以下')
+                    }}
+                  />
+                  <label
+                    className="form-check-label"
+                    htmlFor="flexCheckDefault"
+                  >
+                    $1,000以下
+                  </label>
+                </div>
+
+                <div className="form-check my-2">
+                  <input
+                    className="form-check-input"
+                    type="radio"
+                    value=""
+                    id="flexCheckChecked"
+                    checked={selectedPrice === '$1001-$3500'}
+                    onChange={() => {
+                      setFilterSettings((c) => ({
+                        ...c,
+                        price: '$1001-$3500',
+                      }))
+                      setSelectedPrice('$1001-$3500')
+                    }}
+                  />
+                  <label
+                    className="form-check-label"
+                    htmlFor="flexCheckChecked"
+                  >
+                    $1,001 - $3,500
+                  </label>
+                </div>
+
+                <div className="form-check my-2">
+                  <input
+                    className="form-check-input"
+                    type="radio"
+                    value=""
+                    id="flexCheckChecked"
+                    checked={selectedPrice === '$3501-$6500'}
+                    onChange={() => {
+                      setFilterSettings((c) => ({
+                        ...c,
+                        price: '$3501-$6500',
+                      }))
+                      setSelectedPrice('$3501-$6500')
+                    }}
+                  />
+                  <label
+                    className="form-check-label"
+                    htmlFor="flexCheckChecked"
+                  >
+                    $3,501 - $6,500
+                  </label>
+                </div>
+                <div className="form-check my-2">
+                  <input
+                    className="form-check-input"
+                    type="radio"
+                    value=""
+                    id="flexCheckChecked"
+                    checked={selectedPrice === '$6501以上'}
+                    onChange={() => {
+                      setFilterSettings((c) => ({
+                        ...c,
+                        price: '$6501以上',
+                      }))
+                      setSelectedPrice('$6501以上')
+                    }}
+                  />
+                  <label
+                    className="form-check-label"
+                    htmlFor="flexCheckChecked"
+                  >
+                    $6,501以上
+                  </label>
+                </div>
+              </div>
+            </div>
           </div>
-          <div className="form-check">
-            <input
-              className="form-check-input"
-              type="checkbox"
-              value=""
-              id="flexCheckChecked"
-            />
-            <label className="form-check-label" htmlFor="flexCheckChecked">
-              $5,001 - $9,999
-            </label>
-          </div>
-          <div className="form-check">
-            <input
-              className="form-check-input"
-              type="checkbox"
-              value=""
-              id="flexCheckChecked"
-            />
-            <label className="form-check-label" htmlFor="flexCheckChecked">
-              $10,000
-            </label>
+          {/* 清除按鍵 */}
+          <div className="my-4 col text-center">
+            <button
+              className="btn btn-primary clear-settings"
+              onClick={clearSettings}
+            >
+              Clear Settings <TbSettingsX className="TbSettingsX" />
+            </button>
           </div>
         </div>
       </div>

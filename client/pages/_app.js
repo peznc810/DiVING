@@ -1,4 +1,5 @@
 import '@/styles/globals.scss'
+import '@/styles/product.scss'
 import { useEffect } from 'react'
 import { useRouter } from 'next/router'
 import DefaultLayout from '@/components/layout/default-layout'
@@ -13,6 +14,7 @@ import EventProvider from '@/hooks/use-eventData'
 import CouponHasProvider from '@/hooks/use-couponHasData'
 import { CartProvider } from '@/hooks/cart'
 import { UsingCouponProvider } from '@/hooks/use-usingCoupon'
+
 
 export default function App({ Component, pageProps }) {
   // 獲取當前頁面路徑

@@ -1,76 +1,143 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 
-import Stars from '@/components/product/star/star'
+import Star from '@/components/product/star/star'
 import Carousel from '@/components/product/carousel'
 import Switch from '@/components/product/detail/switch'
-import ProductRecommond from '@/components/product/detail/product-recommond'
-import Link from 'next/link'
+import ProductRecommend from '@/components/product/detail/product-recommond'
+
+import Breadcrumb from 'react-bootstrap/Breadcrumb'
+import { FaHome } from 'react-icons/fa'
+import { GoHeartFill } from 'react-icons/go'
+import { FaCartPlus } from 'react-icons/fa'
+import toast, { Toaster } from 'react-hot-toast'
+// import { set } from 'lodash'
 
 export default function Detail() {
   const router = useRouter()
   const { pid } = router.query
   const [product, setProduct] = useState(null)
 
+  const [productCount, setProductCount] = useState(1) //增加、減少數量
+  const [items, setItems] = useState([]) //加入到購物車中的項目
+
   const [selectColor, setSelectColor] = useState(null)
+  const [selectSize, setSelectSize] = useState(null)
+
+  const [rating, setRating] = useState(0) //評分
 
   useEffect(() => {
-    if (!pid) return
-    fetch(`http://localhost:3000/api/product/${pid}`)
-      .then((res) => {
-        return res.json()
-      })
-      .then((res) => {
-        setProduct(res.data)
-      })
+    const fetchProduct = async () => {
+      try {
+        await fetch(`http://localhost:3005/api/product/id?pid=${pid}`, {
+          method: 'GET',
+        })
+          .then((res) => {
+            return res.json()
+          })
+          .then(([data]) => {
+            setProduct(data ? data : [])
+          })
+      } catch {
+        ;(err) => {
+          console.error('Error fetching data:', err)
+        }
+      }
+    }
+    if (pid) fetchProduct()
   }, [pid])
 
-  // const colorBtn = document.querySelector('.color-btn')
+  // if (product) {
+  //   const [newproduct] = product.filter((o) => {
+  //     return o.id == pid
+  //   })
+  //   setProduct(newproduct)
+  // }
 
-  // colorBtn.addEventListener('click', (e) => {
-  //   e.currentTarget.classList.add('active')
-  // })
-  if (!product) return null  
+  // useEffect(() => {
+  //   if (!pid) return
+  //   fetch(`http://localhost:3000/api/product/${pid}`)
+  //     .then((res) => {
+  //       return res.json()
+  //     })
+  //     .then((res) => {
+  //       setProduct(res.data)
+  //     })
+  // }, [pid])
+
+  const increment = () => {
+    setProductCount((prevCount) => {
+      return prevCount + 1
+    })
+  }
+
+  const decrement = () => {
+    setProductCount((prevCount) => {
+      if (prevCount === 1) {
+        return prevCount
+      } else {
+        return prevCount - 1
+      }
+    })
+  }
+
+  if (!product) return null
+  // if(!product){
+  //   return null
+  // }
   return (
     <>
       <div className="container-1200">
         {/* 麵包屑 */}
-        <div className="my-3 d-flex mt-5">
-          <div className="d-flex align-items-center">
-            <Link
-              href="/product/list"
-              className="p-2"
-              style={{ color: '#303132' }}
-            >
-              <i class="bi bi-droplet-half p-1"></i>品牌
-            </Link>
-            <div className="p-1">&gt;</div>
-            <Link
-              href="/product/list"
-              className="p-2"
-              style={{ color: '#303132' }}
-            >
-              <i className="bi bi-droplet p-1"></i>商品種類
-            </Link>
-          </div>
-        </div>
+        <Breadcrumb>
+          <Breadcrumb.Item href="http://localhost:3000">
+            <FaHome />
+          </Breadcrumb.Item>
+          <Breadcrumb.Item href="http://localhost:3000/product">
+            商品列表
+          </Breadcrumb.Item>
+          <Breadcrumb.Item href={`http://localhost:3000/product/${pid}`}>
+            商品細節
+          </Breadcrumb.Item>
+        </Breadcrumb>
 
         {/* 輪播 + 商品規格 */}
         <div className="row mt-5 mx-2 my-5">
           <div className="col-sm-7">
             <div className="position-sticky" style={{ top: '2rem' }}>
-              <Carousel />
+              <Carousel
+                imgFileNames={product.img.split(',')}
+                id={product.id}
+                category={product.category}
+              />
             </div>
           </div>
 
           <div className="col-sm-5">
             <h3>{product.name}</h3>
-            <Stars />
-            <h6>4.0分 | 8則評價</h6>
-
-            <h6 className="note-text">{`NT$${product.discount.toLocaleString()}`}</h6>
-            <p className="text-decoration-line-through type-text">{`NT$${product.price.toLocaleString()}`}</p>
-            <p className="product-desc">{product.info}</p>
+            <Star rating={rating} setRating={setRating} />
+            {/* {console.log(rating)} */}
+            <h6 className="my-1">4.0分 | 8則評價</h6>
+            {product.discount ? (
+              <>
+                <span className="note-text">{`NT$${product.discount.toLocaleString()}`}</span>
+                <span className="text-decoration-line-through type-text m-3 my-2">
+                  {`NT$${product.price.toLocaleString()}`}
+                </span>
+              </>
+            ) : (
+              <>
+                <p className="my-2 price-text">
+                  {`NT$${product.price.toLocaleString()}`}
+                </p>
+              </>
+            )}
+            <p
+              className="my-1"
+              dangerouslySetInnerHTML={{
+                __html: product.info.replace(/\n/g, '<br>'),
+              }}
+            ></p>
             <hr />
 
             {/* 顏色 button */}
@@ -91,47 +158,60 @@ export default function Detail() {
                 </button>
               )
             })}
-
             <br />
+
             {/* 尺寸 bottom */}
             <span className="btn-size p-2">尺寸</span>
-            <button type="button" className="btn btn-circle">
-              F
-            </button>
-            <button type="button" className="btn btn-circle">
-              S
-            </button>
-            <button type="button" className="btn btn-circle">
-              M
-            </button>
-            <button type="button" className="btn btn-circle">
-              L
-            </button>
-            <button type="button" className="btn btn-circle">
-              XL
-            </button>
+            {product.size.split(',').map((size) => {
+              return (
+                <button
+                  key={size}
+                  onClick={() => setSelectSize(size)}
+                  className="btn btn-circle"
+                  style={
+                    selectSize === size
+                      ? { backgroundColor: '#265475', color: 'white' }
+                      : null
+                  }
+                >
+                  {size}
+                </button>
+              )
+            })}
 
             {/* 選擇數量 */}
             <div>
-              <button type="button" className="btn btn-circle">
+              <button
+                className="btn btn-circle"
+                onClick={() => {
+                  decrement()
+                }}
+              >
                 -
               </button>
-              <span className="mx-3">數量</span>
-              <button type="button" className="btn btn-circle">
+              <span className="mx-3"> {productCount} </span>
+              <button
+                className="btn btn-circle"
+                onClick={() => {
+                  increment()
+                }}
+              >
                 +
               </button>
             </div>
 
-            {/* 加入購物車 */}
+            {/* 加入最愛 */}
             <button
               className="btn btn-secondary w-100 mb-3 my-3"
               style={{ fontWeight: 'bold', color: 'white' }}
             >
-              <i className="bi bi-person-heart"></i> 加入最愛
+              <GoHeartFill /> 加入最愛
             </button>
-            {/* 加入最愛 */}
+
+            {/* 加入購物車 */}
             <button className="btn btn-outline-primary w-100">
-              加入購物車 <i className="bi bi-cart-plus-fill"></i>
+              加入購物車 <FaCartPlus />
+              <Toaster position="top-center" reverseOrder={false} />
             </button>
 
             {/* 注意事項 */}
@@ -160,7 +240,7 @@ export default function Detail() {
                     <div className="accordion-body px-1">
                       <ul>
                         <li>版型較大，建議訂購小半號</li>
-                        <li>尺寸：尺寸指南</li>
+                        <li>尺寸：可參考商品細節之尺寸指南</li>
                       </ul>
                     </div>
                   </div>
@@ -176,7 +256,7 @@ export default function Detail() {
                       aria-expanded="false"
                       aria-controls="panelsStayOpen-collapseTwo"
                     >
-                      免費寄送及退貨
+                      免運及退貨
                     </button>
                   </h2>
                   <div
@@ -184,17 +264,20 @@ export default function Detail() {
                     className="accordion-collapse collapse"
                   >
                     <div className="accordion-body px-1">
-                      <p>訂單金額滿新臺幣 4,500 元即享免費標準運送服務</p>
-                      <p>
-                        臺北市:標準運送的商品可於 2-5 個工作天內送達
-                        快遞運送的商品可於 2-3 個工作天內送達
-                      </p>
-                      <p>
-                        其它縣市: 標準運送的商品可於 3-6 個工作天內送達
-                        快遞運送的商品可於 3-5 個工作天內送達
-                      </p>
-                      <p>訂單皆於星期一至星期五之間處理與寄送 (國定假日除外)</p>
-                      <p>會員享免費退貨服務免費退貨。退貨政策例外情況。</p>
+                      <ol>
+                        <li>訂單金額滿新臺幣 2,000 元，即享免運服務</li>
+                        <li>
+                          臺北市：標準運送的商品可於 2-5 個工作天內送達
+                          <br />
+                          快遞運送的商品可於 2-3 個工作天內送達
+                        </li>
+                        <li>
+                          其它縣市：標準運送的商品可於 3-6 個工作天內送達
+                          <br />
+                          快遞運送的商品可於 3-5 個工作天內送達
+                        </li>
+                        <li>訂單皆於平日上班時間(09:00-18:00)處理與寄送</li>
+                      </ol>
                     </div>
                   </div>
                 </div>
@@ -205,8 +288,24 @@ export default function Detail() {
 
         <hr />
         {/* 商品介紹 + 顧客評價 */}
+        <Switch
+          name={product.name}
+          imgDetails={product.img_detail.split(',')}
+          id={product.id}
+          category={product.category}
+          detail={product.detail}
+          rating={rating}
+          setRating={setRating}
+        />
+      </div>
 
-        <Switch />
+      <br />
+      <br />
+      <br />
+
+      <div>
+        <h3 className="text-center my-5">你可能會喜歡的商品⋯</h3>
+        <ProductRecommend />
       </div>
 
       <style jsx>{`
@@ -214,24 +313,30 @@ export default function Detail() {
           max-width: 1200px;
           margin: 0 auto;
           padding: 0;
-          margin-top: 70px;
+          margin-top: 10px;
         }
         @media screen and (max-width: 576px) {
           .width-1200 {
             width: 380px;
           }
         }
+        .my-1 {
+          font-family: Arial, sans-serif;
+        }
         .note-text {
           color: var(--red, #dc5151);
-          font-size: 14.5px;
+          font-size: 16.5px;
         }
-
         .type-text {
           color: var(--gray, #858585);
           font-weight: normal;
-          font-size: 12.5px;
+          font-size: 14px;
         }
-
+        .price-text {
+          color: var(--gray, #858585);
+          font-weight: normal;
+          font-size: 16.5px;
+        }
         .btn-md:hover,
         .btn-outline-primary:hover,
         .btn-circle:hover {
@@ -239,7 +344,6 @@ export default function Detail() {
           color: #fff;
           border: none;
         }
-
         .btn-color {
           margin: 5px 0;
         }
@@ -252,14 +356,17 @@ export default function Detail() {
           height: 40px;
           border-radius: 50%;
           background-color: #f5f5f5;
-          font-size: 16px;
+          font-size: 15.5px;
           background-color: transparent;
         }
-        .circle-container {
+         {
+          /* .circle-container {
           display: flex;
           align-items: center;
+        } */
         }
-        .custom-image-container {
+         {
+          /* .custom-image-container {
           margin: 0 auto;
           width: 600px;
           height: 480px;
@@ -268,22 +375,26 @@ export default function Detail() {
           width: 100%;
           height: 100%;
           object-fit: cover;
+        } */
         }
-        .content {
+         {
+          /* .content {
           height: 80px;
+        } */
         }
-        .avatar {
+         {
+          /* .avatar {
           width: 70px;
           height: 70px;
           border-radius: 50%;
           overflow: hidden;
           margin: 15px;
         }
-
         .avatar img {
           width: 100%;
           height: 100%;
           object-fit: cover;
+        } */
         }
       `}</style>
     </>
