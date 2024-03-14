@@ -89,7 +89,18 @@ router.post('/', async (req, res) => {
 })
 
 // 使用優惠卷
-router.put('/', async (req, res) => {})
+router.put('/', async (req, res) => {
+  const [usedCoupon] = await connection.execute(
+    "UPDATE `coupon_has` SET `valid` = 0 "
+  )
+  .then(()=>{
+    return 1
+  })
+  .catch(()=>{
+    return 0
+  })
+  res.json({usedCoupon})
+})
 
 // ----------------------
 
