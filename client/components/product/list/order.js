@@ -1,9 +1,14 @@
-import React from 'react'
+import { useMemo, useState } from 'react'
 
-export default function OrderProduct() {
+import { MdReplyAll } from 'react-icons/md'
+import { MdFiberNew } from 'react-icons/md'
+import { FaSortNumericDownAlt } from 'react-icons/fa'
+import { FaSortNumericUpAlt } from 'react-icons/fa'
+
+export default function OrderProduct({ setSorting }) {
   return (
     <>
-      <div className="d-flex p-2 justify-content-end align-items-center">
+      <div className="d-flex p-3 justify-content-between align-items-center">
         <div className="toolbar">
           <button className="btn" id="sidebarToggle">
             隱藏篩選條件 <i className="bi bi-toggles"></i>
@@ -21,36 +26,44 @@ export default function OrderProduct() {
           </button>
           <ul className="dropdown-menu">
             <li>
-              <a className="dropdown-item" href="#">
-                最新上架商品
-              </a>
+              <div
+                // href="?=all"
+                className="dropdown-item"
+                onClick={() => setSorting('all')}
+              >
+                <MdReplyAll /> 所有商品
+              </div>
             </li>
             <li>
-              <a className="dropdown-item" href="#">
-                價格：由高至低
-              </a>
+              <div
+                // href="?=new"
+                className="dropdown-item"
+                onClick={() => setSorting('createdAt')}
+              >
+                <MdFiberNew /> 最新上架商品
+              </div>
             </li>
             <li>
-              <a className="dropdown-item" href="#">
-                價格：由低至高
-              </a>
+              <div
+                // href="?=descend"
+                className="dropdown-item"
+                onClick={() => setSorting('descending')}
+              >
+                <FaSortNumericDownAlt /> 價格：由高至低
+              </div>
+            </li>
+            <li>
+              <div
+                // href="?=ascend"
+                className="dropdown-item"
+                onClick={() => setSorting('ascending')}
+              >
+                <FaSortNumericUpAlt /> 價格：由低至高
+              </div>
             </li>
           </ul>
         </div>
       </div>
-      <style jsx>{`
-        #sidebarToggle:hover {
-          background-color: #ff9720;
-          color: #fff;
-          border: none;
-        }
-        .dropdown-item:hover,
-        .dropdown-toggle:hover {
-          background-color: #265475;
-          color: #fff;
-          border: none;
-        }
-      `}</style>
     </>
   )
 }
