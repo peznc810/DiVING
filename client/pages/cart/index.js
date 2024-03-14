@@ -14,27 +14,6 @@ import CartStep from '@/components/cart/cart-step'
 // inchhhhh 新增
 import CouponModal from '@/components/cart/coupon-modal'
 import { useCouponHas } from '@/hooks/use-couponHasData'
-<<<<<<< HEAD
-=======
-
-//抓取使用者擁有的優惠券
-// let coupon_has
-
-// await fetch(`http://localhost:3005/api/order/user-coupon?userId=${auth.id}`, {
-//   method: 'GET',
-// })
-//   .then((response) => {
-//     return response.json()
-//   })
-//   .then((result) => {
-//     coupon_has = result
-//   })
-//   .catch((err) => {
-//     console.error('An error occurred:', err)
-//   })
-
-// console.log(coupon_has)
->>>>>>> origin/main
 
 export default function Home() {
   const [discount, setDiscount] = useState(0)
@@ -49,13 +28,6 @@ export default function Home() {
   const [payment, setPayment] = useState(1)
   const [delivery, setDelivery] = useState(1)
   const [totalTotalPrice, setTotalTotalPrice] = useState(cart.totalPrice)
-<<<<<<< HEAD
-
-  useEffect(() => {
-    setTotalTotalPrice(cart.totalPrice)
-  }, [cart])
-=======
->>>>>>> origin/main
 
   useEffect(() => {
     setTotalTotalPrice(cart.totalPrice)
@@ -122,8 +94,6 @@ export default function Home() {
     setTotalTotalPrice(updateTotalPrice)
     setDiscount(updateDiscount)
   }
-<<<<<<< HEAD
-=======
   console.log(cart)
   // 送出已使用的優惠卷給後端
   useEffect(() => {
@@ -149,7 +119,6 @@ export default function Home() {
         })
     }
   }, [cart.coupon])
->>>>>>> origin/main
 
   return (
     <div className="container">
