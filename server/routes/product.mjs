@@ -69,6 +69,12 @@ router.post('/comment', async (req, res) => {
     })
 })
 
+//-----------------------------------
+//先找產品的路由 > 在找評論的路由（標準做法）
+//參考討論區的資料 -- 106
+//-----------------------------------
+
+
 // get 打印評論
 router.get('/comment', async (req, res) => {
   const pid = req.query.pid;
@@ -97,7 +103,12 @@ router.post('/collect', async (req, res) => {
   }
   // member_id 身份驗證
   // step. member_id 是否存在 ?
-  
+  const [result] = await db.execute('SELECT * FROM `users` WHERE id = ?')
+  if (result) {
+      resolve({message: 'Success'})
+    } else {
+      reject({ status: 'error', msg: 'err' })
+    }
   //將取得的東西寫入資料庫
   await insertCollect(payload)
     .then((result) => {
@@ -126,6 +137,7 @@ router.get('/collect', async (req, res) => {
   }
 })
 
+//取得資料庫資料
 function getProduct(req) {
   return new Promise(async (resolve, reject) => {
     const [result] = await db.execute('SELECT * FROM `product`')
@@ -137,6 +149,7 @@ function getProduct(req) {
   })
 }
 
+//取得評論資料
 function getComment(pid) {
   return new Promise(async (resolve, reject) => {
     const [result] = await db.execute('SELECT * FROM `star` WHERE product_id = ?' ,[pid])
@@ -148,6 +161,7 @@ function getComment(pid) {
   })
 }
 
+//新增評論
 function insertComment(data) {
   return new Promise(async (resolve, reject) => {
     const [result] = await db.execute('INSERT INTO star (member_id, product_id, score, comment) VALUES (?, ?, ?, ?);', [data.member_id, data.product_id, data.score, data.comment])
@@ -170,7 +184,7 @@ function getProductID(pid) {
   })
 }
 
-
+//收藏
 function getCollect(mid) {
   return new Promise(async (resolve, reject) => {
     const [result] = await db.execute('SELECT * FROM `collect` WHERE member_id = ?' ,[mid])
@@ -181,7 +195,6 @@ function getCollect(mid) {
     }
   })
 }
-
 function insertCollect(data) {
   return new Promise(async (resolve, reject) => {
     const [result] = await db.execute('INSERT INTO collect (member_id, product_id) VALUES (?, ?);', [data.member_id, data.product_id])

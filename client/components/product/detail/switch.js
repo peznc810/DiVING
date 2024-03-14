@@ -59,13 +59,13 @@ export default function Switch({
         <div className="switch text-center m-2">
           <input
             className="switch-checkbox"
-            id="switchID1"
+            id="switchID"
             type="checkbox"
             name="switch-checkbox"
             checked={isSwitchOn}
             onChange={handleSwitchToggle}
           />
-          <label className="switch-label" for="switchID1">
+          <label className="switch-label" for="switchID">
             <span className="switch-txt" turnOn="評價" turnOff="細節"></span>
             <span className="switch-Round-btn"></span>
           </label>
