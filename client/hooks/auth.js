@@ -243,7 +243,7 @@ export function AuthProvider({ children }) {
     if (router.isReady && !auth.isAuth) {
       checkAuth()
     }
-  }, [])
+  }, [router.isReady])
 
   return (
     <AuthContext.Provider
