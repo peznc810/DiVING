@@ -37,8 +37,6 @@ export default function CouponModal({
     console.log(selectedCoupon)
     setShowCoupon(false)
   }
-
-  console.log(couponHas)
   return (
     <>
       <div

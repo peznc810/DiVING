@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Link from 'next/link'
 
 import Swal from 'sweetalert2'
@@ -13,29 +13,8 @@ import CartStep from '@/components/cart/cart-step'
 // inchhhhh 新增
 import CouponModal from '@/components/cart/coupon-modal'
 import { useCouponHas } from '@/hooks/use-couponHasData'
-import { set } from 'lodash'
-
-//抓取使用者擁有的優惠券
-// let coupon_has
-
-// await fetch(`http://localhost:3005/api/order/user-coupon?userId=${auth.id}`, {
-//   method: 'GET',
-// })
-//   .then((response) => {
-//     return response.json()
-//   })
-//   .then((result) => {
-//     coupon_has = result
-//   })
-//   .catch((err) => {
-//     console.error('An error occurred:', err)
-//   })
-
-// console.log(coupon_has)
 
 export default function Home() {
-  const [totalTotalPrice, setTotalTotalPrice] = useState(0)
-
   const [discount, setDiscount] = useState(0)
   // inchhhhh 新增
   const { couponHas, setCouponHas } = useCouponHas()
@@ -46,6 +25,11 @@ export default function Home() {
 
   const [payment, setPayment] = useState(1)
   const [delivery, setDelivery] = useState(1)
+  const [totalTotalPrice, setTotalTotalPrice] = useState(cart.totalPrice)
+
+  useEffect(() => {
+    setTotalTotalPrice(cart.totalPrice)
+  }, [cart])
 
   //刪除通知
   const notifySA = (name, id, isProduct) => {
@@ -99,6 +83,7 @@ export default function Home() {
     setTotalTotalPrice(updateTotalPrice)
     setDiscount(updateDiscount)
   }
+
   return (
     <div className="container">
       <CartStep step={1} />

@@ -9,16 +9,17 @@ import { useRouter } from 'next/router'
 import OrderForm from '@/components/cart/order-form'
 
 import { useAuth } from '@/hooks/auth'
+import { useCart } from '@/hooks/cart'
 
 export default function Home() {
   const { auth } = useAuth()
+  const { items, cart } = useCart()
 
   const router = useRouter()
 
   const { payment, delivery } = router.query
 
   const [order, setOrder] = useState({})
-  const [cartData, setCartData] = useState(null)
 
   const [userInputs, setUserInputs] = useState({
     user_name: '',
@@ -36,21 +37,13 @@ export default function Home() {
     cCard_securityCode: '',
     cCard_expirationMonth: '',
     cCard_expirationYear: '',
+    store_name: '',
+    store_address: '',
   })
 
   const [isDone, setIsDone] = useState(false)
 
-  let totalPrice = 0
-
   const { transactionId, orderId } = router.query
-
-  //抓取購物車的內容
-  useEffect(() => {
-    const data = JSON.parse(localStorage.getItem('cart'))
-    if (data) {
-      setCartData(data)
-    }
-  }, [])
 
   //檢查交易是否成功
 
@@ -126,7 +119,7 @@ export default function Home() {
     if (checkFormat()) {
       //line pay 所需的格式
       const lineProducts = []
-      cartData.forEach((data) => {
+      items.forEach((data) => {
         const id = data.product_id || data.lesson_id
         const name = data.productName || data.lessonName
         const price =
@@ -141,7 +134,7 @@ export default function Home() {
 
       //資料庫的格式 order_detail
       const products = []
-      cartData.forEach((data) => {
+      items.forEach((data) => {
         products.push(data)
       })
 
@@ -158,7 +151,7 @@ export default function Home() {
 
       const data = {
         user_id: auth.id,
-        totalPrice,
+        totalPrice: cart.totalPrice,
         lineProducts,
         products,
         receiver,
@@ -191,7 +184,7 @@ export default function Home() {
     if (checkFormat()) {
       //資料庫的格式 order_detail
       const products = []
-      cartData.forEach((data) => {
+      items.forEach((data) => {
         products.push(data)
       })
 
@@ -223,7 +216,7 @@ export default function Home() {
       if (userInputs.cCard_number1) {
         data = {
           user_id: auth.id,
-          totalPrice,
+          totalPrice: cart.totalPrice,
           products,
           receiver,
           credit_card,
@@ -232,7 +225,7 @@ export default function Home() {
       } else {
         data = {
           user_id: auth.id,
-          totalPrice,
+          totalPrice: cart.totalPrice,
           products,
           receiver,
           order_note,
@@ -342,52 +335,43 @@ export default function Home() {
                 </tr>
               </thead>
               <tbody>
-                {cartData ? (
-                  cartData.map((item, i) => {
+                {items ? (
+                  items.map((item, i) => {
                     const {
-                      lessonName,
-                      lessonPrice,
+                      price,
                       num,
-                      productName,
-                      productPrice,
-                      productDiscount,
+                      name,
+                      discount_price,
                       product_detail,
                       order_time,
                     } = item
-                    let price = productDiscount
-                      ? productDiscount * num
-                      : (productPrice || lessonPrice) * num
-                    totalPrice += price
+                    const detail = product_detail || order_time
                     return (
                       <tr key={i}>
                         <td>
                           <div className="row">
                             <img />
                             <div>
-                              <h5 className="fw-bold text-start">
-                                {productName || lessonName}
-                              </h5>
+                              <h5 className="fw-bold text-start">{name}</h5>
                               <p className="imperceptible text-start">
-                                {product_detail || order_time}
+                                {detail}
                               </p>
                             </div>
                           </div>
                         </td>
                         <td>
-                          {productDiscount ? (
+                          {discount_price ? (
                             <>
                               <h5 className="fw-bold discounted">
-                                NT${productDiscount}
+                                NT${discount_price}
                               </h5>
                               <p className="imperceptible text-decoration-line-through">
-                                NT${productPrice || lessonPrice}
+                                NT${price}
                               </p>
                             </>
                           ) : (
                             <>
-                              <h5 className="fw-bold">
-                                NT${productPrice || lessonPrice}
-                              </h5>
+                              <h5 className="fw-bold">NT${price}</h5>
                             </>
                           )}
                         </td>
@@ -403,7 +387,7 @@ export default function Home() {
                 )}
               </tbody>
             </table>
-            <p className="text-end fw-bold my-3">合計: NT${totalPrice}</p>
+            <p className="text-end fw-bold my-3">合計: NT${cart.totalPrice}</p>
           </div>
           <OrderForm
             handleSubLinePay={handleSubLinePay}
@@ -413,7 +397,6 @@ export default function Home() {
             payment={payment}
             delivery={delivery}
           />
-          {console.log(payment)}
           {payment === '2' && (
             <button onClick={goLinePay} disabled={!order.orderId}>
               Line Pay

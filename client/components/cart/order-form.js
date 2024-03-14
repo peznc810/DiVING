@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 
 import Delivery from './form/delivery'
 import CreditCard from './form/credit-card'
-import Store711 from './form/store-7-11'
+import Store711 from './form/store-711'
 import { useAuth } from '@/hooks/auth'
 
 export default function OrderForm({
