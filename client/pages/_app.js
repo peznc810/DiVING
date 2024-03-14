@@ -11,6 +11,7 @@ import { AuthProvider } from '@/hooks/auth'
 import EventProvider from '@/hooks/use-eventData'
 // 共享coupon資料context
 import CouponHasProvider from '@/hooks/use-couponHasData'
+import { CartProvider } from '@/hooks/cart'
 
 export default function App({ Component, pageProps }) {
   // 獲取當前頁面路徑
@@ -27,22 +28,28 @@ export default function App({ Component, pageProps }) {
     // 會員中心的預設樣式
     if (currentPage.startsWith('/dashboard')) {
       return (
-        <AuthProvider>
-          <CouponHasProvider>
-            <DefaultLayout currentPage={currentPage}>
-              <DashboardLayout>{children}</DashboardLayout>
-            </DefaultLayout>
-          </CouponHasProvider>
-        </AuthProvider>
+        <CartProvider>
+          <AuthProvider>
+            <CouponHasProvider>
+              <DefaultLayout currentPage={currentPage}>
+                <DashboardLayout>{children}</DashboardLayout>
+              </DefaultLayout>
+            </CouponHasProvider>
+          </AuthProvider>
+        </CartProvider>
       )
     } else {
       // 其他所有頁面的預設樣式
       return (
-        <AuthProvider>
-          <CouponHasProvider>
-            <DefaultLayout currentPage={currentPage}>{children}</DefaultLayout>
-          </CouponHasProvider>
-        </AuthProvider>
+        <CartProvider>
+          <AuthProvider>
+            <CouponHasProvider>
+              <DefaultLayout currentPage={currentPage}>
+                {children}
+              </DefaultLayout>
+            </CouponHasProvider>
+          </AuthProvider>
+        </CartProvider>
       )
     }
   }
