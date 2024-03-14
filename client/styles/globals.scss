@@ -20,6 +20,10 @@ $accordion-button-focus-box-shadow: none;
 // form control 樣式
 $input-focus-border-color: $secondary; // 考慮要primary還是secondary
 $input-focus-box-shadow: none;
+// pagination 樣式
+$pagination-focus-bg: $info;
+$pagination-focus-color: #fff;
+$pagination-focus-box-shadow: none;
 
 // 導入bootstrap
 @import '~bootstrap/scss/bootstrap';
