@@ -7,6 +7,7 @@ import Order from '@/components/product/list/order'
 import Search from '@/components/product/list/search'
 import Filter from '@/components/product/list/filter'
 import Pagination from '@/components/product/list/pagination'
+import Loading from '@/components/layout/loading/loading'
 
 import Breadcrumb from 'react-bootstrap/Breadcrumb'
 import { FaHome } from 'react-icons/fa'
@@ -14,8 +15,16 @@ import { FaHome } from 'react-icons/fa'
 const perPage = 6
 
 export default function List() {
-  const router = useRouter()
+  // const router = useRouter()
   // const { productBrand } = router.query
+  const [loading, setLoading] = useState(false)
+
+  useEffect(() => {
+    setLoading(true)
+    setTimeout(() => {
+      setLoading(false)
+    }, 1500)
+  }, [])
 
   const [product, setProduct] = useState([])
   // console.log(product)
@@ -189,79 +198,89 @@ export default function List() {
 
   return (
     <>
-      <div className="container-1200">
-        {/* 麵包屑 */}
-        <Breadcrumb>
-          <Breadcrumb.Item href="http://localhost:3000">
-            <FaHome />
-          </Breadcrumb.Item>
-          <Breadcrumb.Item href="http://localhost:3000/product">
-            商品列表
-          </Breadcrumb.Item>
+      {loading ? (
+        <Loading />
+      ) : (
+        <>
+          <div className="container-1200">
+            {/* 麵包屑 */}
+            <Breadcrumb>
+              <Breadcrumb.Item href="http://localhost:3000">
+                <FaHome />
+              </Breadcrumb.Item>
+              <Breadcrumb.Item href="http://localhost:3000/product">
+                商品列表
+              </Breadcrumb.Item>
 
-          {filterSettings.brand && (
-            <Breadcrumb.Item href="">{filterSettings.brand}</Breadcrumb.Item>
-          )}
-          {filterSettings.category && (
-            <Breadcrumb.Item href="">{filterSettings.category}</Breadcrumb.Item>
-          )}
-        </Breadcrumb>
+              {filterSettings.brand && (
+                <Breadcrumb.Item href="">
+                  {filterSettings.brand}
+                </Breadcrumb.Item>
+              )}
+              {filterSettings.category && (
+                <Breadcrumb.Item href="">
+                  {filterSettings.category}
+                </Breadcrumb.Item>
+              )}
+            </Breadcrumb>
 
-        <div className="row mt-2 mb-3">
-          <div className="card-text d-flex justify-content-between align-items-center">
-            <h6 className="ps-3 my-1"></h6>
-            {/* 排序 */}
-            <Order setSorting={setSorting} />
-          </div>
-        </div>
-        <div className="row text-center">
-          <div className="col-sm-12">
-            <div className="d-flex" id="wrapper">
-              <div className="bg-white me-3" id="sidebar-wrapper">
-                <div className="scroll">
-                  {/* 搜尋 */}
-                  <Search setFilterSettings={setFilterSettings} />
+            <div className="row mt-2 mb-3">
+              <div className="card-text d-flex justify-content-between align-items-center">
+                <h6 className="ps-3 my-1"></h6>
+                {/* 排序 */}
+                <Order setSorting={setSorting} />
+              </div>
+            </div>
+            <div className="row text-center">
+              <div className="col-sm-12">
+                <div className="d-flex" id="wrapper">
+                  <div className="bg-white me-3" id="sidebar-wrapper">
+                    <div className="scroll">
+                      {/* 搜尋 */}
+                      <Search setFilterSettings={setFilterSettings} />
 
-                  {/* 篩選 filter */}
-                  <div className="my-2">
-                    <div className="accordion accordion-flush">
-                      <Filter
-                        product={product}
-                        setFilterSettings={setFilterSettings}
-                        filterSettings={filterSettings}
-                        clearSettings={clearSettings}
-                      />
+                      {/* 篩選 filter */}
+                      <div className="my-2">
+                        <div className="accordion accordion-flush">
+                          <Filter
+                            product={product}
+                            setFilterSettings={setFilterSettings}
+                            filterSettings={filterSettings}
+                            clearSettings={clearSettings}
+                          />
+                        </div>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </div>
 
-              {/* 卡片 */}
-              <div id="page-content-wrapper">
-                <div className="container-fluid">
-                  <div className="row row-cols-1 row-cols-md-3 g-4">
-                    {Array.isArray(currentSortedPageFilteredProduct) &&
-                      currentSortedPageFilteredProduct.map((value) => (
-                        <Card
-                          key={value}
-                          value={value}
-                          setProduct={setProduct}
-                          rating={rating}
-                          setRating={setRating}
-                        />
-                      ))}
+                  {/* 卡片 */}
+                  <div id="page-content-wrapper">
+                    <div className="container-fluid">
+                      <div className="row row-cols-1 row-cols-md-3 g-4">
+                        {Array.isArray(currentSortedPageFilteredProduct) &&
+                          currentSortedPageFilteredProduct.map((value) => (
+                            <Card
+                              key={value}
+                              value={value}
+                              setProduct={setProduct}
+                              rating={rating}
+                              setRating={setRating}
+                            />
+                          ))}
+                      </div>
+                    </div>
+                    <Pagination
+                      totalPages={Math.ceil(filteredProducts.length / perPage)}
+                      setFilterSettings={setFilterSettings}
+                      page={filterSettings.page}
+                    />
                   </div>
                 </div>
-                <Pagination
-                  totalPages={Math.ceil(filteredProducts.length / perPage)}
-                  setFilterSettings={setFilterSettings}
-                  page={filterSettings.page}
-                />
               </div>
             </div>
           </div>
-        </div>
-      </div>
+        </>
+      )}
 
       <style jsx>{`
         .container-1200 {
