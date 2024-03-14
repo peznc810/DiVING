@@ -7,6 +7,7 @@ const MySwal = withReactContent(Swal)
 
 import { useAuth } from '@/hooks/auth'
 import { useCart } from '@/hooks/cart'
+import { useUsingCoupon } from '@/hooks/use-usingCoupon'
 
 import { FaShoppingCart, FaRegTrashAlt } from 'react-icons/fa'
 import CartStep from '@/components/cart/cart-step'
@@ -22,6 +23,7 @@ export default function Home() {
   const { items, updateItemQty, increment, decrement, removeItem, cart } =
     useCart()
   const { auth } = useAuth()
+  const { coupon, applyCoupon } = useUsingCoupon()
 
   const [payment, setPayment] = useState(1)
   const [delivery, setDelivery] = useState(1)
