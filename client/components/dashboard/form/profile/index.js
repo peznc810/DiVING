@@ -12,6 +12,7 @@ export default function Form({
 }) {
   const { handleChangeProfile, handleChangePWD, errorMsg } = useFormCheck()
   const { type, icon, handleToggle } = useShow()
+
   return (
     <>
       <div className={`col-sm-8 p-0 rounded-end ${styles['form-container']}`}>
@@ -39,6 +40,7 @@ export default function Form({
                 <form onSubmit={handleUpdateProfile}>
                   <div className="accordion-body">
                     <div className="row gy-4">
+                      {/* 表單 */}
                       <div className="col-12 col-sm-6">
                         <div className="d-flex justify-content-between">
                           <label htmlFor="myName" className="form-label">
@@ -114,6 +116,7 @@ export default function Form({
                           onChange={handleChangeProfile}
                         />
                       </div>
+                      {/* 送出 */}
                       <div className="col-12 text-end">
                         <button
                           type="button"

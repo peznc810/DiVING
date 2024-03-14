@@ -108,6 +108,7 @@ export function AuthProvider({ children }) {
         console.log(err)
       })
   }
+
   // 登出
   const logout = () => {
     let url = 'http://localhost:3005/api/users/logout'
@@ -207,7 +208,6 @@ export function AuthProvider({ children }) {
           if (result.status === 'success') {
             // 刷新頁面後，後台會給予新的token
             token = result.token
-            // console.log(token)
             // 將新的token解譯出來，取出資料放入狀態
             const userData = parseJwt(token)
             setAuth({ ...userData, isAuth: true })
@@ -245,7 +245,16 @@ export function AuthProvider({ children }) {
     if (router.isReady && !auth.isAuth) {
       checkAuth()
     }
-  }, [])
+  }, [router.isReady])
+
+  // 會員頭像狀態
+  const unKnow = '/images/users/unknow.jpg'
+  const [avatar, setAvatar] = useState(unKnow)
+  useEffect(() => {
+    if (auth.avatar !== '') {
+      setAvatar(`http://localhost:3005/avatar/${auth.avatar}`)
+    }
+  }, [auth])
 
   return (
     <AuthContext.Provider
@@ -260,6 +269,8 @@ export function AuthProvider({ children }) {
         logout,
         signUp,
         signUpGoogle,
+        checkAuth,
+        avatar,
       }}
     >
       {children}

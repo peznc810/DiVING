@@ -1,8 +1,11 @@
 import express from 'express'
 import multer from 'multer'
 import db from '../db.mjs'
-import jwt from "jsonwebtoken"
+import jwt from 'jsonwebtoken'
+
+// middlewares
 import checkToken from '../middlewares/checkToken.mjs'
+
 const router = express.Router()
 
 // 引入.env檔
@@ -13,9 +16,6 @@ const app = express()
 const upload = multer()
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
-
-
-// let user
 
 // 登入
 router.post('/login', upload.none(), async (req, res) => {
@@ -205,8 +205,8 @@ router.put('/:id/profile', checkToken, upload.none(), async (req, res) => {
   if (checkId !== uid) {
     return res.status(401).json({ status: 'error', msg: '無法更新會員資料' })
   }
-  const {name, birth, email, tel, address, id} = req.body
-  
+  const { name, birth, email, tel, address, id } = req.body
+
   // 檢查必填欄位是否有空字串
   if (!id || !name || !email) {
     return res.json({ status: 'error', msg: '缺少必要資料' })
@@ -214,15 +214,15 @@ router.put('/:id/profile', checkToken, upload.none(), async (req, res) => {
 
   await db.execute(
     'UPDATE `users` SET `name` = ?,`birth` = ?,`email` = ?,`tel` = ?,`address` = ? WHERE `id` = ? ',
-      [name, birth, email, tel, address, id]
+    [name, birth, email, tel, address, id]
   )
     .then(result => {
       console.log(result)
-      res.status(200).json({ status: 'success',msg:'會員資料更新成功' })
+      res.status(200).json({ status: 'success', msg: '會員資料更新成功' })
     })
     .catch(err => {
       console.log(err)
-      res.status(400).json({ status: 'error',msg:'會員資料更新失敗' })
+      res.status(400).json({ status: 'error', msg: '會員資料更新失敗' })
     })
 })
 
@@ -233,8 +233,8 @@ router.put('/:id/password', checkToken, upload.none(), async (req, res) => {
   if (checkId !== uid) {
     return res.status(401).json({ status: 'error', msg: '無法更新會員資料' })
   }
-  const {origin, newPWD, id} = req.body
-  
+  const { origin, newPWD, id } = req.body
+
   // 檢查必填欄位是否有空字串
   if (!id || !newPWD) {
     return res.json({ status: 'error', msg: '缺少必要資料' })
@@ -242,17 +242,15 @@ router.put('/:id/password', checkToken, upload.none(), async (req, res) => {
 
   await db.execute(
     'UPDATE `users` SET `password` = ? WHERE `id` = ? AND `password` = ?',
-      [newPWD, id, origin]
+    [newPWD, id, origin]
   )
     .then(result => {
       console.log(result)
-      res.status(200).json({ status: 'success',msg:'密碼更新成功，請重新登入' })
+      res.status(200).json({ status: 'success', msg: '密碼更新成功，請重新登入' })
     })
     .catch(err => {
       console.log(err)
-      res.status(400).json({ status: 'error',msg:'查無使用者，會員資料更新失敗' })
+      res.status(400).json({ status: 'error', msg: '查無使用者，會員資料更新失敗' })
     })
 })
-
-
 export default router

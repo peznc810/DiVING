@@ -16,7 +16,7 @@ export default function NavMenu() {
     setCartData(data)
   }, [])
   // 帶入會員登入狀態專用
-  const { auth } = useAuth()
+  const { auth, avatar } = useAuth()
 
   return (
     <>
@@ -93,12 +93,7 @@ export default function NavMenu() {
           {auth.isAuth ? (
             <div className={`d-none d-md-block p-2 ${styles.avatar}`}>
               <Link href="/dashboard">
-                <Image
-                  src="/images/users/woman.jpg"
-                  alt="avatar"
-                  fill
-                  priority
-                />
+                <Image src={avatar} alt="avatar" fill priority />
               </Link>
             </div>
           ) : (
@@ -115,12 +110,7 @@ export default function NavMenu() {
           {auth.isAuth ? (
             <div className={`d-md-none d-block p-2 ${styles.avatar}`}>
               <Link href="/dashboard">
-                <Image
-                  src="/images/users/woman.jpg"
-                  alt="avatar"
-                  fill
-                  priority
-                />
+                <Image src={avatar} alt="avatar" fill priority />
               </Link>
             </div>
           ) : (
