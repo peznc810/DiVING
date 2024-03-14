@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Link from 'next/link'
 
 import Swal from 'sweetalert2'
@@ -13,7 +13,6 @@ import CartStep from '@/components/cart/cart-step'
 // inchhhhh 新增
 import CouponModal from '@/components/cart/coupon-modal'
 import { useCouponHas } from '@/hooks/use-couponHasData'
-import { set } from 'lodash'
 
 //抓取使用者擁有的優惠券
 // let coupon_has
@@ -34,8 +33,6 @@ import { set } from 'lodash'
 // console.log(coupon_has)
 
 export default function Home() {
-  const [totalTotalPrice, setTotalTotalPrice] = useState(0)
-
   const [discount, setDiscount] = useState(0)
   // inchhhhh 新增
   const { couponHas, setCouponHas } = useCouponHas()
@@ -46,7 +43,11 @@ export default function Home() {
 
   const [payment, setPayment] = useState(1)
   const [delivery, setDelivery] = useState(1)
+  const [totalTotalPrice, setTotalTotalPrice] = useState(cart.totalPrice)
 
+  useEffect(() => {
+    setTotalTotalPrice(cart.totalPrice)
+  }, [cart])
   //刪除通知
   const notifySA = (name, id, isProduct) => {
     MySwal.fire({
@@ -78,8 +79,8 @@ export default function Home() {
   const selectedCouponData = (data) => {
     console.log(data)
     if (!data) return totalPrice + deliveryFee
-    const { coupon_discount, coupon_rule } = data
-    // console.log(coupon_discount, coupon_rule)
+    const { user_id, coupon_id, coupon_discount, coupon_rule, valid } = data
+    console.log(valid)
     let updateTotalPrice = 0
     let updateDiscount = 0
     // 判斷小記金額是否大於coupon_rule
@@ -87,7 +88,9 @@ export default function Home() {
       // Number.isInteger()檢查是否為整數
       if (!Number.isInteger(coupon_discount)) {
         console.log('object')
-        updateTotalPrice = totalPrice * coupon_discount + deliveryFee
+        updateTotalPrice = Math.round(
+          totalPrice * coupon_discount + deliveryFee
+        )
       } else {
         updateTotalPrice = totalPrice - coupon_discount + deliveryFee
         console.log(coupon_discount)
@@ -96,9 +99,43 @@ export default function Home() {
     } else {
       updateTotalPrice = totalPrice + deliveryFee
     }
+    // 把選擇的coupon資料存在cart的localStorage
+    cart.coupon = {
+      userID: user_id,
+      couponID: coupon_id,
+      discount: coupon_discount,
+      valid: valid,
+    }
+    cart.finalPrice = updateTotalPrice
     setTotalTotalPrice(updateTotalPrice)
     setDiscount(updateDiscount)
   }
+  console.log(cart)
+  // 送出已使用的優惠卷給後端
+  useEffect(() => {
+    if (cart && cart.coupon) {
+      const { coupon } = cart
+      console.log(coupon)
+      const url = 'http://localhost:3005/api/coupon'
+      fetch(url, {
+        method: 'put',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(coupon),
+      })
+        .then((response) => {
+          return response.json()
+        })
+        .then((result) => {
+          console.log(result)
+        })
+        .catch((error) => {
+          console.log(error)
+        })
+    }
+  }, [cart.coupon])
+
   return (
     <div className="container">
       <CartStep step={1} />
@@ -289,14 +326,19 @@ export default function Home() {
             </Link>
           </div>
         </div>
-        <CouponModal
-          showCoupon={showCoupon}
-          setShowCoupon={setShowCoupon}
-          couponHas={couponHas}
-          setCouponHas={setCouponHas}
-          dataForParent={selectedCouponData}
-        />
+
+        <div>
+          <button type="submit" onClick={() => {}}>
+            送出
+          </button>
+        </div>
       </div>
+      <CouponModal
+        showCoupon={showCoupon}
+        setShowCoupon={setShowCoupon}
+        couponHas={couponHas}
+        dataForParent={selectedCouponData}
+      />
       <style jsx>{`
         h1,
         h2,
