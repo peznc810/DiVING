@@ -1,19 +1,20 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import styles from './styles.module.scss'
-import useFormCheck from '@/hooks/use-form-check'
 // password visibility hook
 import useShow from '@/hooks/use-password-visibility'
 
 export default function Form({
   userProfile = {},
+  handleChangeProfile = () => {},
   handleUpdateProfile = () => {},
+  handleChangePWD = () => {},
   handleUpdatePWD = () => {},
+  errorMsg = {},
   Toaster,
 }) {
-  const { handleChangeProfile, handleChangePWD, errorMsg } = useFormCheck()
   const { type, icon, handleToggle } = useShow()
   console.log(errorMsg)
-  // useEffect(() => {}, [errorMsg])
+
   return (
     <>
       <div className={`col-sm-8 p-0 rounded-end ${styles['form-container']}`}>

@@ -14,10 +14,13 @@ export default function Profile() {
   const { auth, logout } = useAuth()
   const router = useRouter()
   const {
+    handleChangeProfile,
     handleProfileCheck,
+    handleChangePWD,
     handlePWDCheck,
     userProfile,
     setUserProfile,
+    errorMsg,
     setMsg,
     initMsg,
     password,
@@ -87,13 +90,15 @@ export default function Profile() {
       .catch((err) => console.log(err.msg))
   }
   // Update Profile（不含密碼）
-  const handleUpdateProfile = async (e) => {
+  const handleUpdateProfile = (e) => {
     e.preventDefault()
     // 表單驗證
-    handleProfileCheck()
-    // if (formStatus) {
-    //   await updateProfile(e)
-    // }
+    const formStatus = handleProfileCheck()
+    if (formStatus) {
+      updateProfile(e)
+    } else {
+      handleProfileCheck()
+    }
   }
 
   // Update API (password)
@@ -123,12 +128,13 @@ export default function Profile() {
   // Update password
   const handleUpdatePWD = (e) => {
     e.preventDefault()
-    handlePWDCheck()
     // 表單驗證
-    // const formStatus = handlePWDCheck()
-    // if (formStatus) {
-    //   updatePWD(e)
-    // }
+    const formStatus = handlePWDCheck()
+    if (formStatus) {
+      updatePWD(e)
+    } else {
+      handlePWDCheck()
+    }
   }
 
   // 取得資料後，再更新一次
@@ -150,8 +156,11 @@ export default function Profile() {
       <Menu />
       <Form
         userProfile={userProfile}
+        handleChangeProfile={handleChangeProfile}
         handleUpdateProfile={handleUpdateProfile}
+        handleChangePWD={handleChangePWD}
         handleUpdatePWD={handleUpdatePWD}
+        errorMsg={errorMsg}
         notify={notify}
         Toaster={Toaster}
       />

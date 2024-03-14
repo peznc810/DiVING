@@ -36,7 +36,7 @@ export default function useFormCheck() {
 
   // Error module
   const errText = {
-    empty: '*必填欄位',
+    empty: '必填欄位',
     syntax: '輸入格式錯誤',
     different: '密碼不符',
     reuse: '重複使用相同密碼',
@@ -51,42 +51,38 @@ export default function useFormCheck() {
 
   // 表單驗證
   const handleProfileCheck = () => {
-    console.log('object')
-    setMsg({ ...errorMsg, nameErr: errText.empty })
-    console.log(errorMsg)
-    // switch (true) {
-    //   case userProfile.name.trim() === '':
-    //     setMsg({ ...errorMsg, nameErr: errText.empty })
-    //     break
-    //   default:
-    //     return true
-    // }
+    switch (true) {
+      case userProfile.name.trim() === '':
+        setMsg({ ...errorMsg, nameErr: errText.empty })
+        break
+      default:
+        return true
+    }
   }
 
   const handlePWDCheck = () => {
-    setMsg({ ...errorMsg, originErr: errText.empty })
-    // switch (true) {
-    //   case password.origin.trim() === '':
-    //     setMsg({ ...errorMsg, originErr: errText.empty })
-    //     break
-    //   case password.newPWD.trim() === '':
-    //     setMsg({ ...errorMsg, newPWDErr: errText.empty })
-    //     break
-    //   case !passwordRegex.test(password.newPWD):
-    //     setMsg({ ...errorMsg, newPWDErr: errText.syntax })
-    //     break
-    //   case password.origin === password.newPWD:
-    //     setMsg({ ...errorMsg, newPWDErr: errText.reuse })
-    //     break
-    //   case password.rePWD.trim() === '':
-    //     setMsg({ ...errorMsg, rePWDErr: errText.empty })
-    //     break
-    //   case password.newPWD !== password.rePWD:
-    //     setMsg({ ...errorMsg, rePWDErr: errText.different })
-    //     break
-    //   default:
-    //     return true
-    // }
+    switch (true) {
+      case password.origin.trim() === '':
+        setMsg({ ...errorMsg, originErr: errText.empty })
+        break
+      case password.newPWD.trim() === '':
+        setMsg({ ...errorMsg, newPWDErr: errText.empty })
+        break
+      case !passwordRegex.test(password.newPWD):
+        setMsg({ ...errorMsg, newPWDErr: errText.syntax })
+        break
+      case password.origin === password.newPWD:
+        setMsg({ ...errorMsg, newPWDErr: errText.reuse })
+        break
+      case password.rePWD.trim() === '':
+        setMsg({ ...errorMsg, rePWDErr: errText.empty })
+        break
+      case password.newPWD !== password.rePWD:
+        setMsg({ ...errorMsg, rePWDErr: errText.different })
+        break
+      default:
+        return true
+    }
   }
   console.log(errorMsg)
 
