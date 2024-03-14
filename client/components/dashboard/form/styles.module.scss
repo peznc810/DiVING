@@ -48,6 +48,21 @@
   .card > * {
     min-height: 120px;
   }
+  .card {
+    .rule {
+      font-size: 12px;
+    }
+  }
+
+  .errorBlock {
+    height: 70px;
+    border: 10px;
+    background-color: #f7b2b28d;
+    color: #954a4a;
+    border: 1px solid #954a4a;
+    border-radius: 10px;
+    line-height: 70px;
+  }
 }
 
 @media screen and (max-width: 576px) {
