@@ -1,7 +1,8 @@
 [
     {
         "product_id":"1",
-        "num":2
+        "num":2,
+        "product_detail":"黑/S"
     },
     {
 
@@ -11,6 +12,7 @@
     },
     {
         "product_id":"2",
-        "num":2
+        "num":2,
+        "product_detail":"灰/M"
     }
 ]
