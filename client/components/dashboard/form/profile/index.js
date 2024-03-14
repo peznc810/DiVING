@@ -1,7 +1,6 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import styles from './styles.module.scss'
 import useFormCheck from '@/hooks/use-form-check'
-
 // password visibility hook
 import useShow from '@/hooks/use-password-visibility'
 
@@ -9,10 +8,12 @@ export default function Form({
   userProfile = {},
   handleUpdateProfile = () => {},
   handleUpdatePWD = () => {},
+  Toaster,
 }) {
   const { handleChangeProfile, handleChangePWD, errorMsg } = useFormCheck()
   const { type, icon, handleToggle } = useShow()
-
+  console.log(errorMsg)
+  // useEffect(() => {}, [errorMsg])
   return (
     <>
       <div className={`col-sm-8 p-0 rounded-end ${styles['form-container']}`}>
@@ -120,8 +121,8 @@ export default function Form({
                       <div className="col-12 text-end">
                         <button
                           type="button"
-                          className={`btn btn-outline-secondary me-3 ${styles['hover-style']}  d-none`}
-                          // onClick={handleClear}
+                          className={`btn btn-outline-secondary me-3 ${styles['hover-style']} ㄍㄟ`}
+                          // onClick={notify}
                         >
                           取消
                         </button>
@@ -130,6 +131,7 @@ export default function Form({
                           className="btn btn-secondary text-white"
                         >
                           儲存變更
+                          <Toaster />
                         </button>
                       </div>
                     </div>

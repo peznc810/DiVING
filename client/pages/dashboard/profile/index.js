@@ -7,6 +7,8 @@ import { useRouter } from 'next/router'
 import { useAuth } from '@/hooks/auth'
 // 表單驗證的hook
 import useFormCheck from '@/hooks/use-form-check'
+// Alert
+import toast, { Toaster } from 'react-hot-toast'
 
 export default function Profile() {
   const { auth, logout } = useAuth()
@@ -20,6 +22,20 @@ export default function Profile() {
     initMsg,
     password,
   } = useFormCheck()
+
+  const notify = (msg, status) => {
+    if (status === 'error') {
+      toast.error(msg, {
+        duration: 4000,
+        position: 'top-center',
+      })
+    } else {
+      toast.success(msg, {
+        duration: 4000,
+        position: 'top-center',
+      })
+    }
+  }
 
   // GET Profile
   const getUserProfile = async (id) => {
@@ -48,11 +64,6 @@ export default function Profile() {
       .catch((err) => console.log(err))
   }
 
-  // 抓取改變的欄位
-  // const handleChangeProfile = (e) => {
-  //   setUserProfile({ ...userProfile, [e.target.name]: e.target.value })
-  // }
-
   // Update API (不含密碼)
   const updateProfile = async (e) => {
     const user = new FormData(e.target)
@@ -62,24 +73,27 @@ export default function Profile() {
     await fetch(url, {
       method: 'PUT',
       headers: {
-        // 'Content-Type': 'application/json',
         Authorization: `Bearer ${token}`,
       },
       body: user,
       credentials: 'include',
     })
       .then((response) => response.json())
-      .then((result) => console.log(result.msg))
+      .then((result) => {
+        const { status, msg } = result
+        notify(msg, status)
+        // console.log(result.msg)
+      })
       .catch((err) => console.log(err.msg))
   }
   // Update Profile（不含密碼）
   const handleUpdateProfile = async (e) => {
     e.preventDefault()
     // 表單驗證
-    const formStatus = handleProfileCheck()
-    if (formStatus) {
-      updateProfile(e)
-    }
+    handleProfileCheck()
+    // if (formStatus) {
+    //   await updateProfile(e)
+    // }
   }
 
   // Update API (password)
@@ -109,11 +123,12 @@ export default function Profile() {
   // Update password
   const handleUpdatePWD = (e) => {
     e.preventDefault()
+    handlePWDCheck()
     // 表單驗證
-    const formStatus = handlePWDCheck()
-    if (formStatus) {
-      updatePWD(e)
-    }
+    // const formStatus = handlePWDCheck()
+    // if (formStatus) {
+    //   updatePWD(e)
+    // }
   }
 
   // 取得資料後，再更新一次
@@ -137,6 +152,8 @@ export default function Profile() {
         userProfile={userProfile}
         handleUpdateProfile={handleUpdateProfile}
         handleUpdatePWD={handleUpdatePWD}
+        notify={notify}
+        Toaster={Toaster}
       />
     </>
   )

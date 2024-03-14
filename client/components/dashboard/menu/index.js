@@ -1,4 +1,4 @@
-import React, { use, useEffect, useRef, useState } from 'react'
+import React, { useRef, useState } from 'react'
 import styles from './styles.module.scss'
 import Link from 'next/link'
 import Image from 'next/image'
@@ -9,6 +9,7 @@ import { menuItems } from '@/config/dashboard-menu'
 import { useAuth } from '@/hooks/auth'
 // React icon
 import { TbLogout2 } from 'react-icons/tb'
+import { IoCamera } from 'react-icons/io5'
 // React Bootstrap
 import Button from 'react-bootstrap/Button'
 import Modal from 'react-bootstrap/Modal'
@@ -18,19 +19,9 @@ export default function Menu() {
   const path = router.pathname
   const { logout, avatar, checkAuth } = useAuth()
 
-  // const unKnow = '/images/users/unknow.jpg'
-
   // file refs
   const [file, setFiles] = useState(null)
-  // const [avatar, setAvatar] = useState(unKnow)
   const fileInputRef = useRef(null)
-
-  // 誰改變了以後要再渲染一次？
-  // useEffect(() => {
-  //   if (auth.avatar !== '') {
-  //     setAvatar(`http://localhost:3005/avatar/${auth.avatar}`)
-  //   }
-  // }, [auth])
 
   // 替代input file
   const handleFIleRef = () => {
@@ -60,9 +51,6 @@ export default function Menu() {
 
     formData.append('avatar', fileInputRef.current.files[0])
 
-    // for (const key of formData.entries()) {
-    //   console.log(key)
-    // }
     await fetch(url, {
       method: 'POST',
       headers: {
@@ -89,15 +77,23 @@ export default function Menu() {
             <Modal.Title>編輯照片</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <div className={`m-auto ${styles.avatar}`}>
-              <Image src={previewImg} alt="newAvatar" fill />
+            <div className="d-flex justify-content-center position-relative">
+              <div className={`border border-1 ${styles.avatar}`}>
+                <Image src={previewImg} alt="newAvatar" fill />
+              </div>
+              <div
+                className={`rounded-circle text-center border border-1 ${styles.upload}`}
+                onClick={handleFIleRef}
+              >
+                <IoCamera />
+              </div>
             </div>
             <input
               type="file"
               name="avatar"
               id="avatar"
               ref={fileInputRef}
-              className=""
+              className="d-none "
               accept="image/*"
               onChange={handleFile}
             />
@@ -119,17 +115,7 @@ export default function Menu() {
           {/* 大頭照 */}
           <div className="mb-4">
             <div className={`m-auto ${styles.avatar}`}>
-              <Image
-                src={
-                  avatar
-                  // auth.avatar === ''
-                  //   ? unKnow
-                  //   : `http://localhost:3005/avatar/${avatar}`
-                }
-                alt="avatar"
-                fill
-                priority
-              />
+              <Image src={avatar} alt="avatar" fill priority />
               <div
                 className={`d-flex align-items-end w-100 h-100 position-absolute top-0 start-0 ${styles.content}`}
                 onClick={handleShow}

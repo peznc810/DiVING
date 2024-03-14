@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 
 // 表單使用的錯誤訊息
 export default function useFormCheck() {
@@ -41,7 +41,6 @@ export default function useFormCheck() {
     different: '密碼不符',
     reuse: '重複使用相同密碼',
   }
-
   // 抓取改變的欄位
   const handleChangeProfile = (e) => {
     setUserProfile({ ...userProfile, [e.target.name]: e.target.value })
@@ -52,36 +51,44 @@ export default function useFormCheck() {
 
   // 表單驗證
   const handleProfileCheck = () => {
-    switch (true) {
-      default:
-        return true
-    }
+    console.log('object')
+    setMsg({ ...errorMsg, nameErr: errText.empty })
+    console.log(errorMsg)
+    // switch (true) {
+    //   case userProfile.name.trim() === '':
+    //     setMsg({ ...errorMsg, nameErr: errText.empty })
+    //     break
+    //   default:
+    //     return true
+    // }
   }
 
   const handlePWDCheck = () => {
-    switch (true) {
-      case password.origin.trim() === '':
-        setMsg({ ...errorMsg, originErr: errText.empty })
-        break
-      case password.newPWD.trim() === '':
-        setMsg({ ...errorMsg, newPWDErr: errText.empty })
-        break
-      case !passwordRegex.test(password.newPWD):
-        setMsg({ ...errorMsg, newPWDErr: errText.syntax })
-        break
-      case password.origin === password.newPWD:
-        setMsg({ ...errorMsg, newPWDErr: errText.reuse })
-        break
-      case password.rePWD.trim() === '':
-        setMsg({ ...errorMsg, rePWDErr: errText.empty })
-        break
-      case password.newPWD !== password.rePWD:
-        setMsg({ ...errorMsg, rePWDErr: errText.different })
-        break
-      default:
-        return true
-    }
+    setMsg({ ...errorMsg, originErr: errText.empty })
+    // switch (true) {
+    //   case password.origin.trim() === '':
+    //     setMsg({ ...errorMsg, originErr: errText.empty })
+    //     break
+    //   case password.newPWD.trim() === '':
+    //     setMsg({ ...errorMsg, newPWDErr: errText.empty })
+    //     break
+    //   case !passwordRegex.test(password.newPWD):
+    //     setMsg({ ...errorMsg, newPWDErr: errText.syntax })
+    //     break
+    //   case password.origin === password.newPWD:
+    //     setMsg({ ...errorMsg, newPWDErr: errText.reuse })
+    //     break
+    //   case password.rePWD.trim() === '':
+    //     setMsg({ ...errorMsg, rePWDErr: errText.empty })
+    //     break
+    //   case password.newPWD !== password.rePWD:
+    //     setMsg({ ...errorMsg, rePWDErr: errText.different })
+    //     break
+    //   default:
+    //     return true
+    // }
   }
+  console.log(errorMsg)
 
   return {
     handleProfileCheck,
