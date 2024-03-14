@@ -21,7 +21,21 @@ export default function Switch({
     <div className="mt-4">
       {/* 轉換按鈕 -- 商品介紹/評價 */}
       <div className="form-check form-switch d-flex justify-content-end">
-        <input
+        <div className="switch text-center m-2">
+          <input
+            className="switch-checkbox"
+            id="switchID1"
+            type="checkbox"
+            name="switch-checkbox"
+            checked={isSwitchOn}
+            onChange={handleSwitchToggle}
+          />
+          <label className="switch-label" for="switchID1">
+            <span className="switch-txt" turnOn="評價" turnOff="細節"></span>
+            <span className="switch-Round-btn"></span>
+          </label>
+        </div>
+        {/* <input
           className="form-check-input"
           type="checkbox"
           id="flexSwitchCheckDefault"
@@ -30,7 +44,7 @@ export default function Switch({
         />
         <label className="form-check-label" htmlFor="flexSwitchCheckDefault">
           {isSwitchOn ? '評價' : '細節'}
-        </label>
+        </label> */}
       </div>
       {isSwitchOn && (
         <div>
@@ -157,6 +171,75 @@ export default function Switch({
           width: 100%;
           height: 100%;
           object-fit: cover;
+        }
+        .switch {
+          /*設定開關鈕的長寬*/
+          position: relative;
+          width: 79px;
+          height: 30px;
+          line-height: 30px;
+        }
+        .switch-checkbox {
+          position: absolute;
+          display: none;
+        }
+        .switch-label {
+          display: block;
+          overflow: hidden;
+          cursor: pointer;
+          border-radius: 20px;
+        }
+        .switch-txt {
+          display: block;
+          width: 200%;
+          margin-left: -100%;
+          transition: margin 0.3s ease-in 0s;
+        }
+        .switch-txt::before,
+        .switch-txt::after {
+          display: block;
+          float: right;
+          width: 50%;
+          font-size: 13px;
+          color: #fff;
+          font-weight: bold;
+          box-sizing: border-box;
+        }
+        /*開關鈕底色(開啟時)*/
+        .switch-txt::after {
+          content: attr(turnOn);
+          padding-left: 18px;
+          background: #265475;
+          color: #fff;
+          text-align: left;
+        }
+        /*開關鈕底色(關閉時)*/
+        .switch-txt::before {
+          content: attr(turnOff);
+          padding-right: 18px;
+          background: #265475;
+          color: #fff;
+          text-align: right;
+        }
+        /*開關鈕的顏色與大小*/
+        .switch-Round-btn {
+          position: absolute;
+          display: block;
+          width: 18px;
+          height: 18px;
+          margin: 6px 5px;
+          background: #fff;
+          top: 0;
+          bottom: 0;
+          right: 50px;
+          border-radius: 15px;
+          transition: all 0.3s ease-in 0s;
+        }
+        .switch-checkbox:checked + .switch-label .switch-txt {
+          margin-left: 0;
+        }
+        .switch-checkbox:checked + .switch-label .switch-Round-btn {
+          right: 0;
         }
       `}</style>
     </div>

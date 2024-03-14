@@ -386,7 +386,6 @@ export default function Detail() {
           overflow: hidden;
           margin: 15px;
         }
-
         .avatar img {
           width: 100%;
           height: 100%;

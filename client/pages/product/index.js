@@ -157,8 +157,9 @@ export default function List() {
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        await fetch('http://localhost:3005/api/product', {
+        await fetch('http://localhost:3000/api/product', {
           method: 'GET',
+          // body: JSON.stringify({}) POST
         })
           .then((res) => {
             return res.json()
