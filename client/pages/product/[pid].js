@@ -10,6 +10,8 @@ import Breadcrumb from 'react-bootstrap/Breadcrumb'
 import { FaHome } from 'react-icons/fa'
 import { GoHeartFill } from 'react-icons/go'
 import { FaCartPlus } from 'react-icons/fa'
+import { GiClothes } from 'react-icons/gi'
+import { FaShuttleVan } from 'react-icons/fa'
 import toast, { Toaster } from 'react-hot-toast'
 // import { set } from 'lodash'
 
@@ -230,6 +232,7 @@ export default function Detail() {
                       data-bs-target="#panelsStayOpen-collapseOne"
                       aria-controls="panelsStayOpen-collapseOne"
                     >
+                      <GiClothes />
                       尺寸與版型
                     </button>
                   </h4>
@@ -256,6 +259,7 @@ export default function Detail() {
                       aria-expanded="false"
                       aria-controls="panelsStayOpen-collapseTwo"
                     >
+                      <FaShuttleVan />
                       免運及退貨
                     </button>
                   </h2>
