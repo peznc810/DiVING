@@ -3,12 +3,17 @@ import Link from 'next/link'
 import styles from './index.module.scss'
 import MyProduct from './myProduct'
 
+import { useCart } from '@/hooks/cart'
+
 export default function SideCart() {
+  const { items, cart } = useCart()
+
   return (
     <>
       <div
         className={`offcanvas offcanvas-end ${styles.sideCart}`}
         id="offcanvasCart"
+        data-bs-scroll={true}
       >
         <div
           className={`offcanvas-header ${styles.title} py-2 px-3 d-flex justify-content-between`}
@@ -29,17 +34,53 @@ export default function SideCart() {
         </div>
 
         {/* 購買商品列表 */}
-        <div className={`${styles.myProducts}`}>
+        <div className={`offcanvas-body ${styles.myProducts}`}>
           {/* 加入商品後會消失 */}
-          <p className={`${styles.text}`}>你的購物車是空的</p>
-          <MyProduct />
-          <MyProduct />
+          <p className={`${styles.text}`}>{!cart && '你的購物車是空的'}</p>
+          {items &&
+            items.map((item, i) => {
+              const {
+                name,
+                price,
+                num,
+                discount_price,
+                product_detail,
+                order_time,
+                product_id,
+                lesson_id,
+              } = item
+              return (
+                <MyProduct
+                  key={i}
+                  name={name}
+                  detail={product_detail || order_time}
+                  price={price}
+                  discountPrice={discount_price}
+                  num={num}
+                  index={i}
+                  isProduct={item.product_id ? true : false}
+                  id={product_id || lesson_id}
+                />
+              )
+            })}
+          {/* <MyProduct
+            name={'aaa'}
+            detail={'bbb'}
+            price={500}
+            discountPrice={200}
+            num={2}
+          /> */}
         </div>
 
         {/* 前往購物車按鈕 */}
         {/* 加入商品後會變成立即結帳 */}
-        <Link href={'./cart'} className={`${styles.cartLink}`}>
-          開始購物
+
+        {/* <Link {{cartData} ? "./cart" : "./product" } href={'./cart'} className={`${styles.cartLink}`}> */}
+        <Link
+          href={items.length > 1 ? './cart' : './product'}
+          className={`${styles.cartLink}`}
+        >
+          {items.length > 1 ? '立即結帳' : '開始購物'}
         </Link>
       </div>
     </>

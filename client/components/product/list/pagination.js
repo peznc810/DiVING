@@ -1,33 +1,50 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 
-export default function Pagination() {
+export default function Pagination({ totalPages, setFilterSettings, page }) {
+  const perPage = 6
+
+  const handlePageChange = (pageNumber) => {
+    setFilterSettings((c) => ({ ...c, page: pageNumber }))
+  }
+
   return (
     <>
       <div className="container-1200 pagination-container">
         <nav aria-label="Page navigation example mx-auto">
           <ul className="pagination">
-            <li className="page-item">
-              <a className="page-link" href="#" aria-label="Previous">
+            <li className={`page-item ${page === 1 ? 'disabled' : ''}`}>
+              <a
+                className="page-link"
+                href="?=page"
+                aria-label="Previous"
+                onClick={() => handlePageChange(page - 1)}
+              >
                 <span aria-hidden="true">&laquo;</span>
               </a>
             </li>
-            <li className="page-item">
-              <a className="page-link" href="#">
-                1
-              </a>
-            </li>
-            <li className="page-item">
-              <a className="page-link" href="#">
-                2
-              </a>
-            </li>
-            <li className="page-item">
-              <a className="page-link" href="#">
-                3
-              </a>
-            </li>
-            <li className="page-item">
-              <a className="page-link" href="#" aria-label="Next">
+            {Array.from({ length: totalPages }, (_, index) => (
+              <li
+                key={index}
+                className={`page-item ${page === index + 1 ? 'active' : ''}`}
+              >
+                <a
+                  className="page-link"
+                  // href="?=page"
+                  onClick={() => handlePageChange(index + 1)}
+                >
+                  {index + 1}
+                </a>
+              </li>
+            ))}
+            <li
+              className={`page-item ${page === totalPages ? 'disabled' : ''}`}
+            >
+              <a
+                className="page-link"
+                // href="?=page"
+                aria-label="Next"
+                onClick={() => handlePageChange(page + 1)}
+              >
                 <span aria-hidden="true">&raquo;</span>
               </a>
             </li>
@@ -50,6 +67,18 @@ export default function Pagination() {
           .pagination-container {
             display: flex;
             justify-content: center;
+          }
+          .page-item {
+            cursor: pointer;
+          }
+          .page-item.disabled {
+            pointer-events: none;
+            opacity: 0.5;
+          }
+          .page-item.active .page-link {
+            background-color: #265475;
+            color: #fff;
+            border-color: #265475;
           }
         `}
       </style>

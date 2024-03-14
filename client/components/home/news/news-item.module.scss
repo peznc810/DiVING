@@ -2,15 +2,15 @@
 
 .newsItem {
   width: 360px;
-  // margin-right: 20px;
+  height: 105px;
   margin-block: 10px;
   letter-spacing: 1px;
   padding: 8px 24px 8px 0;
   border-right: 1px solid $light-gray;
+  animation: scrollCards 10s linear infinite; /* 滾動動畫 */
   cursor: pointer;
   .day {
     padding: 0 30px;
-    // margin-right: 25px;
     .date {
       font-size: 36px;
       line-height: 36px;
@@ -46,8 +46,18 @@
   }
 }
 
-.newsItem:hover {
+.newsItem:hover,
+.linkFocus {
   background-color: $info;
   border: none;
   border-radius: 4px;
+}
+
+@keyframes scrollCards {
+  0% {
+    transform: translateX(0);
+  } /* 初始位置 */
+  100% {
+    transform: translateX(-100%);
+  } /* 終點位置（滾動到盡頭） */
 }
