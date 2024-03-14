@@ -78,16 +78,16 @@ export default function Switch({
           <div className="container">
             <form>
               <div className="form-group">
-                <label className="mx-2" for="exampleFormControlTextarea1">
+                <label className="mx-2 my-1" for="exampleFormControlTextarea1">
                   來為 <span className="comment-product-name">{name}</span>{' '}
                   評價吧
                 </label>
                 <Star rating={rating} setRating={setRating} />
                 <textarea
-                  className="form-control"
+                  className="form-control my-1"
                   id="exampleFormControlTextarea1"
                   rows="3"
-                  placeholder="請撰寫評價"
+                  placeholder="請說明您使用此商品的體驗"
                 ></textarea>
               </div>
               <button
@@ -100,7 +100,7 @@ export default function Switch({
           </div>
 
           {/* 用戶評價 */}
-          <div className="containermt-5 d-flex align-items-center justify-content-center">
+          <div className="d-flex align-items-center justify-content-center">
             <div className="mt-2">
               <div className="d-flex justify-content-between align-items-center mt-3">
                 <div className="avatar d-none d-sm-block">

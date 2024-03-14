@@ -46,7 +46,6 @@ export default function Detail() {
     }
     if (pid) fetchProduct()
   }, [pid])
-  // console.log(product)
 
   // if (product) {
   //   const [newproduct] = product.filter((o) => {
@@ -54,8 +53,6 @@ export default function Detail() {
   //   })
   //   setProduct(newproduct)
   // }
-
-  // console.log(product)
 
   // useEffect(() => {
   //   if (!pid) return
@@ -347,7 +344,6 @@ export default function Detail() {
           color: #fff;
           border: none;
         }
-
         .btn-color {
           margin: 5px 0;
         }
@@ -360,14 +356,17 @@ export default function Detail() {
           height: 40px;
           border-radius: 50%;
           background-color: #f5f5f5;
-          font-size: 16px;
+          font-size: 15.5px;
           background-color: transparent;
         }
-        .circle-container {
+         {
+          /* .circle-container {
           display: flex;
           align-items: center;
+        } */
         }
-        .custom-image-container {
+         {
+          /* .custom-image-container {
           margin: 0 auto;
           width: 600px;
           height: 480px;
@@ -376,11 +375,15 @@ export default function Detail() {
           width: 100%;
           height: 100%;
           object-fit: cover;
+        } */
         }
-        .content {
+         {
+          /* .content {
           height: 80px;
+        } */
         }
-        .avatar {
+         {
+          /* .avatar {
           width: 70px;
           height: 70px;
           border-radius: 50%;
@@ -391,6 +394,7 @@ export default function Detail() {
           width: 100%;
           height: 100%;
           object-fit: cover;
+        } */
         }
       `}</style>
     </>
