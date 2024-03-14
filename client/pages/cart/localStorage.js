@@ -8,8 +8,8 @@ let data = cartData.map((item) => {
     if (item.lesson_id === lessontData[i].id) {
       item = {
         ...item,
-        lessonName: lessontData[i].name,
-        lessonPrice: lessontData[i].price,
+        name: lessontData[i].name,
+        price: lessontData[i].price,
       }
     }
   }
@@ -17,9 +17,9 @@ let data = cartData.map((item) => {
     if (item.product_id === productData[i].id) {
       item = {
         ...item,
-        productName: productData[i].name,
-        productPrice: productData[i].price,
-        productDiscount: productData[i].discount,
+        name: productData[i].name,
+        price: productData[i].price,
+        discount_price: productData[i].discount,
       }
     }
   }

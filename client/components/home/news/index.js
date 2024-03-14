@@ -2,7 +2,6 @@ import Link from 'next/link'
 import React from 'react'
 import styles from './index.module.scss'
 import NewsCarousel from './news-carousel'
-import { IoMdArrowDropright } from 'react-icons/io'
 
 export default function News() {
   return (
