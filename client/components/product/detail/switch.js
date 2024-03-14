@@ -1,10 +1,11 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { useRouter } from 'next/router'
 
 import Star from '@/components/product/star/star'
 import ProductRecommond from '@/components/product/detail/product-recommond'
-import Link from 'next/link'
 
 export default function Switch({
+  name,
   imgDetails,
   id,
   category,
@@ -17,6 +18,40 @@ export default function Switch({
   const handleSwitchToggle = () => {
     setIsSwitchOn(!isSwitchOn)
   }
+
+  //新增評論
+  const router = useRouter()
+  const { pid } = router.query
+  const [score, setScore] = useState(0)
+  const [comment, setComment] = useState('')
+
+  useEffect(() => {
+    const fetchComment = async () => {
+      try {
+        await fetch(`http://localhost:3005/api/product/?comment`, {
+          method: 'POST',
+          body: JSON.stringify({ score, comment }),
+        })
+        if (response.ok) {
+          console.log('送出評價成功')
+        } else {
+          console.error('送出評價失敗')
+        }
+        // .then((res) => {
+        //   return res.json()
+        // })
+        // .then(([data]) => {
+        //   setProduct(data ? data : [])
+        // })
+      } catch {
+        ;(err) => {
+          console.error('送出評價失敗：', err)
+        }
+      }
+    }
+    if (pid) fetchComment()
+  }, [pid])
+
   return (
     <div className="mt-4">
       {/* 轉換按鈕 -- 商品介紹/評價 */}
@@ -35,16 +70,6 @@ export default function Switch({
             <span className="switch-Round-btn"></span>
           </label>
         </div>
-        {/* <input
-          className="form-check-input"
-          type="checkbox"
-          id="flexSwitchCheckDefault"
-          checked={isSwitchOn}
-          onChange={handleSwitchToggle}
-        />
-        <label className="form-check-label" htmlFor="flexSwitchCheckDefault">
-          {isSwitchOn ? '評價' : '細節'}
-        </label> */}
       </div>
       {isSwitchOn && (
         <div>
@@ -54,7 +79,8 @@ export default function Switch({
             <form>
               <div className="form-group">
                 <label className="mx-2" for="exampleFormControlTextarea1">
-                  來為 --- 評價吧～
+                  來為 <span className="comment-product-name">{name}</span>{' '}
+                  評價吧
                 </label>
                 <Star rating={rating} setRating={setRating} />
                 <textarea
@@ -137,9 +163,9 @@ export default function Switch({
       <br />
       <br />
       <style>{`    
-      .form-check-input{
-        width: 40px;
-        height:20px;
+      .comment-product-name{
+        font-size: 20px;
+        font-weight: bold;
       }
       .btn-comment {
           background-color: #265475;

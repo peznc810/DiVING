@@ -292,6 +292,7 @@ export default function Detail() {
         <hr />
         {/* 商品介紹 + 顧客評價 */}
         <Switch
+          name={product.name}
           imgDetails={product.img_detail.split(',')}
           id={product.id}
           category={product.category}
