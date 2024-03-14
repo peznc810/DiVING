@@ -21,7 +21,7 @@ app.use(express.urlencoded({ extended: true }));
 
 router.post("/create-order", async(req, res)=>{
   const userId = req.body.user_id
-  const orderId =uuidv4()
+  const orderId =Date.now()
   const packgeId = uuidv4()
 
   const { totalPrice, lineProducts, products, receiver, order_note } = req.body;

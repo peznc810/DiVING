@@ -29,7 +29,7 @@ router.get("/", async(req,res)=>{
 
 router.post("/create-order", async(req, res)=>{
   const userId = req.body.user_id
-  const orderId =uuidv4()
+  const orderId = Date.now()
 
   const { totalPrice, products, receiver, credit_card, order_note } = req.body;
 

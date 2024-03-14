@@ -5,11 +5,22 @@ export default function Store711({
   handleInputChange,
   userInputs,
   setUserInputs,
+  cUser,
 }) {
-  const { store711, openWindow, closeWindow } = useShip711StoreOpener(
+  const { store711, openWindow } = useShip711StoreOpener(
     'http://localhost:3005/api/shipment/711',
     { autoCloseMins: 3 } // x分鐘沒完成選擇會自動關閉，預設5分鐘。
   )
+
+  const deliveryChange = () => {
+    const { name, tel } = cUser
+    setUserInputs((prevState) => ({
+      ...prevState,
+      user_name: name,
+      user_phone: tel,
+    }))
+  }
+
   const [store, setStore] = useState(store711)
 
   useEffect(() => {
@@ -28,6 +39,14 @@ export default function Store711({
           <h5 className="span">送貨資料</h5>
         </div>
         <div className="container">
+          <div className="d-flex mt-3">
+            <input
+              type="checkbox"
+              className="deliver_cb"
+              onClick={() => deliveryChange()}
+            />
+            <h6 className="fw-bold">收貨人資料與會員資料相同</h6>
+          </div>
           <div className="row justify-content-between spacing">
             <div className="col-6">
               <p className="fw-bold">收件人名稱</p>

@@ -16,6 +16,10 @@ export default function OrderForm({
   const [cUser, setCUser] = useState()
   const { auth } = useAuth()
 
+  if (typeof window !== 'undefined') {
+    localStorage.setItem('store711', '')
+  }
+
   const getUserProfile = async (id) => {
     const token = localStorage.getItem('token')
     const url = `http://localhost:3005/api/users/${id}`
@@ -51,7 +55,7 @@ export default function OrderForm({
   return (
     <>
       <div className="container">
-        <form onSubmit={payment === 2 ? handleSubLinePay : handleSub}>
+        <form onSubmit={payment === '3' ? handleSubLinePay : handleSub}>
           {delivery === '1' ? (
             <>
               <Delivery
@@ -67,6 +71,7 @@ export default function OrderForm({
                 handleInputChange={handleInputChange}
                 userInputs={userInputs}
                 setUserInputs={setUserInputs}
+                cUser={cUser}
               />
             </>
           )}
@@ -84,7 +89,7 @@ export default function OrderForm({
               onChange={handleInputChange}
             ></textarea>
           </div>
-          {payment === 3 ? (
+          {payment === '2' ? (
             <>
               <CreditCard
                 handleInputChange={handleInputChange}

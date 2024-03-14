@@ -121,9 +121,8 @@ export default function Home() {
       const lineProducts = []
       items.forEach((data) => {
         const id = data.product_id || data.lesson_id
-        const name = data.productName || data.lessonName
-        const price =
-          data.productDiscount || data.productPrice || data.lessonPrice
+        const name = data.name
+        const price = data.discount_price || data.price
         lineProducts.push({
           id,
           name,
@@ -144,7 +143,8 @@ export default function Home() {
       const receiver = {
         name: userInputs.user_name,
         phone: userInputs.user_phone,
-        address: receiverAddress,
+        address: receiverAddress || userInputs.store_address,
+        store_name: userInputs.store_name,
       }
 
       const order_note = userInputs.order_note
@@ -194,7 +194,8 @@ export default function Home() {
       const receiver = {
         name: userInputs.user_name,
         phone: userInputs.user_phone,
-        address: receiverAddress,
+        address: receiverAddress || userInputs.store_address,
+        store_name: userInputs.store_name,
       }
 
       const expirationDate = `${userInputs.cCard_expirationMonth}/${userInputs.cCard_expirationYear}`
@@ -397,7 +398,7 @@ export default function Home() {
             payment={payment}
             delivery={delivery}
           />
-          {payment === '2' && (
+          {payment === '3' && (
             <button onClick={goLinePay} disabled={!order.orderId}>
               Line Pay
             </button>
