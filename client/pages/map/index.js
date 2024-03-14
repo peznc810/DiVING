@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Container, Row, Col, Button, Stack, Image } from 'react-bootstrap'
-import DiButton from '@/components/post/diButton'
+import DiButton from '@/components/post/defaultButton'
 import { FaWind } from 'react-icons/fa'
 import { TiWeatherCloudy } from 'react-icons/ti'
 import { LuWaves } from 'react-icons/lu'
