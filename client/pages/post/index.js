@@ -94,22 +94,22 @@ export default function List() {
                   </Card.Subtitle>
 
                   <Card.Title>{v.title}</Card.Title>
-                  <Card.Text className="">
-                    <div
-                      style={{
-                        overflow: 'hidden',
-                        display: '-webkit-box',
-                        WebkitBoxOrient: 'vertical',
-                        textOverflow: 'ellipsis',
-                        WebkitLineClamp: 2, // 要顯示的行數
-                      }}
-                      // dangerouslySetInnerHTML={{
-                      //   __html: DOMPurify.sanitize(v.content),
-                      // }}
-                    >
-                      {htmlToPlainText(v.content)}
-                    </div>
-                  </Card.Text>
+
+                  <div
+                    style={{
+                      overflow: 'hidden',
+                      display: '-webkit-box',
+                      WebkitBoxOrient: 'vertical',
+                      textOverflow: 'ellipsis',
+                      WebkitLineClamp: 2, // 要顯示的行數
+                    }}
+                    // dangerouslySetInnerHTML={{
+                    //   __html: DOMPurify.sanitize(v.content),
+                    // }}
+                  >
+                    {htmlToPlainText(v.content)}
+                  </div>
+
                   <Stack direction="horizontal" gap={2} className="my-2">
                     <div>
                       {getTagsArray(v.tags).map((tag, index) => (

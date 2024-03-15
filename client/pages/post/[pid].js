@@ -76,7 +76,7 @@ export default function Detail() {
   const display = (
     <>
       <Container>
-        <Row className="justify-content-evenly">
+        <Row className="justify-content-evenly mb-2">
           <Col md={3}>
             <h4>相關文章</h4>
             <Row xs={1} className="gy-4">
@@ -95,7 +95,7 @@ export default function Detail() {
                       <Stack direction="horizontal" gap={1}>
                         <div>
                           {getTagsArray(v.tags).map((tag, index) => (
-                            <Link key={index} href="/post/list" target="_blank">
+                            <Link key={index} href="/post" target="_blank">
                               <TagButton text={`# ${tag}`} />
                             </Link>
                           ))}
@@ -123,17 +123,15 @@ export default function Detail() {
               ))}
             </div>
             <Card.Img variant="top" src={`/images/post/${post.image}`} />
-            <p>
-              <div
-                className="m-4"
-                // dangerouslySetInnerHTML={{
-                //   __html: post.content,
-                // }}
-                dangerouslySetInnerHTML={{
-                  __html: DOMPurify.sanitize(post.content),
-                }}
-              ></div>
-            </p>
+            <div
+              className="m-4"
+              // dangerouslySetInnerHTML={{
+              //   __html: DOMPurify.sanitize(post.content),
+              // }}
+              dangerouslySetInnerHTML={{
+                __html: post.content,
+              }}
+            ></div>
           </Col>
         </Row>
       </Container>
