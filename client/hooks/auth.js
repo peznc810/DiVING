@@ -251,11 +251,14 @@ export function AuthProvider({ children }) {
   const unKnow = '/images/users/unknow.jpg'
   const [avatar, setAvatar] = useState(unKnow)
   useEffect(() => {
-    if (auth.avatar !== '') {
-      setAvatar(`http://localhost:3005/avatar/${auth.avatar}`)
-    }
-    if (auth.isGoogle === true) {
-      setAvatar(auth.avatar)
+    switch (true) {
+      case auth.avatar === '' || auth.avatar === null:
+        break
+      case auth.isGoogle:
+        setAvatar(auth.avatar)
+        break
+      default:
+        setAvatar(`http://localhost:3005/avatar/${auth.avatar}`)
     }
   }, [auth])
 
