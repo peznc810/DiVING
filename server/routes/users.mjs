@@ -2,6 +2,7 @@ import express from 'express'
 import multer from 'multer'
 import db from '../db.mjs'
 import jwt from 'jsonwebtoken'
+import moment from 'moment'
 
 // middlewares
 import checkToken from '../middlewares/checkToken.mjs'
@@ -152,7 +153,6 @@ router.post('/google-login', async (req, res) => {
 
 // Google註冊
 router.post('/google-register', async (req, res) => {
-  console.log(req.body)
   const { displayName, email, photoURL, uid } = req.body
   const [[userData]] = await db.execute(
     'SELECT * FROM `users` WHERE `google_uid` = ?',
@@ -191,8 +191,9 @@ router.get('/:id', checkToken, async (req, res) => {
     'SELECT * FROM `users` WHERE `id` = ? ',
     [id]
   )
+
   if (userData) {
-    res.status(200).json({ status: 'success', msg: 'test', userData })
+    res.status(200).json({ status: 'success', userData })
   } else {
     res.status(404).json({ status: 'error', msg: '查無資料' })
   }
@@ -253,4 +254,71 @@ router.put('/:id/password', checkToken, upload.none(), async (req, res) => {
       res.status(400).json({ status: 'error', msg: '查無使用者，會員資料更新失敗' })
     })
 })
+
+// 讀取訂單
+router.get('/:id/order', checkToken, async (req, res) => {
+  const id = req.params.id
+  const checkId = req.decode.id.toString()
+
+  // 確認授權會員與請求取得的會員資料是否為同一人
+  if (checkId !== id) {
+    return res.json({ status: 'error', message: '會員資料存取失敗' })
+  }
+
+
+  const [data] = await db.execute(
+    'SELECT * FROM `order` WHERE `user_id` = ?',
+    [id]
+  )
+
+  const orderData = formatDate(data)
+
+  // data.forEach((order) => {
+  //   const formatDate = moment(order.create_at).format("YYYY-MM-DD HH:MM:SS")
+  //   const formatOrder = { ...order, created_at: formatDate }
+  //   orderData.push(formatOrder)
+  // })
+
+  if (orderData) {
+    res.status(200).json({ status: 'success', orderData })
+  } else {
+    res.status(404).json({ status: 'error', msg: '查無資料' })
+  }
+})
+
+// 讀取評論
+router.get('/:id/common', checkToken, async (req, res) => {
+  const id = req.params.id
+  const checkId = req.decode.id.toString()
+
+  // 確認授權會員與請求取得的會員資料是否為同一人
+  if (checkId !== id) {
+    return res.json({ status: 'error', message: '會員資料存取失敗' })
+  }
+
+
+  const [data] = await db.execute(
+    'SELECT star.*, product.name AS product_name, product.img_top AS product_img_top, lesson.title AS lesson_title, lesson.img AS lesson_img FROM star JOIN product ON product.id = star.product_id  JOIN lesson ON lesson.id = star.lesson_id WHERE star.user_id = ?', [id]
+  )
+
+  const commonData = formatDate(data)
+  console.log(commonData)
+  // if (data) {
+  //   res.status(200).json({ status: 'success', data })
+  // } else {
+  //   res.status(404).json({ status: 'error', msg: '查無資料' })
+  // }
+})
+
+
+function formatDate(data) {
+  const formatData = []
+  data.forEach((item) => {
+    const formatDate = moment(item.create_at).format("YYYY-MM-DD HH:MM:SS")
+    const formatItem = { ...item, created_at: formatDate }
+    formatData.push(formatItem)
+  })
+  return formatData
+}
+
 export default router

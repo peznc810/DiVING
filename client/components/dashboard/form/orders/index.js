@@ -2,7 +2,7 @@ import React from 'react'
 import styles from '../styles.module.scss'
 import Link from 'next/link'
 
-export default function Form() {
+export default function Form({ order = [] }) {
   return (
     <>
       <div className={`col-sm-8 p-0 rounded-end ${styles['form-container']}`}>
@@ -24,48 +24,24 @@ export default function Form() {
                 </thead>
                 <tbody>
                   {/* 之後改用map */}
-                  <tr className="align-middle">
-                    <td>20240101</td>
-                    <td>Mark</td>
-                    <td>Otto</td>
-                    <td>@mdo</td>
-                    <td>
-                      <Link
-                        href="/dashboard/orders/order"
-                        className="btn btn-secondary btn-sm text-white"
-                      >
-                        訂單詳情
-                      </Link>
-                    </td>
-                  </tr>
-                  <tr className="align-middle">
-                    <td>20240101</td>
-                    <td>Mark</td>
-                    <td>Otto</td>
-                    <td>@mdo</td>
-                    <td>
-                      <Link
-                        href="/dashboard/orders/order"
-                        className="btn btn-secondary btn-sm text-white"
-                      >
-                        訂單詳情
-                      </Link>
-                    </td>
-                  </tr>
-                  <tr className="align-middle">
-                    <td>20240101</td>
-                    <td>Mark</td>
-                    <td>Otto</td>
-                    <td>@mdo</td>
-                    <td>
-                      <Link
-                        href="/dashboard/orders/order"
-                        className="btn btn-secondary btn-sm text-white"
-                      >
-                        訂單詳情
-                      </Link>
-                    </td>
-                  </tr>
+                  {order.map((item) => {
+                    return (
+                      <tr className="align-middle" key={item.id}>
+                        <td>{item.id}</td>
+                        <td>{item.created_at}</td>
+                        <td>{item.total_price}</td>
+                        <td>{item.status}</td>
+                        <td>
+                          <Link
+                            href="/dashboard/orders/order"
+                            className="btn btn-secondary btn-sm text-white"
+                          >
+                            訂單詳情
+                          </Link>
+                        </td>
+                      </tr>
+                    )
+                  })}
                 </tbody>
               </table>
               <div className="d-flex justify-content-center">
