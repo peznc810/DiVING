@@ -243,7 +243,7 @@ function getOrder(orderId) {
     return new Promise((resolve, reject) => {
       db.execute(
         'INSERT INTO `order`(id, user_id, total_price, payment, shipping, status, receiver, created_at, order_note) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);',[
-          dbOrder.id, dbOrder.user_id, dbOrder.total_price, dbOrder.payment, dbOrder.shipping, dbOrder.status, dbOrder.receiver, , datetimeNow ,dbOrder.order_note
+          dbOrder.id, dbOrder.user_id, dbOrder.total_price, "取貨付款", dbOrder.shipping, dbOrder.status, dbOrder.receiver, , datetimeNow ,dbOrder.order_note
         ]
       ).then(([result]) => {
         if (result) {
@@ -273,7 +273,7 @@ function getOrder(orderId) {
     return new Promise((resolve, reject) => {
       db.execute(
         'INSERT INTO `order`(id, user_id, total_price, payment, shipping, status, receiver, created_at, credit_card, order_note) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);',[
-          dbOrder.id, dbOrder.user_id, dbOrder.total_price, dbOrder.payment, dbOrder.shipping, dbOrder.status, dbOrder.receiver, datetimeNow, dbOrder.credit_card ,dbOrder.order_note
+          dbOrder.id, dbOrder.user_id, dbOrder.total_price, "信用卡付款", dbOrder.shipping, dbOrder.status, dbOrder.receiver, datetimeNow, dbOrder.credit_card ,dbOrder.order_note
         ]
       ).then(([result]) => {
         if (result) {
