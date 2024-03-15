@@ -53,7 +53,7 @@ export default function Form({ common = [] }) {
                             className={`rounded ${styles.avatar} flex-shrink-0`}
                           >
                             <Image
-                              src={`/images/product/images/${item.product_category}/${item.product_id}/${item.product_img_top}`}
+                              src={`/images/product/images/${item.product_category}/${item.product_id}/${item.img}`}
                               alt="turtle"
                               fill
                             />

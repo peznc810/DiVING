@@ -7,7 +7,7 @@ export default function Orders() {
   return (
     <>
       <Head>
-        <title>訂單記錄</title>
+        <title>優惠券</title>
       </Head>
       <Menu />
       <Form />

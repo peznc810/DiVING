@@ -45,10 +45,13 @@
     height: 60px;
     overflow: hidden;
   }
-  .card > * {
+  .card-list > * {
     min-height: 120px;
   }
-  .card {
+  .card-list {
+    .card {
+      flex: 0 0 300px;
+    }
     .rule {
       font-size: 12px;
     }

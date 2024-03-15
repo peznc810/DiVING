@@ -273,12 +273,6 @@ router.get('/:id/order', checkToken, async (req, res) => {
 
   const orderData = formatDate(data)
 
-  // data.forEach((order) => {
-  //   const formatDate = moment(order.create_at).format("YYYY-MM-DD HH:MM:SS")
-  //   const formatOrder = { ...order, created_at: formatDate }
-  //   orderData.push(formatOrder)
-  // })
-
   if (orderData) {
     res.status(200).json({ status: 'success', orderData })
   } else {
@@ -296,9 +290,8 @@ router.get('/:id/common', checkToken, async (req, res) => {
     return res.json({ status: 'error', message: '會員資料存取失敗' })
   }
 
-
   const [data] = await db.execute(
-    'SELECT star.*, product.name AS product_name, product.img_top AS product_img_top, product.category AS product_category, product.id AS product_id, lesson.title AS lesson_title, lesson.img AS lesson_img FROM star JOIN product ON product.id = star.product_id  JOIN lesson ON lesson.id = star.lesson_id WHERE star.user_id = ?', [id]
+    'SELECT star.*, CASE WHEN star.lesson_id IS NOT NULL THEN lesson.title ELSE product.name END AS name, CASE WHEN star.lesson_id IS NOT NULL THEN lesson.img ELSE product.img_top END AS img,product.id AS product_id,product.category AS product_category FROM star LEFT JOIN product ON product.id = star.product_id LEFT JOIN lesson ON lesson.id = star.lesson_id WHERE star.user_id = ?', [id]
   )
 
   const commonData = formatDate(data)
@@ -310,7 +303,7 @@ router.get('/:id/common', checkToken, async (req, res) => {
   }
 })
 
-
+// 重置時間的格式
 function formatDate(data) {
   const formatData = []
   data.forEach((item) => {
