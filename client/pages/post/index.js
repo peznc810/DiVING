@@ -14,6 +14,7 @@ import {
 } from 'react-bootstrap'
 import Caro from '@/components/post/caro'
 import TagButton from '@/components/post/tagButton'
+import { PiUserCircleDuotone } from 'react-icons/pi'
 // import DOMPurify from 'dompurify'
 
 export default function List() {
@@ -77,17 +78,23 @@ export default function List() {
             <Col key={v.id}>
               <Card>
                 <Link href={`/post/${v.id}`} style={{ textDecoration: 'none' }}>
-                  <Card.Img variant="top" src={`/images/post/${v.image}`} />
+                  <div style={{ height: '200px' }}>
+                    <Card.Img
+                      variant="top"
+                      src={`/images/post/${v.image}`}
+                      style={{ height: '100%', objectFit: 'cover' }}
+                    />
+                  </div>
                 </Link>
                 <Card.Body className="bg-light">
-                  <Card.Subtitle className="mb-2 text-primary">
-                    {v.user_id} ﹡{' '}
+                  <Card.Subtitle className="mb-2 text-primary justify-content-center">
                     {new Date(v.published_at)
                       .toLocaleDateString()
-                      .replace(/\//g, '-')}
+                      .replace(/\//g, '-')}{' '}
                   </Card.Subtitle>
+
                   <Card.Title>{v.title}</Card.Title>
-                  <Card.Text className="fs-5">
+                  <Card.Text className="">
                     <div
                       style={{
                         overflow: 'hidden',
@@ -103,7 +110,7 @@ export default function List() {
                       {htmlToPlainText(v.content)}
                     </div>
                   </Card.Text>
-                  <Stack direction="horizontal" gap={2}>
+                  <Stack direction="horizontal" gap={2} className="my-2">
                     <div>
                       {getTagsArray(v.tags).map((tag, index) => (
                         <Link key={index} href="/post/list" target="_blank">
@@ -112,6 +119,9 @@ export default function List() {
                       ))}
                     </div>
                   </Stack>
+                  <Card.Subtitle className="mb-2 text-primary text-end">
+                    <PiUserCircleDuotone /> {v.user_id}
+                  </Card.Subtitle>
                 </Card.Body>
               </Card>
             </Col>

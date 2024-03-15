@@ -90,10 +90,8 @@ export default function Detail() {
                       <Card.Img variant="top" src={`/images/post/${v.image}`} />
                     </Link>
                     <Card.Body className="bg-light">
-                      <Card.Subtitle className="mb-2 text-primary">
-                        {v.author}
-                      </Card.Subtitle>
-                      <h6>{v.title}</h6>
+                      <Card.Text>{v.title}</Card.Text>
+
                       <Stack direction="horizontal" gap={1}>
                         <div>
                           {getTagsArray(v.tags).map((tag, index) => (
@@ -103,17 +101,20 @@ export default function Detail() {
                           ))}
                         </div>
                       </Stack>
+                      <Card.Text className="mb-2 text-primary text-end">
+                        {v.author}
+                      </Card.Text>
                     </Card.Body>
                   </Card>
                 </Col>
               ))}
             </Row>
           </Col>
-          <Col md={8} className="bg-light p-4">
+          <Col md={8} className="bg-light p-4 mb-3">
             <p>{post.published}</p>
             <h3>{post.title}</h3>
-            <p>作者:{post.user_id}</p>
-            <div className="p-2">
+            作者：{post.user_id}
+            <div className="my-2">
               {' '}
               {getTagsArray(post.tags).map((tag, index) => (
                 <Link key={index} href="/post" target="_blank">

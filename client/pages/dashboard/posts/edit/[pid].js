@@ -5,7 +5,7 @@ import styles from '@/components/dashboard/form/styles.module.scss'
 import loaderStyles from '@/styles/loader/loader_ripple.module.css'
 
 import { Form, InputGroup, Stack } from 'react-bootstrap'
-import DiButton from '@/components/post/diButton'
+import DiButton from '@/components/post/defaultButton'
 import QuillEditor from '@/components/post/quill'
 import ImageUpload from '@/components/post/imageUpload'
 import TagGenerator from '@/components/post/tagGenerator'

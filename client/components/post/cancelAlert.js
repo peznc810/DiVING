@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import React from 'react'
 import Swal from 'sweetalert2'
-import DiButton from './diButton'
+import DiButton from './defaultButton'
 
 export default function CancelAlert({
   title,
