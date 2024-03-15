@@ -1,8 +1,11 @@
 import express from 'express'
 import multer from 'multer'
 import db from '../db.mjs'
-import jwt from "jsonwebtoken"
+import jwt from 'jsonwebtoken'
+
+// middlewares
 import checkToken from '../middlewares/checkToken.mjs'
+
 const router = express.Router()
 
 // 引入.env檔
@@ -13,9 +16,6 @@ const app = express()
 const upload = multer()
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
-
-
-// let user
 
 // 登入
 router.post('/login', upload.none(), async (req, res) => {
@@ -33,7 +33,7 @@ router.post('/login', upload.none(), async (req, res) => {
       userEmail: userData.email,
       userName: userData.name,
       avatar: userData.avatar,
-    }, secretKey, { expiresIn: '1d' })
+    }, secretKey, { expiresIn: '1h' })
     res.status(200).json({ status: 'success', msg: '登入成功', token })
   } else {
     res.status(401).json({
@@ -84,7 +84,7 @@ router.post('/status', checkToken, async (req, res) => {
       userEmail: userData.email,
       userName: userData.name,
       avatar: userData.avatar,
-    }, secretKey, { expiresIn: '1d' })
+    }, secretKey, { expiresIn: '1h' })
     res.status(200).json({
       status: 'success',
       msg: '使用者已登入',
@@ -140,7 +140,7 @@ router.post('/google-login', async (req, res) => {
       userEmail: userData.email,
       userName: userData.name,
       avatar: userData.avatar,
-    }, secretKey, { expiresIn: '1d' })
+    }, secretKey, { expiresIn: '1h' })
     res.status(200).json({ status: 'success', msg: '登入成功', token })
   } else {
     res.status(401).json({
@@ -183,7 +183,7 @@ router.get('/:id', checkToken, async (req, res) => {
   const checkId = req.decode.id.toString()
 
   // 確認授權會員與請求取得的會員資料是否為同一人
-  if(checkId !== id) {
+  if (checkId !== id) {
     return res.json({ status: 'error', message: '會員資料存取失敗' })
   }
 
@@ -199,14 +199,58 @@ router.get('/:id', checkToken, async (req, res) => {
 })
 
 // 更新profile
-router.put('/:id/profile', checkToken, (req, res) => {
-  const id = req.params.id
+router.put('/:id/profile', checkToken, upload.none(), async (req, res) => {
+  const uid = req.params.id
   const checkId = req.decode.id.toString()
-  if( checkId !== id){
-    return res.json({ status: 'error', message: '會員資料更新失敗' })
+  if (checkId !== uid) {
+    return res.status(401).json({ status: 'error', msg: '無法更新會員資料' })
   }
-  res.status(200).json({msg:'success'})
+  const { name, birth, email, tel, address, id } = req.body
+
+  // 檢查必填欄位是否有空字串
+  if (!id || !name || !email) {
+    return res.json({ status: 'error', msg: '缺少必要資料' })
+  }
+
+  await db.execute(
+    'UPDATE `users` SET `name` = ?,`birth` = ?,`email` = ?,`tel` = ?,`address` = ? WHERE `id` = ? ',
+    [name, birth, email, tel, address, id]
+  )
+    .then(result => {
+      console.log(result)
+      res.status(200).json({ status: 'success', msg: '會員資料更新成功' })
+    })
+    .catch(err => {
+      console.log(err)
+      res.status(400).json({ status: 'error', msg: '會員資料更新失敗' })
+    })
 })
 
+// 更新password
+router.put('/:id/password', checkToken, upload.none(), async (req, res) => {
+  const uid = req.params.id
+  const checkId = req.decode.id.toString()
+  if (checkId !== uid) {
+    return res.status(401).json({ status: 'error', msg: '無法更新會員資料' })
+  }
+  const { origin, newPWD, id } = req.body
 
+  // 檢查必填欄位是否有空字串
+  if (!id || !newPWD) {
+    return res.json({ status: 'error', msg: '缺少必要資料' })
+  }
+
+  await db.execute(
+    'UPDATE `users` SET `password` = ? WHERE `id` = ? AND `password` = ?',
+    [newPWD, id, origin]
+  )
+    .then(result => {
+      console.log(result)
+      res.status(200).json({ status: 'success', msg: '密碼更新成功，請重新登入' })
+    })
+    .catch(err => {
+      console.log(err)
+      res.status(400).json({ status: 'error', msg: '查無使用者，會員資料更新失敗' })
+    })
+})
 export default router
