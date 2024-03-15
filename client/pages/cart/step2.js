@@ -21,7 +21,9 @@ export default function Home() {
 
   useEffect(() => {
     if (router.isReady) {
-      setFinalPrice(usingCoupon.finalPrice)
+      if (usingCoupon) {
+        setFinalPrice(usingCoupon.finalPrice)
+      }
     }
   }, [router.isReady])
 
@@ -177,7 +179,7 @@ export default function Home() {
 
       const data = {
         user_id: auth.id,
-        totalPrice: usingCoupon.finalPrice || cart.totalPrice,
+        totalPrice: (usingCoupon && usingCoupon.finalPrice) || cart.totalPrice,
         lineProducts,
         products,
         receiver,
@@ -254,7 +256,8 @@ export default function Home() {
       if (userInputs.cCard_number1) {
         data = {
           user_id: auth.id,
-          totalPrice: usingCoupon.finalPrice || cart.totalPrice,
+          totalPrice:
+            (usingCoupon && usingCoupon.finalPrice) || cart.totalPrice,
           products,
           receiver,
           credit_card,
@@ -264,7 +267,8 @@ export default function Home() {
       } else {
         data = {
           user_id: auth.id,
-          totalPrice: usingCoupon.finalPrice || cart.totalPrice,
+          totalPrice:
+            (usingCoupon && usingCoupon.finalPrice) || cart.totalPrice,
           products,
           receiver,
           order_note,

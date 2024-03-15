@@ -3,8 +3,15 @@ import Link from 'next/link'
 
 import CartStep from '@/components/cart/cart-step'
 import { useRouter } from 'next/router'
+import { useUsingCoupon } from '@/hooks/use-usingCoupon'
+import { useCart } from '@/hooks/cart'
 
 export default function Order({ orderIdTest }) {
+  const { removeUsingCoupon } = useUsingCoupon()
+  const { clearCart } = useCart()
+
+  clearCart()
+  removeUsingCoupon()
   const router = useRouter()
   const { orderId } = router.query
 
