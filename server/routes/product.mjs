@@ -47,7 +47,8 @@ router.get('/id', async (req, res) => {
   }
 })
 
-//post 新增評論（傳送到資料庫）
+//新增評論功能
+//post 傳送到資料庫
 // router.post('/comment', async (req, res) => {
 //   const payload = {
 //     score: req.body.score,
@@ -76,12 +77,6 @@ router.get('/id', async (req, res) => {
 //     })
 // })
 
-//-----------------------------------
-//先找產品的路由 > 在找評論的路由（標準做法）
-//參考討論區的資料 -- 106
-//-----------------------------------
-
-
 router.post('/comment', async (req, res) => {
   try {
     const payload = {
@@ -91,27 +86,27 @@ router.post('/comment', async (req, res) => {
       user_id: req.body.user_id
     };
 
-    // Step 1: 身份驗證，檢查 user_id 是否存在
-    const userExists = await findUserById(payload.user_id);
+    // Step1. 身份驗證，檢查 user_id 是否存在
+    const [userExists] = await db.execute('SELECT * FROM `users` WHERE id = ?', [payload.user_id]);
     if (!userExists) {
       return res.status(404).json({ error: 'User not found' });
     }
 
-    // Step 2: 檢查 user_id 是否有購買 product_id 的產品
-    const hasPurchased = await checkUserPurchase(payload.user_id, payload.product_id);
-    if (!hasPurchased) {
+    // Step2. 檢查 user 是否有購買 product_id 的產品
+    const [hasPurchased] = await db.execute('SELECT * FROM `order_detail` WHERE product_id = ?', [payload.product_id]);
+    if (!hasPurchased || hasPurchased.length === 0) {
       return res.status(400).json({ error: 'User has not purchased this product' });
     }
 
-    // Step 3: 將評論寫入資料庫
+    // Step3. 寫入資料庫
     await insertComment(payload);
     res.status(200).json({ message: 'Success' });
+
   } catch (error) {
     console.error('Error:', error);
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
-
 
 
 // get 打印評論
@@ -135,40 +130,17 @@ router.get('/comment', async (req, res) => {
 
 // 收藏功能
 //post 傳送到資料庫
-// router.post('/collect', async (req, res) => {
-//   const payload = {
-//     product_id: req.body.product_id, 
-//     user_id: req.body.user_id
-//   }
-//   // user_id 身份驗證
-//   // step. user_id 是否存在 ?
-//   const [result] = await db.execute('SELECT * FROM `users` WHERE id = ?', [user_id])
-//   if (result) {
-//       resolve({message: 'Success'})
-//     } else {
-//       reject({ status: 'error', msg: 'err' })
-//     }
-//   //將取得的東西寫入資料庫
-//   await insertCollect(payload)
-//     .then((result) => {
-//       res.status(200).json(result)
-//     })
-//     .catch((err) => {
-//       res.status(400).json(err)
-//     })
-// })
-//加入收藏
 router.post('/collect', async (req, res) => {
   try {
     const { product_id, user_id } = req.body;
     
-    // step1. 身份驗證 -> user_id 是否存在 ?
+    // Step1. 身份驗證 -> user_id 是否存在 ?
     const [result] = await db.execute('SELECT * FROM `users` WHERE id = ?', [user_id]);
     
     if (!result || result.length === 0) {
       return res.status(404).json({ status: 'error', msg: 'User not found' });
     }
-    // step2. 寫入資料庫
+    // Step2. 寫入資料庫
     await insertCollect({ product_id, user_id });
     
     res.status(200).json({ message: 'Success' });
@@ -177,7 +149,6 @@ router.post('/collect', async (req, res) => {
     res.status(500).json({ status: 'error', msg: 'Internal server error' });
   }
 });
-
 
 router.get('/collect', async (req, res) => {
   const mid = req.query.mid;
