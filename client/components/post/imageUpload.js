@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import React, { useState, useEffect } from 'react'
 
 export default function ImageUpload() {
@@ -17,7 +18,7 @@ export default function ImageUpload() {
       return
     }
 
-    // createObjectURL產生一個臨時性的URL
+    // createObjectURL產生一個臨時性的URL 預覽用
     const objectUrl = URL.createObjectURL(selectedFile)
     console.log(objectUrl)
     setPreview(objectUrl)
@@ -33,7 +34,6 @@ export default function ImageUpload() {
     if (file) {
       setIsFilePicked(true)
       setSelectedFile(file)
-      setImgServerUrl('')
       handleSubmission()
     } else {
       setIsFilePicked(false)
@@ -42,11 +42,11 @@ export default function ImageUpload() {
     }
   }
 
-  const handleSubmission = () => {
+  const handleSubmission = (e) => {
     const formData = new FormData()
 
     // 對照server上的檔案名稱 req.files.avatar
-    formData.append('avatar', selectedFile)
+    formData.append('images', selectedFile)
 
     fetch('http://localhost:3005/post/upload', {
       method: 'POST',
@@ -63,6 +63,8 @@ export default function ImageUpload() {
         console.error('Error:', error)
       })
     console.log(formData)
+    console.log(selectedFile)
+    console.log(imgServerUrl)
   }
 
   return (
@@ -70,7 +72,8 @@ export default function ImageUpload() {
       <input type="file" name="file" onChange={changeHandler} />
       {selectedFile && (
         <div>
-          預覽圖片: <img src={preview} alt="" />
+          預覽圖片:{' '}
+          <Image src={preview} alt="" layout="fill" objectFit="contain"></Image>
         </div>
       )}
       {isFilePicked ? (
@@ -80,7 +83,7 @@ export default function ImageUpload() {
           <p>Size in bytes: {selectedFile.size}</p>
         </>
       ) : (
-        <p>選擇檔案觀看詳細資料</p>
+        <p>選擇檔案以預覽</p>
       )}
       {/* <div>
         <button onClick={handleSubmission}>送出</button>

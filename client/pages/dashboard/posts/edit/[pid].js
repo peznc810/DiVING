@@ -117,7 +117,6 @@ export default function Edit() {
         <br />
         <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
           <QuillEditor
-            // value={editedContent || content}
             onChange={(value) => {
               setEditFormData({ ...editFormData, content: value })
             }}

@@ -1,4 +1,4 @@
-// npm install quill react-quill 應該會改用CKEditor
+// npm install quill react-quill
 
 import React, { useEffect, useState } from 'react'
 import Head from 'next/head'
@@ -18,33 +18,28 @@ export default function Index() {
   const [editorLoaded, setEditorLoaded] = useState(false)
 
   const [formData, setFormData] = useState({
-    user_id: '有值',
-    title: '123',
+    user_id: '',
+    title: '',
     image: 'post.jpg',
     content: '',
-    tags: '1,2,3',
+    tags: '',
   })
 
   useEffect(() => {
     setEditorLoaded(true)
   }, [])
 
+  //formData內容 onChange隨時更新
   const handleFormDataChange = (fieldName) => (value) => {
-    // const newData = e.target.value
     setFormData({ ...formData, [fieldName]: value })
     console.log(formData)
   }
 
+  //提交數據
   const handleSubmit = async (e) => {
     e.preventDefault()
     console.log('Submitting data:', formData)
-    // 将标签数组转换为以逗号分隔的字符串
-    // const tagsString = formData.tags.join(',')
 
-    // 更新 formData 对象中的 tags 属性为字符串
-    // const updatedFormData = { ...formData, tags: tagsString }
-
-    // 在這裡發送POST請求到後端保存數據
     try {
       const res = await fetch('http://localhost:3005/api/post/new', {
         method: 'POST',
@@ -55,7 +50,7 @@ export default function Index() {
         body: JSON.stringify(formData),
       })
 
-      // 處理後端返回的響應
+      //成功的話跳alert
       if (res.status === 201) {
         Swal.fire({
           title: '新增成功',
@@ -80,6 +75,7 @@ export default function Index() {
           no-repeat
         `,
         })
+        //跳轉
         router.push('/dashboard/posts')
       }
     } catch (error) {
@@ -102,7 +98,6 @@ export default function Index() {
             <div className="accordion-body overflow-auto">
               <Container>
                 <Form className="my-3" onSubmit={handleSubmit}>
-                  <Form.Label>文字編輯器 Quill Rich Text Editor</Form.Label>{' '}
                   <InputGroup className="mb-3">
                     <InputGroup.Text id="inputGroup-sizing-default">
                       文章標題
@@ -113,16 +108,13 @@ export default function Index() {
                       onChange={(e) =>
                         handleFormDataChange('title')(e.target.value)
                       }
+                      required
                     />
                   </InputGroup>
                   <div className="board">
                     <ImageUpload />
                   </div>
                   <TagGenerator
-                    // onChange={(e) => {
-                    //   handleFormDataChange('tags')(e)
-                    //   console.log(e)
-                    // }}
                     onTagsChange={(newTags) => {
                       handleFormDataChange('tags')(newTags.join(','))
                       console.log(newTags)
@@ -135,10 +127,6 @@ export default function Index() {
                   >
                     <div className="h-screen w-screen flex items-center flex-col">
                       <QuillEditor
-                        // value={editedContent || content}
-                        // onChange={(data) => {
-                        //   setFormData(data)
-                        // }}
                         editorLoaded={editorLoaded}
                         onChange={(value) =>
                           handleFormDataChange('content')(value)

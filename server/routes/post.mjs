@@ -8,10 +8,11 @@ import { dirname, extname, resolve } from "path";
 import { fileURLToPath } from "url";
 import formidable from "formidable";
 const __dirname = dirname(fileURLToPath(import.meta.url));
+import checkToken from '../middlewares/checkToken.mjs'
+
 
 const router = express.Router();
 
-// 定義處理 `/api/post` 請求的路由
   //讀取所有文章-list
   router.get('/', async (req, res) => {
   const { sort, searchText } = req.query; 
@@ -72,6 +73,7 @@ const router = express.Router();
     res.status(500).json({ error: 'NOOOOOO' });    
   }
 });
+
   //讀取登入使用者文章
   // router.get('/', async (req, res) => {
   //   try {
@@ -86,18 +88,18 @@ const router = express.Router();
   // });
 
 //dashboard 新增文章
-router.post('/new', async (req, res) => {
+router.post('/new', checkToken, async (req, res) => {
   const { user_id, title, image, content, tags} = req.body;
   const id = uuidv4();
   const now = new Date();
+  const uesr_id = req.decode.id
 
   try {
     // const tagsValue = tags !== undefined ? tags : null;
     const [result] = await db.execute('INSERT INTO post (id, user_id, title, image, content, published_at, updated_at,tags , valid) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)', 
-     [id, '戴夫', title, image, content, now, now, tags, 1]);   
+     [id, uesr_id, title, image, content, now, now, tags, 1]);   
 
         res.status(201).json({ status: 'success', message: '成功寫入'});
-      // res.redirect('http://localhost:3000/dashboard/posts/');
   } catch (error) {
     console.error('Error executing database query:', error);
     
@@ -139,26 +141,8 @@ router.post("/disable/:postId", async(req,res) =>{
   }
 })
 
-router.post("/test", async(req, res) => {
-  const {name, title} = req.body;
-  const id = uuidv4();
-
-  try {
-    // Using prepared statement to handle the parameter
-    const [result] = await db.execute('INSERT INTO test (id, name, title) VALUES (?, ?, ?)', [id, name, title]);
-
-    console.log(`Inserted UUID: ${id}`);
-
-    res.status(200).json({ status: 'success', message: '成功寫入', insertedUUID: id });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ status: 'error', message: 'Internal server error' });
-  }
-})
-
 // --BEN--
-
-router.post("/upload", (req, res, next) => { //ESline 嚴格 => 要空格
+router.post("/upload", (req, res, next) => {
   const form = formidable({
       uploadDir: resolve(__dirname, "public/upload"), //路徑
       keepExtensions: true //保留副檔名

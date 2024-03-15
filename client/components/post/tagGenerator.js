@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import { Badge, Col, Form, InputGroup, Row, Button } from 'react-bootstrap'
-// import DiButton from './dibutton'
 
 export default function TagGenerator({ onTagsChange }) {
   const [tags, setTags] = useState([])
@@ -29,12 +28,13 @@ export default function TagGenerator({ onTagsChange }) {
           <div className="mb-3">
             {tags.map((tag) => (
               <Badge
-                // value={value}
                 key={tag}
                 pill
                 bg="primary"
-                className="mr-2"
+                className="me-1 p-2"
                 onClick={() => handleRemoveTag(tag)}
+                style={{ fontSize: 14 }}
+                title="點按即可移除"
               >
                 {tag}
               </Badge>
@@ -47,9 +47,7 @@ export default function TagGenerator({ onTagsChange }) {
           <InputGroup className="mb-3">
             <InputGroup.Text>標籤</InputGroup.Text>
             <Form.Control
-              placeholder="新增標籤..."
-              aria-label="Recipient's username"
-              aria-describedby="basic-addon2"
+              placeholder="新增標籤... "
               type="text"
               value={newTag}
               onChange={(e) => setNewTag(e.target.value)}
@@ -61,11 +59,6 @@ export default function TagGenerator({ onTagsChange }) {
             >
               新增
             </Button>
-            {/* <DiButton
-                text={'新增標籤'}
-                color="#ff9720"
-                onClick={handleAddTag}
-              /> */}
           </InputGroup>
         </Col>
       </Row>
