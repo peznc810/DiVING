@@ -1,7 +1,7 @@
 [
     {
       "id": "1",
-      "author": "Marijn Haverbeke",
+      "author": "戴夫",
       "published": "2018-12-04 14:00",
       "image":"post.jpg",
       "title": "自由潛水不只是一項運動，更是認識自我的心靈旅程",
@@ -10,8 +10,8 @@
     },
     {
         "id": "2",
-        "title": "Eloquent JavaScript, Third Edition",
-        "author": "Marijn Haverbeke",
+        "title": "潛水體驗之旅",
+        "author": "戴夫",
         "published": "2018-12-04",
         "image":"dive.jpg",
         "content": "JavaScript lies at the heart of almost every modern web application, from social apps like Twitter to browser-based game frameworks like Phaser and Babylon. Though simple for beginners to pick up and play with, JavaScript is a flexible, complex language that you can use to build full-scale applications.",
@@ -20,7 +20,7 @@
       {
           "id": "3",
           "title": "學習潛水的第一步：區分「水肺潛水」和「自由潛水」",
-          "author": "Marijn Haverbeke",
+          "author": "戴夫",
           "published": "2018-12-04",
           "image":"people.jpg",
           "content": "JavaScript lies at the heart of almost every modern web application, from social apps like Twitter to browser-based game frameworks like Phaser and Babylon. Though simple for beginners to pick up and play with, JavaScript is a flexible, complex language that you can use to build full-scale applications.",
