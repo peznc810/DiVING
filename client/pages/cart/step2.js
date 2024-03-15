@@ -212,10 +212,7 @@ export default function Home() {
     e.preventDefault()
     if (checkFormat()) {
       //資料庫的格式 order_detail
-      const products = []
-      items.forEach((data) => {
-        products.push(data)
-      })
+      const products = items.map((data) => data)
 
       const receiverAddress =
         userInputs.user_city + userInputs.user_section + userInputs.user_road
@@ -241,39 +238,16 @@ export default function Home() {
 
       const order_note = userInputs.order_note
 
-      let shipment
-      switch (delivery) {
-        case '1':
-          shipment = '宅配'
-          break
-        case '2':
-          shipment = '7-11取貨'
-          break
-      }
+      const shipment = delivery === '1' ? '宅配' : '7-11取貨'
 
-      let data
-
-      if (userInputs.cCard_number1) {
-        data = {
-          user_id: auth.id,
-          totalPrice:
-            (usingCoupon && usingCoupon.finalPrice) || cart.totalPrice,
-          products,
-          receiver,
-          credit_card,
-          order_note,
-          shipment,
-        }
-      } else {
-        data = {
-          user_id: auth.id,
-          totalPrice:
-            (usingCoupon && usingCoupon.finalPrice) || cart.totalPrice,
-          products,
-          receiver,
-          order_note,
-          shipment,
-        }
+      const data = {
+        user_id: auth.id,
+        totalPrice: (usingCoupon && usingCoupon.finalPrice) || cart.totalPrice,
+        products,
+        receiver,
+        order_note,
+        shipment,
+        ...(userInputs.cCard_number1 && { credit_card }),
       }
 
       const url = 'http://localhost:3005/api/order/create-order'
@@ -290,7 +264,6 @@ export default function Home() {
         .then((data) => {
           if (data.status === 'success') {
             setOrder(data.data.dbOrder)
-            console.log(data.data.dbOrder.id)
             window.location.href = `http://localhost:3000/cart/step2?orderId=${data.data.dbOrder.id}`
           }
         })

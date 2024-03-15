@@ -10,7 +10,7 @@ export default function AutoTab({ className, maxLength }) {
       const { value } = event.target
       const { keyCode } = event
 
-      const isMaxLengthReached = value.length === maxLength
+      const isMaxLengthReached = value && value.length === maxLength
       const isFunctionKey = functionKeys.includes(keyCode)
 
       if (isMaxLengthReached && !isFunctionKey) {
