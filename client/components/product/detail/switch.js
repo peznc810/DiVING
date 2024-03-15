@@ -87,7 +87,7 @@ export default function Switch({
                   className="form-control my-1"
                   id="exampleFormControlTextarea1"
                   rows="3"
-                  placeholder="請說明您使用此商品的體驗"
+                  placeholder="請說明使用此商品的體驗"
                 ></textarea>
               </div>
               <button
