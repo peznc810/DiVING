@@ -98,7 +98,6 @@ export function AuthProvider({ children }) {
           //   msg: "查無使用者，請先註冊",
           // })
           setMsg(msg)
-          notify(msg, status)
         }
       })
       .catch((err) => {
@@ -149,7 +148,6 @@ export function AuthProvider({ children }) {
           notify(msg, status)
           router.push('/users/login')
         } else {
-          notify(msg, status)
           setMsg(msg)
         }
       })

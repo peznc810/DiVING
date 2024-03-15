@@ -119,7 +119,7 @@ export default function Login() {
         <title>會員登入</title>
       </Head>
       <main className={`${styles['main-style']}`}>
-        <div className="d-flex justify-content-center mt-5">
+        <div className="d-flex justify-content-center">
           <div className={`${styles['card-style']}`}>
             <form onSubmit={handleLogin}>
               <h2 className="fs-3 mb-4 text-center">會員登入</h2>
@@ -190,15 +190,12 @@ export default function Login() {
               {/* END */}
               {/* 警示標語 */}
               <div
-                className={`fw-medium small text-center text-danger mb-0 ${styles.notify}`}
+                className={`fw-medium text-center text-danger mb-0 ${styles.notify}`}
               >
                 {errorMsg}
               </div>
               {/* END */}
-              <button className={`fw-medium ${styles.btn}`}>
-                登入
-                <Toaster />
-              </button>
+              <button className={`fw-medium ${styles.btn}`}>登入</button>
               <div className="row justify-content-center align-items-center">
                 <div className="col-10">
                   <div
@@ -231,6 +228,7 @@ export default function Login() {
           </div>
         </div>
       </main>
+      <Toaster />
     </>
   )
 }

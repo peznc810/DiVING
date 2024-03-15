@@ -149,7 +149,7 @@ export default function Menu() {
             })}
             <li>
               <Link
-                href=""
+                href="/"
                 className="text-center text-sm-start ps-sm-4"
                 onClick={logout}
               >

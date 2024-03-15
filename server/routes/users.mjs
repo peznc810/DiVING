@@ -33,7 +33,7 @@ router.post('/login', upload.none(), async (req, res) => {
       userEmail: userData.email,
       userName: userData.name,
       avatar: userData.avatar,
-    }, secretKey, { expiresIn: '1d' })
+    }, secretKey, { expiresIn: '1h' })
     res.status(200).json({ status: 'success', msg: '登入成功', token })
   } else {
     res.status(401).json({
@@ -84,7 +84,7 @@ router.post('/status', checkToken, async (req, res) => {
       userEmail: userData.email,
       userName: userData.name,
       avatar: userData.avatar,
-    }, secretKey, { expiresIn: '1d' })
+    }, secretKey, { expiresIn: '1h' })
     res.status(200).json({
       status: 'success',
       msg: '使用者已登入',
@@ -140,7 +140,7 @@ router.post('/google-login', async (req, res) => {
       userEmail: userData.email,
       userName: userData.name,
       avatar: userData.avatar,
-    }, secretKey, { expiresIn: '1d' })
+    }, secretKey, { expiresIn: '1h' })
     res.status(200).json({ status: 'success', msg: '登入成功', token })
   } else {
     res.status(401).json({

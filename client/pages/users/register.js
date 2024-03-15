@@ -11,6 +11,8 @@ import { useAuth } from '@/hooks/auth'
 import useFirebase from '@/hooks/use-firebase'
 // password visibility hook
 import useShow from '@/hooks/use-password-visibility'
+// Alert
+import { Toaster } from 'react-hot-toast'
 
 export default function SignUp() {
   const { signUp, signUpGoogle, auth, setMsg, errorMsg } = useAuth()
@@ -83,7 +85,7 @@ export default function SignUp() {
   return (
     <>
       <main className={`${styles['main-style']}`}>
-        <div className="d-flex justify-content-center mt-5">
+        <div className="d-flex justify-content-center">
           <div className={`${styles['card-style']} ${styles['card-layout']}`}>
             <form onSubmit={handleSignUp}>
               <h2 className="fs-3 mb-4 text-center">註冊會員</h2>
@@ -140,6 +142,7 @@ export default function SignUp() {
                   name="rePWD"
                   id="rePWD"
                   placeholder="請再輸入一次"
+                  maxLength={12}
                   onChange={handleVal}
                 />
                 <label htmlFor="rePWD">確認密碼</label>
@@ -181,6 +184,7 @@ export default function SignUp() {
           </div>
         </div>
       </main>
+      <Toaster />
     </>
   )
 }
