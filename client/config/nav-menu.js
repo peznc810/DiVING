@@ -14,13 +14,8 @@ export const menuItems = [
     label: '所有商品',
     href: '/product',
     children: [
-      { id: '31', label: 'HeleiWaho', href: '/product' },
-      { id: '32', label: 'OceanMax', href: '/product' },
-      { id: '33', label: 'MYSTIC', href: '/product' },
-      { id: '34', label: 'ADISI', href: '/product' },
-      { id: '35', label: 'AROPEC', href: '/product' },
-      { id: '36', label: 'Princeton Tec', href: '/product' },
-      { id: '37', label: 'Unidive', href: '/product' },
+      { id: '31', label: '所有品牌', href: '/product' },
+      { id: '32', label: '所有種類', href: '/product' },
     ],
   },
   {

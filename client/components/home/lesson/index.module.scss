@@ -52,42 +52,49 @@
   }
 
   .lessonScroll {
+    overflow-x: scroll;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: thin; /* "auto" or "thin" */
+    scrollbar-color: #ffffff4e transparent;
+    margin-top: 60px;
     .lessonItem {
       position: relative;
-      overflow: hidden; //隱藏超出去content
-      width: 320px;
-      height: 320px;
-      .lessonLink {
-        color: #fff;
-        .info {
-          width: 150px;
-          height: 56px;
-          position: absolute;
-          top: calc(50% - 28px);
-          left: calc(50% - 75px);
-          z-index: 4;
-        }
-        .imgDiv {
-          position: relative;
-          width: 320px;
-          height: 320px;
-        }
-      }
-    }
-    .lessonItem:hover {
-      overflow: hidden;
-      .info {
-        display: none;
-      }
-      .divHover {
-        position: absolute;
-        top: 0;
-        left: 0;
-        z-index: 10;
+      width: 450px;
+      height: 300px;
+      margin-inline: 20px;
+      .videoDiv {
         width: 100%;
-        height: 100%;
-        background: linear-gradient(#ff9720c6, #ff97203d);
-        animation: itemHoverAni 1s linear;
+        height: 300px;
+        border-radius: 8px;
+        overflow: hidden;
+        video {
+          height: 100%;
+          object-fit: cover;
+        }
+      }
+      .play {
+        position: absolute;
+        top: 20px;
+        left: 20px;
+        width: 30px;
+        height: 30px;
+        border-radius: 25px;
+        background-color: #fff;
+        text-align: center;
+        line-height: 30px;
+        color: $info;
+      }
+      .info {
+        position: absolute;
+        bottom: 15px;
+        left: 20px;
+        color: #fff;
+        .enName {
+          h5 {
+            font-size: 24px;
+            margin-bottom: 6px;
+          }
+        }
       }
     }
   }
