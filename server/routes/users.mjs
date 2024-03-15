@@ -298,16 +298,16 @@ router.get('/:id/common', checkToken, async (req, res) => {
 
 
   const [data] = await db.execute(
-    'SELECT star.*, product.name AS product_name, product.img_top AS product_img_top, lesson.title AS lesson_title, lesson.img AS lesson_img FROM star JOIN product ON product.id = star.product_id  JOIN lesson ON lesson.id = star.lesson_id WHERE star.user_id = ?', [id]
+    'SELECT star.*, product.name AS product_name, product.img_top AS product_img_top, product.category AS product_category, product.id AS product_id, lesson.title AS lesson_title, lesson.img AS lesson_img FROM star JOIN product ON product.id = star.product_id  JOIN lesson ON lesson.id = star.lesson_id WHERE star.user_id = ?', [id]
   )
 
   const commonData = formatDate(data)
-  console.log(commonData)
-  // if (data) {
-  //   res.status(200).json({ status: 'success', data })
-  // } else {
-  //   res.status(404).json({ status: 'error', msg: '查無資料' })
-  // }
+  
+  if (data) {
+    res.status(200).json({ status: 'success', commonData })
+  } else {
+    res.status(404).json({ status: 'error', msg: '查無資料' })
+  }
 })
 
 

@@ -8,7 +8,7 @@ import { useAuth } from '@/hooks/auth'
 export default function Orders() {
   const { auth } = useAuth()
   const [common, setCommon] = useState([])
-
+  console.log(common)
   const getUserCommon = async (id) => {
     const token = localStorage.getItem('token')
     const url = `http://localhost:3005/api/users/${id}/common`

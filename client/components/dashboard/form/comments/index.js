@@ -6,7 +6,7 @@ import Image from 'next/image'
 // React icon
 import { FaStar } from 'react-icons/fa'
 
-export default function Form() {
+export default function Form({ common = [] }) {
   return (
     <>
       <div className={`col-sm-8 p-0 rounded-end ${styles['form-container']}`}>
@@ -39,39 +39,48 @@ export default function Form() {
                     <th scope="col">名稱</th>
                     <th scope="col">評價</th>
                     <th scope="col">內容</th>
+                    <th scope="col">建立時間</th>
                     <th scope="col"></th>
                   </tr>
                 </thead>
                 <tbody>
                   {/* 之後改用map */}
-                  <tr className="align-middle">
-                    <td className="d-flex justify-content-center">
-                      <div className={`rounded ${styles.avatar} flex-shrink-0`}>
-                        <Image
-                          src="/images/coupons/turtle.jpg"
-                          alt="turtle"
-                          fill
-                        />
-                      </div>
-                    </td>
-                    <td>烏龜</td>
-                    <td>
-                      <FaStar className="text-secondary" />
-                      <FaStar className="text-secondary" />
-                      <FaStar className="text-secondary" />
-                      <FaStar className="text-secondary" />
-                      <FaStar className="text-secondary" />
-                    </td>
-                    <td>碰一下30萬</td>
-                    <td>
-                      <Link
-                        href="#"
-                        className="btn btn-secondary btn-sm text-white"
-                      >
-                        前往評論
-                      </Link>
-                    </td>
-                  </tr>
+                  {common.map((item) => {
+                    return (
+                      <tr className="align-middle" key={item.id}>
+                        <td className="d-flex justify-content-center">
+                          <div
+                            className={`rounded ${styles.avatar} flex-shrink-0`}
+                          >
+                            <Image
+                              src={`/images/product/images/${item.product_category}/${item.product_id}/${item.product_img_top}`}
+                              alt="turtle"
+                              fill
+                            />
+                          </div>
+                        </td>
+                        <td>{item.product_name}</td>
+                        <td>
+                          {/* 改成map */}
+                          <FaStar className="text-secondary" />
+                          <FaStar className="text-secondary" />
+                          <FaStar className="text-secondary" />
+                          <FaStar className="text-secondary" />
+                          <FaStar className="text-secondary" />
+                        </td>
+                        <td>{item.comment}</td>
+                        <td>{item.created_at}</td>
+                        <td>
+                          <Link
+                            href="#"
+                            className="btn btn-secondary btn-sm text-white"
+                          >
+                            前往評論
+                          </Link>
+                        </td>
+                      </tr>
+                    )
+                  })}
                 </tbody>
               </table>
               <div className="d-flex justify-content-center">
