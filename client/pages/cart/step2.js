@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import toast, { Toaster } from 'react-hot-toast'
 
 import CartStep from '@/components/cart/cart-step'
-import AutoTab from '@/components/cart/test'
+import AutoTab from '@/components/cart/auto-tab'
 import Order from '@/components/cart/order'
 
 import { useRouter } from 'next/router'
@@ -360,7 +360,7 @@ export default function Home() {
   return (
     <>
       {isDone ? (
-        <Order orderIdTest={orderId} />
+        <Order orderId={orderId} />
       ) : (
         <div className="container">
           <CartStep step={2} />

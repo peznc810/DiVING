@@ -2,71 +2,47 @@ import React, { useState, useEffect } from 'react'
 import Link from 'next/link'
 
 import CartStep from '@/components/cart/cart-step'
-import { useRouter } from 'next/router'
 import { useUsingCoupon } from '@/hooks/use-usingCoupon'
 import { useCart } from '@/hooks/cart'
 
-export default function Order({ orderIdTest }) {
+export default function Order({ orderId }) {
   const { removeUsingCoupon } = useUsingCoupon()
   const { clearCart } = useCart()
 
-  clearCart()
-  removeUsingCoupon()
-  const router = useRouter()
-  const { orderId } = router.query
-
-  const [order, setOrder] = useState(null)
-  const [orderDetail, setOrderDetail] = useState(null)
   useEffect(() => {
+    clearCart()
+    removeUsingCoupon()
+
     const fetchOrderDetail = async () => {
       try {
-        await fetch(
-          `http://localhost:3005/api/order/order-detail?orderId=${orderIdTest}`,
-          {
-            method: 'GET',
-          }
+        const response = await fetch(
+          `http://localhost:3005/api/order/order-detail?orderId=${orderId}`
         )
-          .then((response) => {
-            return response.json()
-          })
-          .then((result) => {
-            setOrderDetail(result)
-          })
-          .catch((err) => {
-            console.error('An error occurred:', err)
-          })
+        const result = await response.json()
+        setOrderDetail(result)
       } catch (error) {
-        console.error('Error fetching data:', error)
+        console.error('Error fetching order detail:', error)
       }
     }
+
     const fetchOrder = async () => {
       try {
-        await fetch(
-          `http://localhost:3005/api/order/order?orderId=${orderIdTest}`,
-          {
-            method: 'GET',
-          }
+        const response = await fetch(
+          `http://localhost:3005/api/order/order?orderId=${orderId}`
         )
-          .then((response) => {
-            return response.json()
-          })
-          .then(([result]) => {
-            setOrder(result)
-          })
-          .catch((err) => {
-            console.error('An error occurred:', err)
-          })
+        const [result] = await response.json()
+        setOrder(result)
       } catch (error) {
-        console.error('Error fetching data:', error)
+        console.error('Error fetching order:', error)
       }
     }
     fetchOrderDetail()
     fetchOrder()
   }, [])
 
-  console.log(order)
+  const [order, setOrder] = useState(null)
+  const [orderDetail, setOrderDetail] = useState(null)
 
-  let totalPrice = 0
   return (
     <div className="container">
       <CartStep step={3} />
@@ -87,7 +63,6 @@ export default function Order({ orderIdTest }) {
           orderDetail.map((item, i) => {
             const { name, num, price } = item
             const singleItemsPrice = price * num
-            totalPrice += singleItemsPrice
             return (
               <div className="row" key={i}>
                 <p className="col-6 fw-bold">{name}</p>

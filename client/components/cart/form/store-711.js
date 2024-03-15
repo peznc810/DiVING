@@ -21,10 +21,7 @@ export default function Store711({
     }))
   }
 
-  const [store, setStore] = useState(store711)
-
   useEffect(() => {
-    setStore(store711)
     setUserInputs((s) => ({
       ...s,
       store_name: store711.storename,
@@ -73,7 +70,7 @@ export default function Store711({
                 type="text"
                 className="w-100 form-control user_name"
                 name="store_name"
-                defaultValue={store.storename}
+                defaultValue={store711.storename}
                 onChange={handleInputChange}
                 disabled
               />
@@ -84,7 +81,7 @@ export default function Store711({
                 type="text"
                 className="w-100 form-control user_phone"
                 name="store_address"
-                defaultValue={store.storeaddress}
+                defaultValue={store711.storeaddress}
                 onChange={handleInputChange}
                 disabled
               />

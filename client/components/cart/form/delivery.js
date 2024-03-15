@@ -2,22 +2,21 @@ import React from 'react'
 
 export default function Delivery({
   handleInputChange,
-  userInputs,
+  userInputs: { user_name, user_phone, user_city, user_section, user_road },
   setUserInputs,
   cUser,
 }) {
   //勾選資料相同 收貨人
   const deliveryChange = () => {
     const { name, tel, address } = cUser
+    const [city, section, road] = address ? address.split(',') : ['', '', '']
     setUserInputs((prevState) => ({
       ...prevState,
       user_name: name,
       user_phone: tel,
-      ...(address && {
-        user_city: address.split(',')[0],
-        user_section: address.split(',')[1],
-        user_road: address.split(',')[2],
-      }),
+      user_city: city,
+      user_section: section,
+      user_road: road,
     }))
   }
 
@@ -44,7 +43,7 @@ export default function Delivery({
                 type="text"
                 className="w-100 form-control user_name"
                 name="user_name"
-                defaultValue={userInputs.user_name}
+                defaultValue={user_name}
                 onChange={handleInputChange}
               />
             </div>
@@ -54,7 +53,7 @@ export default function Delivery({
                 type="text"
                 className="w-100 form-control user_phone"
                 name="user_phone"
-                defaultValue={userInputs.user_phone}
+                defaultValue={user_phone}
                 onChange={handleInputChange}
               />
             </div>
@@ -64,7 +63,7 @@ export default function Delivery({
             <div className="col-3">
               <select
                 className="form-select user_city"
-                value={userInputs.user_city}
+                value={user_city}
                 onChange={handleInputChange}
                 name="user_city"
               >
@@ -79,7 +78,7 @@ export default function Delivery({
             <div className="col-3">
               <select
                 className="form-select user_section"
-                value={userInputs.user_section}
+                value={user_section}
                 onChange={handleInputChange}
                 name="user_section"
               >
@@ -96,7 +95,7 @@ export default function Delivery({
                 type="text"
                 className="w-100 form-control user_road"
                 name="user_road"
-                value={userInputs.user_road}
+                value={user_road}
                 onChange={handleInputChange}
               />
             </div>

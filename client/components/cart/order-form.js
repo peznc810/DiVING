@@ -57,23 +57,19 @@ export default function OrderForm({
       <div className="container">
         <form onSubmit={payment === '3' ? handleSubLinePay : handleSub}>
           {delivery === '1' ? (
-            <>
-              <Delivery
-                handleInputChange={handleInputChange}
-                userInputs={userInputs}
-                setUserInputs={setUserInputs}
-                cUser={cUser}
-              />
-            </>
+            <Delivery
+              handleInputChange={handleInputChange}
+              userInputs={userInputs}
+              setUserInputs={setUserInputs}
+              cUser={cUser}
+            />
           ) : (
-            <>
-              <Store711
-                handleInputChange={handleInputChange}
-                userInputs={userInputs}
-                setUserInputs={setUserInputs}
-                cUser={cUser}
-              />
-            </>
+            <Store711
+              handleInputChange={handleInputChange}
+              userInputs={userInputs}
+              setUserInputs={setUserInputs}
+              cUser={cUser}
+            />
           )}
 
           <div className="container">
@@ -89,17 +85,13 @@ export default function OrderForm({
               onChange={handleInputChange}
             ></textarea>
           </div>
-          {payment === '2' ? (
-            <>
-              <CreditCard
-                handleInputChange={handleInputChange}
-                userInputs={userInputs}
-                setUserInputs={setUserInputs}
-                cUser={cUser}
-              />
-            </>
-          ) : (
-            <></>
+          {payment === '2' && (
+            <CreditCard
+              handleInputChange={handleInputChange}
+              userInputs={userInputs}
+              setUserInputs={setUserInputs}
+              cUser={cUser}
+            />
           )}
           <div className="text-end my-3">
             <button type="submit" className="btn next-step-btn text-white px-5">
@@ -137,7 +129,6 @@ export default function OrderForm({
             padding: 0.5rem;
           }
         `}</style>
-        {/* <AutoTab className="autotab-4" maxLength={4} /> */}
       </div>
     </>
   )
