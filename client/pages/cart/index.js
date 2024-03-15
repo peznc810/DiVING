@@ -1,37 +1,41 @@
+//react next
 import React, { useEffect, useState } from 'react'
 import Link from 'next/link'
-
-import Swal from 'sweetalert2'
-import withReactContent from 'sweetalert2-react-content'
-const MySwal = withReactContent(Swal)
-
+//hook
 import { useAuth } from '@/hooks/auth'
 import { useCart } from '@/hooks/cart'
-import { useUsingCoupon } from '@/hooks/use-usingCoupon'
-
-import { FaShoppingCart, FaRegTrashAlt } from 'react-icons/fa'
-import CartStep from '@/components/cart/cart-step'
-// inchhhhh 新增
-import CouponModal from '@/components/cart/coupon-modal'
 import { useCouponHas } from '@/hooks/use-couponHasData'
+import { useUsingCoupon } from '@/hooks/use-usingCoupon'
+//component
+import CartStep from '@/components/cart/cart-step'
+import CouponModal from '@/components/cart/coupon-modal'
+//通知視窗
+import Swal from 'sweetalert2'
+import withReactContent from 'sweetalert2-react-content'
+//圖示
+import { FaShoppingCart, FaRegTrashAlt } from 'react-icons/fa'
+
+const MySwal = withReactContent(Swal)
 
 export default function Home() {
-  const [discount, setDiscount] = useState(0)
-  // inchhhhh 新增
-  const { couponHas, setCouponHas } = useCouponHas()
-  const [showCoupon, setShowCoupon] = useState(false)
+  const { auth } = useAuth()
+  const { applyUsingCoupon } = useUsingCoupon()
+  const { couponHas } = useCouponHas()
   const { items, updateItemQty, increment, decrement, removeItem, cart } =
     useCart()
-  const { auth } = useAuth()
-  const { usingCoupon, applyUsingCoupon } = useUsingCoupon()
 
+  const [discount, setDiscount] = useState(0)
+  const [showCoupon, setShowCoupon] = useState(false)
   const [payment, setPayment] = useState(1)
   const [delivery, setDelivery] = useState(1)
   const [totalTotalPrice, setTotalTotalPrice] = useState(cart.totalPrice)
 
+  const { totalPrice, deliveryFee } = cart
+
   useEffect(() => {
     setTotalTotalPrice(cart.totalPrice)
   }, [cart])
+
   //刪除通知
   const notifySA = (name, id, isProduct) => {
     MySwal.fire({
@@ -52,39 +56,28 @@ export default function Home() {
     })
   }
 
+  //設定payment和delivert
   const handleSelectChange = (e) => {
     const { name, value } = e.target
     name === 'payment' ? setPayment(value) : setDelivery(value)
   }
 
-  const { totalPrice, deliveryFee } = cart
-
   // 收到coupon傳來的資訊
   const selectedCouponData = (data) => {
     console.log(data)
     if (!data) return totalPrice + deliveryFee
-    const {
-      user_id,
-      coupon_id,
-      coupon_discount,
-      coupon_rule,
-      valid,
-      coupon_name,
-    } = data
-    console.log(valid)
+    const { coupon_id, coupon_discount, coupon_rule, coupon_name } = data
     let updateTotalPrice = 0
     let updateDiscount = 0
     // 判斷小記金額是否大於coupon_rule
     if (totalPrice > coupon_rule) {
       // Number.isInteger()檢查是否為整數
       if (!Number.isInteger(coupon_discount)) {
-        console.log('object')
         updateTotalPrice = Math.round(
           totalPrice * coupon_discount + deliveryFee
         )
       } else {
         updateTotalPrice = totalPrice - coupon_discount + deliveryFee
-        console.log(coupon_discount)
       }
       updateDiscount = (updateTotalPrice - totalPrice - deliveryFee) * -1
     } else {
@@ -99,54 +92,6 @@ export default function Home() {
     setTotalTotalPrice(updateTotalPrice)
     setDiscount(updateDiscount)
   }
-
-  const test = () => {
-    const url = 'http://localhost:3005/api/coupon/'
-    const data = {
-      userID: auth.id,
-      couponID: usingCoupon.id,
-    }
-    fetch(url, {
-      method: 'put',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data),
-    })
-      .then((response) => {
-        return response.json()
-      })
-      .then((result) => {
-        console.log(result)
-      })
-      .catch((error) => {
-        console.log(error)
-      })
-  }
-  // 送出已使用的優惠卷給後端
-  // useEffect(() => {
-  //   if (cart && cart.coupon) {
-  //     const { coupon } = cart
-  //     console.log(coupon)
-  //     const url = 'http://localhost:3005/api/coupon'
-  //     fetch(url, {
-  //       method: 'put',
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //       },
-  //       body: JSON.stringify(coupon),
-  //     })
-  //       .then((response) => {
-  //         return response.json()
-  //       })
-  //       .then((result) => {
-  //         console.log(result)
-  //       })
-  //       .catch((error) => {
-  //         console.log(error)
-  //       })
-  //   }
-  // }, [cart.coupon])
 
   return (
     <div className="container">
@@ -181,13 +126,12 @@ export default function Home() {
                 } = item
                 const id = product_id || lesson_id
                 const detail = product_detail || order_time
-                const isProduct = item.product_id ? true : false
-                let totalPrice
-                if (discount_price) {
-                  totalPrice = discount_price * num
-                } else {
-                  totalPrice = price * num
-                }
+                const isProduct = !!item.product_id
+                console.log(isProduct)
+                const totalPrice = discount_price
+                  ? discount_price * num
+                  : price * num
+
                 return (
                   <tr key={i}>
                     <td>
@@ -338,17 +282,6 @@ export default function Home() {
             </Link>
           </div>
         </div>
-
-        <div>
-          <button
-            type="submit"
-            onClick={() => {
-              test()
-            }}
-          >
-            送出
-          </button>
-        </div>
       </div>
       <CouponModal
         showCoupon={showCoupon}
@@ -357,7 +290,8 @@ export default function Home() {
         dataForParent={selectedCouponData}
       />
       <style jsx>{`
-        h1,
+         {
+          /* h1,
         h2,
         h3,
         h4,
@@ -365,6 +299,7 @@ export default function Home() {
         h6,
         p {
           margin: 0;
+        } */
         }
 
         .order-detail,

@@ -1,36 +1,27 @@
+//react next
 import React, { useState, useEffect } from 'react'
-import toast, { Toaster } from 'react-hot-toast'
-
-import CartStep from '@/components/cart/cart-step'
-import AutoTab from '@/components/cart/auto-tab'
-import Order from '@/components/cart/order'
-
 import { useRouter } from 'next/router'
-import OrderForm from '@/components/cart/order-form'
-
+//hook
 import { useAuth } from '@/hooks/auth'
 import { useCart } from '@/hooks/cart'
 import { useUsingCoupon } from '@/hooks/use-usingCoupon'
+//component
+import Order from '@/components/cart/order'
+import CartStep from '@/components/cart/cart-step'
+import OrderForm from '@/components/cart/order-form'
+//通知視窗
+import toast, { Toaster } from 'react-hot-toast'
 
 export default function Home() {
+  const router = useRouter()
+
   const { auth } = useAuth()
   const { items, cart } = useCart()
   const { usingCoupon } = useUsingCoupon()
+
   const [finalPrice, setFinalPrice] = useState()
-  const router = useRouter()
-
-  useEffect(() => {
-    if (router.isReady) {
-      if (usingCoupon) {
-        setFinalPrice(usingCoupon.finalPrice)
-      }
-    }
-  }, [router.isReady])
-
-  const { payment, delivery } = router.query
-
   const [order, setOrder] = useState({})
-
+  const [isDone, setIsDone] = useState(false)
   const [userInputs, setUserInputs] = useState({
     user_name: '',
     user_phone: '',
@@ -51,7 +42,15 @@ export default function Home() {
     store_address: '',
   })
 
-  const [isDone, setIsDone] = useState(false)
+  const { payment, delivery } = router.query
+
+  useEffect(() => {
+    if (router.isReady) {
+      if (usingCoupon) {
+        setFinalPrice(usingCoupon.finalPrice)
+      }
+    }
+  }, [router.isReady])
 
   const { transactionId, orderId } = router.query
 
@@ -330,6 +329,7 @@ export default function Home() {
     const msgBox = <p style={{ margin: 0 }}>{msg}</p>
     toast.error(msgBox)
   }
+
   return (
     <>
       {isDone ? (
@@ -467,7 +467,6 @@ export default function Home() {
               text-align: center;
             }
           `}</style>
-          <AutoTab className="autotab-4" maxLength={4} />
           <Toaster position="bottom-center" />
         </div>
       )}

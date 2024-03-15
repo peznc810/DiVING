@@ -1,13 +1,7 @@
 import React from 'react'
+import AutoTab from '@/components/cart/auto-tab'
 
-function CreditCardInput({
-  name,
-  label,
-  value,
-  onChange,
-  maxLength,
-  placeholder,
-}) {
+function CreditCardInput({ name, value, onChange, maxLength, placeholder }) {
   return (
     <div className="col-2">
       <input
@@ -168,6 +162,7 @@ export default function CreditCard({
           padding: 0.5rem;
         }
       `}</style>
+      <AutoTab className="autotab-4" maxLength={4} />
     </>
   )
 }

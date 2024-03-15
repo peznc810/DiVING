@@ -4,15 +4,15 @@ import Link from 'next/link'
 import CartStep from '@/components/cart/cart-step'
 import { useUsingCoupon } from '@/hooks/use-usingCoupon'
 import { useCart } from '@/hooks/cart'
+import { useAuth } from '@/hooks/auth'
 
 export default function Order({ orderId }) {
   const { removeUsingCoupon } = useUsingCoupon()
   const { clearCart } = useCart()
+  const { auth } = useAuth()
+  const { usingCoupon } = useUsingCoupon()
 
   useEffect(() => {
-    clearCart()
-    removeUsingCoupon()
-
     const fetchOrderDetail = async () => {
       try {
         const response = await fetch(
@@ -36,8 +36,35 @@ export default function Order({ orderId }) {
         console.error('Error fetching order:', error)
       }
     }
+
+    const couponUsed = async () => {
+      try {
+        if (usingCoupon) {
+          const url = 'http://localhost:3005/api/coupon/'
+          const data = {
+            userID: auth.id,
+            couponID: usingCoupon.id,
+          }
+          const response = await fetch(url, {
+            method: 'put',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+          })
+          const result = await response.json()
+          console.log(result)
+        }
+      } catch (error) {
+        console.log(error)
+      }
+    }
+
     fetchOrderDetail()
     fetchOrder()
+    couponUsed()
+    clearCart()
+    removeUsingCoupon()
   }, [])
 
   const [order, setOrder] = useState(null)
