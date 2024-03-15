@@ -31,7 +31,7 @@ router.post("/create-order", async(req, res)=>{
   const userId = req.body.user_id
   const orderId = Date.now()
 
-  const { totalPrice, products, receiver, credit_card, order_note } = req.body;
+  const { totalPrice, products, receiver, credit_card, order_note,shipment } = req.body;
 
   //寫入資料庫的資料 order
   const dbOrder = {
@@ -39,7 +39,7 @@ router.post("/create-order", async(req, res)=>{
     user_id : userId,
     total_price : totalPrice,
     payment: "取貨付款",
-    shipping: "宅配",
+    shipping: shipment,
     status: "建立成功",
     receiver : JSON.stringify(receiver),
     credit_card: JSON.stringify(credit_card),

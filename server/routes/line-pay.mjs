@@ -24,7 +24,7 @@ router.post("/create-order", async(req, res)=>{
   const orderId =Date.now()
   const packgeId = uuidv4()
 
-  const { totalPrice, lineProducts, products, receiver, order_note } = req.body;
+  const { totalPrice, lineProducts, products, receiver, order_note, shipment } = req.body;
 
   //傳送給line pay的資料
   const order = {
@@ -47,7 +47,7 @@ router.post("/create-order", async(req, res)=>{
     user_id : userId,
     total_price : totalPrice,
     payment: "Line pay",
-    shipping: "宅配",
+    shipping: shipment,
     status: "建立成功",
     receiver : JSON.stringify(receiver),
     order_info: JSON.stringify(order),

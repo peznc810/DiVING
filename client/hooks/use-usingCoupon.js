@@ -4,7 +4,7 @@ const UsingCouponContext = createContext(null)
 
 export const UsingCouponProvider = ({
   children,
-  initialCoupon = { name: '', discount: 0, finalPrice: 0 },
+  initialCoupon = {},
   localStorageKey = 'usingCoupon',
 }) => {
   const [usingCoupon, setUsingCoupon] = useState(() => {

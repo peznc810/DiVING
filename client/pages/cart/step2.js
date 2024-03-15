@@ -16,8 +16,14 @@ export default function Home() {
   const { auth } = useAuth()
   const { items, cart } = useCart()
   const { usingCoupon } = useUsingCoupon()
-
+  const [finalPrice, setFinalPrice] = useState()
   const router = useRouter()
+
+  useEffect(() => {
+    if (router.isReady) {
+      setFinalPrice(usingCoupon.finalPrice)
+    }
+  }, [router.isReady])
 
   const { payment, delivery } = router.query
 
@@ -159,6 +165,16 @@ export default function Home() {
 
       const order_note = userInputs.order_note
 
+      let shipment
+      switch (delivery) {
+        case '1':
+          shipment = '宅配'
+          break
+        case '2':
+          shipment = '7-11取貨'
+          break
+      }
+
       const data = {
         user_id: auth.id,
         totalPrice: usingCoupon.finalPrice || cart.totalPrice,
@@ -166,6 +182,7 @@ export default function Home() {
         products,
         receiver,
         order_note,
+        shipment,
       }
       const url = 'http://localhost:3005/api/line-pay/create-order'
       fetch(url, {
@@ -222,6 +239,16 @@ export default function Home() {
 
       const order_note = userInputs.order_note
 
+      let shipment
+      switch (delivery) {
+        case '1':
+          shipment = '宅配'
+          break
+        case '2':
+          shipment = '7-11取貨'
+          break
+      }
+
       let data
 
       if (userInputs.cCard_number1) {
@@ -232,6 +259,7 @@ export default function Home() {
           receiver,
           credit_card,
           order_note,
+          shipment,
         }
       } else {
         data = {
@@ -240,6 +268,7 @@ export default function Home() {
           products,
           receiver,
           order_note,
+          shipment,
         }
       }
 
@@ -401,7 +430,7 @@ export default function Home() {
             </table>
             <p className="text-end fw-bold my-3">
               合計: NT$
-              {usingCoupon.finalPrice || cart.totalPrice}
+              {finalPrice || cart.totalPrice}
             </p>
           </div>
           <OrderForm
