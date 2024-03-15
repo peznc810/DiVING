@@ -10,10 +10,12 @@ import OrderForm from '@/components/cart/order-form'
 
 import { useAuth } from '@/hooks/auth'
 import { useCart } from '@/hooks/cart'
+import { useUsingCoupon } from '@/hooks/use-usingCoupon'
 
 export default function Home() {
   const { auth } = useAuth()
   const { items, cart } = useCart()
+  const { usingCoupon } = useUsingCoupon()
 
   const router = useRouter()
 
@@ -130,6 +132,14 @@ export default function Home() {
           price,
         })
       })
+      if (usingCoupon) {
+        lineProducts.push({
+          id: 0,
+          name: '折扣',
+          quantity: 1,
+          price: usingCoupon.discount * -1 + cart.deliveryFee,
+        })
+      }
 
       //資料庫的格式 order_detail
       const products = []
@@ -151,7 +161,7 @@ export default function Home() {
 
       const data = {
         user_id: auth.id,
-        totalPrice: cart.totalPrice,
+        totalPrice: usingCoupon.finalPrice || cart.totalPrice,
         lineProducts,
         products,
         receiver,
@@ -217,7 +227,7 @@ export default function Home() {
       if (userInputs.cCard_number1) {
         data = {
           user_id: auth.id,
-          totalPrice: cart.totalPrice,
+          totalPrice: usingCoupon.finalPrice || cart.totalPrice,
           products,
           receiver,
           credit_card,
@@ -226,7 +236,7 @@ export default function Home() {
       } else {
         data = {
           user_id: auth.id,
-          totalPrice: cart.totalPrice,
+          totalPrice: usingCoupon.finalPrice || cart.totalPrice,
           products,
           receiver,
           order_note,
@@ -336,8 +346,8 @@ export default function Home() {
                 </tr>
               </thead>
               <tbody>
-                {items ? (
-                  items.map((item, i) => {
+                {cart.items ? (
+                  cart.items.map((item, i) => {
                     const {
                       price,
                       num,
@@ -345,6 +355,7 @@ export default function Home() {
                       discount_price,
                       product_detail,
                       order_time,
+                      subtotal,
                     } = item
                     const detail = product_detail || order_time
                     return (
@@ -379,7 +390,7 @@ export default function Home() {
                         <td>
                           <span>{num}</span>
                         </td>
-                        <td>NT${price}</td>
+                        <td>NT${subtotal}</td>
                       </tr>
                     )
                   })
@@ -388,7 +399,10 @@ export default function Home() {
                 )}
               </tbody>
             </table>
-            <p className="text-end fw-bold my-3">合計: NT${cart.totalPrice}</p>
+            <p className="text-end fw-bold my-3">
+              合計: NT$
+              {usingCoupon.finalPrice || cart.totalPrice}
+            </p>
           </div>
           <OrderForm
             handleSubLinePay={handleSubLinePay}

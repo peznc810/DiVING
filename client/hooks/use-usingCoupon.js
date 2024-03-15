@@ -4,10 +4,10 @@ const UsingCouponContext = createContext(null)
 
 export const UsingCouponProvider = ({
   children,
-  initialCoupon = null,
-  localStorageKey = 'coupon',
+  initialCoupon = { name: '', discount: 0, finalPrice: 0 },
+  localStorageKey = 'usingCoupon',
 }) => {
-  const [coupon, setCoupon] = useState(() => {
+  const [usingCoupon, setUsingCoupon] = useState(() => {
     if (typeof window !== 'undefined') {
       try {
         const storedCoupon = window.localStorage.getItem(localStorageKey)
@@ -22,27 +22,30 @@ export const UsingCouponProvider = ({
   useEffect(() => {
     try {
       if (typeof window !== 'undefined') {
-        window.localStorage.setItem(localStorageKey, JSON.stringify(coupon))
+        window.localStorage.setItem(
+          localStorageKey,
+          JSON.stringify(usingCoupon)
+        )
       }
     } catch (error) {
       console.log(error)
     }
-  }, [coupon])
+  }, [usingCoupon])
 
-  const applyCoupon = (newCoupon) => {
-    setCoupon(newCoupon)
+  const applyUsingCoupon = (newCoupon) => {
+    setUsingCoupon(newCoupon)
   }
 
-  const removeCoupon = () => {
-    setCoupon(null)
+  const removeUsingCoupon = () => {
+    setUsingCoupon(null)
   }
 
   return (
     <UsingCouponContext.Provider
       value={{
-        coupon,
-        applyCoupon,
-        removeCoupon,
+        usingCoupon,
+        applyUsingCoupon,
+        removeUsingCoupon,
       }}
     >
       {children}

@@ -65,8 +65,6 @@ export default function Store711({
                 className="w-100 form-control user_phone"
                 name="user_phone"
                 defaultValue={userInputs.user_phone}
-                // onChange={handleInputChange}
-                onChange={console.log('aaa')}
               />
             </div>
             <div className="col-6">

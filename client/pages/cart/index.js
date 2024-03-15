@@ -23,7 +23,7 @@ export default function Home() {
   const { items, updateItemQty, increment, decrement, removeItem, cart } =
     useCart()
   const { auth } = useAuth()
-  const { coupon, applyCoupon } = useUsingCoupon()
+  const { usingCoupon, applyUsingCoupon } = useUsingCoupon()
 
   const [payment, setPayment] = useState(1)
   const [delivery, setDelivery] = useState(1)
@@ -63,7 +63,14 @@ export default function Home() {
   const selectedCouponData = (data) => {
     console.log(data)
     if (!data) return totalPrice + deliveryFee
-    const { user_id, coupon_id, coupon_discount, coupon_rule, valid } = data
+    const {
+      user_id,
+      coupon_id,
+      coupon_discount,
+      coupon_rule,
+      valid,
+      coupon_name,
+    } = data
     console.log(valid)
     let updateTotalPrice = 0
     let updateDiscount = 0
@@ -83,42 +90,63 @@ export default function Home() {
     } else {
       updateTotalPrice = totalPrice + deliveryFee
     }
-    // 把選擇的coupon資料存在cart的localStorage
-    cart.coupon = {
-      userID: user_id,
-      couponID: coupon_id,
+    applyUsingCoupon({
+      id: coupon_id,
+      name: coupon_name,
       discount: coupon_discount,
-      valid: valid,
-    }
-    cart.finalPrice = updateTotalPrice
+      finalPrice: updateTotalPrice,
+    })
     setTotalTotalPrice(updateTotalPrice)
     setDiscount(updateDiscount)
   }
-  console.log(cart)
-  // 送出已使用的優惠卷給後端
-  useEffect(() => {
-    if (cart && cart.coupon) {
-      const { coupon } = cart
-      console.log(coupon)
-      const url = 'http://localhost:3005/api/coupon'
-      fetch(url, {
-        method: 'put',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(coupon),
-      })
-        .then((response) => {
-          return response.json()
-        })
-        .then((result) => {
-          console.log(result)
-        })
-        .catch((error) => {
-          console.log(error)
-        })
+
+  const test = () => {
+    const url = 'http://localhost:3005/api/coupon/'
+    const data = {
+      userID: auth.id,
+      couponID: usingCoupon.id,
     }
-  }, [cart.coupon])
+    fetch(url, {
+      method: 'put',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    })
+      .then((response) => {
+        return response.json()
+      })
+      .then((result) => {
+        console.log(result)
+      })
+      .catch((error) => {
+        console.log(error)
+      })
+  }
+  // 送出已使用的優惠卷給後端
+  // useEffect(() => {
+  //   if (cart && cart.coupon) {
+  //     const { coupon } = cart
+  //     console.log(coupon)
+  //     const url = 'http://localhost:3005/api/coupon'
+  //     fetch(url, {
+  //       method: 'put',
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //       },
+  //       body: JSON.stringify(coupon),
+  //     })
+  //       .then((response) => {
+  //         return response.json()
+  //       })
+  //       .then((result) => {
+  //         console.log(result)
+  //       })
+  //       .catch((error) => {
+  //         console.log(error)
+  //       })
+  //   }
+  // }, [cart.coupon])
 
   return (
     <div className="container">
@@ -312,7 +340,12 @@ export default function Home() {
         </div>
 
         <div>
-          <button type="submit" onClick={() => {}}>
+          <button
+            type="submit"
+            onClick={() => {
+              test()
+            }}
+          >
             送出
           </button>
         </div>
