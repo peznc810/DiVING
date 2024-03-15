@@ -207,7 +207,7 @@ export default function Detail() {
               className="btn btn-secondary w-100 mb-3 my-3"
               style={{ fontWeight: 'bold', color: 'white' }}
             >
-              <GoHeartFill /> 加入最愛
+              <GoHeartFill /> 加入收藏
             </button>
 
             {/* 加入購物車 */}
