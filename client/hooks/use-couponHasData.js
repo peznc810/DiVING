@@ -8,7 +8,6 @@ export default function CouponHasProvider({ children }) {
   const [couponHas, setCouponHas] = useState([])
   const { auth } = useAuth()
   const authID = auth.id
-  console.log(auth)
   // 讀取會員所有coupon
   useEffect(() => {
     if (auth && authID) {
@@ -24,7 +23,6 @@ export default function CouponHasProvider({ children }) {
             b.coupon_id - a.coupon_id
           })
           setCouponHas(newCouponHas)
-          console.log(newCouponHas)
         })
         .catch((error) => {
           console.log('連線錯誤')
