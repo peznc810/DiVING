@@ -7,7 +7,6 @@ export default function CouponModal({
   setShowCoupon = () => {},
   showCoupon = false,
   couponHas = [],
-  setCouponHas = () => {},
   dataForParent = () => {},
 }) {
   // const { couponHas, setCouponHas } = useCouponHas()
@@ -49,7 +48,7 @@ export default function CouponModal({
         <div className={`${styles.couponModal}`}>
           <div className={`container py-4`}>
             <div
-              className={`d-flex justify-content-between align-items-center mb-3 ${styles.title}`}
+              className={`d-flex justify-content-between align-items-center mb-2 ${styles.title}`}
             >
               <p className={`m-0`}>選擇優惠卷</p>
               {/* 關掉按鈕 */}
@@ -65,7 +64,7 @@ export default function CouponModal({
               </button>
             </div>
             {/* 優惠卷列表 */}
-            <div>
+            <div className={`${styles.listBlock}`}>
               {couponHas.map((v, i) => {
                 return (
                   <div

@@ -35,7 +35,7 @@ router.get('/:id', async (req, res) => {
 
   try {
     const [userCoupons] = await connection.execute(
-      'SELECT coupon_has.* , coupon.name AS coupon_name,coupon.sort AS coupon_sort ,coupon.discount AS coupon_discount, coupon.rule AS coupon_rule, coupon.rule_content AS coupon_rule_content, coupon.valid AS coupon_valid FROM coupon_has JOIN coupon ON coupon.id = coupon_has.coupon_id WHERE coupon_has.user_id = ?',
+      'SELECT coupon_has.* , coupon.name AS coupon_name,coupon.sort AS coupon_sort ,coupon.discount AS coupon_discount, coupon.rule AS coupon_rule, coupon.rule_content AS coupon_rule_content FROM coupon_has JOIN coupon ON coupon.id = coupon_has.coupon_id WHERE coupon_has.user_id = ?',
       [userID],
     )
 
@@ -90,16 +90,17 @@ router.post('/', async (req, res) => {
 
 // 使用優惠卷
 router.put('/', async (req, res) => {
-  const [usedCoupon] = await connection.execute(
-    "UPDATE `coupon_has` SET `valid` = 0 "
+  let { userID, couponID } = req.body
+  await connection.execute(
+    "UPDATE `coupon_has` SET `valid` = 0 WHERE coupon_id = ? AND user_id=?",
+    [couponID, userID]
   )
   .then(()=>{
-    return 1
+    res.json({ msg: '更新成功' })
   })
   .catch(()=>{
-    return 0
+    res.status(500).json({ msg: '更新失敗' })
   })
-  res.json({usedCoupon})
 })
 
 // ----------------------

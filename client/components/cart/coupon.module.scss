@@ -1,12 +1,12 @@
 @import '@/styles/variable.scss';
 
 .couponBlock {
-  position: absolute;
+  position: fixed;
   z-index: 4;
   top: 0;
   right: 0;
   width: 100%;
-  height: 100vh;
+  height: 100%;
   z-index: 33;
   background-color: #3c3c3c5e;
 }
@@ -30,6 +30,10 @@
       background-color: transparent;
       color: $gray;
     }
+  }
+  .listBlock {
+    height: 260px;
+    overflow-y: scroll;
   }
 
   .coupon {
