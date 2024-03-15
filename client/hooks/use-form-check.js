@@ -31,6 +31,7 @@ export default function useFormCheck() {
   const [errorMsg, setMsg] = useState(initMsg)
 
   // Rule
+  const nameRegex = /[0-9]/
   const emailRegex = /^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/
   const passwordRegex = /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,12}/
 
@@ -54,6 +55,9 @@ export default function useFormCheck() {
     switch (true) {
       case userProfile.name.trim() === '':
         setMsg({ ...errorMsg, nameErr: errText.empty })
+        break
+      case nameRegex.test(userProfile.name.trim()):
+        setMsg({ ...errorMsg, nameErr: errText.syntax })
         break
       default:
         return true
@@ -84,7 +88,6 @@ export default function useFormCheck() {
         return true
     }
   }
-  console.log(errorMsg)
 
   return {
     handleProfileCheck,

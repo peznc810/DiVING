@@ -13,6 +13,8 @@ import { IoCamera } from 'react-icons/io5'
 // React Bootstrap
 import Button from 'react-bootstrap/Button'
 import Modal from 'react-bootstrap/Modal'
+// Alert
+import { notify } from '@/hooks/use-alert'
 
 export default function Menu() {
   const router = useRouter()
@@ -59,8 +61,10 @@ export default function Menu() {
       body: formData,
     })
       .then((res) => res.json())
-      .then(() => {
+      .then((result) => {
+        const { status, msg } = result
         // 成功更新頭像後，需要再重新抓取會員資料
+        notify(msg, status)
         checkAuth()
         handleClose()
       })
@@ -145,8 +149,8 @@ export default function Menu() {
             })}
             <li>
               <Link
+                href=""
                 className="text-center text-sm-start ps-sm-4"
-                href="/"
                 onClick={logout}
               >
                 <TbLogout2 />

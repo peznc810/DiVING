@@ -10,16 +10,6 @@
     background-color: $info;
     margin-inline-end: 10px;
   }
-  .avatar {
-    position: relative;
-    width: 160px;
-    height: 160px;
-    border-radius: 50%;
-    overflow: hidden;
-    & img {
-      object-fit: cover;
-    }
-  }
   .hover-style:hover {
     color: $secondary;
     background-color: $white;

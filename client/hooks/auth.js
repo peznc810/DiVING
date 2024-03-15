@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
+import { notify } from '@/hooks/use-alert'
 
 export const AuthContext = createContext(null)
 
@@ -11,6 +12,7 @@ export function AuthProvider({ children }) {
     userName: '',
     avatar: '',
     isAuth: false,
+    isGoogle: false,
   }
   // 使用者的全域狀態
   const [auth, setAuth] = useState(initAuth)
@@ -39,10 +41,10 @@ export function AuthProvider({ children }) {
     })
       .then((response) => response.json())
       .then((result) => {
-        // console.log(result)
+        const { status, msg } = result
         if (result.status !== 'error') {
           // 登入成功要做的事
-          let token = result.token
+          const token = result.token
           // 解譯token
           const user = parseJwt(token)
           const id = user.id.toString()
@@ -52,11 +54,8 @@ export function AuthProvider({ children }) {
           // 把token存入localStorage，後續要重新抓登入狀態時會需要
           localStorage.setItem('token', token)
 
-          // 檢查解譯出來的data
-          // for (let [key, value] of Object.entries(auth)) {
-          //   console.log(`${key}: ${value}`)
-          // }
           router.push('/')
+          notify(msg, status)
         } else {
           setMsg(result.msg)
         }
@@ -80,28 +79,26 @@ export function AuthProvider({ children }) {
     })
       .then((response) => response.json())
       .then((result) => {
+        let { status, msg } = result
         if (result.status === 'success') {
+          const token = result.token
           // 登入成功要做的事
-          let token = result.token
           // 解譯token
           const userData = parseJwt(token)
           // 把會員的資料放到狀態中，之後可以共享到其他頁面
-          setAuth({ ...userData, isAuth: true })
+          setAuth({ ...userData, isAuth: true, isGoogle: true })
           // 把token存入localStorage，後續要重新抓登入狀態時會需要
           localStorage.setItem('token', token)
-
-          // 檢查解譯出來的data
-          // for (let [key, value] of Object.entries(auth)) {
-          //   console.log(`${key}: ${value}`)
-          // }
           router.push('/')
+          notify(msg, status)
         } else {
           // server res be like:
           // res.status(401).json({
           //   status: "error",
           //   msg: "查無使用者，請先註冊",
           // })
-          setMsg(result.msg)
+          setMsg(msg)
+          notify(msg, status)
         }
       })
       .catch((err) => {
@@ -122,10 +119,11 @@ export function AuthProvider({ children }) {
     })
       .then((response) => response.json())
       .then((result) => {
+        const { status, msg } = result
         // 把狀態中的user資料清除
         setAuth(initAuth)
-        console.log(result)
         localStorage.removeItem('token')
+        notify(msg, status)
       })
       .catch((err) => {
         console.log(err)
@@ -146,11 +144,13 @@ export function AuthProvider({ children }) {
     })
       .then((response) => response.json())
       .then((result) => {
-        // console.log(result)
+        const { status, msg } = result
         if (result.status !== 'error') {
+          notify(msg, status)
           router.push('/users/login')
         } else {
-          setMsg(result.msg)
+          notify(msg, status)
+          setMsg(msg)
         }
       })
       .catch((err) => {
@@ -173,10 +173,12 @@ export function AuthProvider({ children }) {
     })
       .then((response) => response.json())
       .then((result) => {
+        const { status, msg } = result
         if (result.status !== 'error') {
+          notify(msg, status)
           router.push('/users/login')
         } else {
-          setMsg(result.msg)
+          setMsg(msg)
         }
       })
       .catch((err) => {
@@ -253,6 +255,9 @@ export function AuthProvider({ children }) {
   useEffect(() => {
     if (auth.avatar !== '') {
       setAvatar(`http://localhost:3005/avatar/${auth.avatar}`)
+    }
+    if (auth.isGoogle === true) {
+      setAvatar(auth.avatar)
     }
   }, [auth])
 

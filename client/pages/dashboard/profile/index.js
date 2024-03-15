@@ -8,7 +8,8 @@ import { useAuth } from '@/hooks/auth'
 // 表單驗證的hook
 import useFormCheck from '@/hooks/use-form-check'
 // Alert
-import toast, { Toaster } from 'react-hot-toast'
+import { Toaster } from 'react-hot-toast'
+import { notify } from '@/hooks/use-alert'
 
 export default function Profile() {
   const { auth, logout } = useAuth()
@@ -25,20 +26,6 @@ export default function Profile() {
     initMsg,
     password,
   } = useFormCheck()
-
-  const notify = (msg, status) => {
-    if (status === 'error') {
-      toast.error(msg, {
-        duration: 4000,
-        position: 'top-center',
-      })
-    } else {
-      toast.success(msg, {
-        duration: 4000,
-        position: 'top-center',
-      })
-    }
-  }
 
   // GET Profile
   const getUserProfile = async (id) => {
@@ -85,7 +72,6 @@ export default function Profile() {
       .then((result) => {
         const { status, msg } = result
         notify(msg, status)
-        // console.log(result.msg)
       })
       .catch((err) => console.log(err.msg))
   }
@@ -117,10 +103,11 @@ export default function Profile() {
     })
       .then((response) => response.json())
       .then((result) => {
+        const { status, msg } = result
         if (result.status === 'success') {
-          console.log(result.msg)
+          notify(msg, status)
           logout()
-          router.push('/users')
+          router.push('/')
         }
       })
       .catch((err) => console.log(err.msg))
@@ -153,6 +140,7 @@ export default function Profile() {
       <Head>
         <title>個人資料</title>
       </Head>
+      <Toaster />
       <Menu />
       <Form
         userProfile={userProfile}
@@ -161,8 +149,6 @@ export default function Profile() {
         handleChangePWD={handleChangePWD}
         handleUpdatePWD={handleUpdatePWD}
         errorMsg={errorMsg}
-        notify={notify}
-        Toaster={Toaster}
       />
     </>
   )

@@ -10,11 +10,8 @@ export default function Form({
   handleChangePWD = () => {},
   handleUpdatePWD = () => {},
   errorMsg = {},
-  Toaster,
 }) {
   const { type, icon, handleToggle } = useShow()
-  console.log(errorMsg)
-
   return (
     <>
       <div className={`col-sm-8 p-0 rounded-end ${styles['form-container']}`}>
@@ -58,7 +55,7 @@ export default function Form({
                           className="form-control"
                           name="name"
                           placeholder="王小美"
-                          defaultValue={userProfile.name}
+                          value={userProfile.name}
                           onChange={handleChangeProfile}
                         />
                       </div>
@@ -71,7 +68,7 @@ export default function Form({
                           id="myBirth"
                           className="form-control"
                           name="birth"
-                          defaultValue={userProfile.birth}
+                          value={userProfile.birth}
                           onChange={handleChangeProfile}
                         />
                       </div>
@@ -86,7 +83,7 @@ export default function Form({
                           className="form-control"
                           name="email"
                           placeholder="xxx@test.com.tw"
-                          defaultValue={userProfile.email}
+                          value={userProfile.email}
                           onChange={handleChangeProfile}
                         />
                       </div>
@@ -101,7 +98,7 @@ export default function Form({
                           name="tel"
                           placeholder="0987654321"
                           maxLength={10}
-                          defaultValue={userProfile.tel}
+                          value={userProfile.tel}
                           onChange={handleChangeProfile}
                         />
                       </div>
@@ -114,7 +111,7 @@ export default function Form({
                           id="address"
                           className="form-control"
                           name="address"
-                          defaultValue={userProfile.address}
+                          value={userProfile.address}
                           onChange={handleChangeProfile}
                         />
                       </div>
@@ -132,7 +129,6 @@ export default function Form({
                           className="btn btn-secondary text-white"
                         >
                           儲存變更
-                          <Toaster />
                         </button>
                       </div>
                     </div>

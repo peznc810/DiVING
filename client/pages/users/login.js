@@ -12,6 +12,9 @@ import useShow from '@/hooks/use-password-visibility'
 import { FcGoogle } from 'react-icons/fc'
 import { useAuth } from '@/hooks/auth'
 
+// Alert
+import { Toaster } from 'react-hot-toast'
+
 export default function Login() {
   const { login, loginGoogle, auth, setMsg, errorMsg } = useAuth()
   const { loginGoogleRedirect, logoutFirebase, initGoogle } = useFirebase()
@@ -25,7 +28,6 @@ export default function Login() {
   // 將拿到的google資料進行處理
   const callbackGoogleLogin = (providerData) => {
     // 取得使用者的資料
-    // console.log(providerData)
     // 判斷當前是否已經登入，如果已登入就結束function（因為init本意為檢查是否登入，未登入才會執行其他事情）
     if (auth.isAuth) return
     // initGoogle取得資料並同步給其他function後，此處先將資料登出，避免google資料仍留存
@@ -193,7 +195,10 @@ export default function Login() {
                 {errorMsg}
               </div>
               {/* END */}
-              <button className={`fw-medium ${styles.btn}`}>登入</button>
+              <button className={`fw-medium ${styles.btn}`}>
+                登入
+                <Toaster />
+              </button>
               <div className="row justify-content-center align-items-center">
                 <div className="col-10">
                   <div
