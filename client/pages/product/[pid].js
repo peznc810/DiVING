@@ -13,7 +13,6 @@ import { FaCartPlus } from 'react-icons/fa'
 import { GiClothes } from 'react-icons/gi'
 import { FaShuttleVan } from 'react-icons/fa'
 import toast, { Toaster } from 'react-hot-toast'
-// import { set } from 'lodash'
 
 export default function Detail() {
   const router = useRouter()
@@ -21,12 +20,43 @@ export default function Detail() {
   const [product, setProduct] = useState(null)
 
   const [productCount, setProductCount] = useState(1) //增加、減少數量
-  const [items, setItems] = useState([]) //加入到購物車中的項目
 
   const [selectColor, setSelectColor] = useState(null)
   const [selectSize, setSelectSize] = useState(null)
 
   const [rating, setRating] = useState(0) //評分
+
+  const [favorites, setFavorites] = useState([]) //加入收藏
+
+  // 得到我的最愛
+  const handleAddToFavorites = async () => {
+    try {
+      const userId = '用户ID' // 替换为实际的用户ID
+      const productId = product.id // 使用产品ID作为收藏的对象
+
+      const response = await fetch('http://localhost:3005/api/collect', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ user_id: userId, product_id: productId }),
+      })
+
+      if (!response.ok) {
+        throw new Error('Network response was not ok')
+      }
+
+      // 弹出通知，表示成功加入收藏
+      notify()
+    } catch (error) {
+      console.error('加入收藏失败:', error)
+    }
+  }
+
+  const notify = () =>
+    toast('商品已加入收藏！', {
+      icon: '✅',
+    })
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -118,7 +148,6 @@ export default function Detail() {
           <div className="col-sm-5">
             <h3>{product.name}</h3>
             <Star rating={rating} setRating={setRating} />
-            {/* {console.log(rating)} */}
             <h6 className="my-1">4.0分 | 8則評價</h6>
             {product.discount ? (
               <>
@@ -206,14 +235,16 @@ export default function Detail() {
             <button
               className="btn btn-secondary w-100 mb-3 my-3"
               style={{ fontWeight: 'bold', color: 'white' }}
+              onClick={notify}
             >
               <GoHeartFill /> 加入收藏
+              <Toaster />
             </button>
 
             {/* 加入購物車 */}
             <button className="btn btn-outline-primary w-100">
               加入購物車 <FaCartPlus />
-              <Toaster position="top-center" reverseOrder={false} />
+              {/* <Toaster position="top-center" reverseOrder={false} /> */}
             </button>
 
             {/* 注意事項 */}

@@ -1,13 +1,12 @@
 import { useMemo, useEffect, useState } from 'react'
-import { Router, useRouter } from 'next/router'
+// import { Router, useRouter } from 'next/router'
 
-import Star from '@/components/product/star/star'
 import Card from '@/components/product/list/card'
 import Order from '@/components/product/list/order'
 import Search from '@/components/product/list/search'
 import Filter from '@/components/product/list/filter'
 import Pagination from '@/components/product/list/pagination'
-import Loading from '@/components/layout/loading/loading'
+// import Loading from '@/components/layout/loading/loading'
 
 import Breadcrumb from 'react-bootstrap/Breadcrumb'
 import { FaHome } from 'react-icons/fa'
@@ -19,7 +18,6 @@ export default function List() {
   // const { productBrand } = router.query
 
   const [product, setProduct] = useState([])
-  // console.log(product)
   const [rating, setRating] = useState(0) //評分
 
   // useEffect(() => {
@@ -33,9 +31,6 @@ export default function List() {
   //     }
   //   }
   // }, [productBrand])
-
-  // console.log()
-  // console.log(product)
 
   // Toggle the side navigation
   useEffect(() => {
@@ -169,7 +164,6 @@ export default function List() {
       try {
         await fetch('http://localhost:3005/api/product', {
           method: 'GET',
-          // body: JSON.stringify({}) POST
         })
           .then((res) => {
             return res.json()

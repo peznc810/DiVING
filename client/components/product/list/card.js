@@ -1,16 +1,14 @@
 import { useState } from 'react'
 import Star from '@/components/product/star/star'
-import Pagination from '@/components/product/list/pagination'
 import Link from 'next/link'
 
 import Badge from 'react-bootstrap/Badge'
 import Stack from 'react-bootstrap/Stack'
 import { GoHeartFill } from 'react-icons/go'
 import { FaCartPlus } from 'react-icons/fa'
+import toast, { Toaster } from 'react-hot-toast'
 
 export default function Card({ setProduct, value, rating, setRating }) {
-  // console.log(value)
-
   const handleMouseEnter = () => {
     setIsHovered(true)
   }
