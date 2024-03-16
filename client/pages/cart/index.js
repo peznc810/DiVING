@@ -16,7 +16,7 @@ export default function Home() {
   const { auth } = useAuth()
   const { cart } = useCart()
   const { couponHas } = useCouponHas()
-  const { applyUsingCoupon, removeUsingCoupon } = useUsingCoupon()
+  const { usingCoupon, applyUsingCoupon, removeUsingCoupon } = useUsingCoupon()
 
   const [payment, setPayment] = useState(1)
   const [delivery, setDelivery] = useState(1)
@@ -25,10 +25,21 @@ export default function Home() {
   const [showCoupon, setShowCoupon] = useState(false)
   const { totalPrice, deliveryFee } = cart
 
-  console.log(cart)
-
   useEffect(() => {
-    setTotalTotalPrice(cart.totalPrice)
+    if (usingCoupon && totalPrice < usingCoupon.rule) {
+      removeUsingCoupon()
+      setDiscount(0)
+      setTotalTotalPrice(totalPrice + deliveryFee)
+    } else if (usingCoupon) {
+      applyUsingCoupon((prevState) => ({
+        ...prevState,
+        finalPrice: totalPrice + deliveryFee - usingCoupon.discount,
+      }))
+
+      setTotalTotalPrice(totalPrice + deliveryFee - usingCoupon.discount)
+    } else {
+      setTotalTotalPrice(totalPrice + deliveryFee)
+    }
   }, [cart])
 
   useEffect(() => {
@@ -53,15 +64,17 @@ export default function Home() {
         updateTotalPrice = totalPrice - coupon_discount + deliveryFee
       }
       updateDiscount = (updateTotalPrice - totalPrice - deliveryFee) * -1
+      applyUsingCoupon({
+        id: coupon_id,
+        name: coupon_name,
+        discount: coupon_discount,
+        finalPrice: updateTotalPrice,
+        rule: coupon_rule,
+      })
     } else {
+      removeUsingCoupon()
       updateTotalPrice = totalPrice + deliveryFee
     }
-    applyUsingCoupon({
-      id: coupon_id,
-      name: coupon_name,
-      discount: coupon_discount,
-      finalPrice: updateTotalPrice,
-    })
     setTotalTotalPrice(updateTotalPrice)
     setDiscount(updateDiscount)
   }

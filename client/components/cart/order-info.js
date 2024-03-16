@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 
-export default function OrderInfo({ cart, finalPrice }) {
+export default function OrderInfo({ cart, finalPrice, discount }) {
+  const { totalPrice, deliveryFee } = cart
   return (
     <div className="container">
       <div className="w-100 text-center section-name">
@@ -68,9 +69,14 @@ export default function OrderInfo({ cart, finalPrice }) {
           )}
         </tbody>
       </table>
+      <p className="text-end fw-bold my-3">運費: NT${deliveryFee}</p>
+      {discount && (
+        <p className="text-end fw-bold my-3">折扣: -NT${discount}</p>
+      )}
+
       <p className="text-end fw-bold my-3">
         合計: NT$
-        {finalPrice || cart.totalPrice}
+        {finalPrice || totalPrice + deliveryFee}
       </p>
       <style jsx>{`
         h1,

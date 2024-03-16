@@ -21,6 +21,7 @@ export default function Home() {
   const { usingCoupon } = useUsingCoupon()
 
   const [finalPrice, setFinalPrice] = useState()
+  const [discount, setDiscount] = useState()
   const [order, setOrder] = useState({})
   const [isDone, setIsDone] = useState(false)
 
@@ -30,6 +31,7 @@ export default function Home() {
     if (router.isReady) {
       if (usingCoupon) {
         setFinalPrice(usingCoupon.finalPrice)
+        setDiscount(usingCoupon.discount)
       }
     }
   }, [router.isReady])
@@ -114,7 +116,7 @@ export default function Home() {
       ) : (
         <div className="container">
           <CartStep step={2} />
-          <OrderInfo cart={cart} finalPrice={finalPrice} />
+          <OrderInfo cart={cart} finalPrice={finalPrice} discount={discount} />
           <OrderForm
             payment={payment}
             delivery={delivery}
