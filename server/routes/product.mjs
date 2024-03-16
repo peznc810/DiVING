@@ -93,7 +93,7 @@ router.post('/comment', async (req, res) => {
     }
 
     // Step2. 檢查 user 是否有購買 product_id 的產品
-    const [hasPurchased] = await db.execute('SELECT * FROM `order_detail` WHERE product_id = ?', [payload.product_id]);
+    const [hasPurchased] = await db.execute('SELECT * FROM `order` JOIN `order_detail` ON `order_detail`.order_id = `order`.id WHERE `order_detail`.product_id= ? AND `order`.user_id=?;', [payload.product_id, payload.user_id]);
     if (!hasPurchased || hasPurchased.length === 0) {
       return res.status(400).json({ error: 'User has not purchased this product' });
     }
