@@ -9,7 +9,6 @@ const app = express()
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
-
 //商品列表
 router.get('/', async (req, res) => {
   let product, error
@@ -30,7 +29,7 @@ router.get('/', async (req, res) => {
 
 //商品細節
 router.get('/id', async (req, res) => {
-  const pid = req.query.pid;
+  const pid = req.query.pid
   let product, error
   await getProductID(pid)
     .then((result) => {
@@ -47,42 +46,47 @@ router.get('/id', async (req, res) => {
   }
 })
 
-
 router.post('/comment', async (req, res) => {
   try {
     const payload = {
       score: req.body.score,
       comment: req.body.comment,
       product_id: req.body.product_id,
-      user_id: req.body.user_id
-    };
+      user_id: req.body.user_id,
+    }
 
     // Step1. 身份驗證，檢查 user_id 是否存在
-    const [userExists] = await db.execute('SELECT * FROM `users` WHERE id = ?', [payload.user_id]);
+    const [userExists] = await db.execute(
+      'SELECT * FROM `users` WHERE id = ?',
+      [payload.user_id],
+    )
     if (!userExists) {
-      return res.status(404).json({ error: 'User not found' });
+      return res.status(404).json({ error: 'User not found' })
     }
 
     // Step2. 檢查 user 是否有購買 product_id 的產品
-    const [hasPurchased] = await db.execute('SELECT * FROM `order` JOIN `order_detail` ON `order_detail`.order_id = `order`.id WHERE `order_detail`.product_id= ? AND `order`.user_id=?;', [payload.product_id, payload.user_id]);
+    const [hasPurchased] = await db.execute(
+      'SELECT * FROM `order` JOIN `order_detail` ON `order_detail`.order_id = `order`.id WHERE `order_detail`.product_id= ? AND `order`.user_id=?;',
+      [payload.product_id, payload.user_id],
+    )
     if (!hasPurchased || hasPurchased.length === 0) {
-      return res.status(400).json({ error: 'User has not purchased this product' });
+      return res
+        .status(400)
+        .json({ error: 'User has not purchased this product' })
     }
 
     // Step3. 寫入資料庫
-    await insertComment(payload);
-    res.status(200).json({ message: 'Success' });
-
+    await insertComment(payload)
+    res.status(200).json({ message: 'Success' })
   } catch (error) {
-    console.error('Error:', error);
-    res.status(500).json({ error: 'Internal Server Error' });
+    console.error('Error:', error)
+    res.status(500).json({ error: 'Internal Server Error' })
   }
-});
-
+})
 
 // get 打印評論
 router.get('/comment', async (req, res) => {
-  const pid = req.query.pid;
+  const pid = req.query.pid
   let comment, error
   await getComment(pid)
     .then((result) => {
@@ -103,26 +107,28 @@ router.get('/comment', async (req, res) => {
 //post 傳送到資料庫
 router.post('/collect', async (req, res) => {
   try {
-    const { product_id, user_id } = req.body;
-    
+    const { product_id, user_id } = req.body
+
     // Step1. 身份驗證 -> user_id 是否存在 ?
-    const [result] = await db.execute('SELECT * FROM `users` WHERE id = ?', [user_id]);
-    
+    const [result] = await db.execute('SELECT * FROM `users` WHERE id = ?', [
+      user_id,
+    ])
+
     if (!result || result.length === 0) {
-      return res.status(404).json({ status: 'error', msg: 'User not found' });
+      return res.status(404).json({ status: 'error', msg: 'User not found' })
     }
     // Step2. 寫入資料庫
-    await insertCollect({ product_id, user_id });
-    
-    res.status(200).json({ message: 'Success' });
+    await insertCollect({ product_id, user_id })
+
+    res.status(200).json({ message: 'Success' })
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ status: 'error', msg: 'Internal server error' });
+    console.error(err)
+    res.status(500).json({ status: 'error', msg: 'Internal server error' })
   }
-});
+})
 
 router.get('/collect', async (req, res) => {
-  const mid = req.query.mid;
+  const mid = req.query.mid
   let comment, error
   await getCollect(mid)
     .then((result) => {
@@ -136,6 +142,38 @@ router.get('/collect', async (req, res) => {
   }
   if (comment) {
     res.status(200).json(comment)
+  }
+})
+
+router.get('/product-is-collect', async (req, res) => {
+  const mid = req.query.mid
+  const pid = req.query.pid
+  let comment, error
+  await getIsCollect(mid, pid)
+    .then((result) => {
+      comment = result
+    })
+    .catch((err) => {
+      error = err
+    })
+  if (error) {
+    res.status(400).json(error)
+  }
+  if (comment) {
+    res.status(200).json(comment)
+  }
+})
+
+router.delete('/delete-collect', async (req, res) => {
+  const mid = req.query.mid
+  const pid = req.query.pid
+  try {
+    await removeCollect({ product_id: pid, user_id: mid })
+    res
+      .status(200)
+      .json({ message: 'Product removed from collection successfully' })
+  } catch (err) {
+    res.status(400).json(err)
   }
 })
 
@@ -154,7 +192,10 @@ function getProduct(req) {
 //取得評論資料
 function getComment(pid) {
   return new Promise(async (resolve, reject) => {
-    const [result] = await db.execute('SELECT * FROM `star` WHERE product_id = ?' ,[pid])
+    const [result] = await db.execute(
+      'SELECT * FROM `star` WHERE product_id = ?',
+      [pid],
+    )
     if (result) {
       resolve(result)
     } else {
@@ -166,9 +207,12 @@ function getComment(pid) {
 //新增評論
 function insertComment(data) {
   return new Promise(async (resolve, reject) => {
-    const [result] = await db.execute('INSERT INTO star (user_id, product_id, score, comment) VALUES (?, ?, ?, ?);', [data.user_id, data.product_id, data.score, data.comment])
+    const [result] = await db.execute(
+      'INSERT INTO star (user_id, product_id, score, comment) VALUES (?, ?, ?, ?);',
+      [data.user_id, data.product_id, data.score, data.comment],
+    )
     if (result) {
-      resolve({message: 'Success'})
+      resolve({ message: 'Success' })
     } else {
       reject({ status: 'error', msg: 'err' })
     }
@@ -177,7 +221,10 @@ function insertComment(data) {
 
 function getProductID(pid) {
   return new Promise(async (resolve, reject) => {
-    const [result] = await db.execute('SELECT * FROM `product` WHERE product.id = ?' ,[pid])
+    const [result] = await db.execute(
+      'SELECT * FROM `product` WHERE product.id = ? ',
+      [pid],
+    )
     if (result) {
       resolve(result)
     } else {
@@ -189,7 +236,10 @@ function getProductID(pid) {
 //收藏
 function getCollect(mid) {
   return new Promise(async (resolve, reject) => {
-    const [result] = await db.execute('SELECT * FROM `collect` WHERE user_id = ?' ,[mid])
+    const [result] = await db.execute(
+      'SELECT * FROM `collect` WHERE user_id = ?',
+      [mid],
+    )
     if (result) {
       resolve(result)
     } else {
@@ -197,15 +247,68 @@ function getCollect(mid) {
     }
   })
 }
-function insertCollect(data) {
+
+//判斷有沒有收藏過
+function getIsCollect(mid, pid) {
   return new Promise(async (resolve, reject) => {
-    const [result] = await db.execute('INSERT INTO collect (user_id, product_id) VALUES (?, ?);', [data.user_id, data.product_id])
+    const [result] = await db.execute(
+      'SELECT * FROM `collect` WHERE user_id = ? AND product_id = ?',
+      [mid, pid],
+    )
     if (result) {
-      resolve({message: 'Success'})
+      resolve(result)
     } else {
       reject({ status: 'error', msg: 'err' })
     }
   })
 }
+
+function insertCollect(data) {
+  return new Promise(async (resolve, reject) => {
+    const [result] = await db.execute(
+      'INSERT INTO `collect` (user_id, product_id) VALUES (?, ?);',
+      [data.user_id, data.product_id],
+    )
+    if (result) {
+      resolve({ message: 'Success' })
+    } else {
+      reject({ status: 'error', msg: 'err' })
+    }
+  })
+}
+
+function removeCollect(data) {
+  return new Promise(async (resolve, reject) => {
+    const [result] = await db.execute(
+      'DELETE FROM collect WHERE `collect`.`user_id` = ? AND `collect`.`product_id` = ?;',
+      [data.user_id, data.product_id],
+    )
+    if (result.affectedRows === 1) {
+      resolve({ message: 'Success' })
+    } else {
+      reject({ status: 'error', msg: 'err' })
+    }
+  })
+}
+// function removeCollect(data = { user_id: 35, product_id: 23 }) {
+//   return new Promise((resolve, reject) => {
+//     db.execute(
+//       'DELETE FROM collect WHERE `collect`.`user_id` = ? AND `collect`.`product_id` = ?;',
+//       [data.user_id, data.product_id])
+
+//       (err, result) => {
+//         if (err) {
+//           reject(err)
+//         } else {
+//           if (result.affectedRows > 0) {
+//             resolve({ message: 'Success' })
+//           } else {
+//             reject({ status: 'error', msg: 'No rows affected' })
+//           }
+//         }
+//       },
+//     )
+//   })
+// }
 
 export default router

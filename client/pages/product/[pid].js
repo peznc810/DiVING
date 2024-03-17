@@ -13,9 +13,32 @@ import { FaCartPlus } from 'react-icons/fa'
 import { GiClothes } from 'react-icons/gi'
 import { FaShuttleVan } from 'react-icons/fa'
 import toast, { Toaster } from 'react-hot-toast'
+import { useAuth } from '@/hooks/auth'
+
+const fetchIsCollect = async (pid, id) => {
+  try {
+    return await fetch(
+      `http://localhost:3005/api/product/product-is-collect?pid=${pid}&mid=${id}`,
+      {
+        method: 'GET',
+      }
+    )
+      .then((res) => {
+        return res.json()
+      })
+      .then((res) => {
+        return res.length > 0
+      })
+  } catch (error) {
+    return false
+  }
+}
 
 export default function Detail() {
   const router = useRouter()
+  const {
+    auth: { id },
+  } = useAuth()
   const { pid } = router.query
   const [product, setProduct] = useState(null)
 
@@ -39,14 +62,32 @@ export default function Detail() {
   }
 
   //-----------------------------------------------
-  const [favorites, setFavorites] = useState([]) //加入收藏
+  const [favorites, setFavorites] = useState(false) //加入收藏
 
+  const handleRemoveFavorites = async () => {
+    try {
+      const response = await fetch(
+        `http://localhost:3005/api/product/delete-collect?pid=${pid}&mid=${id}`,
+        {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      )
+      if (response.ok) {
+        // toast
+        notify('商品已從收藏移除！')
+        fetchIsCollect(pid, id).then((res) => setFavorites(res))
+      }
+    } catch (err) {
+      // toast
+      notify('收藏移除失敗！', false)
+    }
+  }
   // 得到我的最愛
   const handleAddToFavorites = async () => {
     try {
-      const userId = users.id //要帶入？
-      const productId = product.id
-
       const response = await fetch(
         'http://localhost:3005/api/product/collect',
         {
@@ -54,24 +95,24 @@ export default function Detail() {
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ user_id: userId, product_id: productId }),
+          body: JSON.stringify({ user_id: id, product_id: product.id }),
         }
       )
 
       if (!response.ok) {
         throw new Error('Network response was not ok')
       }
-
+      fetchIsCollect(pid, id).then((res) => setFavorites(res))
       // 吐司通知，表示成功加入收藏
-      notify()
+      notify('商品已加入收藏！')
     } catch (error) {
-      console.error('加入收藏失败:', error)
+      notify('加入收藏失败', false)
     }
   }
 
-  const notify = () =>
-    toast('商品已加入收藏！', {
-      icon: '✅',
+  const notify = (text, isSuccess = true) =>
+    toast(text, {
+      icon: isSuccess ? '✅' : 'X',
     })
   //-----------------------------------------------
 
@@ -93,8 +134,13 @@ export default function Detail() {
         }
       }
     }
-    if (pid) fetchProduct()
-  }, [pid])
+    if (pid && id) {
+      fetchProduct()
+      fetchIsCollect(pid, id).then((res) => {
+        setFavorites(res)
+      })
+    }
+  }, [pid, id])
 
   // if (product) {
   //   const [newproduct] = product.filter((o) => {
@@ -154,11 +200,11 @@ export default function Detail() {
         <div className="row mt-5 mx-2 my-5">
           <div className="col-sm-7">
             <div className="position-sticky" style={{ top: '2rem' }}>
-              <Carousel
+              {/* <Carousel
                 imgFileNames={product.img.split(',')}
                 id={product.id}
                 category={product.category}
-              />
+              /> */}
             </div>
           </div>
 
@@ -252,9 +298,9 @@ export default function Detail() {
             <button
               className="btn btn-secondary w-100 mb-3 my-3"
               style={{ fontWeight: 'bold', color: 'white' }}
-              onClick={notify}
+              onClick={favorites ? handleRemoveFavorites : handleAddToFavorites}
             >
-              <GoHeartFill /> 加入收藏
+              <GoHeartFill /> {favorites ? '移除收藏' : '收藏'}
               <Toaster />
             </button>
 
