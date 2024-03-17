@@ -18,7 +18,7 @@
     //全部svg
     width: 100%;
     height: 100%;
-    fill: #d9d9d9;
+    fill: transparent;
     // circle {
     //   // overflow: hidden;
     //   stroke: rgba(250, 235, 215, 0.178);
@@ -33,28 +33,26 @@
       fill: none;
       stroke: var(--bs-gray);
     }
-    .use {
-      //複製出來的svg
-      fill: #000000;
-    }
+    // .use {
+    //複製出來的svg
+    // fill: #000000;
+    // }
   }
 }
 
-.same {
-  //想要同時選取 圓形+區 的時候亮
-  // &:hover {
-  //   fill: #74d8ff;
-  //   .diveSvg {
-  //     //潛水伕
-  //     fill: black;
-  //     animation: cloudAni 2s infinite linear;
-  //   }
-  // }
-  transform: scale(1);
-  transform-box: fill-box;
-  transform-origin: center;
-  animation: circle 5s ease-in 1.3s infinite;
-}
+// .same {
+//   // 想要同時選取 圓形 + 區 的時候亮
+//   &:hover {
+//     fill: #74d8ff;
+//     .diveSvg {
+//       //潛水伕
+//       fill: black;
+//       animation: swimming 2s infinite linear;
+//     }
+//   }
+//   transform: scale(1);
+//   animation: circle 5s ease-in 1.3s infinite;
+// }
 @keyframes circle {
   50% {
     transform: scale(2);
@@ -65,7 +63,7 @@
 }
 .district {
   //8大區域
-  fill: pink;
+  fill: #a8cd9f;
   cursor: pointer;
   path {
     //各個區
@@ -77,31 +75,32 @@
   }
 }
 
-.ctaSvg {
-  //圓形裡面所有東西
-  animation: jump 2s ease-in-out infinite;
-  // animation-delay: 200ms;
-  cursor: pointer;
-  fill: rgb(189, 199, 239);
-  .diveSvg {
-    // 裡面的人
-    fill: #000;
-  }
+// .ctaSvg {
+//   //圓形裡面所有東西
+//   // animation: jump 2s ease-in-out infinite;
+//   // animation-delay: 200ms;
+//   cursor: pointer;
+//   fill: rgb(189, 199, 239);
+// }
+.diveSvg {
+  // 裡面的人
+  fill: #000;
+  // animation: swimming 2s infinite linear;
 }
 
-@keyframes cloudAni {
+@keyframes swimming {
   0% {
-    transform: translateX(6%);
+    transform: translateX(7%);
   }
   /*可加50%給他loop*/
   50% {
     transform: translateY(-1%);
   }
   75% {
-    transform: translateY(0);
+    transform: translateY(2%);
   }
   100% {
-    transform: translateX(-5%); /*最左邊*/
+    transform: translateX(-9%); /*最左邊*/
   }
 }
 @keyframes jump {
@@ -127,10 +126,50 @@
   }
 }
 
+//氣象資訊區塊
 .weather {
-  //氣象資訊區塊
   .weather-detail {
     font-size: 20px;
     line-height: 30px;
+  }
+}
+
+.ctaSvg {
+  position: relative;
+  // border: 1px solid;
+}
+
+.rp1,
+.rp2,
+.rp3 {
+  /*content: ' ';
+  position: absolute;
+  transition: all 1.5s linear;
+  z-index: 1;*/
+  animation: pulse 5s 1 ease-out;
+  // stroke: #000;
+}
+.rp1 {
+  animation-delay: 1s;
+  fill: rgba(96, 147, 171, 0.137);
+}
+.rp2 {
+  animation-delay: 2s;
+  fill: rgba(163, 184, 193, 0.315);
+}
+.rp3 {
+  animation-delay: 3s;
+  fill: rgba(194, 194, 194, 0.244);
+}
+@keyframes pulse {
+  0% {
+    opacity: 0.5;
+  }
+
+  100% {
+    opacity: 0;
+
+    transform: scale(2);
+    transition: all 0.5 linear;
   }
 }
