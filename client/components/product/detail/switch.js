@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 
 import Star from '@/components/product/star/star'
-import ProductRecommond from '@/components/product/detail/product-recommond'
+import { FaRegCommentDots } from 'react-icons/fa'
 
 export default function Switch({
   name,
@@ -80,7 +80,7 @@ export default function Switch({
               <div className="form-group">
                 <label className="mx-2 my-1" for="exampleFormControlTextarea1">
                   來為 <span className="comment-product-name">{name}</span>{' '}
-                  評價吧
+                  評價吧 <FaRegCommentDots className="FaRegCommentDots" />
                 </label>
                 <Star rating={rating} setRating={setRating} />
                 <textarea
