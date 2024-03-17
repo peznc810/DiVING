@@ -14,7 +14,6 @@ import EventProvider from '@/hooks/use-eventData'
 import CouponHasProvider from '@/hooks/use-couponHasData'
 import { CartProvider } from '@/hooks/cart'
 
-
 export default function App({ Component, pageProps }) {
   // 獲取當前頁面路徑
   const router = useRouter()

@@ -1,28 +1,23 @@
-import React, { useState } from 'react'
+import React from 'react'
+import style from '@/styles/lessonStyle/switch.module.scss'
 
 export default function Test({ switchvalue }) {
-  // const [isChecked, setIsChecked] = useState(false)
-
-  // const toggleSwitch = () => {
-  //   setIsChecked(!isChecked)
-
-  //   return console.log(isChecked)
-  // }
-
   return (
-    <div className="switch">
+    <div className={style.switch}>
       <input
         type="checkbox"
-        className="switch-checkbox"
+        className={style['switch-checkbox']}
         id="switch1"
         checked={switchvalue.isChecked}
         onChange={switchvalue.toggleSwitch}
       />
-      <label className="switch-label" htmlFor="switch1">
+      <label className={style['switch-label']} htmlFor="switch1">
         <span
-          className={`switch-txt ${switchvalue.isChecked ? 'on' : 'off'}`}
+          className={`${style['switch-txt']} ${
+            switchvalue.isChecked ? 'on' : 'off'
+          }`}
         ></span>
-        <span className="switch-Round-btn"></span>
+        <span className={style['switch-Round-btn']}></span>
       </label>
     </div>
   )

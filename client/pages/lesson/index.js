@@ -6,7 +6,7 @@ import Col from 'react-bootstrap/Col'
 import Head from 'next/head'
 // ----引入元件----
 import BsCard from '@/components/lesson/Bs-card'
-import AddrCheck from '@/components/lesson/Addrcheck'
+import InputCheck from '@/components/lesson/inputCheck'
 // import Difflayout from '@/components/lesson/Diffcheck'
 import List from '@/components/lesson/List'
 import Star from '@/components/lesson/star'
@@ -66,7 +66,7 @@ export default function Test() {
                   </div>
                 </div>
               </div>
-              <AddrCheck />
+              <InputCheck />
             </Col>
             <Col
               lg="9"
