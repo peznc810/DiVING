@@ -28,6 +28,18 @@ export default function Detail() {
 
   const [favorites, setFavorites] = useState([]) //加入收藏
 
+  //css樣式
+  const [accordionStyle, setAccordionStyle] = useState({
+    size: '',
+    freight: '',
+  })
+  const handleButtonClick = (buttonName) => {
+    setAccordionStyle({
+      ...accordionStyle,
+      [buttonName]: accordionStyle[buttonName] ? '' : 'active',
+    })
+  }
+
   // 得到我的最愛
   const handleAddToFavorites = async () => {
     try {
@@ -248,7 +260,7 @@ export default function Detail() {
             </button>
 
             {/* 注意事項 */}
-            <div className="my-4">
+            <div className="my-5">
               <div
                 className="accordion accordion-flush"
                 id="accordionFlushExample"
@@ -256,14 +268,15 @@ export default function Detail() {
                 <div className="accordion-item">
                   <h4 className="accordion-header">
                     <button
-                      className="accordion-button collapsed"
+                      className={`accordion-button collapsed ${accordionStyle.size}`}
                       type="button"
                       data-bs-toggle="collapse"
                       aria-expanded="false"
                       data-bs-target="#panelsStayOpen-collapseOne"
                       aria-controls="panelsStayOpen-collapseOne"
+                      onClick={() => handleButtonClick('size')}
                     >
-                      <GiClothes className="GiClothes" />
+                      <GiClothes className="GiClothes m-1" />
                       尺寸與版型
                     </button>
                   </h4>
@@ -283,14 +296,15 @@ export default function Detail() {
                 <div className="accordion-item">
                   <h2 className="accordion-header">
                     <button
-                      className="accordion-button collapsed"
+                      className={`accordion-button collapsed ${accordionStyle.freight}`}
                       type="button"
                       data-bs-toggle="collapse"
                       data-bs-target="#panelsStayOpen-collapseTwo"
                       aria-expanded="false"
                       aria-controls="panelsStayOpen-collapseTwo"
+                      onClick={() => handleButtonClick('freight')}
                     >
-                      <FaShuttleVan className="FaShuttleVan" />
+                      <FaShuttleVan className="FaShuttleVan m-1" />
                       免運及退貨
                     </button>
                   </h2>
