@@ -6,11 +6,19 @@ import Badge from 'react-bootstrap/Badge'
 import Stack from 'react-bootstrap/Stack'
 
 import { GoHeartFill } from 'react-icons/go'
+import { TbHeartX } from 'react-icons/tb'
 import { FaCartPlus } from 'react-icons/fa'
 import Link from 'next/link'
 
+import { Toaster } from 'react-hot-toast'
+import useCollect from '@/hooks/use-collect'
+
 export default function ProductRecommend() {
   const [product, setProduct] = useState([])
+  console.log(product)
+  const { handleAddToFavorites, handleRemoveFavorites, favorites } = useCollect(
+    product.id
+  )
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -39,17 +47,6 @@ export default function ProductRecommend() {
     }
     fetchProduct()
   }, [])
-
-  // useEffect(() => {
-  //   if (!pid) return
-  //   fetch(`http://localhost:3000/api/product/`)
-  //     .then((res) => res.json())
-  //     .then((res) => {
-  //       const shuffledProducts = shuffle(res.data)
-  //       const selectedProducts = shuffledProducts.slice(0, 4)
-  //       setProduct(selectedProducts)
-  //     })
-  // }, [pid])
 
   if (!product || !Array.isArray(product)) return null
   return (
@@ -111,8 +108,17 @@ export default function ProductRecommend() {
                           </>
                         )}
                         <div>
-                          <Button className="color-btn" variant="light">
-                            <GoHeartFill />
+                          <Button
+                            className="color-btn"
+                            variant="light"
+                            onClick={
+                              favorites
+                                ? handleRemoveFavorites
+                                : handleAddToFavorites
+                            }
+                          >
+                            {favorites ? <TbHeartX /> : <GoHeartFill />}
+                            <Toaster />
                           </Button>
                           <Button className="color-btn" variant="light">
                             <FaCartPlus />
@@ -167,8 +173,17 @@ export default function ProductRecommend() {
                         </>
                       )}
                       <div>
-                        <Button className="color-btn" variant="light">
-                          <GoHeartFill />
+                        <Button
+                          className="color-btn"
+                          variant="light"
+                          onClick={
+                            favorites
+                              ? handleRemoveFavorites
+                              : handleAddToFavorites
+                          }
+                        >
+                          {favorites ? <TbHeartX /> : <GoHeartFill />}
+                          <Toaster />
                         </Button>
                         <Button className="color-btn" variant="light">
                           <FaCartPlus />

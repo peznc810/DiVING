@@ -5,10 +5,16 @@ import Link from 'next/link'
 import Badge from 'react-bootstrap/Badge'
 import Stack from 'react-bootstrap/Stack'
 import { GoHeartFill } from 'react-icons/go'
+import { TbHeartX } from 'react-icons/tb'
 import { FaCartPlus } from 'react-icons/fa'
-import toast, { Toaster } from 'react-hot-toast'
+
+import { Toaster } from 'react-hot-toast'
+import useCollect from '@/hooks/use-collect'
 
 export default function Card({ setProduct, value, rating, setRating }) {
+  const { handleAddToFavorites, handleRemoveFavorites, favorites } = useCollect(
+    value.id
+  )
   const handleMouseEnter = () => {
     setIsHovered(true)
   }
@@ -61,8 +67,14 @@ export default function Card({ setProduct, value, rating, setRating }) {
             {isHovered ? (
               <div>
                 <div className="bi-icon">
-                  <button className="btn mouse-add p-2">
-                    <GoHeartFill />
+                  <button
+                    className="btn mouse-add p-2"
+                    onClick={
+                      favorites ? handleRemoveFavorites : handleAddToFavorites
+                    }
+                  >
+                    {favorites ? <TbHeartX /> : <GoHeartFill />}
+                    <Toaster />
                   </button>
                   <button className="btn mouse-add p-2">
                     <FaCartPlus />

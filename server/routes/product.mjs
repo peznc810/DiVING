@@ -290,25 +290,5 @@ function removeCollect(data) {
     }
   })
 }
-// function removeCollect(data = { user_id: 35, product_id: 23 }) {
-//   return new Promise((resolve, reject) => {
-//     db.execute(
-//       'DELETE FROM collect WHERE `collect`.`user_id` = ? AND `collect`.`product_id` = ?;',
-//       [data.user_id, data.product_id])
-
-//       (err, result) => {
-//         if (err) {
-//           reject(err)
-//         } else {
-//           if (result.affectedRows > 0) {
-//             resolve({ message: 'Success' })
-//           } else {
-//             reject({ status: 'error', msg: 'No rows affected' })
-//           }
-//         }
-//       },
-//     )
-//   })
-// }
 
 export default router

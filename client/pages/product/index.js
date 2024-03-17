@@ -195,7 +195,7 @@ export default function List() {
     <>
       <div className="container-1200">
         {/* 麵包屑 */}
-        <Breadcrumb>
+        <Breadcrumb className="product-Breadcrumb">
           <Breadcrumb.Item href="http://localhost:3000">
             <FaHome />
           </Breadcrumb.Item>

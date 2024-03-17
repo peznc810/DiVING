@@ -220,8 +220,10 @@ div.scroll {
 .clear-settings {
   background-color: #265475;
   border: #265475;
+  // color: #265475;
+  // outline: #265475 1px solid;
   border-radius: 20px;
-  font-weight: 300;
+  font-weight: 400;
 }
 .TbSettingsX {
   font-size: 18px;
@@ -238,8 +240,19 @@ div.scroll {
 }
 
 //product-detail
+.detail-TbHeartX,
+.detail-GoHeartFill,
+.detail-FaCartPlus{
+  padding-bottom: 1.8px;
+}
+
 .GiClothes,
-.FaShuttleVan {
-  color: #303132;
+.FaShuttleVan{
   padding-right: 2px;
+}
+
+//common
+.product-Breadcrumb{
+  font-size: 16.5px;
+  font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
 }

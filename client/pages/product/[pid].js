@@ -9,38 +9,19 @@ import ProductRecommend from '@/components/product/detail/product-recommond'
 import Breadcrumb from 'react-bootstrap/Breadcrumb'
 import { FaHome } from 'react-icons/fa'
 import { GoHeartFill } from 'react-icons/go'
+import { TbHeartX } from 'react-icons/tb'
 import { FaCartPlus } from 'react-icons/fa'
 import { GiClothes } from 'react-icons/gi'
 import { FaShuttleVan } from 'react-icons/fa'
-import toast, { Toaster } from 'react-hot-toast'
-import { useAuth } from '@/hooks/auth'
-
-const fetchIsCollect = async (pid, id) => {
-  try {
-    return await fetch(
-      `http://localhost:3005/api/product/product-is-collect?pid=${pid}&mid=${id}`,
-      {
-        method: 'GET',
-      }
-    )
-      .then((res) => {
-        return res.json()
-      })
-      .then((res) => {
-        return res.length > 0
-      })
-  } catch (error) {
-    return false
-  }
-}
+import { Toaster } from 'react-hot-toast'
+import useCollect from '@/hooks/use-collect'
 
 export default function Detail() {
   const router = useRouter()
-  const {
-    auth: { id },
-  } = useAuth()
   const { pid } = router.query
   const [product, setProduct] = useState(null)
+  const { handleAddToFavorites, handleRemoveFavorites, favorites } =
+    useCollect(pid)
 
   const [productCount, setProductCount] = useState(1) //增加、減少數量
 
@@ -61,61 +42,6 @@ export default function Detail() {
     })
   }
 
-  //-----------------------------------------------
-  const [favorites, setFavorites] = useState(false) //加入收藏
-
-  const handleRemoveFavorites = async () => {
-    try {
-      const response = await fetch(
-        `http://localhost:3005/api/product/delete-collect?pid=${pid}&mid=${id}`,
-        {
-          method: 'DELETE',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        }
-      )
-      if (response.ok) {
-        // toast
-        notify('商品已從收藏移除！')
-        fetchIsCollect(pid, id).then((res) => setFavorites(res))
-      }
-    } catch (err) {
-      // toast
-      notify('收藏移除失敗！', false)
-    }
-  }
-  // 得到我的最愛
-  const handleAddToFavorites = async () => {
-    try {
-      const response = await fetch(
-        'http://localhost:3005/api/product/collect',
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ user_id: id, product_id: product.id }),
-        }
-      )
-
-      if (!response.ok) {
-        throw new Error('Network response was not ok')
-      }
-      fetchIsCollect(pid, id).then((res) => setFavorites(res))
-      // 吐司通知，表示成功加入收藏
-      notify('商品已加入收藏！')
-    } catch (error) {
-      notify('加入收藏失败', false)
-    }
-  }
-
-  const notify = (text, isSuccess = true) =>
-    toast(text, {
-      icon: isSuccess ? '✅' : 'X',
-    })
-  //-----------------------------------------------
-
   useEffect(() => {
     const fetchProduct = async () => {
       try {
@@ -134,13 +60,10 @@ export default function Detail() {
         }
       }
     }
-    if (pid && id) {
+    if (pid) {
       fetchProduct()
-      fetchIsCollect(pid, id).then((res) => {
-        setFavorites(res)
-      })
     }
-  }, [pid, id])
+  }, [pid])
 
   // if (product) {
   //   const [newproduct] = product.filter((o) => {
@@ -177,14 +100,11 @@ export default function Detail() {
   }
 
   if (!product) return null
-  // if(!product){
-  //   return null
-  // }
   return (
     <>
       <div className="container-1200">
         {/* 麵包屑 */}
-        <Breadcrumb>
+        <Breadcrumb className="product-Breadcrumb">
           <Breadcrumb.Item href="http://localhost:3000">
             <FaHome />
           </Breadcrumb.Item>
@@ -209,9 +129,9 @@ export default function Detail() {
           </div>
 
           <div className="col-sm-5">
-            <h3>{product.name}</h3>
+            <h4>{product.name}</h4>
             <Star rating={rating} setRating={setRating} />
-            <h6 className="my-1">4.0分 | 8則評價</h6>
+            <h6 className="my-2">4.0分 | 8則評價</h6>
             {product.discount ? (
               <>
                 <span className="note-text">{`NT$${product.discount.toLocaleString()}`}</span>
@@ -227,7 +147,7 @@ export default function Detail() {
               </>
             )}
             <p
-              className="my-1"
+              className="my-1 product-info"
               dangerouslySetInnerHTML={{
                 __html: product.info.replace(/\n/g, '<br>'),
               }}
@@ -283,7 +203,7 @@ export default function Detail() {
               >
                 -
               </button>
-              <span className="mx-3"> {productCount} </span>
+              <span className="mx-3 productCount"> {productCount} </span>
               <button
                 className="btn btn-circle"
                 onClick={() => {
@@ -300,14 +220,21 @@ export default function Detail() {
               style={{ fontWeight: 'bold', color: 'white' }}
               onClick={favorites ? handleRemoveFavorites : handleAddToFavorites}
             >
-              <GoHeartFill /> {favorites ? '移除收藏' : '收藏'}
+              {favorites ? (
+                <>
+                  <TbHeartX className="detail-TbHeartX" /> 移除收藏
+                </>
+              ) : (
+                <>
+                  <GoHeartFill className="detail-GoHeartFill" /> 收藏
+                </>
+              )}
               <Toaster />
             </button>
 
             {/* 加入購物車 */}
             <button className="btn btn-outline-primary w-100">
-              加入購物車 <FaCartPlus />
-              {/* <Toaster position="top-center" reverseOrder={false} /> */}
+              加入購物車 <FaCartPlus className="detail-FaCartPlus" />
             </button>
 
             {/* 注意事項 */}
@@ -419,9 +346,7 @@ export default function Detail() {
             width: 380px;
           }
         }
-        .my-1 {
-          font-family: Arial, sans-serif;
-        }
+
         .note-text {
           color: var(--red, #dc5151);
           font-size: 16.5px;
@@ -436,6 +361,11 @@ export default function Detail() {
           font-weight: normal;
           font-size: 16.5px;
         }
+        .productCount,
+        .product-info {
+          font-size: 15px;
+        }
+
         .btn-md:hover,
         .btn-outline-primary:hover,
         .btn-circle:hover {
