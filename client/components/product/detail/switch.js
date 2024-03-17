@@ -26,26 +26,6 @@ export default function Switch({
   const [score, setScore] = useState(0)
   const [comment, setComment] = useState('')
 
-  // useEffect(() => {
-  //   const fetchComment = async () => {
-  //     try {
-  //       await fetch(`http://localhost:3005/api/product/comment`, {
-  //         method: 'POST',
-  //         body: JSON.stringify({ score, comment }),
-  //       })
-  //       if (response.ok) {
-  //         console.log('送出評價成功')
-  //       } else {
-  //         console.error('送出評價失敗')
-  //       }
-  //     } catch {
-  //       ;(err) => {
-  //         console.error('送出評價失敗：', err)
-  //       }
-  //     }
-  //   }
-  //   if (pid) fetchComment()
-  // }, [pid])
   const handleCommentSubmit = async (e) => {
     e.preventDefault()
     try {
