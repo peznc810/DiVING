@@ -4,13 +4,14 @@ import Link from 'next/link'
 import CartStep from '@/components/cart/cart-step'
 import { useRouter } from 'next/router'
 
-export default function Home({ orderIdTest }) {
+export default function Order({ orderIdTest }) {
   const router = useRouter()
   const { orderId } = router.query
 
   const [order, setOrder] = useState(null)
+  const [orderDetail, setOrderDetail] = useState(null)
   useEffect(() => {
-    const fetchOrder = async () => {
+    const fetchOrderDetail = async () => {
       try {
         await fetch(
           `http://localhost:3005/api/order/order-detail?orderId=${orderIdTest}`,
@@ -22,6 +23,27 @@ export default function Home({ orderIdTest }) {
             return response.json()
           })
           .then((result) => {
+            setOrderDetail(result)
+          })
+          .catch((err) => {
+            console.error('An error occurred:', err)
+          })
+      } catch (error) {
+        console.error('Error fetching data:', error)
+      }
+    }
+    const fetchOrder = async () => {
+      try {
+        await fetch(
+          `http://localhost:3005/api/order/order?orderId=${orderIdTest}`,
+          {
+            method: 'GET',
+          }
+        )
+          .then((response) => {
+            return response.json()
+          })
+          .then(([result]) => {
             setOrder(result)
           })
           .catch((err) => {
@@ -31,9 +53,11 @@ export default function Home({ orderIdTest }) {
         console.error('Error fetching data:', error)
       }
     }
-
+    fetchOrderDetail()
     fetchOrder()
   }, [])
+
+  console.log(order)
 
   let totalPrice = 0
   return (
@@ -52,8 +76,8 @@ export default function Home({ orderIdTest }) {
           <p className="col">數量</p>
           <p className="col  text-end">小計</p>
         </div>
-        {order &&
-          order.map((item, i) => {
+        {orderDetail &&
+          orderDetail.map((item, i) => {
             const { name, num, price } = item
             const singleItemsPrice = price * num
             totalPrice += singleItemsPrice
@@ -68,7 +92,9 @@ export default function Home({ orderIdTest }) {
         <hr />
         <div className="row">
           <p className="col fw-bold">合計</p>
-          <p className="col fw-bold text-end">NT$ {totalPrice}</p>
+          <p className="col fw-bold text-end">
+            NT$ {order && order.total_price}
+          </p>
         </div>
         <div className="text-end my-3">
           <Link href="../">
