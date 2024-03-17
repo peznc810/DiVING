@@ -26,8 +26,6 @@ export default function Detail() {
 
   const [rating, setRating] = useState(0) //評分
 
-  const [favorites, setFavorites] = useState([]) //加入收藏
-
   //css樣式
   const [accordionStyle, setAccordionStyle] = useState({
     size: '',
@@ -40,25 +38,31 @@ export default function Detail() {
     })
   }
 
+  //-----------------------------------------------
+  const [favorites, setFavorites] = useState([]) //加入收藏
+
   // 得到我的最愛
   const handleAddToFavorites = async () => {
     try {
-      const userId = '用户ID' // 替换为实际的用户ID
-      const productId = product.id // 使用产品ID作为收藏的对象
+      const userId = users.id //要帶入？
+      const productId = product.id
 
-      const response = await fetch('http://localhost:3005/api/collect', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ user_id: userId, product_id: productId }),
-      })
+      const response = await fetch(
+        'http://localhost:3005/api/product/collect',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ user_id: userId, product_id: productId }),
+        }
+      )
 
       if (!response.ok) {
         throw new Error('Network response was not ok')
       }
 
-      // 弹出通知，表示成功加入收藏
+      // 吐司通知，表示成功加入收藏
       notify()
     } catch (error) {
       console.error('加入收藏失败:', error)
@@ -69,6 +73,7 @@ export default function Detail() {
     toast('商品已加入收藏！', {
       icon: '✅',
     })
+  //-----------------------------------------------
 
   useEffect(() => {
     const fetchProduct = async () => {

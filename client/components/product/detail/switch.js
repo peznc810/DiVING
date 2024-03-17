@@ -19,38 +19,59 @@ export default function Switch({
     setIsSwitchOn(!isSwitchOn)
   }
 
+  //-----------------------------------------------
   //新增評論
   const router = useRouter()
   const { pid } = router.query
   const [score, setScore] = useState(0)
   const [comment, setComment] = useState('')
 
-  useEffect(() => {
-    const fetchComment = async () => {
-      try {
-        await fetch(`http://localhost:3005/api/product/?comment`, {
+  // useEffect(() => {
+  //   const fetchComment = async () => {
+  //     try {
+  //       await fetch(`http://localhost:3005/api/product/comment`, {
+  //         method: 'POST',
+  //         body: JSON.stringify({ score, comment }),
+  //       })
+  //       if (response.ok) {
+  //         console.log('送出評價成功')
+  //       } else {
+  //         console.error('送出評價失敗')
+  //       }
+  //     } catch {
+  //       ;(err) => {
+  //         console.error('送出評價失敗：', err)
+  //       }
+  //     }
+  //   }
+  //   if (pid) fetchComment()
+  // }, [pid])
+  const handleCommentSubmit = async (e) => {
+    e.preventDefault()
+    try {
+      const response = await fetch(
+        `http://localhost:3005/api/product/comment`,
+        {
           method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
           body: JSON.stringify({ score, comment }),
-        })
-        if (response.ok) {
-          console.log('送出評價成功')
-        } else {
-          console.error('送出評價失敗')
         }
-        // .then((res) => {
-        //   return res.json()
-        // })
-        // .then(([data]) => {
-        //   setProduct(data ? data : [])
-        // })
-      } catch {
-        ;(err) => {
-          console.error('送出評價失敗：', err)
-        }
+      )
+      if (response.ok) {
+        console.log('送出評價成功')
+        // 清空表單
+        setScore(0)
+        setComment('')
+      } else {
+        console.error('送出評價失敗')
       }
+    } catch (err) {
+      console.error('送出評價失敗：', err)
     }
-    if (pid) fetchComment()
-  }, [pid])
+  }
+  //-----------------------------------------------
 
   return (
     <div className="mt-4">
@@ -76,18 +97,29 @@ export default function Switch({
           {/* 顯示顧客評價 */}
           <h3 className="text-center my-2">顧客評價</h3>
           <div className="container">
-            <form>
+            <form action="post" onSubmit={handleCommentSubmit}>
               <div className="form-group">
                 <label className="mx-2 my-1" for="exampleFormControlTextarea1">
                   來為 <span className="comment-product-name">{name}</span>{' '}
                   評價吧 <FaRegCommentDots className="FaRegCommentDots" />
                 </label>
-                <Star rating={rating} setRating={setRating} />
+                <Star
+                  rating={rating}
+                  setRating={setRating}
+                  type="number"
+                  id="score"
+                  value={score}
+                  required
+                  onChange={(e) => setScore(parseInt(e.target.value))}
+                />
                 <textarea
-                  className="form-control my-1"
-                  id="exampleFormControlTextarea1"
+                  className="form-control my-1 border-2"
+                  id="comment"
+                  value={comment}
                   rows="3"
                   placeholder="請說明使用此商品的體驗"
+                  required
+                  onChange={(e) => setComment(e.target.value)}
                 ></textarea>
               </div>
               <button

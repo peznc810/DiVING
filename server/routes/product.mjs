@@ -47,35 +47,6 @@ router.get('/id', async (req, res) => {
   }
 })
 
-//新增評論功能
-//post 傳送到資料庫
-// router.post('/comment', async (req, res) => {
-//   const payload = {
-//     score: req.body.score,
-//     comment: req.body.comment,
-//     product_id: req.body.product_id, 
-//     user_id: req.body.user_id
-//   }
-//   // user_id 身份驗證, user_id 是否有購買 product_id
-//   // step1. user_id 是否存在 
-//   // step2. 抓取是否有 user_id 購買 prodcut_id 的訂單記錄 (訂單)
-//   const [result] = await db.execute
-//   ('SELECT star.*, product.*, users.* FROM `star` INNER JOIN product ON star.product_id = product.id 
-//   INNER JOIN users ON star.user_id = users.id WHERE product.id = ?')
-//   if (result) {
-//     resolve({message: 'Success'})
-//   } else {
-//     reject({ status: 'error', msg: 'err' })
-//   }
-//   //將取得的東西寫入資料庫
-//   await insertComment(payload)
-//     .then((result) => {
-//       res.status(200).json(result)
-//     })
-//     .catch((err) => {
-//       res.status(400).json(err)
-//     })
-// })
 
 router.post('/comment', async (req, res) => {
   try {
