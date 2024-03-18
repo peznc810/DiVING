@@ -1,0 +1,149 @@
+@import '@/styles/variable.scss';
+.bg_color {
+  background-color: $super-light-gray;
+}
+.pt {
+  padding-top: '5rem';
+}
+.lesson-img {
+  width: 730px;
+  height: 450px;
+  background-color: $secondary;
+}
+
+.switch {
+  position: relative;
+  width: 80px;
+  height: 30px;
+  line-height: 30px;
+
+  .switch-checkbox {
+    position: absolute;
+    opacity: 0;
+  }
+
+  .switch-label {
+    display: block;
+    overflow: hidden;
+    cursor: pointer;
+    border-radius: 20px;
+
+    .switch-txt {
+      display: block;
+      width: 200%;
+      margin-left: -100%;
+      transition: margin 0.3s ease-in 0s;
+
+      &:before,
+      &:after {
+        display: block;
+        float: right;
+        width: 50%;
+        font-size: 13px;
+        color: $super-light-gray;
+        font-weight: bold;
+        box-sizing: border-box;
+      }
+
+      &:after {
+        content: attr(turnon);
+        padding-left: 10px;
+        background: $primary;
+        color: $super-light-gray;
+        text-align: left;
+      }
+
+      &:before {
+        content: attr(turnoff);
+        padding-right: 10px;
+        background: $primary;
+        color: $super-light-gray;
+        text-align: right;
+      }
+    }
+
+    .switch-Round-btn {
+      position: absolute;
+      display: block;
+      width: 26px;
+      height: 26px;
+      margin: 2px;
+      background: $super-light-gray;
+      top: 0;
+      bottom: 0;
+      right: 50px;
+      border-radius: 13px;
+      transition: all 0.3s ease-in 0s;
+    }
+
+    .switch-checkbox:checked + .switch-label .switch-txt {
+      margin-left: 0;
+    }
+
+    .switch-checkbox:checked + .switch-label .switch-Round-btn {
+      right: 0;
+    }
+  }
+}
+
+.scrollbar {
+  &::-webkit-scrollbar {
+    width: 5px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background-color: #c8e8f9;
+    border-radius: 10px;
+    margin: 3rem 130px 1rem;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    background-color: $primary;
+  }
+}
+
+.scrollbar_area {
+  height: 100vh;
+  overflow-y: scroll;
+}
+.on {
+  color: gold;
+}
+
+.off {
+  color: gray;
+}
+
+.good-style {
+  color: red;
+}
+
+.star-btn {
+  background-color: transparent;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 0.25rem;
+}
+.list-bg {
+  background-color: #fff;
+}
+.bg-hover {
+  :hover {
+    // background-color: #a1c4fd;
+    border-radius: 0 6px 6px 0;
+    cursor: pointer;
+    background-image: linear-gradient(120deg, $primary 0%, #c2e9fb 80%);
+    color: $secondary;
+    border-color: $secondary;
+  }
+  .text-area {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+  .hover-none {
+    pointer-events: none;
+  }
+}
