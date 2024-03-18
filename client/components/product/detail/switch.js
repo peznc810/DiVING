@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react'
+import { useMemo, useEffect, useState } from 'react'
+import { useAuth } from '@/hooks/auth'
 import { useRouter } from 'next/router'
 
 import Star from '@/components/product/star/star'
@@ -24,7 +25,12 @@ export default function Switch({
   const router = useRouter()
   const { pid } = router.query
   const [score, setScore] = useState(0)
+  console.log('score', score)
   const [comment, setComment] = useState('')
+  const [allComments, setAllComments] = useState([])
+  const {
+    auth: { id: user_id },
+  } = useAuth()
 
   const handleCommentSubmit = async (e) => {
     e.preventDefault()
@@ -36,14 +42,37 @@ export default function Switch({
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ score, comment }),
+          body: JSON.stringify({
+            score,
+            comment,
+            user_id,
+            product_id: pid,
+          }),
         }
       )
       if (response.ok) {
         console.log('送出評價成功')
-        // 清空表單
-        setScore(0)
-        setComment('')
+        const response = await fetch(
+          `http://localhost:3005/api/product/can-comment?pid=${id}&mid=${user_id}`
+        )
+        const data = await response.json()
+        setCanComment(data)
+        try {
+          const response = await fetch(
+            `http://localhost:3005/api/product/comment?pid=${id}`,
+            {
+              method: 'GET',
+            }
+          )
+          console.log('response', response)
+          if (response.ok) {
+            const data = await response.json()
+            setAllComments(data)
+            console.log(data)
+          }
+        } catch (err) {
+          // console.error('送出評價失敗：', err)
+        }
       } else {
         console.error('送出評價失敗')
       }
@@ -52,6 +81,49 @@ export default function Switch({
     }
   }
   //-----------------------------------------------
+
+  const [canComment, setCanComment] = useState(false)
+
+  useEffect(async () => {
+    const response = await fetch(
+      `http://localhost:3005/api/product/can-comment?pid=${id}&mid=${user_id}`
+    )
+    const data = await response.json()
+    setCanComment(data)
+  }, [id, user_id])
+
+  useEffect(() => {
+    const fetchComment = async () => {
+      try {
+        const response = await fetch(
+          `http://localhost:3005/api/product/comment?pid=${id}`,
+          {
+            method: 'GET',
+          }
+        )
+        console.log('response', response)
+        if (response.ok) {
+          const data = await response.json()
+          setAllComments(data)
+          console.log(data)
+        }
+      } catch (err) {
+        // console.error('送出評價失敗：', err)
+      }
+    }
+    fetchComment()
+  }, [id])
+
+  const averageScore = useMemo(() => {
+    let totalScore = 0
+    allComments.forEach((comment) => {
+      totalScore = totalScore + comment.score
+    })
+    const average = totalScore / allComments.length
+    return average
+  }, [allComments])
+
+  console.log('averageScore', averageScore)
 
   return (
     <div className="mt-4">
@@ -76,45 +148,56 @@ export default function Switch({
         <div>
           {/* 顯示顧客評價 */}
           <h3 className="text-center my-2">顧客評價</h3>
-          <div className="container">
-            <form action="post" onSubmit={handleCommentSubmit}>
-              <div className="form-group">
-                <label className="mx-2 my-1" for="exampleFormControlTextarea1">
-                  來為 <span className="comment-product-name">{name}</span>{' '}
-                  評價吧 <FaRegCommentDots className="FaRegCommentDots" />
-                </label>
-                <Star
-                  rating={rating}
-                  setRating={setRating}
-                  type="number"
-                  id="score"
-                  value={score}
-                  required
-                  onChange={(e) => setScore(parseInt(e.target.value))}
-                />
-                <textarea
-                  className="form-control my-1 border-2"
-                  id="comment"
-                  value={comment}
-                  rows="3"
-                  placeholder="請說明使用此商品的體驗"
-                  required
-                  onChange={(e) => setComment(e.target.value)}
-                ></textarea>
-              </div>
-              <button
-                type="submit"
-                className="btn btn-primary d-flex btn-comment"
-              >
-                送出評價
-              </button>
-            </form>
-          </div>
+          {canComment ? (
+            <div className="container">
+              <form action="post" onSubmit={handleCommentSubmit}>
+                <div className="form-group">
+                  <label
+                    className="mx-2 my-1"
+                    for="exampleFormControlTextarea1"
+                  >
+                    來為 <span className="comment-product-name">{name}</span>{' '}
+                    評價吧 <FaRegCommentDots className="FaRegCommentDots" />
+                  </label>
+                  <Star
+                    rating={score}
+                    setRating={setScore}
+                    type="number"
+                    id="score"
+                    // value={score}
+                    required
+                    // onChange={(e) => {
+                    //   console.log(e.target.value)
+                    //   setScore(parseInt(e.target.value))
+                    // }}
+                  />
+                  <textarea
+                    className="form-control my-1 border-2"
+                    id="comment"
+                    value={comment}
+                    rows="3"
+                    placeholder="請說明使用此商品的體驗"
+                    required
+                    onChange={(e) => setComment(e.target.value)}
+                  ></textarea>
+                </div>
+                <button
+                  type="submit"
+                  className="btn btn-primary d-flex btn-comment"
+                >
+                  送出評價
+                </button>
+              </form>
+            </div>
+          ) : null}
 
           {/* 用戶評價 */}
           <div className="d-flex align-items-center justify-content-center">
             <div className="mt-2">
-              <div className="d-flex justify-content-between align-items-center mt-3">
+              {allComments.map((data) => (
+                <Comment key={data.id} data={data} />
+              ))}
+              {/* <div className="d-flex justify-content-between align-items-center mt-3">
                 <div className="avatar d-none d-sm-block">
                   <img src="/images/product/test/20/1-1.webp" alt="..." />
                 </div>
@@ -125,15 +208,14 @@ export default function Switch({
                     若沒有潛水的存在，那麼後果可想而知。亦舒曾經說過，人生短短數十載，最要緊的是滿足自己，不是討好他人。這影響了我的價值觀。
                   </p>
                 </div>
-              </div>
-
-              <hr />
+              </div> */}
+              {/* <hr />
               <button
                 type="submit"
                 className="btn btn-primary d-flex btn-comment"
               >
                 更多評價
-              </button>
+              </button> */}
             </div>
           </div>
         </div>
@@ -280,6 +362,21 @@ export default function Switch({
           right: 0;
         }
       `}</style>
+    </div>
+  )
+}
+
+const Comment = ({ data, setRating }) => {
+  return (
+    <div className="d-flex justify-content-between align-items-center mt-3">
+      <div className="avatar d-none d-sm-block">
+        <img src={`http://localhost:3005/avatar/${data.avatar}`} alt="..." />
+      </div>
+      <div className="content">
+        <h6>{data.name + '   ' + data.created_at}</h6>
+        <Star rating={data.score} setRating={() => {}} />
+        <p>{data.comment}</p>
+      </div>
     </div>
   )
 }

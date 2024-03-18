@@ -84,6 +84,34 @@ router.post('/comment', async (req, res) => {
   }
 })
 
+// get 是否曾經評論
+router.get('/can-comment', async (req, res) => {
+  const mid = req.query.mid
+  const pid = req.query.pid
+  let comment, error
+
+  // Step2. 檢查 user 是否有購買 product_id 的產品
+  const [result] = await db.execute(
+    'SELECT * FROM `order` JOIN `order_detail` ON `order_detail`.order_id = `order`.id WHERE `order_detail`.product_id= ? AND `order`.user_id=?;',
+    [pid, mid],
+  )
+  if (result && result.length > 0) {
+    await getIsUserCommented(mid, pid)
+      .then((result) => {
+        if (result && result.length > 0) {
+          res.status(200).json(false)
+        } else {
+          res.status(200).json(true)
+        }
+      })
+      .catch((err) => {
+        res.status(400).json(error)
+      })
+  } else {
+    res.status(200).json(false)
+  }
+})
+
 // get 打印評論
 router.get('/comment', async (req, res) => {
   const pid = req.query.pid
@@ -189,11 +217,25 @@ function getProduct(req) {
   })
 }
 
+function getIsUserCommented(mid, pid) {
+  return new Promise(async (resolve, reject) => {
+    const [result] = await db.execute(
+      'SELECT * FROM `star` WHERE user_id = ? AND product_id = ?',
+      [mid, pid],
+    )
+    if (result) {
+      resolve(result)
+    } else {
+      reject({ status: 'error', msg: 'err' })
+    }
+  })
+}
+
 //取得評論資料
 function getComment(pid) {
   return new Promise(async (resolve, reject) => {
     const [result] = await db.execute(
-      'SELECT * FROM `star` WHERE product_id = ?',
+      'SELECT * FROM `star` JOIN `users` ON `users`.id = `star`.user_id  WHERE `star`.product_id = ?',
       [pid],
     )
     if (result) {

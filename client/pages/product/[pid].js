@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useMemo, useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 
 import Star from '@/components/product/star/star'
@@ -29,6 +29,7 @@ export default function Detail() {
   const [selectSize, setSelectSize] = useState(null)
 
   const [rating, setRating] = useState(0) //評分
+  const [allComments, setAllComments] = useState([]) //評論
 
   //css樣式
   const [accordionStyle, setAccordionStyle] = useState({
@@ -41,6 +42,38 @@ export default function Detail() {
       [buttonName]: accordionStyle[buttonName] ? '' : 'active',
     })
   }
+
+  //評論
+  useEffect(() => {
+    const fetchComment = async () => {
+      try {
+        const response = await fetch(
+          `http://localhost:3005/api/product/comment?pid=${pid}`,
+          {
+            method: 'GET',
+          }
+        )
+        console.log('response', response)
+        if (response.ok) {
+          const data = await response.json()
+          setAllComments(data)
+          console.log(data)
+        }
+      } catch (err) {
+        // console.error('送出評價失敗：', err)
+      }
+    }
+    fetchComment()
+  }, [pid])
+
+  const averageScore = useMemo(() => {
+    let totalScore = 0
+    allComments.forEach((comment) => {
+      totalScore = totalScore + comment.score
+    })
+    const average = totalScore / allComments.length
+    return average
+  }, [allComments])
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -130,8 +163,8 @@ export default function Detail() {
 
           <div className="col-sm-5">
             <h4>{product.name}</h4>
-            <Star rating={rating} setRating={setRating} />
-            <h6 className="my-2">4.0分 | 8則評價</h6>
+            <Star rating={averageScore} setRating={setRating} />
+            <h6 className="my-2">{`${averageScore}分 | ${allComments.length}則評價`}</h6>
             {product.discount ? (
               <>
                 <span className="note-text">{`NT$${product.discount.toLocaleString()}`}</span>
