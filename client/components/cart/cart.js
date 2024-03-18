@@ -2,6 +2,8 @@ import React from 'react'
 import { FaShoppingCart, FaRegTrashAlt } from 'react-icons/fa'
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
+import styles from './cart.module.scss'
+import Image from 'next/image'
 
 import { useCart } from '@/hooks/cart'
 
@@ -32,18 +34,18 @@ export default function Cart() {
 
   return (
     <div className="container">
-      <div className="section-name d-flex">
+      <div className={`${styles.sectionName} d-flex`}>
         <FaShoppingCart size={20} color="#013C64" />
-        <h5 className="ms-2 span">{items.length}項商品</h5>
+        <h5 className={`ms-2 ${styles.span}`}>{items.length}項商品</h5>
       </div>
       <table>
         <thead>
           <tr>
-            <th className="col-4 text-start">商品資料</th>
+            <th className="col text-start">商品資料</th>
             <th className="col-2">商品價格</th>
             <th className="col-2">數量</th>
             <th className="col-2">小計</th>
-            <th className="col-2"></th>
+            <th className="col-1 col-sm-2"></th>
           </tr>
         </thead>
         <tbody>
@@ -58,6 +60,9 @@ export default function Cart() {
                 discount_price,
                 product_detail,
                 order_time,
+                category,
+                pid,
+                pimg,
               } = item
               const id = product_id || lesson_id
               const detail = product_detail || order_time
@@ -69,21 +74,30 @@ export default function Cart() {
               return (
                 <tr key={i}>
                   <td>
-                    <div className="row">
-                      <img />
-                      <div>
+                    <div className="d-flex">
+                      <Image
+                        src={`/images/product/images/${category}/${pid}/${pimg}`}
+                        alt="t"
+                        width={100}
+                        height={100}
+                      />
+                      <div className="ms-2">
                         <h5 className="fw-bold text-start">{name}</h5>
-                        <p className="imperceptible text-start">{detail}</p>
+                        <p className={`${styles.imperceptible} text-start`}>
+                          {detail}
+                        </p>
                       </div>
                     </div>
                   </td>
                   <td>
                     {discount_price ? (
                       <>
-                        <h5 className="fw-bold discounted">
+                        <h5 className={`fw-bold ${styles.discounted}`}>
                           NT${discount_price}
                         </h5>
-                        <p className="imperceptible text-decoration-line-through">
+                        <p
+                          className={`${styles.imperceptible}  text-decoration-line-through`}
+                        >
                           NT${price}
                         </p>
                       </>
@@ -96,7 +110,7 @@ export default function Cart() {
                   <td>
                     <button
                       type="button"
-                      className="btn btn-light"
+                      className={`${styles.btnLight}`}
                       onClick={() => {
                         decrement(id, isProduct)
                       }}
@@ -113,7 +127,7 @@ export default function Cart() {
                     />
                     <button
                       type="button"
-                      className="btn btn-light"
+                      className={`${styles.btnLight}`}
                       onClick={() => {
                         increment(id, isProduct)
                       }}
@@ -150,27 +164,9 @@ export default function Cart() {
           margin: 0;
         }
 
-        .span {
-          color: #013c64;
-          font-weight: bold;
-        }
-
         input {
           background-color: #f8f9fa;
           border: 0;
-        }
-
-        .discounted {
-          color: #dc5151;
-        }
-
-        .imperceptible {
-          color: #858585;
-        }
-
-        .section-name {
-          background-color: #f5f5f5;
-          padding: 0.5rem;
         }
 
         table {
@@ -187,14 +183,12 @@ export default function Cart() {
           padding-bottom: 1rem;
           text-align: center;
         }
-
-        .btn-light {
-          padding: 2px 6px;
-        }
-
-        @media (max-width: 576px) {
-          .btn-light {
-            padding: 6px;
+        @media screen and (max-width: 576px) {
+          h5 {
+            font-size: 1rem;
+          }
+          p {
+            font-size: 0.75rem;
           }
         }
       `}</style>

@@ -6,11 +6,20 @@ import { useUsingCoupon } from '@/hooks/use-usingCoupon'
 import { useCart } from '@/hooks/cart'
 import { useAuth } from '@/hooks/auth'
 
+import styles from './cart.module.scss'
+
 export default function Order({ orderId }) {
   const { removeUsingCoupon } = useUsingCoupon()
-  const { clearCart } = useCart()
+  const { cart, clearCart } = useCart()
   const { auth } = useAuth()
   const { usingCoupon } = useUsingCoupon()
+
+  const [order, setOrder] = useState(null)
+  const [orderDetail, setOrderDetail] = useState(null)
+
+  const [coupon, setCoupon] = useState(null)
+
+  console.log(coupon)
 
   useEffect(() => {
     const fetchOrderDetail = async () => {
@@ -32,6 +41,7 @@ export default function Order({ orderId }) {
         )
         const [result] = await response.json()
         setOrder(result)
+        setCoupon(JSON.parse(result.used_coupon))
       } catch (error) {
         console.error('Error fetching order:', error)
       }
@@ -67,21 +77,18 @@ export default function Order({ orderId }) {
     removeUsingCoupon()
   }, [])
 
-  const [order, setOrder] = useState(null)
-  const [orderDetail, setOrderDetail] = useState(null)
-
   return (
     <div className="container">
       <CartStep step={3} />
       <div className="container">
-        <div className="w-100 section-name text-center">
-          <h5 className="span">訂單資訊</h5>
+        <div className={`w-100 ${styles.sectionName} text-center`}>
+          <h5 className={`${styles.span}`}>訂單資訊</h5>
         </div>
-        <div className="row">
+        <div className={`row ${styles.row}`}>
           <p className="col fw-bold">訂單編號</p>
           <p className="col text-end">{orderId}</p>
         </div>
-        <div className="row fw-bold">
+        <div className={`row ${styles.row} fw-bold`}>
           <p className="col-6">商品明細</p>
           <p className="col">數量</p>
           <p className="col  text-end">小計</p>
@@ -91,7 +98,7 @@ export default function Order({ orderId }) {
             const { name, num, price } = item
             const singleItemsPrice = price * num
             return (
-              <div className="row" key={i}>
+              <div className={`row ${styles.row}`} key={i}>
                 <p className="col-6 fw-bold">{name}</p>
                 <p className="col">{num}</p>
                 <p className="col text-end">NT${singleItemsPrice}</p>
@@ -99,7 +106,20 @@ export default function Order({ orderId }) {
             )
           })}
         <hr />
-        <div className="row">
+        <div className={`row ${styles.row}`}>
+          <div className="col-10"></div>
+          <p className="col fw-bold">運費</p>
+          <p className="col fw-bold text-end">NT$ {cart.deliveryFee}</p>
+        </div>
+        {coupon && (
+          <div className={`row ${styles.row}`}>
+            <div className="col-10"></div>
+            <p className="col fw-bold">優惠</p>
+            <p className="col fw-bold text-end">-NT$ {coupon.discount}</p>
+          </div>
+        )}
+        <div className={`row ${styles.row}`}>
+          <div className="col-10"></div>
           <p className="col fw-bold">合計</p>
           <p className="col fw-bold text-end">
             NT$ {order && order.total_price}
@@ -107,7 +127,7 @@ export default function Order({ orderId }) {
         </div>
         <div className="text-end my-3">
           <Link href="../">
-            <button type="button" className="btn next-step-btn text-white px-5">
+            <button type="button" className={`btn nextStepBtn text-white px-5`}>
               <h5 className="fw-bold py-1 px-3">返回商場</h5>
             </button>
           </Link>
@@ -123,25 +143,7 @@ export default function Order({ orderId }) {
         p {
           margin: 0;
         }
-
-        .span {
-          color: #013c64;
-          font-weight: bold;
-        }
-
-        .row {
-          margin-top: 1rem;
-          margin-bottom: 1rem;
-        }
-
-        .section-name {
-          background-color: #f5f5f5;
-          padding-left: 0.5rem;
-          padding-top: 0.5rem;
-          padding-bottom: 0.5rem;
-        }
-
-        .next-step-btn {
+        .nextStepBtn {
           background-color: #ff9720;
         }
       `}</style>

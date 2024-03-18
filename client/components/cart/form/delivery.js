@@ -1,5 +1,7 @@
 import React from 'react'
 
+import styles from '../cart.module.scss'
+
 export default function Delivery({
   handleInputChange,
   userInputs: { user_name, user_phone, user_city, user_section, user_road },
@@ -23,8 +25,8 @@ export default function Delivery({
   return (
     <>
       <div className="container">
-        <div className="w-100 section-name text-center">
-          <h5 className="span">送貨資料</h5>
+        <div className={`w-100 ${styles.sectionName} text-center`}>
+          <h5 className={`${styles.span}`}>送貨資料</h5>
         </div>
         <div className="container">
           <div className="d-flex mt-3">
@@ -36,7 +38,7 @@ export default function Delivery({
             <h6 className="fw-bold">收貨人資料與會員資料相同</h6>
           </div>
 
-          <div className="row justify-content-between spacing">
+          <div className={`row justify-content-between ${styles.spacing}`}>
             <div className="col-6">
               <p className="fw-bold">收件人名稱</p>
               <input
@@ -111,21 +113,6 @@ export default function Delivery({
         h6,
         p {
           margin: 0;
-        }
-
-        .span {
-          color: #013c64;
-          font-weight: bold;
-        }
-
-        .spacing {
-          margin-top: 1rem;
-          margin-bottom: 1rem;
-        }
-
-        .section-name {
-          background-color: #f5f5f5;
-          padding: 0.5rem;
         }
       `}</style>
     </>

@@ -1,6 +1,8 @@
 import React from 'react'
 import AutoTab from '@/components/cart/auto-tab'
 
+import styles from '../cart.module.scss'
+
 function CreditCardInput({ name, value, onChange, maxLength, placeholder }) {
   return (
     <div className="col-2">
@@ -45,10 +47,12 @@ export default function CreditCard({
   return (
     <>
       <div className="container credit-card-section">
-        <div className="w-100 section-name text-center mb-3">
-          <h5 className="span">信用卡付款資訊</h5>
+        <div className={`w-100 ${styles.sectionName} text-center mb-3`}>
+          <h5 className={`${styles.span}`}>信用卡付款資訊</h5>
         </div>
-        <h6 className="span my-3">※ 信用卡交易資訊 Credit Card Information</h6>
+        <h6 className={`${styles.span} my-3`}>
+          ※ 信用卡交易資訊 Credit Card Information
+        </h6>
         <div className="row justify-content-between my-3">
           <p className="col-sm-2 col-3 fw-bold">信用卡卡號</p>
           <CreditCardInput
@@ -104,7 +108,9 @@ export default function CreditCard({
             />
           </div>
         </div>
-        <h6 className="span my-3">※ 持卡人資料 Cardholder Information </h6>
+        <h6 className={`${styles.span} my-3`}>
+          ※ 持卡人資料 Cardholder Information{' '}
+        </h6>
         <div className="d-flex my-3">
           <input
             type="checkbox"
@@ -145,21 +151,6 @@ export default function CreditCard({
         h6,
         p {
           margin: 0;
-        }
-
-        .span {
-          color: #013c64;
-          font-weight: bold;
-        }
-
-        .spacing {
-          margin-top: 1rem;
-          margin-bottom: 1rem;
-        }
-
-        .section-name {
-          background-color: #f5f5f5;
-          padding: 0.5rem;
         }
       `}</style>
       <AutoTab className="autotab-4" maxLength={4} />

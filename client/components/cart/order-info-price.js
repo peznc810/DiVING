@@ -1,6 +1,8 @@
 import React from 'react'
 import Link from 'next/link'
 
+import styles from './cart.module.scss'
+
 export default function OrderInfoPrice({
   auth,
   cart,
@@ -13,21 +15,21 @@ export default function OrderInfoPrice({
   const { totalPrice, deliveryFee } = cart
 
   return (
-    <div className="col-sm-4 order-section">
-      <h5 className="mb-3 section-name span">訂單資訊</h5>
+    <div className={`col-sm-4 ${styles.orderSection}`}>
+      <h5 className={`mb-3 ${styles.sectionName} ${styles.span}`}>訂單資訊</h5>
       <div className="container">
-        <div className="d-flex justify-content-between spacing">
+        <div className={`d-flex justify-content-between ${styles.spacing}`}>
           <p className="fw-bold">小計:</p>
           <p>NT$ {totalPrice}</p>
         </div>
-        <div className="d-flex justify-content-between spacing">
+        <div className={`d-flex justify-content-between ${styles.spacing}`}>
           <p className="fw-bold">運費:</p>
           <p>NT$ {deliveryFee}</p>
         </div>
         <p className="text-end">優惠 -NT${discount}</p>
         <button
           type="button"
-          className="coupon-btn p-0 my-2"
+          className={`${styles.couponBtn} p-0 my-2`}
           onClick={() => {
             setShowCoupon(true)
           }}
@@ -35,7 +37,9 @@ export default function OrderInfoPrice({
           選擇優惠券
         </button>
         <hr />
-        <div className="d-flex justify-content-between spacing fw-bold">
+        <div
+          className={`d-flex justify-content-between ${styles.spacing} fw-bold`}
+        >
           <p>合計:</p>
           <p>NT$ {totalTotalPrice}</p>
         </div>
@@ -48,7 +52,7 @@ export default function OrderInfoPrice({
         >
           <button
             type="button"
-            className="btn next-step-btn w-100 text-white"
+            className={`btn nextStepBtn w-100 text-white`}
             disabled={!auth.isAuth || cart.isEmpty}
           >
             <h5 className="fw-bold py-1">
@@ -71,46 +75,8 @@ export default function OrderInfoPrice({
         p {
           margin: 0;
         }
-
-        .spacing {
-          margin-inline: 0;
-          margin-top: 1rem;
-          margin-bottom: 1rem;
-        }
-
-        .next-step-btn {
+        .nextStepBtn {
           background-color: #ff9720;
-        }
-
-        .span {
-          color: #013c64;
-          font-weight: bold;
-        }
-
-        .section-name {
-          background-color: #f5f5f5;
-          padding: 0.5rem;
-        }
-
-        .order-section {
-          border: 1px solid #f5f5f5;
-          padding: 0;
-        }
-
-        .coupon-btn {
-          border: none;
-          background-color: transparent;
-          font-size: 14px;
-          color: #265475;
-        }
-        .coupon-btn:hover {
-          border-bottom: 1px solid #265475;
-        }
-
-        @media (max-width: 576px) {
-          .order-section {
-            margin-top: 1rem;
-          }
         }
       `}</style>
     </div>

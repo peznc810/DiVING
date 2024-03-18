@@ -8,16 +8,9 @@ import { useCart } from '@/hooks/cart'
 import { useUsingCoupon } from '@/hooks/use-usingCoupon'
 
 import toast from 'react-hot-toast'
+import styles from './cart.module.scss'
 
-export default function OrderForm({
-  // handleSubLinePay,
-  // handleSub,
-  // userInputs,
-  // setUserInputs,
-  payment,
-  delivery,
-  setOrder,
-}) {
+export default function OrderForm({ payment, delivery, order, setOrder }) {
   const [cUser, setCUser] = useState()
   const { auth } = useAuth()
   const { items, cart } = useCart()
@@ -68,6 +61,12 @@ export default function OrderForm({
       getUserProfile(auth.id)
     }
   }, [auth])
+
+  useEffect(() => {
+    if (order.orderId) {
+      toast.success('訂單建立成功')
+    }
+  }, [order])
 
   //處理input更新
   const handleInputChange = (e) => {
@@ -201,6 +200,7 @@ export default function OrderForm({
         receiver,
         order_note,
         shipment,
+        usingCoupon,
         ...(userInputs.cCard_number1 && { credit_card }),
       }
 
@@ -228,14 +228,13 @@ export default function OrderForm({
   }
 
   const checkFormat = () => {
-    const phone = document.querySelector('.user_phone').value
-    const user_name = document.querySelector('.user_name').value
-    const cCard_name = document.querySelector('.cCard_name')?.value
-
     let emptyInput
 
-    const phoneRegex = /^09\d{8}$/
     const chineseRegex = /^[\u4e00-\u9fa5]+$/
+    const phoneRegex = /^09\d{8}$/
+    const monthRegex = /0[1-9]|1[0-2]/
+    const yearRegex = /\d{2}/
+    const securityRegex = /\d{3}/
 
     const inputs = document.querySelectorAll('input[type=text]')
 
@@ -258,21 +257,60 @@ export default function OrderForm({
       return true
     }
 
-    if (!checkCorr(phone, phoneRegex, '收件人電話 格式錯誤')) {
+    if (!checkCorr(userInputs.user_name, chineseRegex, '收件人名稱 格式錯誤')) {
       return false
     }
 
-    if (!checkCorr(user_name, chineseRegex, '收件人名稱 格式錯誤')) {
+    if (!checkCorr(userInputs.user_phone, phoneRegex, '收件人電話 格式錯誤')) {
       return false
     }
 
-    if (cCard_name) {
-      if (!checkCorr(cCard_name, chineseRegex, '持卡人姓名 格式錯誤')) {
+    if (payment === '2') {
+      if (
+        !checkCorr(userInputs.cCard_name, chineseRegex, '持卡人姓名 格式錯誤')
+      ) {
+        return false
+      }
+
+      if (
+        !checkCorr(
+          userInputs.cCard_expirationMonth,
+          monthRegex,
+          '信用卡月份 格式錯誤'
+        )
+      ) {
+        return false
+      }
+
+      if (
+        !checkCorr(
+          userInputs.cCard_expirationYear,
+          yearRegex,
+          '信用卡年份 格式錯誤'
+        )
+      ) {
+        return false
+      }
+
+      if (
+        !checkCorr(
+          userInputs.cCard_securityCode,
+          securityRegex,
+          '信用卡安全碼 格式錯誤'
+        )
+      ) {
         return false
       }
     }
 
     return true
+  }
+
+  const goLinePay = () => {
+    if (window.confirm('確認要導向至LINE Pay進行付款?')) {
+      // 先連到node伺服器後，導向至LINE Pay付款頁面
+      window.location.href = `http://localhost:3005/api/line-pay/reserve?orderId=${order.orderId}`
+    }
   }
 
   const notify = (msg) => {
@@ -301,11 +339,11 @@ export default function OrderForm({
           )}
 
           <div className="container">
-            <div className="w-100 section-name text-center">
-              <h5 className="span">訂單備註</h5>
+            <div className={`w-100 ${styles.sectionName} text-center`}>
+              <h5 className={`${styles.span}`}>訂單備註</h5>
             </div>
             <textarea
-              className="form-control spacing"
+              className={`form-control ${styles.spacing}`}
               rows="5"
               maxLength={50}
               name="order_note"
@@ -322,11 +360,26 @@ export default function OrderForm({
             />
           )}
           <div className="text-end my-3">
-            <button type="submit" className="btn next-step-btn text-white px-5">
+            <button
+              type="submit"
+              className={`btn nextStepBtn text-white px-5`}
+              disabled={order.orderId}
+            >
               <h5 className="fw-bold py-1 px-3">提交訂單</h5>
             </button>
           </div>
         </form>
+        {payment === '3' && (
+          <div className="text-end">
+            <button
+              className="btn text-end text-white line-pay-btn my-3"
+              onClick={goLinePay}
+              disabled={!order.orderId}
+            >
+              Line Pay
+            </button>
+          </div>
+        )}
         <style jsx>{`
           h1,
           h2,
@@ -338,23 +391,12 @@ export default function OrderForm({
             margin: 0;
           }
 
-          .span {
-            color: #013c64;
-            font-weight: bold;
-          }
-
-          .next-step-btn {
+          .nextStepBtn {
             background-color: #ff9720;
           }
 
-          .spacing {
-            margin-top: 1rem;
-            margin-bottom: 1rem;
-          }
-
-          .section-name {
-            background-color: #f5f5f5;
-            padding: 0.5rem;
+          .line-pay-btn {
+            background-color: green;
           }
         `}</style>
       </div>

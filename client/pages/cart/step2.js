@@ -57,13 +57,6 @@ export default function Home() {
     fetchData()
   }, [router.isReady])
 
-  const goLinePay = () => {
-    if (window.confirm('確認要導向至LINE Pay進行付款?')) {
-      // 先連到node伺服器後，導向至LINE Pay付款頁面
-      window.location.href = `http://localhost:3005/api/line-pay/reserve?orderId=${order.orderId}`
-    }
-  }
-
   const getOrder = async (orderId) => {
     try {
       const url = `http://localhost:3005/api/order/order?orderId=${orderId}`
@@ -120,57 +113,9 @@ export default function Home() {
           <OrderForm
             payment={payment}
             delivery={delivery}
+            order={order}
             setOrder={setOrder}
           />
-          {payment === '3' && (
-            <button onClick={goLinePay} disabled={!order.orderId}>
-              Line Pay
-            </button>
-          )}
-
-          <style jsx>{`
-            h1,
-            h2,
-            h3,
-            h4,
-            h5,
-            h6,
-            p {
-              margin: 0;
-            }
-
-            .span {
-              color: #013c64;
-              font-weight: bold;
-            }
-
-            .discounted {
-              color: #dc5151;
-            }
-
-            .imperceptible {
-              color: #858585;
-            }
-
-            .section-name {
-              background-color: #f5f5f5;
-              padding: 0.5rem;
-            }
-
-            table {
-              width: 100%;
-            }
-
-            tr {
-              border-bottom: 1px solid black;
-            }
-
-            td,
-            th {
-              padding: 1rem 0;
-              text-align: center;
-            }
-          `}</style>
           <Toaster position="bottom-center" />
         </div>
       )}

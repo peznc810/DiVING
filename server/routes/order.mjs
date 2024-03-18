@@ -31,7 +31,7 @@ router.post("/create-order", async(req, res)=>{
   const userId = req.body.user_id
   const orderId = Date.now()
 
-  const { totalPrice, products, receiver, credit_card, order_note,shipment } = req.body;
+  const { totalPrice, products, receiver, credit_card, order_note,shipment,usingCoupon } = req.body;
 
   //寫入資料庫的資料 order
   const dbOrder = {
@@ -43,6 +43,7 @@ router.post("/create-order", async(req, res)=>{
     status: "建立成功",
     receiver : JSON.stringify(receiver),
     credit_card: JSON.stringify(credit_card),
+    usingCoupon: JSON.stringify(usingCoupon),
     order_note,
   }
 
@@ -242,8 +243,8 @@ function getOrder(orderId) {
     
     return new Promise((resolve, reject) => {
       db.execute(
-        'INSERT INTO `order`(id, user_id, total_price, payment, shipping, status, receiver, created_at, order_note) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);',[
-          dbOrder.id, dbOrder.user_id, dbOrder.total_price, "取貨付款", dbOrder.shipping, dbOrder.status, dbOrder.receiver, , datetimeNow ,dbOrder.order_note
+        'INSERT INTO `order`(id, user_id, total_price, payment, shipping, used_coupon, status, receiver, created_at, order_note) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);',[
+          dbOrder.id, dbOrder.user_id, dbOrder.total_price, "取貨付款", dbOrder.shipping, dbOrder.usingCoupon, dbOrder.status, dbOrder.receiver, , datetimeNow ,dbOrder.order_note
         ]
       ).then(([result]) => {
         if (result) {
@@ -272,8 +273,8 @@ function getOrder(orderId) {
     
     return new Promise((resolve, reject) => {
       db.execute(
-        'INSERT INTO `order`(id, user_id, total_price, payment, shipping, status, receiver, created_at, credit_card, order_note) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);',[
-          dbOrder.id, dbOrder.user_id, dbOrder.total_price, "信用卡付款", dbOrder.shipping, dbOrder.status, dbOrder.receiver, datetimeNow, dbOrder.credit_card ,dbOrder.order_note
+        'INSERT INTO `order`(id, user_id, total_price, payment, shipping,used_coupon, status, receiver, created_at, credit_card, order_note) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);',[
+          dbOrder.id, dbOrder.user_id, dbOrder.total_price, "信用卡付款", dbOrder.shipping, dbOrder.usingCoupon, dbOrder.status, dbOrder.receiver, datetimeNow, dbOrder.credit_card ,dbOrder.order_note
         ]
       ).then(([result]) => {
         if (result) {

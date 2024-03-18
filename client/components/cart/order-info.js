@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from 'react'
 
+import styles from './cart.module.scss'
+import Image from 'next/image'
+
 export default function OrderInfo({ cart, finalPrice, discount }) {
   const { totalPrice, deliveryFee } = cart
   return (
     <div className="container">
-      <div className="w-100 text-center section-name">
-        <h5 className="span">購物車</h5>
+      <div className={`w-100 text-center ${styles.sectionName}`}>
+        <h5 className={`${styles.span}`}>購物車</h5>
       </div>
       <table>
         <thead>
@@ -14,7 +17,6 @@ export default function OrderInfo({ cart, finalPrice, discount }) {
             <th className="col-2">商品價格</th>
             <th className="col-2">數量</th>
             <th className="col-2">小計</th>
-            <th className="col-2"></th>
           </tr>
         </thead>
         <tbody>
@@ -28,26 +30,35 @@ export default function OrderInfo({ cart, finalPrice, discount }) {
                 product_detail,
                 order_time,
                 subtotal,
+                category,
+                pid,
+                pimg,
               } = item
+              console.log(cart.items)
               const detail = product_detail || order_time
+              const url = `/images/product/images/${category}/${pid}/${pimg}`
               return (
                 <tr key={i}>
                   <td>
-                    <div className="row">
-                      <img />
-                      <div>
+                    <div className="d-flex">
+                      <Image src={`${url}`} alt="t" width={100} height={100} />
+                      <div className="ms-2">
                         <h5 className="fw-bold text-start">{name}</h5>
-                        <p className="imperceptible text-start">{detail}</p>
+                        <p className={`${styles.imperceptible}  text-start`}>
+                          {detail}
+                        </p>
                       </div>
                     </div>
                   </td>
                   <td>
                     {discount_price ? (
                       <>
-                        <h5 className="fw-bold discounted">
+                        <h5 className={`fw-bold ${styles.discounted}`}>
                           NT${discount_price}
                         </h5>
-                        <p className="imperceptible text-decoration-line-through">
+                        <p
+                          className={`${styles.imperceptible}  text-decoration-line-through`}
+                        >
                           NT${price}
                         </p>
                       </>
@@ -89,24 +100,6 @@ export default function OrderInfo({ cart, finalPrice, discount }) {
           margin: 0;
         }
 
-        .span {
-          color: #013c64;
-          font-weight: bold;
-        }
-
-        .discounted {
-          color: #dc5151;
-        }
-
-        .imperceptible {
-          color: #858585;
-        }
-
-        .section-name {
-          background-color: #f5f5f5;
-          padding: 0.5rem;
-        }
-
         table {
           width: 100%;
         }
@@ -119,6 +112,15 @@ export default function OrderInfo({ cart, finalPrice, discount }) {
         th {
           padding: 1rem 0;
           text-align: center;
+        }
+
+        @media screen and (max-width: 576px) {
+          h5 {
+            font-size: 1rem;
+          }
+          p {
+            font-size: 0.75rem;
+          }
         }
       `}</style>
     </div>
