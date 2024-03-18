@@ -4,15 +4,15 @@
   // background-color: $info;
   box-sizing: border-box;
   padding-top: 70px;
-  padding-bottom: 120px;
+  padding-bottom: 80px;
   letter-spacing: 1px;
-  background-image: linear-gradient(
-    to top,
-    rgba(1, 60, 100, 0) 0%,
-    #265475bc 3%,
-    #2654756f 97%,
-    rgba(1, 60, 100, 0) 100%
-  );
+  // background-image: linear-gradient(
+  //   to top,
+  //   rgba(1, 60, 100, 0) 0%,
+  //   #265475bc 3%,
+  //   #2654756f 97%,
+  //   rgba(1, 60, 100, 0) 100%
+  // );
   filter: blur(10);
   .titleBlock {
     position: relative;
@@ -60,7 +60,7 @@
     .lessonItem {
       position: relative;
       width: 450px;
-      height: 300px;
+      height: 310px;
       margin-inline: 20px;
       .videoDiv {
         width: 100%;
@@ -72,6 +72,17 @@
           object-fit: cover;
         }
       }
+      .block {
+        width: 100%;
+        height: 300px;
+        position: absolute;
+        top: 0;
+        left: 0;
+        background: linear-gradient(to top, #253948c4 10%, #daebf90f 100%);
+        transition-duration: 2s;
+        animation: hoverAni 1s linear;
+      }
+
       .play {
         position: absolute;
         top: 20px;
@@ -83,12 +94,14 @@
         text-align: center;
         line-height: 30px;
         color: $info;
+        animation: hoverAni 2s ease-out;
       }
       .info {
         position: absolute;
-        bottom: 15px;
+        bottom: 35px;
         left: 20px;
         color: #fff;
+        animation: hoverAni 1s linear;
         .enName {
           h5 {
             font-size: 24px;
@@ -100,7 +113,7 @@
   }
 }
 
-@keyframes itemHoverAni {
+@keyframes hoverAni {
   from {
     opacity: 0;
   }
@@ -109,18 +122,32 @@
   }
 }
 
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 390px) {
   .LessonSection {
     .titleBlock {
       .title {
         margin-left: 10px;
       }
     }
-  }
 
-  .LessonSection {
     .lessonScroll {
-      flex-wrap: wrap;
+      .lessonItem {
+        width: 360px;
+        height: 280px;
+        margin-inline: 10px;
+        .videoDiv {
+          width: 100%;
+          height: 280px;
+          border-radius: 4px;
+          video {
+            height: 100%;
+            object-fit: cover;
+          }
+        }
+      }
+    }
+    .block {
+      height: 260px;
     }
   }
 }

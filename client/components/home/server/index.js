@@ -15,7 +15,7 @@ export default function Server() {
   return (
     <>
       <ParallaxProvider>
-        <Parallax y={[-100, 100]} className={`${styles.server}`}>
+        <Parallax speed={6} className={`${styles.server}`}>
           <div className={`d-inline-block px-4 ${styles.title}`}>
             <h3 className={`m-0`}>OUR SERVER</h3>
           </div>
@@ -24,7 +24,7 @@ export default function Server() {
             {/* Lesson */}
             <div className={`d-flex ${styles.sevLesson}`}>
               <Parallax
-                speed={1}
+                speed={3}
                 onProgressChange={(progress) => setProgress(progress)}
                 onEnter={() => setEntered(true)}
                 onExit={() => setEntered(false)}
@@ -39,7 +39,7 @@ export default function Server() {
                 />
               </Parallax>
 
-              <Parallax speed={10} className={` ${styles.content}`}>
+              <Parallax speed={6} className={` ${styles.content}`}>
                 <h4>
                   專業課程 & <br /> 嚴選潛水設備
                 </h4>
@@ -52,7 +52,7 @@ export default function Server() {
             {/* product */}
             <div className={`d-flex ${styles.sevProduct}`}>
               <Parallax
-                speed={1}
+                speed={3}
                 onProgressChange={(progress) => setProgress(progress)}
                 onEnter={() => setEntered(true)}
                 onExit={() => setEntered(false)}

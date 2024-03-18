@@ -38,10 +38,10 @@ export default function Index() {
       <ParallaxProvider>
         <HomeHeader />
         <Server />
-        <News eventList={eventList} />
-        <Parallax>
+        <Parallax strength={600} bgImage="/images/home/header.png">
+          <News eventList={eventList} />
           <LessonSection />
-          <Products />
+          {/* <Products /> */}
         </Parallax>
         <MapSection />
         <Coupon />

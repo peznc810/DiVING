@@ -1,6 +1,5 @@
-import React from 'react'
+import React, { useState, useRef } from 'react'
 import Link from 'next/link'
-import Image from 'next/image'
 import styles from './index.module.scss'
 
 const lessonItem = [
@@ -35,6 +34,22 @@ const lessonItem = [
 ]
 
 export default function LessonSection() {
+  const [play, setPlay] = useState({}) //使用一個物件追蹤影片播放狀態為
+  const videoRef = useRef({}) // 使用一個物件來保存每個影片的 ref
+
+  const handleMouseEnter = (id) => {
+    setPlay({ ...play, [id]: true })
+    if (videoRef.current[id]) {
+      videoRef.current[id].play()
+    }
+  }
+
+  const handleMouseLeave = (id) => {
+    setPlay({ ...play, [id]: false })
+    if (videoRef.current[id]) {
+      videoRef.current[id].pause()
+    }
+  }
   return (
     <>
       <section className={`${styles.LessonSection}`}>
@@ -44,35 +59,53 @@ export default function LessonSection() {
               <h3 className="me-3 mb-0 text-light">
                 OUR <br /> LESSON
               </h3>
-              <Link
-                href={'/event'}
-                className={`${styles.moreBtn} me-5 text-center`}
-              >
+              <Link href={'/'} className={`${styles.moreBtn} me-5 text-center`}>
                 more
                 <i className="bi bi-caret-right-fill ms-1"></i>
               </Link>
             </div>
 
             <div className={`d-flex p-0 ${styles.lessonScroll} `}>
-              {lessonItem.map((v) => {
+              {lessonItem.map((v, i) => {
                 return (
                   <div
                     key={v.id}
                     className={`flex-shrink-0 ${styles.lessonItem}`}
+                    onMouseEnter={() => {
+                      handleMouseEnter(v.id)
+                    }}
+                    onMouseLeave={() => {
+                      handleMouseLeave(v.id)
+                    }}
                   >
                     <div className={`${styles.videoDiv} `}>
                       <video
-                        // ref={videoRef}
+                        ref={(el) => {
+                          videoRef.current[v.id] = el
+                        }}
                         src={v.video}
-                        // autoPlay
+                        autoPlay={play[v.id]}
                         muted
                         loop
                       ></video>
+                      <div
+                        className={`${styles.block} ${
+                          play[v.id] ? 'd-none' : 'd-block'
+                        }`}
+                      ></div>
                     </div>
-                    <div className={`${styles.play}`}>
+                    <div
+                      className={`${styles.play} ${
+                        play[v.id] ? 'd-none' : 'd-block'
+                      }`}
+                    >
                       <i className="bi bi-caret-right-fill"></i>
                     </div>
-                    <div className={` ${styles.info}`}>
+                    <div
+                      className={` ${styles.info} ${
+                        play[v.id] ? 'd-none' : 'd-block'
+                      }`}
+                    >
                       <div className={`${styles.enName}`}>
                         <h5 className="">{v.enName}</h5>
                       </div>
