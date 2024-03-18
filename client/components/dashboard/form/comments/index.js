@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import styles from '../styles.module.scss'
 import Link from 'next/link'
 import Image from 'next/image'
@@ -7,6 +7,37 @@ import Image from 'next/image'
 import { FaStar } from 'react-icons/fa'
 
 export default function Form({ common = [] }) {
+  console.log(common)
+  const [category, setCategory] = useState([])
+
+  const handleCategory = () => {
+    // 產品
+    const product = common.filter((v) => {
+      return v.product_id !== null
+    })
+
+    // 課程
+    const lesson = common.filter((v) => {
+      return v.lesson_id !== null
+    })
+
+    common.map((item) => {
+      switch (true) {
+        case item.product_id:
+          setCategory(product)
+          break
+        case item.lesson_id:
+          setCategory(lesson)
+          break
+        default:
+          setCategory(common)
+      }
+    })
+  }
+
+  useEffect(() => {
+    setCategory(common)
+  }, [common])
   return (
     <>
       <div className={`col-sm-8 p-0 rounded-end ${styles['form-container']}`}>
@@ -19,15 +50,27 @@ export default function Form({ common = [] }) {
               {/* 篩選＆搜尋，要再調整 */}
               <div className="d-flex justify-content-between align-items-center mb-3">
                 <div className="d-flex align-items-center">
-                  <button type="button" className="btn btn-sm text-secondary">
+                  <button
+                    type="button"
+                    className="btn btn-sm text-secondary"
+                    onClick={handleCategory}
+                  >
                     全部
                   </button>
                   |
-                  <button type="button" className="btn btn-sm">
+                  <button
+                    type="button"
+                    className="btn btn-sm"
+                    onClick={handleCategory}
+                  >
                     商品
                   </button>
                   |
-                  <button type="button" className="btn btn-sm">
+                  <button
+                    type="button"
+                    className="btn btn-sm"
+                    onClick={handleCategory}
+                  >
                     課程
                   </button>
                 </div>
@@ -45,18 +88,26 @@ export default function Form({ common = [] }) {
                 </thead>
                 <tbody>
                   {/* 之後改用map */}
-                  {common.map((item) => {
+                  {category.map((item) => {
                     return (
                       <tr className="align-middle" key={item.id}>
                         <td className="d-flex justify-content-center">
                           <div
                             className={`rounded ${styles.avatar} flex-shrink-0`}
                           >
-                            <Image
-                              src={`/images/product/images/${item.product_category}/${item.product_id}/${item.img}`}
-                              alt="turtle"
-                              fill
-                            />
+                            {item.product_id ? (
+                              <Image
+                                src={`/images/product/images/${item.product_category}/${item.product_id}/${item.img}`}
+                                alt={item.name}
+                                fill
+                              />
+                            ) : (
+                              <Image
+                                src={`/image/users/unKnow.jpg`}
+                                alt={item.name}
+                                fill
+                              />
+                            )}
                           </div>
                         </td>
                         <td>{item.product_name}</td>
