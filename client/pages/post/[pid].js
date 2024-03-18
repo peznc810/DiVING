@@ -5,9 +5,9 @@ import { useRouter } from 'next/router'
 import Link from 'next/link'
 import styles from '@/styles/loader/loader_ripple.module.css'
 import postData from '@/data/post/post.json'
-import DiButton from '@/components/post/dibutton'
-
+import TagButton from '@/components/post/tagButton'
 import { Container, Card, Col, Row, Stack } from 'react-bootstrap'
+import DOMPurify from 'dompurify'
 
 export default function Detail() {
   const router = useRouter()
@@ -26,14 +26,10 @@ export default function Detail() {
   const [isLoading, setIsLoading] = useState(true)
   const getPost = async (pid) => {
     try {
-      //   網址改成pid 用傳入的
-      //   const res = await fetch(
-      //     `https://my-json-server.typicode.com/eyesofkids/json-fake-data/products/${pid}`
-      //   )
+      // 網址改成pid 用傳入的
+      const res = await fetch(`http://localhost:3005/api/post/${pid}`)
 
-      //   const data = await res.json()
-      const data = postData.find((post) => post.id === `${pid}`)
-      console.log(data)
+      const data = await res.json()
 
       if (data.title) {
         setPost(data)
@@ -70,71 +66,72 @@ export default function Detail() {
       </div>{' '}
     </>
   )
-
   const getTagsArray = (tagsString) => {
-    return tagsString.split(',')
+    // 檢查 tagsString 是否存在
+    if (tagsString) {
+      return tagsString.split(',')
+    }
+    return []
   }
-
   const display = (
     <>
-      <hr />
       <Container>
-        <Row>
-          <Col lg={3}>
+        <Row className="justify-content-evenly mb-2">
+          <Col md={3}>
             <h4>相關文章</h4>
-            <Stack>
-              <Row xs={1} className="g-4">
-                {postData.map((v) => (
-                  <Col key={v.id}>
-                    <Card>
-                      <Link
-                        href={`/post/${v.id}`}
-                        style={{ textDecoration: 'none' }}
-                      >
-                        <Card.Img
-                          variant="top"
-                          src={`/images/post/${v.image}`}
-                        />
-                      </Link>
-                      <Card.Body className="bg-light">
-                        <Card.Subtitle className="mb-2 text-primary">
-                          {v.author}
-                        </Card.Subtitle>
-                        <h6>{v.title}</h6>
-                        <Stack direction="horizontal" gap={1}>
-                          <div>
-                            {getTagsArray(v.tags).map((tag, index) => (
-                              <Link
-                                key={index}
-                                href="/post/list"
-                                target="_blank"
-                              >
-                                <DiButton text={`# ${tag}`} />
-                              </Link>
-                            ))}
-                          </div>
-                        </Stack>
-                      </Card.Body>
-                    </Card>
-                  </Col>
-                ))}
-              </Row>
-            </Stack>
+            <Row xs={1} className="gy-4">
+              {postData.map((v) => (
+                <Col key={v.id}>
+                  <Card>
+                    <Link
+                      href={`/post/${v.id}`}
+                      style={{ textDecoration: 'none' }}
+                    >
+                      <Card.Img variant="top" src={`/images/post/${v.image}`} />
+                    </Link>
+                    <Card.Body className="bg-light">
+                      <Card.Text>{v.title}</Card.Text>
+
+                      <Stack direction="horizontal" gap={1}>
+                        <div>
+                          {getTagsArray(v.tags).map((tag, index) => (
+                            <Link key={index} href="/post" target="_blank">
+                              <TagButton text={`# ${tag}`} />
+                            </Link>
+                          ))}
+                        </div>
+                      </Stack>
+                      <Card.Text className="mb-2 text-primary text-end">
+                        {v.author}
+                      </Card.Text>
+                    </Card.Body>
+                  </Card>
+                </Col>
+              ))}
+            </Row>
           </Col>
-          <Col xs={9} className="bg-light">
+          <Col md={8} className="bg-light p-4 mb-3">
             <p>{post.published}</p>
             <h3>{post.title}</h3>
-            <p>作者:{post.author}</p>
-            <div className="p-2">
+            作者：{post.user_id}
+            <div className="my-2">
               {' '}
               {getTagsArray(post.tags).map((tag, index) => (
-                <Link key={index} href="/post/list" target="_blank">
-                  <DiButton text={`# ${tag}`} />
+                <Link key={index} href="/post" target="_blank">
+                  <TagButton text={`# ${tag}`} />
                 </Link>
               ))}
             </div>
             <Card.Img variant="top" src={`/images/post/${post.image}`} />
-            <p>內文:{post.content}</p>
+            <div
+              className="m-4"
+              // dangerouslySetInnerHTML={{
+              //   __html: DOMPurify.sanitize(post.content),
+              // }}
+              dangerouslySetInnerHTML={{
+                __html: post.content,
+              }}
+            ></div>
           </Col>
         </Row>
       </Container>
@@ -142,9 +139,10 @@ export default function Detail() {
   )
   return (
     <>
-      <Link href="/post/list">回列表頁</Link>
+      <Container className="p-3">
+        <Link href="/post">回列表頁</Link>
+      </Container>
       {isLoading ? loader : display}
-      <hr />
     </>
   )
 }
