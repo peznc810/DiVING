@@ -44,8 +44,8 @@ router.get('/getstar/:id', function (req, res, next) {
     const Sid = req.params.id
     let [star] = await db
       .execute(
-        'SELECT lesson.title, star.score ,star.comment FROM lesson INNER JOIN star ON lesson.id = ? AND star.lesson_id = ?',
-        [Sid, Sid],
+        'SELECT id,score ,comment FROM star WHERE lesson_id = ? ',
+        [Sid],
       )
       .catch((err) => {
         console.error(err)

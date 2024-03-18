@@ -7,11 +7,11 @@ export default function Test({ switchvalue }) {
       <input
         type="checkbox"
         className={style['switch-checkbox']}
-        id="switch1"
+        id="switch"
         checked={switchvalue.isChecked}
         onChange={switchvalue.toggleSwitch}
       />
-      <label className={style['switch-label']} htmlFor="switch1">
+      <label className={style['switch-label']} htmlFor="switch">
         <span
           className={`${style['switch-txt']} ${
             switchvalue.isChecked ? 'on' : 'off'

@@ -2,10 +2,9 @@ import React, { useState, useEffect } from 'react'
 import { Container, Row, Col } from 'react-bootstrap'
 import { useRouter } from 'next/router'
 import { useAuth } from '@/hooks/auth'
-import Test from '@/components/lesson/test'
+import ButtonChange from '@/components/lesson/buttonChange'
 import GetDetail from '@/components/lesson/getDetail'
 import GetComment from '@/components/lesson/getComment'
-import CommentList from '@/components/lesson/CommentList'
 import UserComment from '@/components/lesson/UserComment'
 import DetailTop from '@/components/lesson/detailTop'
 import Style from '@/styles/lessonStyle/lesson.module.scss'
@@ -66,7 +65,9 @@ export default function Detail() {
         <hr />
         <Row className="justify-content-end">
           <Col lg={1}>
-            <Test switchvalue={{ isChecked, toggleSwitch }}></Test>
+            <ButtonChange
+              switchvalue={{ isChecked, toggleSwitch }}
+            ></ButtonChange>
           </Col>
         </Row>
         {!isChecked ? (
