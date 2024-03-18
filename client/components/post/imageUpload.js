@@ -52,7 +52,10 @@ export default function ImageUpload() {
       method: 'POST',
       body: formData,
     })
-      .then((response) => response.json())
+      .then((response) => {
+        console.log('Server Response:', response)
+        response.json()
+      })
       .then((result) => {
         console.log('Success:', result)
         setImgServerUrl(
@@ -62,18 +65,25 @@ export default function ImageUpload() {
       .catch((error) => {
         console.error('Error:', error)
       })
-    console.log(formData)
-    console.log(selectedFile)
-    console.log(imgServerUrl)
+    // console.log(formData)
+    // console.log(selectedFile)
+    // console.log(imgServerUrl)
+    // console.log(preview)
   }
 
   return (
     <>
       <input type="file" name="file" onChange={changeHandler} />
       {selectedFile && (
-        <div>
+        <div style={{ width: '100%', height: '300px', position: 'relative' }}>
           預覽圖片:{' '}
-          <Image src={preview} alt="" layout="fill" objectFit="contain"></Image>
+          <Image
+            src={preview}
+            alt="images"
+            fill={true}
+            style={{ objectFit: 'contain' }}
+            priority={false}
+          ></Image>
         </div>
       )}
       {isFilePicked ? (

@@ -3,7 +3,6 @@ import Head from 'next/head'
 import Menu from '@/components/dashboard/menu'
 import styles from '@/components/dashboard/form/styles.module.scss'
 import loaderStyles from '@/styles/loader/loader_ripple.module.css'
-
 import { Form, InputGroup, Stack } from 'react-bootstrap'
 import DiButton from '@/components/post/defaultButton'
 import QuillEditor from '@/components/post/quill'
@@ -11,6 +10,7 @@ import ImageUpload from '@/components/post/imageUpload'
 import TagGenerator from '@/components/post/tagGenerator'
 import { useRouter } from 'next/router'
 import CancelAlert from '@/components/post/cancelAlert'
+import Swal from 'sweetalert2'
 
 export default function Edit() {
   const router = useRouter()
@@ -22,6 +22,7 @@ export default function Edit() {
     image: '',
     content: '',
     tags: '',
+    lastUpdate: '',
   })
 
   const [isLoading, setIsLoading] = useState(true)
@@ -38,6 +39,7 @@ export default function Edit() {
           image: data.image,
           content: data.content,
           tags: data.tags || '',
+          lastUpdate: data.updated_at,
         })
 
         setTimeout(() => {
@@ -52,14 +54,12 @@ export default function Edit() {
   useEffect(() => {
     if (router.isReady) {
       const { pid } = router.query
-      console.log(pid)
       fetchPostData(pid)
     }
   }, [router.isReady]) // 確保只在 component 首次渲染時執行
 
-  const handleFormDataChange = (fieldName) => (e) => {
-    const newData = e.target.value
-    setEditFormData({ ...editFormData, [fieldName]: newData })
+  const handleFormDataChange = (fieldName) => (value) => {
+    setEditFormData({ ...editFormData, [fieldName]: value })
     console.log(editFormData)
   }
 
@@ -70,18 +70,45 @@ export default function Edit() {
 
     // 在這裡發送POST請求到後端保存數據
     try {
-      const response = await fetch('http://localhost:3005/api/post/edit', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(editFormData),
-        // body: JSON.stringify(postData),
-      })
+      const res = await fetch(
+        `http://localhost:3005/api/post/edit/${router.query.pid}`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(editFormData),
+        }
+      )
 
-      // 處理後端返回的響應
-      const result = await response.json()
-      console.log(result)
+      //成功的話跳alert
+      if (res.status === 201) {
+        Swal.fire({
+          title: '編輯成功',
+          showClass: {
+            popup: `
+              animate__animated
+              animate__fadeInUp
+              animate__faster
+            `,
+          },
+          hideClass: {
+            popup: `
+              animate__animated
+              animate__fadeOutDown
+              animate__faster
+            `,
+          },
+          backdrop: `
+          rgba(0,0,123,0.4)
+          url("/images/post/swimmingdog.gif")
+          top
+          no-repeat
+        `,
+        })
+        //跳轉
+        router.push('/dashboard/posts')
+      }
     } catch (error) {
       console.error('Error submitting data:', error)
     }
@@ -105,25 +132,38 @@ export default function Edit() {
           <Form.Control
             aria-label="title"
             aria-describedby="inputGroup-sizing-default"
-            onChange={handleFormDataChange('title')}
+            onChange={(e) => {
+              handleFormDataChange('title')(e.target.value)
+            }}
             value={editFormData.title} // 設定預設值
+            required
           />
         </InputGroup>
-        <ImageUpload />
+        <div className="board">
+          <ImageUpload />
+        </div>
         <TagGenerator
-          onChange={handleFormDataChange('tags')}
-          value={editFormData.tags}
+          onTagsChange={(newTags) => {
+            handleFormDataChange('tags')(newTags.join(','))
+          }}
+          initialTags={editFormData.tags}
         />
         <br />
         <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
-          <QuillEditor
-            onChange={(value) => {
-              setEditFormData({ ...editFormData, content: value })
-            }}
-            className="w-full h-[70%] mt-10 bg-white"
-            editorLoaded={editorLoaded}
-            initialContent={editFormData.content}
-          />{' '}
+          <div className="h-screen w-screen flex items-center flex-col">
+            <QuillEditor
+              editorLoaded={editorLoaded}
+              onChange={(value) => handleFormDataChange('content')(value)}
+              initialContent={editFormData.content}
+            />{' '}
+          </div>
+          <div className="text-end">
+            上次編輯時間:
+            {editFormData.lastUpdate
+              .toString()
+              .replace(/T/, ' ')
+              .replace(/:00\+08:00/, '')}
+          </div>
         </Form.Group>
         <Stack direction="horizontal" gap={3}>
           <div className="p-2 mx-auto">

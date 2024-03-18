@@ -1,17 +1,12 @@
 import express from 'express';
 import db from '../db.mjs';
 import { v4 as uuidv4 } from 'uuid';
-// import multer from 'multer';
-// const path = 'path';
-// const upload = multer({ storage: storage }); // 初始化 Multer
-import { dirname, extname, resolve } from "path";
-import { fileURLToPath } from "url";
-import formidable from "formidable";
-const __dirname = dirname(fileURLToPath(import.meta.url));
 import checkToken from '../middlewares/checkToken.mjs'
-
+import fileUpload from 'express-fileupload';
+import bodyParser from 'body-parser';
 
 const router = express.Router();
+const app = express();
 
   //讀取所有文章-list
   router.get('/', async (req, res) => {
@@ -44,11 +39,14 @@ const router = express.Router();
   });
 
     //讀取所有文章-dashboard
-    router.get('/posts', async (req, res) => {
+    router.get('/posts/:userId', async (req, res) => {
+      const userId = req.query.userId
+      console.log(userId);
+      
       try {
-        const [result, field] = await db.execute('SELECT * FROM post');
-  
-        console.log(field);
+        //抓出post.id 避免被userId覆寫 
+        const [result] = await db.execute( 'SELECT post.id as post_id, post.*, users.id as user_id, users.name FROM post JOIN users ON post.user_id = users.id WHERE post.user_id = ?',[userId]);
+        
         res.json(result);
       } catch (error) {
         console.error('Error executing database query:', error);
@@ -59,47 +57,33 @@ const router = express.Router();
   //讀取動態文章
   router.get('/:pid', async (req, res) => {
     const postId = req.params.pid;
+    try {
+      const [result, _fields] = await db.execute('SELECT * FROM post WHERE id = ? ', [postId]);
 
-  try {
-    const [result, _fields] = await db.execute('SELECT * FROM post WHERE id = ? ', [postId]);
-
-    if(result.length === 1) {
-        res.json(result[0]); //回傳單篇文章的數據
-    }else{
-        res.status(404).json({ error: '沒這篇啦'})
+      if(result.length === 1) {
+          res.json(result[0]); //回傳單篇文章的數據
+      }else{
+          res.status(404).json({ error: '沒這篇啦'})
+      }
+    } catch (error) {
+      console.error('Error executing database query:', error);
+      res.status(500).json({ error: 'NOOOOOO' });    
     }
-  } catch (error) {
-    console.error('Error executing database query:', error);
-    res.status(500).json({ error: 'NOOOOOO' });    
-  }
 });
 
-  //讀取登入使用者文章
-  // router.get('/', async (req, res) => {
-  //   try {
-  //     const [result, field] = await db.execute('SELECT * FROM post');
-
-  //     console.log(field);
-  //     res.json(result);
-  //   } catch (error) {
-  //     console.error('Error executing database query:', error);
-  //     res.status(500).json({ error: 'NOOOOOO' });  
-  //   }
-  // });
-
 //dashboard 新增文章
-router.post('/new', checkToken, async (req, res) => {
+router.post('/new', async (req, res) => {
   const { user_id, title, image, content, tags} = req.body;
   const id = uuidv4();
   const now = new Date();
-  const uesr_id = req.decode.id
+  // const uesr_id = req.body.user_id
 
   try {
     // const tagsValue = tags !== undefined ? tags : null;
     const [result] = await db.execute('INSERT INTO post (id, user_id, title, image, content, published_at, updated_at,tags , valid) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)', 
-     [id, uesr_id, title, image, content, now, now, tags, 1]);   
+     [id, user_id, title, image, content, now, now, tags, 1]);
 
-        res.status(201).json({ status: 'success', message: '成功寫入'});
+      res.status(201).json({ status: 'success', message: '成功寫入'});
   } catch (error) {
     console.error('Error executing database query:', error);
     
@@ -108,8 +92,9 @@ router.post('/new', checkToken, async (req, res) => {
 });
 
 //dashboard 編輯文章
-router.post('/edit', async (req, res) => {
-  const { post_id, title, image, content, tags} = req.body;
+router.post('/edit/:id', async (req, res) => {
+  let post_id = req.params.id;
+  const { title, image, content, tags} = req.body;
   const now = new Date();
 
   try {
@@ -117,7 +102,7 @@ router.post('/edit', async (req, res) => {
      [title, image, content, now, tags, post_id]);
 
      if (result.affectedRows > 0) {
-    res.status(200).json({ status: 'success', message: '成功更新'});
+    res.status(201).json({ status: 'success', message: '成功更新'});
     } else {
       res.status(404).json({ error: '找不到要更新的資料' });
     }
@@ -141,20 +126,51 @@ router.post("/disable/:postId", async(req,res) =>{
   }
 })
 
-// --BEN--
-router.post("/upload", (req, res, next) => {
-  const form = formidable({
-      uploadDir: resolve(__dirname, "public/upload"), //路徑
-      keepExtensions: true //保留副檔名
-  }); //也有很多設定所以用物件的方式來設定參數
+//圖片上傳
+app.use(fileUpload({
+  createParentPath: true,
+  limits: { fileSize: 50 * 1024 * 1024 } 
+}));
 
-  form.parse(req, (error, fields, files) => { //()裡面 錯誤 欄位 檔案
-      if (error) {
-          next(); //把錯誤往下傳
-          return false;
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+
+// 當瀏覽器請求/upload時 Express查找對應文件 提供給client端靜態引用
+app.use('/upload', express.static('upload'));
+
+router.post('/upload', async (req, res) => {
+  try {
+      if(!req.files) {
+        // console.log(req);
+
+          res.send({
+              status: false,
+              message: 'No file uploaded'
+          });
+      } else {
+          console.log(req);
+        
+          //使用輸入框的名稱來獲取上傳檔案 (例如 "images")
+          let images = req.files.images;
+          console.log(images);
+          
+          //使用 mv() 方法來移動上傳檔案到要放置的目錄裡 (例如 "uploads")
+          images.mv('./upload/' + images.name);
+
+          //送出回應
+          res.json({
+              status: true,
+              message: 'File is uploaded',
+              data: {
+                  name: images.name,
+                  mimetype: images.mimetype,
+                  size: images.size
+              }
+          });
       }
-      res.json({ fields, files }) //不曉得有什麼格式 所以直接列出來
-  })
+  } catch (err) {
+      res.status(500).json(err);
+  }
 });
 
 export default router;

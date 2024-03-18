@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import styles from '../styles.module.scss'
 import Link from 'next/link'
-
+import { useAuth } from '@/hooks/auth'
 // React icon
 import { FaTrashCan } from 'react-icons/fa6'
 import { MdOutlineLibraryAdd } from 'react-icons/md'
@@ -9,10 +9,15 @@ import { FaEdit } from 'react-icons/fa'
 
 export default function Index() {
   const [postList, setPostList] = useState([])
+  const { auth } = useAuth()
+  // const token = localStorage.getItem('token')
+  const prevAuthId = useRef(auth.id) //防止相同id一直重複被查詢
 
-  const getPost = async () => {
+  const getPost = async (userId) => {
     try {
-      const res = await fetch('http://localhost:3005/api/post/posts')
+      const res = await fetch(
+        `http://localhost:3005/api/post/posts/router?userId=${userId}`
+      )
       const data = await res.json()
 
       if (Array.isArray(data)) {
@@ -23,9 +28,17 @@ export default function Index() {
     }
   }
 
+  // useEffect(() => {
+  //   if (auth.id !== '' && auth.id !== prevAuthId.current) {
+  //     getPost(auth.id)
+  //   }
+  //   console.log(auth.id)
+  // }, [auth])
   useEffect(() => {
-    getPost()
-  }, [])
+    if (auth.id !== '') {
+      getPost(auth.id)
+    }
+  }, [auth])
 
   const handleDisablePost = async (e, postId) => {
     try {
@@ -33,6 +46,7 @@ export default function Index() {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          // Authorization: `Bearer ${token}`,
           // 可以添加其他必要的Header，如授權令牌等
         },
       })
@@ -77,8 +91,10 @@ export default function Index() {
                 </thead>
                 <tbody>
                   {/* 之後改用map */}
+                  {console.log(postList)}
                   {postList.map((v, i) => (
-                    <tr className="align-middle" key={v.id}>
+                    <tr className="align-middle" key={v.id + i}>
+                      {/* map()加上i 避免跟user_id的id重複 */}
                       <td>{i + 1}</td>
                       <td>
                         <Link
