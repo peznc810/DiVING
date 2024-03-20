@@ -90,10 +90,15 @@ export default function Switch({
         const response = await fetch(
           `http://localhost:3005/api/product/can-comment?pid=${id}&mid=${user_id}`
         )
-        const data = await response.json()
-      } catch (err) {}
+        if (response.ok) {
+          const data = await response.json()
+          setCanComment(data)
+        }
+      } catch (err) {
+        console.error('Error fetching data:', err)
+      }
     }
-    setCanComment(data)
+    fetchCanComment()
   }, [id, user_id])
 
   useEffect(() => {
