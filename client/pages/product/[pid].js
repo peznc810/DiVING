@@ -57,7 +57,7 @@ export default function Detail() {
         if (response.ok) {
           const data = await response.json()
           setAllComments(data)
-          console.log(data)
+          // console.log(data)
         }
       } catch (err) {
         // console.error('送出評價失敗：', err)
@@ -72,7 +72,8 @@ export default function Detail() {
       totalScore = totalScore + comment.score
     })
     const average = totalScore / allComments.length
-    return average
+    const formattedScore = average.toFixed(1)
+    return formattedScore
   }, [allComments])
 
   useEffect(() => {
@@ -89,7 +90,7 @@ export default function Detail() {
           })
       } catch {
         ;(err) => {
-          console.error('Error fetching data:', err)
+          // console.error('Error fetching data:', err)
         }
       }
     }
