@@ -84,11 +84,15 @@ export default function Switch({
 
   const [canComment, setCanComment] = useState(false)
 
-  useEffect(async () => {
-    const response = await fetch(
-      `http://localhost:3005/api/product/can-comment?pid=${id}&mid=${user_id}`
-    )
-    const data = await response.json()
+  useEffect(() => {
+    const fetchCanComment = async () => {
+      try {
+        const response = await fetch(
+          `http://localhost:3005/api/product/can-comment?pid=${id}&mid=${user_id}`
+        )
+        const data = await response.json()
+      } catch (err) {}
+    }
     setCanComment(data)
   }, [id, user_id])
 

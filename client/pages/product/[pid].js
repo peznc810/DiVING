@@ -53,7 +53,7 @@ export default function Detail() {
             method: 'GET',
           }
         )
-        console.log('response', response)
+        // console.log('response', response)
         if (response.ok) {
           const data = await response.json()
           setAllComments(data)
