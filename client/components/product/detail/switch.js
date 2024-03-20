@@ -25,7 +25,7 @@ export default function Switch({
   const router = useRouter()
   const { pid } = router.query
   const [score, setScore] = useState(0)
-  console.log('score', score)
+  // console.log('score', score)
   const [comment, setComment] = useState('')
   const [allComments, setAllComments] = useState([])
   const {
@@ -71,7 +71,7 @@ export default function Switch({
             console.log(data)
           }
         } catch (err) {
-          // console.error('送出評價失敗：', err)
+          console.error('送出評價失敗：', err)
         }
       } else {
         console.error('送出評價失敗')
@@ -110,11 +110,11 @@ export default function Switch({
             method: 'GET',
           }
         )
-        console.log('response', response)
+        // console.log('response', response)
         if (response.ok) {
           const data = await response.json()
           setAllComments(data)
-          console.log(data)
+          // console.log(data)
         }
       } catch (err) {
         // console.error('送出評價失敗：', err)
@@ -129,10 +129,9 @@ export default function Switch({
       totalScore = totalScore + comment.score
     })
     const average = totalScore / allComments.length
-    return average
+    const formattedScore = average.toFixed(1)
+    return formattedScore
   }, [allComments])
-
-  console.log('averageScore', averageScore)
 
   return (
     <div className="mt-4">
@@ -173,12 +172,7 @@ export default function Switch({
                     setRating={setScore}
                     type="number"
                     id="score"
-                    // value={score}
                     required
-                    // onChange={(e) => {
-                    //   console.log(e.target.value)
-                    //   setScore(parseInt(e.target.value))
-                    // }}
                   />
                   <textarea
                     className="form-control my-1 border-2"
@@ -206,25 +200,6 @@ export default function Switch({
               {allComments.map((data) => (
                 <Comment key={data.id} data={data} />
               ))}
-              {/* <div className="d-flex justify-content-between align-items-center mt-3">
-                <div className="avatar d-none d-sm-block">
-                  <img src="/images/product/test/20/1-1.webp" alt="..." />
-                </div>
-                <div className="content">
-                  <h6>安妮雅 2024/01/01</h6>
-                  <Star rating={rating} setRating={setRating} />
-                  <p>
-                    若沒有潛水的存在，那麼後果可想而知。亦舒曾經說過，人生短短數十載，最要緊的是滿足自己，不是討好他人。這影響了我的價值觀。
-                  </p>
-                </div>
-              </div> */}
-              {/* <hr />
-              <button
-                type="submit"
-                className="btn btn-primary d-flex btn-comment"
-              >
-                更多評價
-              </button> */}
             </div>
           </div>
         </div>
@@ -375,14 +350,28 @@ export default function Switch({
   )
 }
 
-const Comment = ({ data, setRating }) => {
+const Comment = ({ data, commentDate, setRating }) => {
+  //處理評論時間
+  const formattedDateTime = useMemo(() => {
+    const timestamp = data.created_at
+    const date = new Date(timestamp)
+    const year = date.getFullYear()
+    const month = ('0' + (date.getMonth() + 1)).slice(-2)
+    const day = ('0' + date.getDate()).slice(-2)
+    const hours = ('0' + date.getHours()).slice(-2)
+    const minutes = ('0' + date.getMinutes()).slice(-2)
+    const seconds = ('0' + date.getSeconds()).slice(-2)
+    return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`
+    // return `${year}-${month}-${day}`
+  }, [data.created_at])
+
   return (
     <div className="d-flex justify-content-between align-items-center mt-3">
       <div className="avatar d-none d-sm-block">
         <img src={`http://localhost:3005/avatar/${data.avatar}`} alt="..." />
       </div>
       <div className="content">
-        <h6>{data.name + '   ' + data.created_at}</h6>
+        <h6>{data.name + '   ' + formattedDateTime}</h6>
         <Star rating={data.score} setRating={() => {}} />
         <p>{data.comment}</p>
       </div>
