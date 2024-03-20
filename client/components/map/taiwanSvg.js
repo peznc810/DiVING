@@ -1,7 +1,12 @@
-import React from 'react'
+import React, { useState } from 'react'
 import styles from '@/pages/map/svg.module.scss'
 
 function TaiwanSvg({ handleMapClick }) {
+  const [selectedPoint, setSelectedPoint] = useState('')
+  const clickedPoint = (id) => {
+    setSelectedPoint(id)
+  }
+
   return (
     <>
       <svg
@@ -13,14 +18,14 @@ function TaiwanSvg({ handleMapClick }) {
         viewBox="0 0 503.6 643"
         xmlSpace="preserve"
       >
-        <defs>
+        {/* <defs>
           <filter id="f3">
             <feOffset in="SourceAlpha" dx="0" dy="0" />
             <feGaussianBlur stdDeviation="4" />
             <feBlend in="SourceGraphic" in2="blurOut" />
           </filter>
-        </defs>
-        <g className={styles['district']} filter="url(#f3)">
+        </defs> */}
+        <g className={styles['district']}>
           <g>
             <path
               d="M191.4 518.1L192.1 519.7 190.6 520.5 188 523.6 186.7 523.5 186.4 522.6 187.5 521.2 187.6 520.3 188.2 519.1 189.5 517.9z"
@@ -51,7 +56,13 @@ function TaiwanSvg({ handleMapClick }) {
           </g>
         </g>
 
-        <g className={styles['ctaSvg']} onClick={(e) => handleMapClick(e)}>
+        <g
+          className={styles['ctaSvg']}
+          onClick={(e) => {
+            handleMapClick(e)
+            // clickedPoint()
+          }}
+        >
           {/* 3蘭嶼 */}
           {/* <use
           href="#cr3"
@@ -65,34 +76,19 @@ function TaiwanSvg({ handleMapClick }) {
           transform="scale(1.5)"
           transform-origin="385 550"
         /> */}
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            x="0"
-            y="0"
-            viewBox="50 50 50 50"
-          >
-            {' '}
-            <circle cx="385.9" cy="550.2" r="50" className={styles['rp2']}>
-              {' '}
-              <animateTransform
-                attributeName="transform"
-                dur="2s"
-                type="rotate"
-                from="0 50 48"
-                to="360 50 52"
-                repeatCount="indefinite"
-              />
-            </circle>
-          </svg>
 
           <circle
             cx="385.9"
             cy="550.2"
             r="26"
-            className={styles['rp1']}
+            // 如果點了對應id 就把樣式換成styles.selected 如果沒有就是空字串(原本的樣式)
+            className={`${styles.rp1} ${
+              selectedPoint === '3' ? styles.test : ''
+            }`}
             data-id="3"
             // fill="red"
             id="cr3"
+            onClick={() => clickedPoint('3')}
           />
 
           {/* 6東沙環礁 */}

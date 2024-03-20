@@ -87,7 +87,11 @@ export default function Detail() {
                       href={`/post/${v.id}`}
                       style={{ textDecoration: 'none' }}
                     >
-                      <Card.Img variant="top" src={`/images/post/${v.image}`} />
+                      <Card.Img
+                        variant="top"
+                        // src={`/images/post/${v.image}`}
+                        src={`http://localhost:3005/upload/${v.image}`}
+                      />
                     </Link>
                     <Card.Body className="bg-light">
                       <Card.Text>{v.title}</Card.Text>
@@ -113,7 +117,7 @@ export default function Detail() {
           <Col md={8} className="bg-light p-4 mb-3">
             <p>{post.published}</p>
             <h3>{post.title}</h3>
-            作者：{post.user_id}
+            作者：{post.name}
             <div className="my-2">
               {' '}
               {getTagsArray(post.tags).map((tag, index) => (
@@ -122,7 +126,11 @@ export default function Detail() {
                 </Link>
               ))}
             </div>
-            <Card.Img variant="top" src={`/images/post/${post.image}`} />
+            <Card.Img
+              variant="top"
+              // src={`/images/post/${post.image}`}
+              src={`http://localhost:3005/upload/${post.image}`}
+            />
             <div
               className="m-4"
               // dangerouslySetInnerHTML={{

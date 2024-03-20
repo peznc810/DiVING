@@ -13,16 +13,52 @@ import TagGenerator from '@/components/post/tagGenerator'
 import CancelAlert from '@/components/post/cancelAlert'
 import { useRouter } from 'next/router'
 import Swal from 'sweetalert2'
+import { useAuth } from '@/hooks/auth'
+import Image from 'next/image'
 
 export default function Index() {
   const router = useRouter()
+  const { auth } = useAuth()
   const [editorLoaded, setEditorLoaded] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
 
-  const [formData, setFormData] = useState({
-    user_id: '',
+  // 選擇的檔案
+  const [selectedFile, setSelectedFile] = useState(null)
+  // 預覽圖片
+  const [preview, setPreview] = useState('')
+  // 當選擇檔案更動時建立預覽圖
+
+  useEffect(() => {
+    if (!selectedFile) {
+      setPreview('')
+      return
+    }
+    // createObjectURL產生一個臨時性的URL 預覽用
+    const objectUrl = URL.createObjectURL(selectedFile)
+    setPreview(objectUrl)
+
+    setFormData({ ...postFormData, images: selectedFile })
+
+    // 當元件unmounted時清除記憶體
+    return () => URL.revokeObjectURL(objectUrl)
+  }, [selectedFile])
+
+  const changeHandler = (e) => {
+    //有檔案上傳時
+    const file = e.target.files[0]
+    console.log(file)
+    // 表單上傳元素沒辦法完全由react可控
+    if (file) {
+      setSelectedFile(file)
+    } else {
+      setSelectedFile(null)
+    }
+  }
+
+  const [postFormData, setFormData] = useState({
+    user_id: `${auth.id}`,
     title: '',
-    image: 'post.jpg',
+    images: 'post.jpg',
     content: '',
     tags: '',
   })
@@ -36,25 +72,27 @@ export default function Index() {
 
   //formData內容 onChange隨時更新
   const handleFormDataChange = (fieldName) => (value) => {
-    setFormData({ ...formData, [fieldName]: value })
-    console.log(formData)
+    setFormData({ ...postFormData, [fieldName]: value })
+    console.log(postFormData)
   }
 
   //提交數據
   const handleSubmit = async (e) => {
     e.preventDefault()
-    console.log('Submitting data:', formData)
 
+    const formData = new FormData()
+    formData.append('user_id', postFormData.user_id)
+    formData.append('title', postFormData.title)
+    formData.append('content', postFormData.content)
+    formData.append('tags', postFormData.tags)
+    formData.append('images', selectedFile) // 将文件添加到 FormData 对象中
+    console.log([...formData])
     try {
       const res = await fetch('http://localhost:3005/api/post/new', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          // 'Content-Type': 'multipart/form-data',
-        },
-        body: JSON.stringify(formData),
+        body: formData,
       })
-
+      console.log('Submitting data:', formData)
       //成功的話跳alert
       if (res.status === 201) {
         Swal.fire({
@@ -110,13 +148,32 @@ export default function Index() {
             required
           />
         </InputGroup>
-        <div className="board">
-          <ImageUpload />
+        <div className="border">
+          <input
+            type="file"
+            name="file"
+            accept="image/*"
+            onChange={changeHandler}
+          />
+          {selectedFile && (
+            <div
+              style={{ width: '100%', height: '300px', position: 'relative' }}
+            >
+              預覽圖片:{' '}
+              <Image
+                src={preview}
+                alt="images"
+                fill={true}
+                style={{ objectFit: 'contain' }}
+                priority={false}
+              ></Image>
+            </div>
+          )}
         </div>
         <TagGenerator
           onTagsChange={(newTags) => {
             handleFormDataChange('tags')(newTags.join(','))
-            console.log(newTags)
+            // console.log(newTags)
           }}
         />
         <br />

@@ -11,10 +11,12 @@ import TagGenerator from '@/components/post/tagGenerator'
 import { useRouter } from 'next/router'
 import CancelAlert from '@/components/post/cancelAlert'
 import Swal from 'sweetalert2'
+import Image from 'next/image'
 
 export default function Edit() {
   const router = useRouter()
   const [editorLoaded, setEditorLoaded] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
 
   const [editFormData, setEditFormData] = useState({
     user_id: '',
@@ -25,7 +27,12 @@ export default function Edit() {
     lastUpdate: '',
   })
 
-  const [isLoading, setIsLoading] = useState(true)
+  // 選擇的檔案
+  const [selectedFile, setSelectedFile] = useState(null)
+  // 預覽圖片
+  const [preview, setPreview] = useState('')
+  // 當選擇檔案更動時建立預覽圖
+
   const fetchPostData = async (pid) => {
     try {
       const res = await fetch(`http://localhost:3005/api/post/${pid}`)
@@ -57,6 +64,32 @@ export default function Edit() {
       fetchPostData(pid)
     }
   }, [router.isReady]) // 確保只在 component 首次渲染時執行
+
+  useEffect(() => {
+    if (!selectedFile) {
+      setPreview('')
+      return
+    }
+    // createObjectURL產生一個臨時性的URL 預覽用
+    const objectUrl = URL.createObjectURL(selectedFile)
+    setPreview(objectUrl)
+
+    // setEditFormData({ ...editFormData, images: selectedFile })
+    // 當元件unmounted時清除記憶體
+    return () => URL.revokeObjectURL(objectUrl)
+  }, [selectedFile])
+
+  const changeHandler = (e) => {
+    //有檔案上傳時
+    const file = e.target.files[0]
+    console.log(file)
+    // 表單上傳元素沒辦法完全由react可控
+    if (file) {
+      setSelectedFile(file)
+    } else {
+      setSelectedFile(null)
+    }
+  }
 
   const handleFormDataChange = (fieldName) => (value) => {
     setEditFormData({ ...editFormData, [fieldName]: value })
@@ -139,7 +172,31 @@ export default function Edit() {
             required
           />
         </InputGroup>
+        <div className="border">
+          <input
+            type="file"
+            name="file"
+            accept="image/*"
+            onChange={changeHandler}
+          />
+          {selectedFile && (
+            <div
+              style={{ width: '100%', height: '300px', position: 'relative' }}
+            >
+              預覽圖片:{' '}
+              <Image
+                src={preview}
+                alt="images"
+                fill={true}
+                style={{ objectFit: 'contain' }}
+                priority={false}
+              ></Image>
+            </div>
+          )}
+        </div>
+
         <div className="board">
+          {editFormData.image}
           <ImageUpload />
         </div>
         <TagGenerator
@@ -156,13 +213,6 @@ export default function Edit() {
               onChange={(value) => handleFormDataChange('content')(value)}
               initialContent={editFormData.content}
             />{' '}
-          </div>
-          <div className="text-end">
-            上次編輯時間:
-            {editFormData.lastUpdate
-              .toString()
-              .replace(/T/, ' ')
-              .replace(/:00\+08:00/, '')}
           </div>
         </Form.Group>
         <Stack direction="horizontal" gap={3}>

@@ -1,9 +1,9 @@
 import express from 'express';
 import db from '../db.mjs';
 import { v4 as uuidv4 } from 'uuid';
-import checkToken from '../middlewares/checkToken.mjs'
 import fileUpload from 'express-fileupload';
-import bodyParser from 'body-parser';
+import multer from 'multer';
+import path from 'path';
 
 const router = express.Router();
 const app = express();
@@ -14,13 +14,6 @@ const app = express();
   // 排序用
   const orderDirection = sort === 'desc' ? 'DESC' : 'ASC'; // 根據排序方式設置排序方向
     try {
-      // let queryString = `SELECT * FROM post`;
-      // if (searchText) {
-      //   queryString += ` WHERE title LIKE ? OR content LIKE ?`;
-      //   queryParams = [`%${searchText}%`, `%${searchText}%`];
-      // }
-      // const [result, field] = await db.execute(queryString + ` ORDER BY published_at ${orderDirection}`, queryParams);
-
       let queryString = `SELECT * FROM post ORDER BY published_at ${orderDirection}`;
       let queryParams = [];
   
@@ -29,7 +22,7 @@ const app = express();
         queryParams = [`%${searchText}%`, `%${searchText}%`];
       }
 
-      const [result, field] = await db.execute('SELECT * FROM post WHERE title LIKE ? OR content LIKE ? ORDER BY published_at DESC', ['%' + searchText + '%', '%' + searchText + '%']);
+      const [result, field] = await db.execute('SELECT post.id as post_id, post.*, users.id as user_id, users.name FROM post JOIN users ON post.user_id = users.id WHERE title LIKE ? OR content LIKE ? ORDER BY published_at DESC', ['%' + searchText + '%', '%' + searchText + '%']);
 
       res.json(result);
     } catch (error) {
@@ -38,27 +31,27 @@ const app = express();
     }
   });
 
-    //讀取所有文章-dashboard
-    router.get('/posts/:userId', async (req, res) => {
-      const userId = req.query.userId
-      console.log(userId);
+   //讀取所有文章-dashboard
+  router.get('/posts/:userId', async (req, res) => {
+    const userId = req.query.userId
+    console.log(userId);
+    
+    try {
+      //抓出post.id 避免被userId覆寫 
+      const [result] = await db.execute( 'SELECT post.id as post_id, post.*, users.id as user_id, users.name FROM post JOIN users ON post.user_id = users.id WHERE post.user_id = ? AND post.valid = ?',[userId, 1]);
       
-      try {
-        //抓出post.id 避免被userId覆寫 
-        const [result] = await db.execute( 'SELECT post.id as post_id, post.*, users.id as user_id, users.name FROM post JOIN users ON post.user_id = users.id WHERE post.user_id = ?',[userId]);
-        
-        res.json(result);
-      } catch (error) {
-        console.error('Error executing database query:', error);
-        res.status(500).json({ error: 'NOOOOOO' });  
-      }
-    });
+      res.json(result);
+    } catch (error) {
+      console.error('Error executing database query:', error);
+      res.status(500).json({ error: 'NOOOOOO' });  
+    }
+  });
 
   //讀取動態文章
   router.get('/:pid', async (req, res) => {
     const postId = req.params.pid;
     try {
-      const [result, _fields] = await db.execute('SELECT * FROM post WHERE id = ? ', [postId]);
+      const [result, _fields] = await db.execute('SELECT post.id as post_id, post.*, users.id as user_id, users.name FROM post JOIN users ON post.user_id = users.id WHERE post.id = ? ', [postId]);
 
       if(result.length === 1) {
           res.json(result[0]); //回傳單篇文章的數據
@@ -71,16 +64,44 @@ const app = express();
     }
 });
 
+
+//圖片上傳
+app.use(fileUpload({
+  createParentPath: true,
+  // limits: { fileSize: 50 * 1024 * 1024 } 
+}));
+
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+ // 4.16.0 或以上body-parser已被內建
+
+// 當瀏覽器請求/upload時 Express查找對應文件 提供給client端靜態引用
+app.use('/upload', express.static('upload'));
+
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'public/upload'); // 儲存的路徑
+  },
+  filename: function (req, file, cb) {
+    const uniqueName = Date.now() + '-' + Math.round(Math.random() * 1E9);
+    const extension = path.extname(file.originalname);
+    const fileName = uniqueName + extension; // 重新命名文件
+
+    cb(null, fileName);
+  }
+});
+
+const upload = multer({ storage: storage });
+
 //dashboard 新增文章
-router.post('/new', async (req, res) => {
-  const { user_id, title, image, content, tags} = req.body;
+router.post('/new', upload.single('images') , async (req, res) => {
+  const {user_id,title, content, tags} = req.body;
   const id = uuidv4();
   const now = new Date();
-  // const uesr_id = req.body.user_id
+  const image = req.file.filename; 
 
   try {
-    // const tagsValue = tags !== undefined ? tags : null;
-    const [result] = await db.execute('INSERT INTO post (id, user_id, title, image, content, published_at, updated_at,tags , valid) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)', 
+    await db.execute('INSERT INTO post (id, user_id, title, image, content, published_at, updated_at,tags , valid) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)', 
      [id, user_id, title, image, content, now, now, tags, 1]);
 
       res.status(201).json({ status: 'success', message: '成功寫入'});
@@ -93,7 +114,7 @@ router.post('/new', async (req, res) => {
 
 //dashboard 編輯文章
 router.post('/edit/:id', async (req, res) => {
-  let post_id = req.params.id;
+  const post_id = req.params.id;
   const { title, image, content, tags} = req.body;
   const now = new Date();
 
@@ -113,64 +134,20 @@ router.post('/edit/:id', async (req, res) => {
   }
 });
 
+//軟刪除文章
 router.post("/disable/:postId", async(req,res) =>{
-  const post_id = req.params.postId
+  const post_id = req.params.postId;
+
   try{
-    const [result] = await db.execute('UPDATE post SET valid = 0 WHERE id = ?', 
+    await db.execute('UPDATE post SET valid = 0 WHERE id = ?', 
      [post_id]);
 
      res.status(200).json({ message: 'Post disabled successfully' });
   } catch{
-    console.error('Error disabling post:', error);
+    console.error('刪除失敗:', error);
     res.status(500).json({ error: 'Internal Server Error' });
   }
 })
 
-//圖片上傳
-app.use(fileUpload({
-  createParentPath: true,
-  limits: { fileSize: 50 * 1024 * 1024 } 
-}));
-
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
-
-// 當瀏覽器請求/upload時 Express查找對應文件 提供給client端靜態引用
-app.use('/upload', express.static('upload'));
-
-router.post('/upload', async (req, res) => {
-  try {
-      if(!req.files) {
-        // console.log(req);
-
-          res.send({
-              status: false,
-              message: 'No file uploaded'
-          });
-      } else {
-          console.log(req);
-        
-          //使用輸入框的名稱來獲取上傳檔案 (例如 "images")
-          let images = req.files.images;
-          console.log(images);
-          
-          //使用 mv() 方法來移動上傳檔案到要放置的目錄裡 (例如 "uploads")
-          images.mv('./upload/' + images.name);
-
-          //送出回應
-          res.json({
-              status: true,
-              message: 'File is uploaded',
-              data: {
-                  name: images.name,
-                  mimetype: images.mimetype,
-                  size: images.size
-              }
-          });
-      }
-  } catch (err) {
-      res.status(500).json(err);
-  }
-});
 
 export default router;

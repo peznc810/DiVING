@@ -3,7 +3,6 @@ import Link from 'next/link'
 import loaderStyles from '@/styles/loader/loader_ripple.module.css'
 import {
   Container,
-  Dropdown,
   Card,
   Col,
   Row,
@@ -11,11 +10,11 @@ import {
   InputGroup,
   Button,
   Form,
+  ButtonGroup,
 } from 'react-bootstrap'
 import Caro from '@/components/post/caro'
 import TagButton from '@/components/post/tagButton'
 import { PiUserCircleDuotone } from 'react-icons/pi'
-// import DOMPurify from 'dompurify'
 
 export default function List() {
   const [postList, setPostList] = useState([])
@@ -81,7 +80,8 @@ export default function List() {
                   <div style={{ height: '200px' }}>
                     <Card.Img
                       variant="top"
-                      src={`/images/post/${v.image}`}
+                      // src={`/images/post/${v.image}`}
+                      src={`http://localhost:3005/upload/${v.image}`}
                       style={{ height: '100%', objectFit: 'cover' }}
                     />
                   </div>
@@ -103,10 +103,8 @@ export default function List() {
                       textOverflow: 'ellipsis',
                       WebkitLineClamp: 2, // 要顯示的行數
                     }}
-                    // dangerouslySetInnerHTML={{
-                    //   __html: DOMPurify.sanitize(v.content),
-                    // }}
                   >
+                    {/* 轉為純文字 */}
                     {htmlToPlainText(v.content)}
                   </div>
 
@@ -120,7 +118,7 @@ export default function List() {
                     </div>
                   </Stack>
                   <Card.Subtitle className="mb-2 text-primary text-end">
-                    <PiUserCircleDuotone /> {v.user_id}
+                    <PiUserCircleDuotone /> {v.name}
                   </Card.Subtitle>
                 </Card.Body>
               </Card>
@@ -161,20 +159,14 @@ export default function List() {
           <h4>所有文章</h4>
           <Row className=" text-end">
             <Col>
-              <Dropdown>
-                <Dropdown.Toggle variant="light" id="dropdown-basic">
-                  排序依據
-                </Dropdown.Toggle>
-                <Dropdown.Menu>
-                  <Dropdown.Item onClick={() => setSortBy('desc')}>
-                    發布日期 - 新到舊
-                  </Dropdown.Item>
-                  <Dropdown.Item onClick={() => setSortBy('asc')}>
-                    發布日期 - 舊到新
-                  </Dropdown.Item>
-                  <Dropdown.Item href="#/action-3">???</Dropdown.Item>
-                </Dropdown.Menu>
-              </Dropdown>
+              <ButtonGroup aria-label="Basic example">
+                <Button variant="secondary" onClick={() => setSortBy('desc')}>
+                  發布日期 -新到舊
+                </Button>
+                <Button variant="secondary" onClick={() => setSortBy('asc')}>
+                  發布日期 -舊到新
+                </Button>
+              </ButtonGroup>
             </Col>
             <Col xs={4}>
               <InputGroup className="mb-3">
@@ -188,11 +180,11 @@ export default function List() {
                   variant="outline-secondary"
                   onClick={() => {
                     const inputValue =
-                      document.getElementById('searchInput').value // 获取输入框的值
-                    setSearchText(inputValue) // 设置为搜索文本
+                      document.getElementById('searchInput').value // 取輸入的值
+                    setSearchText(inputValue)
                   }}
                 >
-                  送出
+                  查詢
                 </Button>
               </InputGroup>
             </Col>

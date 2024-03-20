@@ -8,86 +8,64 @@
   //整個地圖區塊
   padding: 5px;
   border-radius: 1%;
-  // .bg {
-  //   width: 100%;
-  //   height: 100%;
-  //   object-fit: cover;
-  //   opacity: 0.5;
-  // }
   svg {
     //全部svg
     width: 100%;
     height: 100%;
     fill: transparent;
-    // circle {
-    //   // overflow: hidden;
-    //   stroke: rgba(250, 235, 215, 0.178);
-    //   // animation: extend 5s linear 2s infinite;
-    // }
     path {
       width: 100%;
       height: 100%;
+    }
+    circle {
+      // fill: aquamarine;
+      animation: test 2s infinite ease;
+      transform-origin: center;
+      transform-box: fill-box;
     }
     //東沙的方
     rect {
       fill: none;
       stroke: var(--bs-gray);
     }
-    // .use {
-    //複製出來的svg
-    // fill: #000000;
-    // }
   }
+}
+.test {
+  fill: red;
 }
 
-// .same {
-//   // 想要同時選取 圓形 + 區 的時候亮
-//   &:hover {
-//     fill: #74d8ff;
-//     .diveSvg {
-//       //潛水伕
-//       fill: black;
-//       animation: swimming 2s infinite linear;
-//     }
-//   }
-//   transform: scale(1);
-//   animation: circle 5s ease-in 1.3s infinite;
-// }
-@keyframes circle {
-  50% {
-    transform: scale(2);
-  }
-  0% {
-    transform: scale(1);
-  }
-}
 .district {
-  //8大區域
+  //本島跟外島
   fill: #a8cd9f;
-  cursor: pointer;
   path {
     //各個區
     &:hover {
-      // fill: rgba(148, 212, 241, 0.148);
+      fill: rgba(148, 212, 241, 0.148);
       transition: fill 0.3s linear;
-      // stroke: #00000048;
+      stroke: #00000048;
     }
   }
 }
-
-// .ctaSvg {
-//   //圓形裡面所有東西
-//   // animation: jump 2s ease-in-out infinite;
-//   // animation-delay: 200ms;
-//   cursor: pointer;
-//   fill: rgb(189, 199, 239);
-// }
+.ctaSvg {
+  cursor: pointer;
+  fill: rgb(60, 116, 138);
+  // animation: test 2s infinite linear;
+}
 .diveSvg {
   // 裡面的人
   fill: #000;
   // animation: swimming 2s infinite linear;
 }
-
+@keyframes test {
+  0% {
+    transform: scale(1);
+    // transform: rotateZ(0deg);
+  }
+  100% {
+    transform: scale(2);
+    // transform: rotate(90deg);
+  }
+}
 @keyframes swimming {
   0% {
     transform: translateX(7%);
@@ -113,63 +91,11 @@
     transform: translate(2%, 1.5%);
   }
 }
-@keyframes extend {
-  0% {
-    -webkit-transform: scale(0);
-    transform: scale(0);
-    opacity: 0.5;
-  }
-  100% {
-    -webkit-transform: scale(2);
-    transform: scale(2);
-    opacity: 0;
-  }
-}
 
 //氣象資訊區塊
 .weather {
   .weather-detail {
     font-size: 20px;
     line-height: 30px;
-  }
-}
-
-.ctaSvg {
-  position: relative;
-  // border: 1px solid;
-}
-
-.rp1,
-.rp2,
-.rp3 {
-  /*content: ' ';
-  position: absolute;
-  transition: all 1.5s linear;
-  z-index: 1;*/
-  animation: pulse 5s 1 ease-out;
-  // stroke: #000;
-}
-.rp1 {
-  animation-delay: 1s;
-  fill: rgba(96, 147, 171, 0.137);
-}
-.rp2 {
-  animation-delay: 2s;
-  fill: rgba(163, 184, 193, 0.315);
-}
-.rp3 {
-  animation-delay: 3s;
-  fill: rgba(194, 194, 194, 0.244);
-}
-@keyframes pulse {
-  0% {
-    opacity: 0.5;
-  }
-
-  100% {
-    opacity: 0;
-
-    transform: scale(2);
-    transition: all 0.5 linear;
   }
 }
