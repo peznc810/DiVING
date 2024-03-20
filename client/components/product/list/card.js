@@ -13,12 +13,11 @@ import useCollect from '@/hooks/use-collect'
 
 export default function Card({ value, rating, setRating }) {
   const [isHovered, setIsHovered] = useState(false)
-  const [score, setScore] = useState(0)
-  const [allComments, setAllComments] = useState([])
 
   const { handleAddToFavorites, handleRemoveFavorites, favorites } = useCollect(
     value.id
   )
+
   const handleMouseEnter = () => {
     setIsHovered(true)
   }
@@ -84,12 +83,14 @@ export default function Card({ value, rating, setRating }) {
                     <FaCartPlus />
                   </button>
                 </div>
-                <Link href={`/product/${value.id}`}>View more &gt;&gt;</Link>
+                <Link href={`/product/${value.id}`} className="viewmore-css">
+                  View more &gt;&gt;
+                </Link>
               </div>
             ) : (
               <div className="p-2 ">
-                <Star rating={score} setRating={() => {}} />
-                <p className="card-text h-now">{value.brand}</p>
+                {/* <Star rating={rating} setRating={() => {}} /> */}
+                <p className="card-text h-now mt-2">{value.brand}</p>
                 <p className="card-text type-text h-now">{value.name}</p>
                 {value.discount ? (
                   <>
@@ -120,7 +121,6 @@ export default function Card({ value, rating, setRating }) {
             width: 390px;
           }
         }
-
         .mouse-add {
           margin: 10px 5px;
           width: 60px;
@@ -134,13 +134,6 @@ export default function Card({ value, rating, setRating }) {
             color: #fff;
             border: none;
           }
-        }
-
-        .w-350 {
-          width: 100%;
-        }
-        .w-350 img {
-          width: 100%;
         }
         .bi-icon {
           margin-top: 0px;
@@ -166,18 +159,8 @@ export default function Card({ value, rating, setRating }) {
           font-size: 16.5px;
           font-family: Arial, sans-serif;
         }
-
-        /* override by css variable */
-        .no-border {
-          --bs-border-width: 0;
-        }
-
-        /*  card-body override */
-        .no-space-x {
-          padding: var(--bs-card-spacer-y) 0;
-        }
         .h-now {
-          font-size: 16px;
+          font-size: 15.5px;
           color: #303132;
           font-weight: 400;
         }

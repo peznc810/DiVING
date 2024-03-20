@@ -21,10 +21,6 @@
   width: 17rem;
 }
 
-#page-content-wrapper {
-  min-width: 100vw;
-}
-
 body.sb-sidenav-toggled #wrapper #sidebar-wrapper {
   margin-left: -18rem;
 }
@@ -162,24 +158,20 @@ div.scroll {
   height: 80%;
   width: 100%;
 }
-
 .mySwiper {
   height: 20%;
   box-sizing: border-box;
   padding: 10px 0;
   margin: 10px 0;
 }
-
 .mySwiper .swiper-slide {
   width: 25%;
   height: 100%;
   opacity: 0.4;
 }
-
 .mySwiper .swiper-slide-thumb-active {
   opacity: 1;
 }
-
 .swiper-slide img {
   display: block;
   width: 100%;
@@ -210,6 +202,10 @@ div.scroll {
   background-color: #265475;
   color: #fff;
   border: none;
+}
+.order-boxsizing {
+  width: 390;
+  box-sizing: border-box;
 }
 
 //filter
@@ -244,6 +240,12 @@ div.scroll {
 {
   font-size: 15px;
   color: #303132;
+}
+
+//product-list
+.viewmore-css{
+  font-size: 16px;
+  font-weight: 500;
 }
 
 //product-detail

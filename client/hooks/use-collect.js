@@ -10,7 +10,7 @@ const useCollect = (pid) => {
   //   console.log('id', id)
   const notify = (text, isSuccess = true) =>
     toast(text, {
-      icon: isSuccess ? '✅' : 'X',
+      icon: isSuccess ? '✅' : '  ⚠️',
     })
   const fetchIsCollect = async () => {
     try {
@@ -72,7 +72,7 @@ const useCollect = (pid) => {
       notify('商品已加入收藏！')
     } catch (error) {
       console.log(error)
-      notify('加入收藏失败', false)
+      notify('請先註冊/登入會員！', false) //加入收藏失败
     }
   }
 

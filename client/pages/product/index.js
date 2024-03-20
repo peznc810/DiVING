@@ -14,23 +14,8 @@ import { FaHome } from 'react-icons/fa'
 const perPage = 6
 
 export default function List() {
-  // const router = useRouter()
-  // const { productBrand } = router.query
-
   const [product, setProduct] = useState([])
   const [rating, setRating] = useState(0) //評分
-
-  // useEffect(() => {
-  //   if (productBrand) {
-  //     if (productBrand === 'ADISI') {
-  //       setProduct(
-  //         product.filter((v) => {
-  //           v.brand === productBrand
-  //         })
-  //       )
-  //     }
-  //   }
-  // }, [productBrand])
 
   // Toggle the side navigation
   useEffect(() => {
@@ -211,13 +196,14 @@ export default function List() {
           )}
         </Breadcrumb>
 
-        <div className="row mt-2 mb-3">
+        <div className="row mt-2 mb-3 ">
           <div className="card-text d-flex justify-content-between align-items-center">
             <h6 className="ps-3 my-1"></h6>
             {/* 排序 */}
             <Order setSorting={setSorting} />
           </div>
         </div>
+
         <div className="row text-center">
           <div className="col-sm-12">
             <div className="d-flex" id="wrapper">

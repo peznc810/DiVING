@@ -154,11 +154,11 @@ export default function Detail() {
         <div className="row mt-5 mx-2 my-5">
           <div className="col-sm-7">
             <div className="position-sticky" style={{ top: '2rem' }}>
-              {/* <Carousel
+              <Carousel
                 imgFileNames={product.img.split(',')}
                 id={product.id}
                 category={product.category}
-              /> */}
+              />
             </div>
           </div>
 

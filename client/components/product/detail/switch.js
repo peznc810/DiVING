@@ -362,13 +362,24 @@ const Comment = ({ data, commentDate, setRating }) => {
     // return `${year}-${month}-${day}`
   }, [data.created_at])
 
+  //姓名處理
+  const name = data.name
+  const nameLength = name.length
+  const processedName =
+    nameLength <= 1 ? name : name.charAt(0) + '＊' + name.substring(2)
+
   return (
     <div className="d-flex justify-content-between align-items-center mt-3">
       <div className="avatar d-none d-sm-block">
-        <img src={`http://localhost:3005/avatar/${data.avatar}`} alt="..." />
+        {/* <img src={`http://localhost:3005/avatar/${data.avatar}`} alt="..." /> */}
+        {data.avatar ? (
+          <img src={`http://localhost:3005/avatar/${data.avatar}`} alt="..." />
+        ) : (
+          <img src="/images/product/user-img/default.png" alt="..." />
+        )}
       </div>
       <div className="content">
-        <h6>{data.name + '   ' + formattedDateTime}</h6>
+        <h6>{processedName + '   ' + formattedDateTime}</h6>
         <Star rating={data.score} setRating={() => {}} />
         <p>{data.comment}</p>
       </div>
