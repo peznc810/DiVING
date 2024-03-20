@@ -174,7 +174,7 @@ export default function Filter({ setFilterSettings, clearSettings }) {
               className="accordion-collapse collapse"
             >
               <div className="accordion-body ">
-                <div className="form-check">
+                <div className="form-check price-filter-css">
                   <input
                     className="form-check-input"
                     type="radio"
@@ -197,7 +197,7 @@ export default function Filter({ setFilterSettings, clearSettings }) {
                   </label>
                 </div>
 
-                <div className="form-check my-2">
+                <div className="form-check my-2 price-filter-css">
                   <input
                     className="form-check-input"
                     type="radio"
@@ -220,7 +220,7 @@ export default function Filter({ setFilterSettings, clearSettings }) {
                   </label>
                 </div>
 
-                <div className="form-check my-2">
+                <div className="form-check my-2 price-filter-css">
                   <input
                     className="form-check-input"
                     type="radio"
@@ -242,7 +242,7 @@ export default function Filter({ setFilterSettings, clearSettings }) {
                     $3,501 - $6,500
                   </label>
                 </div>
-                <div className="form-check my-2">
+                <div className="form-check my-2 price-filter-css">
                   <input
                     className="form-check-input"
                     type="radio"

@@ -20,12 +20,10 @@ export default function Switch({
     setIsSwitchOn(!isSwitchOn)
   }
 
-  //-----------------------------------------------
   //新增評論
   const router = useRouter()
   const { pid } = router.query
   const [score, setScore] = useState(0)
-  // console.log('score', score)
   const [comment, setComment] = useState('')
   const [allComments, setAllComments] = useState([])
   const {
@@ -51,7 +49,7 @@ export default function Switch({
         }
       )
       if (response.ok) {
-        console.log('送出評價成功')
+        // console.log('送出評價成功')
         const response = await fetch(
           `http://localhost:3005/api/product/can-comment?pid=${id}&mid=${user_id}`
         )
@@ -80,7 +78,6 @@ export default function Switch({
       console.error('送出評價失敗：', err)
     }
   }
-  //-----------------------------------------------
 
   const [canComment, setCanComment] = useState(false)
 

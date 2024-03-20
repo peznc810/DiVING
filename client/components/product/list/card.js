@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useMemo, useEffect, useState } from 'react'
 import Star from '@/components/product/star/star'
 import Link from 'next/link'
 
@@ -11,7 +11,11 @@ import { FaCartPlus } from 'react-icons/fa'
 import { Toaster } from 'react-hot-toast'
 import useCollect from '@/hooks/use-collect'
 
-export default function Card({ setProduct, value, rating, setRating }) {
+export default function Card({ value, rating, setRating }) {
+  const [isHovered, setIsHovered] = useState(false)
+  const [score, setScore] = useState(0)
+  const [allComments, setAllComments] = useState([])
+
   const { handleAddToFavorites, handleRemoveFavorites, favorites } = useCollect(
     value.id
   )
@@ -21,7 +25,7 @@ export default function Card({ setProduct, value, rating, setRating }) {
   const handleMouseLeave = () => {
     setIsHovered(false)
   }
-  const [isHovered, setIsHovered] = useState(false)
+
   return (
     <>
       <div className="col">
@@ -83,9 +87,9 @@ export default function Card({ setProduct, value, rating, setRating }) {
                 <Link href={`/product/${value.id}`}>View more &gt;&gt;</Link>
               </div>
             ) : (
-              <div className="p-2 card-text">
-                <Star setRating={setRating} />
-                <p className="card-text">{value.brand}</p>
+              <div className="p-2 ">
+                <Star rating={score} setRating={() => {}} />
+                <p className="card-text h-now">{value.brand}</p>
                 <p className="card-text type-text h-now">{value.name}</p>
                 {value.discount ? (
                   <>
