@@ -317,7 +317,7 @@ export default function Detail() {
                       onClick={() => handleButtonClick('freight')}
                     >
                       <FaShuttleVan className="FaShuttleVan m-1" />
-                      免運及退貨
+                      購物須知
                     </button>
                   </h2>
                   <div
@@ -325,19 +325,29 @@ export default function Detail() {
                     className="accordion-collapse collapse"
                   >
                     <div className="accordion-body px-1">
-                      <ol>
-                        <li>訂單金額滿新臺幣 2,000 元，即享免運服務</li>
+                      <ol style={{ listStyleType: 'disc' }}>
                         <li>
-                          臺北市：標準運送的商品可於 2-5 個工作天內送達
+                          付款方式：
                           <br />
-                          快遞運送的商品可於 2-3 個工作天內送達
+                          貨到付款、信用卡、LINEpay
                         </li>
+                      </ol>
+                      <ol style={{ listStyleType: 'disc' }}>
                         <li>
-                          其它縣市：標準運送的商品可於 3-6 個工作天內送達
+                          出貨流程：
                           <br />
-                          快遞運送的商品可於 3-5 個工作天內送達
+                          週一至週五：
+                          9點前的訂單，當日出貨；9點後的訂單，隔日出貨。
+                          <br />
+                          週五9點後、例假日： 週一出貨。
                         </li>
-                        <li>訂單皆於平日上班時間(09:00-18:00)處理與寄送</li>
+                      </ol>
+                      <ol style={{ listStyleType: 'disc' }}>
+                        <li>
+                          退換貨說明：
+                          <br />
+                          自您收到商品後的隔日起(包含例假日)，提供7天鑑賞期，一次免運費退/換貨服務，我們將會安排到府取回退貨商品。
+                        </li>
                       </ol>
                     </div>
                   </div>
