@@ -2,6 +2,11 @@ import React, { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
 import DatePicker from '@/components/cart/date-picker'
 export default function PreOrder() {
+  const [selectedDate, setSelectedDate] = useState(null)
+  const handleDateChange = (date) => {
+    setSelectedDate(date)
+    console.log(selectedDate)
+  }
   const router = useRouter()
   const lid = router.query.lessonId
   const [perorder, setPerOrder] = useState({})
@@ -9,11 +14,9 @@ export default function PreOrder() {
     const res = await fetch(`http://localhost:3005/api/lesson/getlist/${lid}`)
     const data = await res.json()
     const [newData] = data
-    console.log(newData.title)
     setPerOrder(newData)
   }
 
-  console.log(perorder)
   useEffect(() => {
     if (router.isReady) {
       const { lid } = router.query
@@ -39,14 +42,11 @@ export default function PreOrder() {
             <hr />
             <div className="row">
               <div className="col-sm-6">
-                <DatePicker />
+                <DatePicker getDate={handleDateChange} />
               </div>
               <div className="col-sm-6 time-section">
-                <h5>
-                  {perorder.date && typeof perorder.date === 'string'
-                    ? perorder.date.split('T')[0]
-                    : ''}
-                </h5>
+                <div>你選擇的預約時間:</div>
+                <h5>{selectedDate}</h5>
                 <div className="d-flex mt-3">
                   <button
                     type="button"

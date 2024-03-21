@@ -85,7 +85,6 @@ router.get('/getfav/:id', function (req, res, next) {
         })
         if (star && star.length > 0) {
             const newFavState = star[0];
-            console.log(newFavState);
             if (newFavState) {
                 console.log(newFavState.state)
                 res.json(newFavState.state)
@@ -98,8 +97,17 @@ router.get('/getfav/:id', function (req, res, next) {
     })();
 });
 
-// Google註冊
-
-// 確認token資料
+//get preoder_date
+router.get('/orderdate', function (req, res, next) {
+  (async () => {
+    try {
+      let [date] = await db.execute('SELECT preorder_date FROM `order_time`')
+      res.json(date)
+    } catch (err) {
+      console.error(err)
+      res.status(500).send('Server error')
+    }
+  })()
+});
 
 export default router
