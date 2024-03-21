@@ -44,9 +44,9 @@ export default function List() {
             className={`m-2 g-0 shadow-sm rounded bg-white ${Style['bg-hover']}`}
           >
             <Col lg={4} className={Style['hover-none']}>
-              <div className="lesson_img">
+              <div className="h-100">
                 <Image
-                  className="img-fluid rounded-start"
+                  className="img-fluid h-100 rounded-start"
                   src="https://images.pexels.com/photos/19733182/pexels-photo-19733182.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
                   alt=""
                 />

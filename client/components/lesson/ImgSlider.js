@@ -18,24 +18,6 @@ export default function ImgSlider() {
           ))}
         </Slider>
       </div>
-      {/* <div className={Style['Slider']}>
-        <Slider {...settings}>
-          {movies.map((movie, i) => (
-            <div key={i} className={Style['warp']}>
-              <img className={Style['img']} src={movie.url} />
-            </div>
-          ))}
-        </Slider>
-      </div> */}
-      {/* <div className={Style['Slider']}>
-        <Slider {...settings}>
-          {movies.map((movie, i) => (
-            <div key={i} className={Style['warp']}>
-              <img src={movie.url} />
-            </div>
-          ))}
-        </Slider>
-      </div> */}
     </>
   )
 }
