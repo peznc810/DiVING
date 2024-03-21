@@ -6,7 +6,7 @@ import Badge from 'react-bootstrap/Badge'
 import Stack from 'react-bootstrap/Stack'
 import { GoHeartFill } from 'react-icons/go'
 import { TbHeartX } from 'react-icons/tb'
-import { FaCartPlus } from 'react-icons/fa'
+// import { FaCartPlus } from 'react-icons/fa'
 
 import { Toaster } from 'react-hot-toast'
 import useCollect from '@/hooks/use-collect'
@@ -79,9 +79,9 @@ export default function Card({ value, rating, setRating }) {
                     {favorites ? <TbHeartX /> : <GoHeartFill />}
                     <Toaster />
                   </button>
-                  <button className="btn mouse-add p-2">
+                  {/* <button className="btn mouse-add p-2">
                     <FaCartPlus />
-                  </button>
+                  </button> */}
                 </div>
                 <Link href={`/product/${value.id}`} className="viewmore-css">
                   View more &gt;&gt;
