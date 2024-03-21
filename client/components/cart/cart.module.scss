@@ -1,0 +1,75 @@
+//文字
+.span {
+  color: #013c64;
+  font-weight: bold;
+}
+
+.discounted {
+  color: #dc5151;
+}
+
+.imperceptible {
+  color: #858585;
+}
+
+//button
+.btnLight {
+  border: 0;
+  padding: 2px 4px;
+}
+
+.btnLight:hover {
+  background-color: lightgray;
+}
+
+.couponBtn {
+  border: none;
+  background-color: transparent;
+  font-size: 14px;
+  color: #265475;
+}
+
+.couponBtn:hover {
+  border-bottom: 1px solid #265475;
+}
+
+//區域
+
+.sectionName {
+  background-color: #f5f5f5;
+  padding: 0.5rem;
+}
+
+.spacing {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+.orderSection {
+  border: 1px solid #f5f5f5;
+  padding: 0;
+}
+
+.row {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+.paySection {
+  border: 1px solid #f5f5f5;
+  padding: 0;
+}
+
+.formSelect {
+  margin-bottom: 1rem;
+}
+
+@media (max-width: 576px) {
+  .orderSection {
+    margin-top: 1rem;
+  }
+
+  .btnLight {
+    padding: 2px 4px;
+  }
+}

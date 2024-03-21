@@ -94,12 +94,18 @@ export default function DetailTop({ selectData }) {
     lesson.tag === '專業科目'
       ? { backgroundColor: 'red' }
       : { backgroundColor: 'green' }
+  //轉跳到預約日期
+  const goToPreOrder = () => {
+    router.push({
+      pathname: '/lesson/preOrder',
+      query: { lessonId: pid }, // 這裡可以放你想要傳遞的查詢參數
+    })
+  }
   useEffect(() => {
     if (router.isReady && pid) {
       getStar(pid)
       getFav(pid)
     }
-    // getFav(pid)
   }, [router.isReady, pid, fav])
   return (
     <>
@@ -147,9 +153,13 @@ export default function DetailTop({ selectData }) {
                 </div>
               </div>
             </Col>
-            <div className="btn btn-warning mt-3" type="button">
+            <button
+              className="btn btn-warning mt-3"
+              type="button"
+              onClick={goToPreOrder}
+            >
               立即預約
-            </div>
+            </button>
           </Row>
         </Col>
       </Row>

@@ -37,7 +37,6 @@ export default function Test() {
               <hr />
               <div className="mb-3">
                 <div className="fs-4 mb-1">商品評價</div>
-                {/* ---插入star--- */}
                 <Star></Star>
               </div>
               <div className="mb-3">
@@ -115,11 +114,6 @@ export default function Test() {
           style={{ paddingTop: '5rem' }}
         >
           <BsCard></BsCard>
-          {/* <Row className="">
-            <Col xs={6}>
-              
-            </Col>
-          </Row> */}
         </Container>
       </DiffCheck.Provider>
     </>
