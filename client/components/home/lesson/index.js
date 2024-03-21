@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react'
 import Link from 'next/link'
 import styles from './index.module.scss'
+import { motion } from 'framer-motion'
 
 const lessonItem = [
   {
@@ -56,16 +57,38 @@ export default function LessonSection() {
         <div className={`container-fluid `}>
           <div className={` ${styles.titleBlock}`}>
             <div className={` ps-4 d-flex align-items-end ${styles.title}`}>
-              <h3 className="me-3 mb-0 text-light">
+              <motion.h3
+                initial={{ opacity: 0, y: 50 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{
+                  type: 'tween',
+                  delay: 0.5,
+                  duration: 1,
+                  ease: 'easeIn',
+                }}
+                viewport={{ once: true }}
+                className="me-3 mb-0 text-light"
+              >
                 OUR <br /> LESSON
-              </h3>
+              </motion.h3>
               <Link href={'/'} className={`${styles.moreBtn} me-5 text-center`}>
                 more
                 <i className="bi bi-caret-right-fill ms-1"></i>
               </Link>
             </div>
 
-            <div className={`d-flex p-0 ${styles.lessonScroll} `}>
+            <div
+              initial={{ opacity: 0, y: 100 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{
+                type: 'tween',
+                delay: 1,
+                duration: 1.5,
+                ease: 'easeIn',
+              }}
+              viewport={{ once: true }}
+              className={`d-flex p-0 ${styles.lessonScroll} `}
+            >
               {lessonItem.map((v, i) => {
                 return (
                   <div

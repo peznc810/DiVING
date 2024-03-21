@@ -4,6 +4,7 @@ import NewsItem from './news-item'
 import styles from './news-carousel.module.scss'
 import { IoIosArrowBack } from 'react-icons/io'
 import { IoIosArrowForward } from 'react-icons/io'
+import { motion } from 'framer-motion'
 
 export default function NewsCarousel() {
   const eventList = useEvent()
@@ -41,7 +42,18 @@ export default function NewsCarousel() {
   // console.log(eventList)
   return (
     <>
-      <div className={`position-relation ${styles.carouselInner}`}>
+      <motion.div
+        initial={{ opacity: 0, y: 50 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{
+          type: 'tween',
+          delay: 0.5,
+          duration: 1,
+          ease: 'easeIn',
+        }}
+        viewport={{ once: true }}
+        className={`position-relation ${styles.carouselInner}`}
+      >
         <div
           className={`d-flex align-items-center pt-3  `}
           ref={carouselRef}
@@ -63,7 +75,7 @@ export default function NewsCarousel() {
             )
           })}
         </div>
-      </div>
+      </motion.div>
       {/* 按鈕 */}
       <div className={`${styles.arrowBtn} d-flex justify-content-end `}>
         <button

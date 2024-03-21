@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { useRouter } from 'next/router'
-import { Parallax, ParallaxProvider } from 'react-scroll-parallax'
 
+//元件
 import HomeHeader from '@/components/home/header'
 import News from '@/components/home/news'
 import Server from '@/components/home/server'
@@ -35,17 +35,13 @@ export default function Index() {
 
   return (
     <>
-      <ParallaxProvider>
-        <HomeHeader />
-        <Server />
-        <Parallax strength={600} bgImage="/images/home/header.png">
-          <News eventList={eventList} />
-          <LessonSection />
-          {/* <Products /> */}
-        </Parallax>
-        <MapSection />
-        <Coupon />
-      </ParallaxProvider>
+      <HomeHeader />
+      <Server />
+      <News eventList={eventList} />
+      <LessonSection />
+      {/* <Products /> */}
+      {/* <MapSection /> */}
+      <Coupon />
     </>
   )
 }
