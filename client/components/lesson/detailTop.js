@@ -7,14 +7,58 @@ import { GiRoundStar } from 'react-icons/gi'
 import Style from '@/styles/lessonStyle/star.module.css'
 
 export default function DetailTop({ selectData }) {
-  const router = useRouter()
-  const [star, setStar] = useState([])
-  const lesson = selectData
+  // 取得uesr 狀態
+  const userState = 5
   const pid = selectData.id
+  const api = `http://localhost:3005/api/lesson`
+  //---get fav API
+  const [fav, setFav] = useState(0)
+  function changeFav() {
+    setFav((prevFav) => {
+      const newFav = prevFav === 0 ? 1 : 0
+      // 呼叫資料庫 API
+      fetch(`${api}/fav/${pid}`, {
+        // 注意這裡的 API 網址可能需要根據你的後端服務來修改
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ fav: newFav }),
+      })
+        .then((response) => response.json())
+        .then((data) => console.log(data))
+        .catch((error) => {
+          console.error('Error:', error)
+        })
+      return newFav
+    })
+  }
+  function getFav() {
+    fetch(`${api}/getfav/${pid}?userState=${userState}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok')
+        }
+        return response.json()
+      })
+      .then((data) => setFav(data))
+      .catch((error) => {
+        console.error('Error:', error)
+      })
+  }
+
+  const router = useRouter()
+  const [star, setStar] = useState({})
+  const lesson = selectData
 
   //取得資料庫 star內容
   const getStar = async (pid) => {
-    const res = await fetch(`http://localhost:3005/api/lesson/getstar/${pid}`)
+    const res = await fetch(`${api}/getstar/${pid}`)
 
     const data = await res.json()
     const [starcomment] = data
@@ -46,15 +90,23 @@ export default function DetailTop({ selectData }) {
       ]
     }
   }
-  const buttonStyle = lesson.tag
-
+  const buttonStyle =
+    lesson.tag === '專業科目'
+      ? { backgroundColor: 'red' }
+      : { backgroundColor: 'green' }
+  //轉跳到預約日期
+  const goToPreOrder = () => {
+    router.push({
+      pathname: '/lesson/preOrder',
+      query: { lessonId: pid }, // 這裡可以放你想要傳遞的查詢參數
+    })
+  }
   useEffect(() => {
     if (router.isReady && pid) {
-      Starlist()
       getStar(pid)
+      getFav(pid)
     }
-  }, [router.isReady, pid])
-
+  }, [router.isReady, pid, fav])
   return (
     <>
       <Row>
@@ -87,18 +139,27 @@ export default function DetailTop({ selectData }) {
                 <div className="fs-4 d-flex align-items-center">
                   {/* ---引入資料庫內的 star--- */}
                   {Starlist()}
-                  {/* <GiRoundStar></GiRoundStar> */}
                   {/* ---引入資料庫內的 star--- */}
                   <span className="fs-6 ps-3">評論</span>
                 </div>
                 <div className="align-self-center">
-                  <FaHeart className="fs-4" />
+                  <button className={Style['star-btn']} onClick={changeFav}>
+                    <FaHeart
+                      className={`fs-4 $ ${
+                        fav === 1 ? Style['good-style'] : Style['off']
+                      }`}
+                    />
+                  </button>
                 </div>
               </div>
             </Col>
-            <div className="btn btn-warning mt-3" type="button">
+            <button
+              className="btn btn-warning mt-3"
+              type="button"
+              onClick={goToPreOrder}
+            >
               立即預約
-            </div>
+            </button>
           </Row>
         </Col>
       </Row>

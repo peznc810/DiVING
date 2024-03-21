@@ -1,15 +1,22 @@
-import { useState } from 'react'
+import { useMemo, useEffect, useState } from 'react'
 import Star from '@/components/product/star/star'
-import Pagination from '@/components/product/list/pagination'
 import Link from 'next/link'
 
 import Badge from 'react-bootstrap/Badge'
 import Stack from 'react-bootstrap/Stack'
 import { GoHeartFill } from 'react-icons/go'
+import { TbHeartX } from 'react-icons/tb'
 import { FaCartPlus } from 'react-icons/fa'
 
-export default function Card({ setProduct, value, rating, setRating }) {
-  // console.log(value)
+import { Toaster } from 'react-hot-toast'
+import useCollect from '@/hooks/use-collect'
+
+export default function Card({ value, rating, setRating }) {
+  const [isHovered, setIsHovered] = useState(false)
+
+  const { handleAddToFavorites, handleRemoveFavorites, favorites } = useCollect(
+    value.id
+  )
 
   const handleMouseEnter = () => {
     setIsHovered(true)
@@ -17,7 +24,7 @@ export default function Card({ setProduct, value, rating, setRating }) {
   const handleMouseLeave = () => {
     setIsHovered(false)
   }
-  const [isHovered, setIsHovered] = useState(false)
+
   return (
     <>
       <div className="col">
@@ -63,19 +70,27 @@ export default function Card({ setProduct, value, rating, setRating }) {
             {isHovered ? (
               <div>
                 <div className="bi-icon">
-                  <button className="btn mouse-add p-2">
-                    <GoHeartFill />
+                  <button
+                    className="btn mouse-add p-2"
+                    onClick={
+                      favorites ? handleRemoveFavorites : handleAddToFavorites
+                    }
+                  >
+                    {favorites ? <TbHeartX /> : <GoHeartFill />}
+                    <Toaster />
                   </button>
                   <button className="btn mouse-add p-2">
                     <FaCartPlus />
                   </button>
                 </div>
-                <Link href={`/product/${value.id}`}>View more &gt;&gt;</Link>
+                <Link href={`/product/${value.id}`} className="viewmore-css">
+                  View more &gt;&gt;
+                </Link>
               </div>
             ) : (
-              <div className="p-2 card-text">
-                <Star setRating={setRating} />
-                <p className="card-text">{value.brand}</p>
+              <div className="p-2 ">
+                {/* <Star rating={rating} setRating={() => {}} /> */}
+                <p className="card-text h-now mt-2">{value.brand}</p>
                 <p className="card-text type-text h-now">{value.name}</p>
                 {value.discount ? (
                   <>
@@ -106,7 +121,6 @@ export default function Card({ setProduct, value, rating, setRating }) {
             width: 390px;
           }
         }
-
         .mouse-add {
           margin: 10px 5px;
           width: 60px;
@@ -120,13 +134,6 @@ export default function Card({ setProduct, value, rating, setRating }) {
             color: #fff;
             border: none;
           }
-        }
-
-        .w-350 {
-          width: 100%;
-        }
-        .w-350 img {
-          width: 100%;
         }
         .bi-icon {
           margin-top: 0px;
@@ -152,18 +159,8 @@ export default function Card({ setProduct, value, rating, setRating }) {
           font-size: 16.5px;
           font-family: Arial, sans-serif;
         }
-
-        /* override by css variable */
-        .no-border {
-          --bs-border-width: 0;
-        }
-
-        /*  card-body override */
-        .no-space-x {
-          padding: var(--bs-card-spacer-y) 0;
-        }
         .h-now {
-          font-size: 16px;
+          font-size: 15.5px;
           color: #303132;
           font-weight: 400;
         }

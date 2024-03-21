@@ -1,8 +1,9 @@
-import { useEffect, useState } from 'react'
+import { useMemo, useEffect, useState } from 'react'
+import { useAuth } from '@/hooks/auth'
 import { useRouter } from 'next/router'
 
 import Star from '@/components/product/star/star'
-import ProductRecommond from '@/components/product/detail/product-recommond'
+import { FaRegCommentDots } from 'react-icons/fa'
 
 export default function Switch({
   name,
@@ -24,33 +25,110 @@ export default function Switch({
   const { pid } = router.query
   const [score, setScore] = useState(0)
   const [comment, setComment] = useState('')
+  const [allComments, setAllComments] = useState([])
+  const {
+    auth: { id: user_id },
+  } = useAuth()
+
+  const handleCommentSubmit = async (e) => {
+    e.preventDefault()
+    try {
+      const response = await fetch(
+        `http://localhost:3005/api/product/comment`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            score,
+            comment,
+            user_id,
+            product_id: pid,
+          }),
+        }
+      )
+      if (response.ok) {
+        // console.log('送出評價成功')
+        const response = await fetch(
+          `http://localhost:3005/api/product/can-comment?pid=${id}&mid=${user_id}`
+        )
+        const data = await response.json()
+        setCanComment(data)
+        try {
+          const response = await fetch(
+            `http://localhost:3005/api/product/comment?pid=${id}`,
+            {
+              method: 'GET',
+            }
+          )
+          console.log('response', response)
+          if (response.ok) {
+            const data = await response.json()
+            setAllComments(data)
+            console.log(data)
+          }
+        } catch (err) {
+          console.error('送出評價失敗：', err)
+        }
+      } else {
+        console.error('送出評價失敗')
+      }
+    } catch (err) {
+      console.error('送出評價失敗：', err)
+    }
+  }
+
+  const [canComment, setCanComment] = useState(false)
+
+  useEffect(() => {
+    const fetchCanComment = async () => {
+      try {
+        const response = await fetch(
+          `http://localhost:3005/api/product/can-comment?pid=${id}&mid=${user_id}`
+        )
+        if (response.ok) {
+          const data = await response.json()
+          setCanComment(data)
+        }
+      } catch (err) {
+        console.error('Error fetching data:', err)
+      }
+    }
+    fetchCanComment()
+  }, [id, user_id])
 
   useEffect(() => {
     const fetchComment = async () => {
       try {
-        await fetch(`http://localhost:3005/api/product/?comment`, {
-          method: 'POST',
-          body: JSON.stringify({ score, comment }),
-        })
+        const response = await fetch(
+          `http://localhost:3005/api/product/comment?pid=${id}`,
+          {
+            method: 'GET',
+          }
+        )
+        // console.log('response', response)
         if (response.ok) {
-          console.log('送出評價成功')
-        } else {
-          console.error('送出評價失敗')
+          const data = await response.json()
+          setAllComments(data)
+          // console.log(data)
         }
-        // .then((res) => {
-        //   return res.json()
-        // })
-        // .then(([data]) => {
-        //   setProduct(data ? data : [])
-        // })
-      } catch {
-        ;(err) => {
-          console.error('送出評價失敗：', err)
-        }
+      } catch (err) {
+        // console.error('送出評價失敗：', err)
       }
     }
-    if (pid) fetchComment()
-  }, [pid])
+    fetchComment()
+  }, [id])
+
+  const averageScore = useMemo(() => {
+    let totalScore = 0
+    allComments.forEach((comment) => {
+      totalScore = totalScore + comment.score
+    })
+    const average = totalScore / allComments.length
+    const formattedScore = average.toFixed(1)
+    return formattedScore
+  }, [allComments])
 
   return (
     <div className="mt-4">
@@ -75,53 +153,50 @@ export default function Switch({
         <div>
           {/* 顯示顧客評價 */}
           <h3 className="text-center my-2">顧客評價</h3>
-          <div className="container">
-            <form>
-              <div className="form-group">
-                <label className="mx-2 my-1" for="exampleFormControlTextarea1">
-                  來為 <span className="comment-product-name">{name}</span>{' '}
-                  評價吧
-                </label>
-                <Star rating={rating} setRating={setRating} />
-                <textarea
-                  className="form-control my-1"
-                  id="exampleFormControlTextarea1"
-                  rows="3"
-                  placeholder="請說明您使用此商品的體驗"
-                ></textarea>
-              </div>
-              <button
-                type="submit"
-                className="btn btn-primary d-flex btn-comment"
-              >
-                送出評價
-              </button>
-            </form>
-          </div>
+          {canComment ? (
+            <div className="container">
+              <form action="post" onSubmit={handleCommentSubmit}>
+                <div className="form-group">
+                  <label
+                    className="mx-2 my-1"
+                    for="exampleFormControlTextarea1"
+                  >
+                    來為 <span className="comment-product-name">{name}</span>{' '}
+                    評價吧 <FaRegCommentDots className="FaRegCommentDots" />
+                  </label>
+                  <Star
+                    rating={score}
+                    setRating={setScore}
+                    type="number"
+                    id="score"
+                    required
+                  />
+                  <textarea
+                    className="form-control my-1 border-2"
+                    id="comment"
+                    value={comment}
+                    rows="3"
+                    placeholder="請說明使用此商品的體驗"
+                    required
+                    onChange={(e) => setComment(e.target.value)}
+                  ></textarea>
+                </div>
+                <button
+                  type="submit"
+                  className="btn btn-primary d-flex btn-comment"
+                >
+                  送出評價
+                </button>
+              </form>
+            </div>
+          ) : null}
 
           {/* 用戶評價 */}
           <div className="d-flex align-items-center justify-content-center">
             <div className="mt-2">
-              <div className="d-flex justify-content-between align-items-center mt-3">
-                <div className="avatar d-none d-sm-block">
-                  <img src="/images/product/test/20/1-1.webp" alt="..." />
-                </div>
-                <div className="content">
-                  <h6>安妮雅 2024/01/01</h6>
-                  <Star rating={rating} setRating={setRating} />
-                  <p>
-                    若沒有潛水的存在，那麼後果可想而知。亦舒曾經說過，人生短短數十載，最要緊的是滿足自己，不是討好他人。這影響了我的價值觀。
-                  </p>
-                </div>
-              </div>
-
-              <hr />
-              <button
-                type="submit"
-                className="btn btn-primary d-flex btn-comment"
-              >
-                更多評價
-              </button>
+              {allComments.map((data) => (
+                <Comment key={data.id} data={data} />
+              ))}
             </div>
           </div>
         </div>
@@ -146,7 +221,7 @@ export default function Switch({
                 {imgDetails.map((imgDetail) => {
                   return (
                     <div key={imgDetail}>
-                      <div className="p-2 my-3 custom-image-container">
+                      <div className="p-2 my-2 custom-image-container">
                         <img
                           className="my-2"
                           src={`/images/product/images/${category}/${id}/${imgDetail}`}
@@ -268,6 +343,46 @@ export default function Switch({
           right: 0;
         }
       `}</style>
+    </div>
+  )
+}
+
+const Comment = ({ data, commentDate, setRating }) => {
+  //處理評論時間
+  const formattedDateTime = useMemo(() => {
+    const timestamp = data.created_at
+    const date = new Date(timestamp)
+    const year = date.getFullYear()
+    const month = ('0' + (date.getMonth() + 1)).slice(-2)
+    const day = ('0' + date.getDate()).slice(-2)
+    const hours = ('0' + date.getHours()).slice(-2)
+    const minutes = ('0' + date.getMinutes()).slice(-2)
+    const seconds = ('0' + date.getSeconds()).slice(-2)
+    return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`
+    // return `${year}-${month}-${day}`
+  }, [data.created_at])
+
+  //姓名處理
+  const name = data.name
+  const nameLength = name.length
+  const processedName =
+    nameLength <= 1 ? name : name.charAt(0) + '＊' + name.substring(2)
+
+  return (
+    <div className="d-flex justify-content-between align-items-center mt-3">
+      <div className="avatar d-none d-sm-block">
+        {/* <img src={`http://localhost:3005/avatar/${data.avatar}`} alt="..." /> */}
+        {data.avatar ? (
+          <img src={`http://localhost:3005/avatar/${data.avatar}`} alt="..." />
+        ) : (
+          <img src="/images/product/user-img/default.png" alt="..." />
+        )}
+      </div>
+      <div className="content">
+        <h6>{processedName + '   ' + formattedDateTime}</h6>
+        <Star rating={data.score} setRating={() => {}} />
+        <p>{data.comment}</p>
+      </div>
     </div>
   )
 }

@@ -21,10 +21,6 @@
   width: 17rem;
 }
 
-#page-content-wrapper {
-  min-width: 100vw;
-}
-
 body.sb-sidenav-toggled #wrapper #sidebar-wrapper {
   margin-left: -18rem;
 }
@@ -162,24 +158,20 @@ div.scroll {
   height: 80%;
   width: 100%;
 }
-
 .mySwiper {
   height: 20%;
   box-sizing: border-box;
   padding: 10px 0;
   margin: 10px 0;
 }
-
 .mySwiper .swiper-slide {
   width: 25%;
   height: 100%;
   opacity: 0.4;
 }
-
 .mySwiper .swiper-slide-thumb-active {
   opacity: 1;
 }
-
 .swiper-slide img {
   display: block;
   width: 100%;
@@ -211,6 +203,10 @@ div.scroll {
   color: #fff;
   border: none;
 }
+.order-boxsizing {
+  width: 390;
+  box-sizing: border-box;
+}
 
 //filter
 .accordion-button.active {
@@ -220,8 +216,10 @@ div.scroll {
 .clear-settings {
   background-color: #265475;
   border: #265475;
+  // color: #265475;
+  // outline: #265475 1px solid;
   border-radius: 20px;
-  font-weight: 300;
+  font-weight: 400;
 }
 .TbSettingsX {
   font-size: 18px;
@@ -235,4 +233,34 @@ div.scroll {
   text-decoration-thickness: 3px;
   text-decoration-style: dashed;
   text-underline-offset: 4.5px;
+}
+.brand-css,
+.category-css,
+.price-filter-css {
+  font-size: 15px;
+  color: #303132;
+}
+
+//product-list
+.viewmore-css {
+  font-size: 16px;
+  font-weight: 500;
+}
+
+//product-detail
+.detail-TbHeartX,
+.detail-GoHeartFill,
+.detail-FaCartPlus {
+  padding-bottom: 1.8px;
+}
+
+.GiClothes,
+.FaShuttleVan {
+  padding-right: 2px;
+}
+
+//common
+.product-Breadcrumb {
+  font-size: 16.5px;
+  font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
 }
