@@ -1,25 +1,33 @@
 .main {
+  //整頁
   img {
     cursor: zoom-in;
-    animation: fadeinout 1s linear forwards;
+    animation: fadeinout 1s linear forwards; //淡入
   }
 }
 
 .box {
-  //整個地圖區塊
+  //左半邊地圖區塊
+  color: rgb(98, 175, 219);
   padding: 5px;
   border-radius: 1%;
   box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2),
     -1px -1px 0.1px 0.1px #0000004f;
-  // box-shadow: 3px 3px #0000004f, -3px -3px 3px #0000004f;
   svg {
     //全部svg
     width: 100%;
     height: 100%;
     fill: transparent;
+    transform-origin: center;
+    transform-box: fill-box;
+    // stroke: linear-gradient(to bottom left, #c5d5fa, #c3dc99);
     path {
       width: 100%;
       height: 100%;
+
+      animation: dash 5s infinite;
+      // transform-origin: center center;
+      // transform-box: fill-box;
     }
     circle {
       // fill: aquamarine;
@@ -32,16 +40,35 @@
       fill: none;
       stroke: var(--bs-gray);
     }
-    .diveSvg {
-      cursor: pointer;
-    }
+    // .diveSvg {
+    // }
   }
 }
+
+@keyframes dash {
+  0% {
+    stroke-dashoffset: 0;
+  }
+  50% {
+    stroke-dashoffset: 500;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes fill-in {
+  to {
+    fill-opacity: 1;
+  }
+}
+
 .district {
   //本島跟外島
   fill: #a8cd9f;
   stroke: #000;
   stroke-width: 0.5px;
+  animation: fill-in 2s 10s forwards;
+  fill-opacity: 0;
 
   //各個區
   &:hover {
@@ -100,18 +127,21 @@
 
 @keyframes swimming {
   0% {
-    transform: translateX(5%);
+    transform: translateX(3%);
+    // transform: rotateY(90deg);
   }
   /*可加50%給他loop*/
   50% {
-    transform: translateX(-4%);
+    transform: translateY(2%);
+    // transform: rotateY(180deg) translateX(-1%);
   }
   75% {
-    transform: rotateY(180deg);
-    transform: translateX(2%);
+    // transform: rotateY(90deg);
+    transform: translateY(-2%);
+    // transform: rotateY(180deg) translateX(-1%);
   }
   100% {
-    transform: translateX(5%); /*最左邊*/
+    transform: translateX(3%); /*最左邊*/
   }
 }
 
@@ -122,6 +152,9 @@
     background-color: aquamarine;
     border-radius: 2%;
     line-height: 50px;
+    span {
+      margin: 0px 6px 0px 20px;
+    }
   }
 }
 

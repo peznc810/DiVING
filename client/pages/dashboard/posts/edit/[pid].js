@@ -2,16 +2,15 @@ import React, { useEffect, useState } from 'react'
 import Head from 'next/head'
 import Menu from '@/components/dashboard/menu'
 import styles from '@/components/dashboard/form/styles.module.scss'
-import loaderStyles from '@/styles/loader/loader_ripple.module.css'
 import { Form, InputGroup, Stack } from 'react-bootstrap'
 import DiButton from '@/components/post/defaultButton'
 import QuillEditor from '@/components/post/quill'
-import ImageUpload from '@/components/post/imageUpload'
 import TagGenerator from '@/components/post/tagGenerator'
 import { useRouter } from 'next/router'
 import CancelAlert from '@/components/post/cancelAlert'
 import Swal from 'sweetalert2'
 import Image from 'next/image'
+import LoaderPing from '@/components/post/loaderPing'
 
 export default function Edit() {
   const router = useRouter()
@@ -147,13 +146,7 @@ export default function Edit() {
     }
   }
 
-  const loader = (
-    <div className={loaderStyles['lds-ripple']}>
-      <div></div>
-      <div></div>
-      <div></div>
-    </div>
-  )
+  const loader = <LoaderPing />
 
   const display = (
     <>

@@ -39,6 +39,22 @@ export default function TagGenerator({ onTagsChange, initialTags }) {
 
   return (
     <>
+      <Row className="align-items-center">
+        <Col xs="auto" className="my-1">
+          <InputGroup className="mb-3">
+            <InputGroup.Text>標籤</InputGroup.Text>
+            <Form.Control
+              placeholder="新增標籤... "
+              type="text"
+              value={newTag}
+              onChange={(e) => setNewTag(e.target.value)}
+            />
+            <Button variant="outline-secondary" onClick={handleAddTag}>
+              新增
+            </Button>
+          </InputGroup>
+        </Col>
+      </Row>
       <Row>
         <Col>
           <div className="mb-3">
@@ -56,22 +72,6 @@ export default function TagGenerator({ onTagsChange, initialTags }) {
               </Badge>
             ))}
           </div>
-        </Col>
-      </Row>
-      <Row className="align-items-center">
-        <Col xs="auto" className="my-1">
-          <InputGroup className="mb-3">
-            <InputGroup.Text>標籤</InputGroup.Text>
-            <Form.Control
-              placeholder="新增標籤... "
-              type="text"
-              value={newTag}
-              onChange={(e) => setNewTag(e.target.value)}
-            />
-            <Button variant="outline-secondary" onClick={handleAddTag}>
-              新增
-            </Button>
-          </InputGroup>
         </Col>
       </Row>
     </>

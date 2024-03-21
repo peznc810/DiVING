@@ -206,26 +206,28 @@ export default function Test() {
                 </div>
                 <Stack
                   direction="horizontal"
-                  gap={4}
+                  // gap={2}
                   className={styles['weather-detail']}
                 >
                   <div>
-                    {/* 風向 */}風向
+                    {/* 風向 */} <span>風向</span>
                     <FaWind />
                     {currentWeather.WindDirection}
                   </div>
                   <div>
-                    {/* 浪高 */}浪高
+                    {/* 浪高 */} <span>浪高(m)</span>
                     <LuWaves />
                     {currentWeather.WaveHeight}
                   </div>
                   <div>
-                    {/* 海溫 */}海溫
+                    {/* 海溫 */}
+                    <span>海溫(&#8451;)</span>
                     <TiWeatherCloudy />
                     {currentWeather.SeaTemperature}
                   </div>
                   <div>
-                    {/* 風速 */}風速
+                    {/* 風速 */}
+                    <span>風速</span>
                     {currentWeather.WindSpeed}
                   </div>
                 </Stack>

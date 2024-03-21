@@ -41,9 +41,12 @@ export default function DefaultButton({ type, text, onClick, color }) {
           transition-delay: calc((var(--n) - 1) * 0.1s);
           z-index: -1;
         }
-        .special:hover,
+        .special:hover {
+          color: #fff;
+        }
         .special:focus {
           color: #fff;
+          background-color: ${color};
         }
         .special:hover span {
           transform: translateY(0) scale(2);

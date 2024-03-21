@@ -4,7 +4,12 @@ function TaiwanSvg({ handleMapClick, pointStyle }) {
   return (
     <>
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="-40 10 640 640">
-        <g className={styles['district']}>
+        <g
+          className={styles['district']}
+          stroke="linear-gradient(to bottom left, #c5d5fa, #c3dc99)"
+          fill="#000"
+          fill-rule="nonzero"
+        >
           <g>
             <path
               d="M191.4 518.1L192.1 519.7 190.6 520.5 188 523.6 186.7 523.5 186.4 522.6 187.5 521.2 187.6 520.3 188.2 519.1 189.5 517.9z"
@@ -161,7 +166,9 @@ function TaiwanSvg({ handleMapClick, pointStyle }) {
           </g>
 
           {/* 8小琉球 */}
-          <g>
+          <g
+            className={`${styles.rp1} ${pointStyle === '8' ? styles.test : ''}`}
+          >
             <path
               d="M195.1 553.5l-1.8-1.3 3.1-4.2.9-4.9c.1-.4.2-.8.5-1.2.3-.3.7-.6 1.1-.7l10.4-3.2 2.2-4.4 3.3-3.3 1.1 1.1-2.8 3.2-1.6 5-5.5 3.8-6.4 2-1.3 3.5-3.2 4.6zm-1.1-8.7c-.6 0-1.1-.2-1.6-.7s-.6-.9-.6-1.5.2-1.1.6-1.5c.4-.4.9-.6 1.6-.6.6 0 1.1.2 1.6.6s.6 1 .6 1.5c0 .6-.2 1.1-.6 1.5-.5.4-1 .6-1.6.7zm6.5-5.4c-.4.1-.9.1-1.2-.2-.4-.2-.7-.6-.8-1s-.1-.9.1-1.3.6-.7 1-.8l5-1.3.9 3.2-5 1.4z"
               className={styles['diveSvg']}

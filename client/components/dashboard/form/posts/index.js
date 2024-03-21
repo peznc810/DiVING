@@ -162,14 +162,14 @@ export default function Index() {
                   ))}
                 </tbody>
               </table>
-              <div className="d-flex justify-content-center">
-                {/* page要做成component */}
+              {/* <div className="d-flex justify-content-center">
+                 page要做成component 
                 <div
                   className="btn-group"
                   role="group"
                   aria-label="First group"
                 >
-                  {/* 要map */}
+                  要map 
                   <button
                     type="button"
                     className={`btn btn-outline-secondary btn-sm ${styles['hover-style']}`}
@@ -195,7 +195,7 @@ export default function Index() {
                     4
                   </button>
                 </div>
-              </div>
+              </div> */}
             </div>
           </div>
         </div>

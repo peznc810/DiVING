@@ -1,7 +1,5 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import loaderStyles from '@/styles/loader/loader_ripple.module.css'
-
 import {
   Container,
   Card,
@@ -11,12 +9,11 @@ import {
   InputGroup,
   Button,
   Form,
-  ButtonGroup,
 } from 'react-bootstrap'
 import Caro from '@/components/post/caro'
 import TagButton from '@/components/post/tagButton'
 import { PiUserCircleDuotone } from 'react-icons/pi'
-import Loading from '@/components/layout/loading/loading'
+import LoaderPing from '@/components/post/loaderPing'
 
 export default function List() {
   const [postList, setPostList] = useState([])
@@ -63,14 +60,7 @@ export default function List() {
     getPost()
   }, [sortBy, searchText]) // 當sortBy 變化時重新取得數據
 
-  const loader = (
-    <Loading />
-    // <div className={loaderStyles['lds-ripple']}>
-    //   <div></div>
-    //   <div></div>
-    //   <div></div>
-    // </div>
-  )
+  const loader = <LoaderPing />
 
   const display = (
     <>
@@ -140,15 +130,7 @@ export default function List() {
 
   return (
     <>
-      <Container className="text-end">
-        <div className="my-2">
-          Hi UUUUUUUUUUser
-          <Link className="ms-3" href={'/'}>
-            我的文章
-          </Link>
-        </div>
-      </Container>
-      <Container>
+      <Container className="mt-3">
         <div className="my-1">
           {' '}
           <h4>熱門文章</h4>
@@ -160,18 +142,8 @@ export default function List() {
         <div className="my-4">
           {' '}
           <h4>所有文章</h4>
-          <Row className=" text-end">
-            <Col>
-              <ButtonGroup aria-label="Basic example">
-                <Button variant="secondary" onClick={() => setSortBy('DESC')}>
-                  發布日期 -新到舊
-                </Button>
-                <Button variant="secondary" onClick={() => setSortBy('ASC')}>
-                  發布日期 -舊到新
-                </Button>
-              </ButtonGroup>
-            </Col>
-            <Col xs={4}>
+          <Row>
+            <Col xs={4} className="ms-auto">
               <InputGroup className="mb-3">
                 <Form.Control
                   placeholder="Search"

@@ -10,12 +10,10 @@ const app = express();
 
   //讀取所有文章-list
   router.get('/', async (req, res) => {
-  const { sort, searchText } = req.query; 
-  // 排序用
-   // 檢查 sort 參數的值，如果是 'asc' 則改變排序方式為升冪
+  const { searchText } = req.query; 
 
     try {
-      const [result, field] = await db.execute(`SELECT post.id as post_id, post.*, users.id as user_id, users.name FROM post JOIN users ON post.user_id = users.id WHERE title LIKE ? OR content LIKE ? ORDER BY published_at DESC`, ['%' + searchText + '%', '%' + searchText + '%']);
+      const [result] = await db.execute(`SELECT post.id as post_id, post.*, users.id as user_id, users.name FROM post JOIN users ON post.user_id = users.id WHERE title LIKE ? OR content LIKE ? ORDER BY published_at DESC`, ['%' + searchText + '%', '%' + searchText + '%']);
 
       res.json(result);
     } catch (error) {
@@ -44,7 +42,7 @@ const app = express();
   router.get('/:pid', async (req, res) => {
     const postId = req.params.pid;
     try {
-      const [result, _fields] = await db.execute('SELECT post.id as post_id, post.*, users.id as user_id, users.name FROM post JOIN users ON post.user_id = users.id WHERE post.id = ? ', [postId]);
+      const [result] = await db.execute('SELECT post.id as post_id, post.*, users.id as user_id, users.name FROM post JOIN users ON post.user_id = users.id WHERE post.id = ? ', [postId]);
 
       if(result.length === 1) {
           res.json(result[0]); //回傳單篇文章的數據
@@ -65,10 +63,6 @@ app.use(fileUpload({
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
- // 4.16.0 或以上body-parser已被內建
-
-// 當瀏覽器請求/upload時 Express查找對應文件 提供給client端靜態引用
-// app.use('/upload', express.static('upload'));
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -100,7 +94,7 @@ router.post('/new', upload.single('images') , async (req, res) => {
   } catch (error) {
     console.error('Error executing database query:', error);
     
-    res.status(500).json({ error: '寫失敗' });
+    res.status(500).json({ error: '寫入失敗' });
   }
 });
 

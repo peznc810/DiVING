@@ -3,11 +3,11 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
-import styles from '@/styles/loader/loader_ripple.module.css'
 import postData from '@/data/post/post.json'
 import TagButton from '@/components/post/tagButton'
 import { Container, Card, Col, Row, Stack } from 'react-bootstrap'
 import DOMPurify from 'dompurify'
+import LoaderPing from '@/components/post/loaderPing'
 
 export default function Detail() {
   const router = useRouter()
@@ -57,15 +57,7 @@ export default function Detail() {
     }
   }, [router.isReady]) //Eddy說just警告
 
-  const loader = (
-    <>
-      <div className={styles['lds-ripple']}>
-        <div></div>
-        <div></div>
-        <div></div>
-      </div>{' '}
-    </>
-  )
+  const loader = <LoaderPing />
   const getTagsArray = (tagsString) => {
     // 檢查 tagsString 是否存在
     if (tagsString) {

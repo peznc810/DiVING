@@ -1,10 +1,9 @@
 // npm install quill react-quill
-
 import React, { useEffect, useState } from 'react'
 import Head from 'next/head'
 import Menu from '@/components/dashboard/menu'
 import styles from '@/components/dashboard/form/styles.module.scss'
-import loaderStyles from '@/styles/loader/loader_ripple.module.css'
+import postStyle from '@/components/post/post-list.module.scss'
 import { Form, InputGroup, Stack, Container } from 'react-bootstrap'
 import DiButton from '@/components/post/defaultButton'
 import QuillEditor from '@/components/post/quill'
@@ -14,6 +13,8 @@ import { useRouter } from 'next/router'
 import Swal from 'sweetalert2'
 import { useAuth } from '@/hooks/auth'
 import Image from 'next/image'
+import { BiImageAdd } from 'react-icons/bi'
+import LoaderPing from '@/components/post/loaderPing'
 
 export default function Index() {
   const router = useRouter()
@@ -45,8 +46,7 @@ export default function Index() {
   const changeHandler = (e) => {
     //有檔案上傳時
     const file = e.target.files[0]
-    console.log(file)
-    // 表單上傳元素沒辦法完全由react可控
+    // console.log(file)
     if (file) {
       setSelectedFile(file)
     } else {
@@ -57,7 +57,7 @@ export default function Index() {
   const [postFormData, setFormData] = useState({
     user_id: `${auth.id}`,
     title: '',
-    images: 'post.jpg',
+    images: '',
     content: '',
     tags: '',
   })
@@ -84,7 +84,7 @@ export default function Index() {
     formData.append('title', postFormData.title)
     formData.append('content', postFormData.content)
     formData.append('tags', postFormData.tags)
-    formData.append('images', selectedFile) // 将文件添加到 FormData 对象中
+    formData.append('images', selectedFile) //將文件添加到 FormData中
     console.log([...formData])
     try {
       const res = await fetch('http://localhost:3005/api/post/new', {
@@ -125,40 +125,38 @@ export default function Index() {
     }
   }
 
-  const loader = (
-    <div className={loaderStyles['lds-ripple']}>
-      <div></div>
-      <div></div>
-      <div></div>
-    </div>
-  )
+  const loader = <LoaderPing />
 
   const display = (
     <Container>
       <Form className="my-3" onSubmit={handleSubmit}>
         <InputGroup className="mb-3">
-          <InputGroup.Text id="inputGroup-sizing-default">
-            文章標題
-          </InputGroup.Text>
+          <InputGroup.Text>文章標題</InputGroup.Text>
           <Form.Control
-            aria-label="title"
-            aria-describedby="inputGroup-sizing-default"
             onChange={(e) => handleFormDataChange('title')(e.target.value)}
             required
           />
         </InputGroup>
-        <div className="border">
-          <input
-            type="file"
-            name="file"
-            accept="image/*"
-            onChange={changeHandler}
-          />
+        <div>
+          <label htmlFor="file" className={postStyle['myLabel']}>
+            {' '}
+            <span>檔案上傳</span>
+            <BiImageAdd className={postStyle['icon']} />
+            <input
+              style={{ display: 'none' }}
+              type="file"
+              name="file"
+              id="file"
+              accept="image/*"
+              onChange={changeHandler}
+            />
+          </label>
           {selectedFile && (
             <div
-              style={{ width: '100%', height: '300px', position: 'relative' }}
+              className="my-2"
+              style={{ width: '100%', height: '400px', position: 'relative' }}
             >
-              預覽圖片:{' '}
+              <div>預覽圖片:</div>
               <Image
                 src={preview}
                 alt="images"
@@ -172,7 +170,6 @@ export default function Index() {
         <TagGenerator
           onTagsChange={(newTags) => {
             handleFormDataChange('tags')(newTags.join(','))
-            // console.log(newTags)
           }}
         />
         <br />
