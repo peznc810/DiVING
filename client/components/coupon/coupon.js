@@ -187,7 +187,7 @@ export default function Coupon() {
                       領取優惠碼
                     </button>
                   ) : (
-                    <Link href={'/users/register'} className={`mt-0`}>
+                    <Link href={'/users/login'} className={`mt-0`}>
                       領取優惠碼
                     </Link>
                   )}
