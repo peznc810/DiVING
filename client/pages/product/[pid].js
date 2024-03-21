@@ -15,10 +15,12 @@ import { GiClothes } from 'react-icons/gi'
 import { FaShuttleVan } from 'react-icons/fa'
 import { Toaster } from 'react-hot-toast'
 import useCollect from '@/hooks/use-collect'
+import { useCart } from '@/hooks/cart'
 
 export default function Detail() {
   const router = useRouter()
   const { pid } = router.query
+  const { addItem } = useCart()
   const [product, setProduct] = useState(null)
   const { handleAddToFavorites, handleRemoveFavorites, favorites } =
     useCollect(pid)
@@ -131,6 +133,25 @@ export default function Detail() {
         return prevCount - 1
       }
     })
+  }
+
+  const addProduct = (
+    product_id,
+    product_detail,
+    name,
+    price,
+    discount_price,
+    num
+  ) => {
+    const item = {
+      product_id,
+      product_detail,
+      name,
+      price,
+      discount_price,
+      num,
+    }
+    addItem(item)
   }
 
   if (!product) return null
@@ -267,7 +288,16 @@ export default function Detail() {
             </button>
 
             {/* 加入購物車 */}
-            <button className="btn btn-outline-primary w-100">
+            <button className="btn btn-outline-primary w-100" onClick={() => {
+                addProduct(
+                  product.id,
+                  `${selectColor}/${selectSize}`,
+                  product.name,
+                  product.price,
+                  product.discount,
+                  productCount
+                )
+              }}>
               加入購物車 <FaCartPlus className="detail-FaCartPlus" />
             </button>
 
