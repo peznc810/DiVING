@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { use, useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 
 //元件
@@ -20,6 +20,7 @@ export default function Index() {
   const router = useRouter()
   const currentPage = router.pathname
   const eventList = useEvent()
+  const [showBottom, setShowBottom] = useState(false)
 
   // 改變頁面body的顏色
   useEffect(() => {
@@ -33,15 +34,66 @@ export default function Index() {
     }
   }, [currentPage])
 
+  // gototop
+  const handleScroll = () => {
+    if (window.scrollY > 100) {
+      setShowBottom(true)
+    } else {
+      setShowBottom(false)
+    }
+  }
+  useEffect(() => {
+    window.addEventListener('scroll', handleScroll)
+    return () => {
+      window.removeEventListener('scroll', handleScroll)
+    }
+  }, [])
+
+  const gotoTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth',
+    })
+  }
   return (
     <>
       <HomeHeader />
       <Server />
       <News eventList={eventList} />
       <LessonSection />
-      {/* <Products /> */}
+      <Products />
       {/* <MapSection /> */}
       <Coupon />
+      <div
+        className={`gototop ${showBottom ? 'd-block' : 'd-none'}`}
+        onClick={gotoTop}
+      >
+        <i className="bi bi-arrow-up-short"></i>
+      </div>
+
+      {/* style */}
+      <style jsx>{`
+        .gototop {
+          position: fixed;
+          bottom: 50px;
+          right: 30px;
+          width: 60px;
+          height: 60px;
+          background-color: #ffffffc3;
+          color: #013c64;
+          border-radius: 30px;
+          text-align: center;
+          line-height: 60px;
+          cursor: pointer;
+        }
+        .gototop:hover,
+        .gototop:hover {
+          color: #ff9720;
+        }
+        .bi {
+          font-size: 50px;
+        }
+      `}</style>
     </>
   )
 }

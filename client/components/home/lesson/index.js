@@ -38,10 +38,12 @@ export default function LessonSection() {
   const [play, setPlay] = useState({}) //使用一個物件追蹤影片播放狀態為
   const videoRef = useRef({}) // 使用一個物件來保存每個影片的 ref
 
+  // 在物件裡面增加新的屬性=> 使用[]，表示是動態
   const handleMouseEnter = (id) => {
     setPlay({ ...play, [id]: true })
     if (videoRef.current[id]) {
       videoRef.current[id].play()
+      console.log(videoRef.current)
     }
   }
 
@@ -77,7 +79,7 @@ export default function LessonSection() {
               </Link>
             </div>
 
-            <div
+            <motion.div
               initial={{ opacity: 0, y: 100 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{
@@ -107,6 +109,7 @@ export default function LessonSection() {
                           videoRef.current[v.id] = el
                         }}
                         src={v.video}
+                        // paly是物件，使用play[v.id]可以指定物件裡面的id
                         autoPlay={play[v.id]}
                         muted
                         loop
@@ -139,7 +142,7 @@ export default function LessonSection() {
                   </div>
                 )
               })}
-            </div>
+            </motion.div>
           </div>
         </div>
       </section>
