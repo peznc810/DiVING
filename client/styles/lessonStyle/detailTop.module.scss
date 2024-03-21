@@ -1,0 +1,21 @@
+@import '../variable.scss';
+.btn-color {
+  background: $secondary;
+  color: $white;
+}
+@media (max-width: 768px) {
+  .detailbox {
+    margin-top: 2rem;
+  }
+  .phone-mt {
+    margin-top: 1rem !important;
+  }
+}
+@media (max-width: 1024px) {
+  .detailbox {
+    margin-top: 2rem;
+    > .card {
+      width: 25%;
+    }
+  }
+}
