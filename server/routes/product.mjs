@@ -57,7 +57,7 @@ router.post('/comment', async (req, res) => {
 
     // Step1. 身份驗證，檢查 user_id 是否存在
     const [userExists] = await db.execute(
-      'SELECT * FROM `users` WHERE id = ?',
+      'SELECT * FROM `users` WHERE uid = ?',
       [payload.user_id],
     )
     if (!userExists) {
@@ -138,7 +138,7 @@ router.post('/collect', async (req, res) => {
     const { product_id, user_id } = req.body
 
     // Step1. 身份驗證 -> user_id 是否存在 ?
-    const [result] = await db.execute('SELECT * FROM `users` WHERE id = ?', [
+    const [result] = await db.execute('SELECT * FROM `users` WHERE uid = ?', [
       user_id,
     ])
 
@@ -235,7 +235,7 @@ function getIsUserCommented(mid, pid) {
 function getComment(pid) {
   return new Promise(async (resolve, reject) => {
     const [result] = await db.execute(
-      'SELECT * FROM `star` JOIN `users` ON `users`.id = `star`.user_id  WHERE `star`.product_id = ?',
+      'SELECT * FROM `star` JOIN `users` ON `users`.uid = `star`.user_id  WHERE `star`.product_id = ?',
       [pid],
     )
     if (result) {
