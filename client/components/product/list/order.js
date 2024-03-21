@@ -26,17 +26,12 @@ export default function OrderProduct({ setSorting }) {
           </button>
           <ul className="dropdown-menu">
             <li>
-              <div
-                // href="?=all"
-                className="dropdown-item"
-                onClick={() => setSorting('all')}
-              >
+              <div className="dropdown-item" onClick={() => setSorting('all')}>
                 <MdReplyAll /> 所有商品
               </div>
             </li>
             <li>
               <div
-                // href="?=new"
                 className="dropdown-item"
                 onClick={() => setSorting('createdAt')}
               >
@@ -45,7 +40,6 @@ export default function OrderProduct({ setSorting }) {
             </li>
             <li>
               <div
-                // href="?=descend"
                 className="dropdown-item"
                 onClick={() => setSorting('descending')}
               >
@@ -54,7 +48,6 @@ export default function OrderProduct({ setSorting }) {
             </li>
             <li>
               <div
-                // href="?=ascend"
                 className="dropdown-item"
                 onClick={() => setSorting('ascending')}
               >
