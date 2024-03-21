@@ -21,10 +21,10 @@ app.use(express.urlencoded({ extended: true }));
 
 router.post("/create-order", async(req, res)=>{
   const userId = req.body.user_id
-  const orderId =uuidv4()
+  const orderId =Date.now()
   const packgeId = uuidv4()
 
-  const { totalPrice, lineProducts, products, receiver, order_note } = req.body;
+  const { totalPrice, lineProducts, products, receiver, order_note, shipment } = req.body;
 
   //傳送給line pay的資料
   const order = {
@@ -47,7 +47,7 @@ router.post("/create-order", async(req, res)=>{
     user_id : userId,
     total_price : totalPrice,
     payment: "Line pay",
-    shipping: "宅配",
+    shipping: shipment,
     status: "建立成功",
     receiver : JSON.stringify(receiver),
     order_info: JSON.stringify(order),
@@ -57,12 +57,13 @@ router.post("/create-order", async(req, res)=>{
   addOrder(dbOrder)
 
   // 寫入資料庫的資料 order_detail
-  products.forEach(({ product_id, lesson_id, order_time, num }) => {
+  products.forEach(({ product_id, lesson_id, order_time, product_detail, num }) => {
     const dbOrderDetail = {
       order_id: orderId,
       product_id,
       lesson_id,
       order_time,
+      product_detail,
       num,
     };
     addOrderDetail(dbOrderDetail);
@@ -218,8 +219,8 @@ function addOrderDetail(dbOrderDetail) {
     let values = [];
 
     if (dbOrderDetail.product_id) {
-      sql = 'INSERT INTO `order_detail`(order_id, product_id, num) VALUES (?, ?, ?);';
-      values = [dbOrderDetail.order_id, dbOrderDetail.product_id, dbOrderDetail.num];
+      sql = 'INSERT INTO `order_detail`(order_id, product_id, product_detail, num) VALUES (?, ?, ?, ?);';
+      values = [dbOrderDetail.order_id, dbOrderDetail.product_id, dbOrderDetail.product_detail, dbOrderDetail.num];
     } else if (dbOrderDetail.lesson_id) {
       sql = 'INSERT INTO `order_detail`(order_id, lesson_id, num, order_time) VALUES (?, ?, ?, ?);';
       values = [dbOrderDetail.order_id, dbOrderDetail.lesson_id, dbOrderDetail.num, dbOrderDetail.order_time];

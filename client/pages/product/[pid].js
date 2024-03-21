@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useMemo, useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 
 import Star from '@/components/product/star/star'
@@ -9,22 +9,74 @@ import ProductRecommend from '@/components/product/detail/product-recommond'
 import Breadcrumb from 'react-bootstrap/Breadcrumb'
 import { FaHome } from 'react-icons/fa'
 import { GoHeartFill } from 'react-icons/go'
+import { TbHeartX } from 'react-icons/tb'
 import { FaCartPlus } from 'react-icons/fa'
+import { GiClothes } from 'react-icons/gi'
+import { FaShuttleVan } from 'react-icons/fa'
 import toast, { Toaster } from 'react-hot-toast'
-// import { set } from 'lodash'
+import useCollect from '@/hooks/use-collect'
+import { useCart } from '@/hooks/cart'
 
 export default function Detail() {
   const router = useRouter()
   const { pid } = router.query
+  const { addItem } = useCart()
   const [product, setProduct] = useState(null)
+  const { handleAddToFavorites, handleRemoveFavorites, favorites } =
+    useCollect(pid)
 
   const [productCount, setProductCount] = useState(1) //增加、減少數量
-  const [items, setItems] = useState([]) //加入到購物車中的項目
 
   const [selectColor, setSelectColor] = useState(null)
   const [selectSize, setSelectSize] = useState(null)
 
   const [rating, setRating] = useState(0) //評分
+  const [allComments, setAllComments] = useState([]) //評論
+
+  //css樣式
+  const [accordionStyle, setAccordionStyle] = useState({
+    size: '',
+    freight: '',
+  })
+  const handleButtonClick = (buttonName) => {
+    setAccordionStyle({
+      ...accordionStyle,
+      [buttonName]: accordionStyle[buttonName] ? '' : 'active',
+    })
+  }
+
+  //評論
+  useEffect(() => {
+    const fetchComment = async () => {
+      try {
+        const response = await fetch(
+          `http://localhost:3005/api/product/comment?pid=${pid}`,
+          {
+            method: 'GET',
+          }
+        )
+        // console.log('response', response)
+        if (response.ok) {
+          const data = await response.json()
+          setAllComments(data)
+          // console.log(data)
+        }
+      } catch (err) {
+        // console.error('送出評價失敗：', err)
+      }
+    }
+    fetchComment()
+  }, [pid])
+
+  const averageScore = useMemo(() => {
+    let totalScore = 0
+    allComments.forEach((comment) => {
+      totalScore = totalScore + comment.score
+    })
+    const average = totalScore / allComments.length
+    const formattedScore = average.toFixed(1)
+    return formattedScore
+  }, [allComments])
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -40,12 +92,21 @@ export default function Detail() {
           })
       } catch {
         ;(err) => {
-          console.error('Error fetching data:', err)
+          // console.error('Error fetching data:', err)
         }
       }
     }
-    if (pid) fetchProduct()
+    if (pid) {
+      fetchProduct()
+    }
   }, [pid])
+
+  useEffect(() => {
+    if (product) {
+      setSelectColor(product.color.split(',')[0])
+      setSelectSize(product.size.split(',')[0])
+    }
+  }, [product])
 
   // if (product) {
   //   const [newproduct] = product.filter((o) => {
@@ -81,15 +142,36 @@ export default function Detail() {
     })
   }
 
+  const addProduct = (
+    product_id,
+    product_detail,
+    name,
+    price,
+    discount_price,
+    num,
+    category,
+    pimg
+  ) => {
+    const item = {
+      product_id,
+      product_detail,
+      name,
+      price,
+      discount_price,
+      num,
+      category,
+      pimg,
+    }
+    addItem(item)
+    toast.success('已加入購物車')
+  }
+
   if (!product) return null
-  // if(!product){
-  //   return null
-  // }
   return (
     <>
       <div className="container-1200">
         {/* 麵包屑 */}
-        <Breadcrumb>
+        <Breadcrumb className="product-Breadcrumb">
           <Breadcrumb.Item href="http://localhost:3000">
             <FaHome />
           </Breadcrumb.Item>
@@ -105,6 +187,7 @@ export default function Detail() {
         <div className="row mt-5 mx-2 my-5">
           <div className="col-sm-7">
             <div className="position-sticky" style={{ top: '2rem' }}>
+              {console.log(product)}
               <Carousel
                 imgFileNames={product.img.split(',')}
                 id={product.id}
@@ -114,10 +197,9 @@ export default function Detail() {
           </div>
 
           <div className="col-sm-5">
-            <h3>{product.name}</h3>
-            <Star rating={rating} setRating={setRating} />
-            {/* {console.log(rating)} */}
-            <h6 className="my-1">4.0分 | 8則評價</h6>
+            <h4>{product.name}</h4>
+            <Star rating={averageScore} setRating={setRating} />
+            <h6 className="my-2">{`${averageScore}分 | ${allComments.length}則評價`}</h6>
             {product.discount ? (
               <>
                 <span className="note-text">{`NT$${product.discount.toLocaleString()}`}</span>
@@ -133,7 +215,7 @@ export default function Detail() {
               </>
             )}
             <p
-              className="my-1"
+              className="my-1 product-info"
               dangerouslySetInnerHTML={{
                 __html: product.info.replace(/\n/g, '<br>'),
               }}
@@ -189,7 +271,7 @@ export default function Detail() {
               >
                 -
               </button>
-              <span className="mx-3"> {productCount} </span>
+              <span className="mx-3 productCount"> {productCount} </span>
               <button
                 className="btn btn-circle"
                 onClick={() => {
@@ -204,18 +286,41 @@ export default function Detail() {
             <button
               className="btn btn-secondary w-100 mb-3 my-3"
               style={{ fontWeight: 'bold', color: 'white' }}
+              onClick={favorites ? handleRemoveFavorites : handleAddToFavorites}
             >
-              <GoHeartFill /> 加入最愛
+              {favorites ? (
+                <>
+                  <TbHeartX className="detail-TbHeartX" /> 移除收藏
+                </>
+              ) : (
+                <>
+                  <GoHeartFill className="detail-GoHeartFill" /> 收藏
+                </>
+              )}
+              <Toaster />
             </button>
 
             {/* 加入購物車 */}
-            <button className="btn btn-outline-primary w-100">
-              加入購物車 <FaCartPlus />
-              <Toaster position="top-center" reverseOrder={false} />
+            <button
+              className="btn btn-outline-primary w-100"
+              onClick={() => {
+                addProduct(
+                  product.id,
+                  `${selectColor}/${selectSize}`,
+                  product.name,
+                  product.price,
+                  product.discount,
+                  productCount,
+                  product.category,
+                  product.img_top
+                )
+              }}
+            >
+              加入購物車 <FaCartPlus className="detail-FaCartPlus" />
             </button>
 
             {/* 注意事項 */}
-            <div className="my-4">
+            <div className="my-5">
               <div
                 className="accordion accordion-flush"
                 id="accordionFlushExample"
@@ -223,13 +328,15 @@ export default function Detail() {
                 <div className="accordion-item">
                   <h4 className="accordion-header">
                     <button
-                      className="accordion-button collapsed"
+                      className={`accordion-button collapsed ${accordionStyle.size}`}
                       type="button"
                       data-bs-toggle="collapse"
                       aria-expanded="false"
                       data-bs-target="#panelsStayOpen-collapseOne"
                       aria-controls="panelsStayOpen-collapseOne"
+                      onClick={() => handleButtonClick('size')}
                     >
+                      <GiClothes className="GiClothes m-1" />
                       尺寸與版型
                     </button>
                   </h4>
@@ -249,13 +356,15 @@ export default function Detail() {
                 <div className="accordion-item">
                   <h2 className="accordion-header">
                     <button
-                      className="accordion-button collapsed"
+                      className={`accordion-button collapsed ${accordionStyle.freight}`}
                       type="button"
                       data-bs-toggle="collapse"
                       data-bs-target="#panelsStayOpen-collapseTwo"
                       aria-expanded="false"
                       aria-controls="panelsStayOpen-collapseTwo"
+                      onClick={() => handleButtonClick('freight')}
                     >
+                      <FaShuttleVan className="FaShuttleVan m-1" />
                       免運及退貨
                     </button>
                   </h2>
@@ -298,7 +407,6 @@ export default function Detail() {
           setRating={setRating}
         />
       </div>
-
       <br />
       <br />
       <br />
@@ -320,9 +428,7 @@ export default function Detail() {
             width: 380px;
           }
         }
-        .my-1 {
-          font-family: Arial, sans-serif;
-        }
+
         .note-text {
           color: var(--red, #dc5151);
           font-size: 16.5px;
@@ -337,6 +443,11 @@ export default function Detail() {
           font-weight: normal;
           font-size: 16.5px;
         }
+        .productCount,
+        .product-info {
+          font-size: 15px;
+        }
+
         .btn-md:hover,
         .btn-outline-primary:hover,
         .btn-circle:hover {
@@ -358,43 +469,6 @@ export default function Detail() {
           background-color: #f5f5f5;
           font-size: 15.5px;
           background-color: transparent;
-        }
-         {
-          /* .circle-container {
-          display: flex;
-          align-items: center;
-        } */
-        }
-         {
-          /* .custom-image-container {
-          margin: 0 auto;
-          width: 600px;
-          height: 480px;
-        }
-        .custom-image-container img {
-          width: 100%;
-          height: 100%;
-          object-fit: cover;
-        } */
-        }
-         {
-          /* .content {
-          height: 80px;
-        } */
-        }
-         {
-          /* .avatar {
-          width: 70px;
-          height: 70px;
-          border-radius: 50%;
-          overflow: hidden;
-          margin: 15px;
-        }
-        .avatar img {
-          width: 100%;
-          height: 100%;
-          object-fit: cover;
-        } */
         }
       `}</style>
     </>

@@ -20,6 +20,9 @@ let data = cartData.map((item) => {
         name: productData[i].name,
         price: productData[i].price,
         discount_price: productData[i].discount,
+        category: productData[i].category,
+        pid: productData[i].id,
+        pimg: productData[i].img_top,
       }
     }
   }

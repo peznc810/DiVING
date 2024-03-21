@@ -29,9 +29,9 @@ router.get("/", async(req,res)=>{
 
 router.post("/create-order", async(req, res)=>{
   const userId = req.body.user_id
-  const orderId =uuidv4()
+  const orderId = Date.now()
 
-  const { totalPrice, products, receiver, credit_card, order_note } = req.body;
+  const { totalPrice, products, receiver, credit_card, order_note,shipment,usingCoupon } = req.body;
 
   //寫入資料庫的資料 order
   const dbOrder = {
@@ -39,10 +39,11 @@ router.post("/create-order", async(req, res)=>{
     user_id : userId,
     total_price : totalPrice,
     payment: "取貨付款",
-    shipping: "宅配",
+    shipping: shipment,
     status: "建立成功",
     receiver : JSON.stringify(receiver),
     credit_card: JSON.stringify(credit_card),
+    usingCoupon: JSON.stringify(usingCoupon),
     order_note,
   }
 
@@ -165,7 +166,7 @@ function getOrderDetail(orderId) {
   return new Promise(async (resolve, reject) => {
 
     const [result] = await db.execute(
-      'SELECT order_detail.*, COALESCE(product.name, lesson.title) AS name, COALESCE(product.price, lesson.price) AS price FROM order_detail LEFT JOIN product ON product.id = order_detail.product_id LEFT JOIN lesson ON lesson.id =order_detail.lesson_id WHERE order_detail.order_id = ?',[orderId]
+      'SELECT order_detail.*, COALESCE(product.name, lesson.title) AS name, COALESCE(product.discount, product.price, lesson.price) AS price FROM order_detail LEFT JOIN product ON product.id = order_detail.product_id LEFT JOIN lesson ON lesson.id =order_detail.lesson_id WHERE order_detail.order_id = ?',[orderId]
     );
     if (result) {
       resolve(result)
@@ -242,8 +243,8 @@ function getOrder(orderId) {
     
     return new Promise((resolve, reject) => {
       db.execute(
-        'INSERT INTO `order`(id, user_id, total_price, payment, shipping, status, receiver, created_at, order_note) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);',[
-          dbOrder.id, dbOrder.user_id, dbOrder.total_price, dbOrder.payment, dbOrder.shipping, dbOrder.status, dbOrder.receiver, , datetimeNow ,dbOrder.order_note
+        'INSERT INTO `order`(id, user_id, total_price, payment, shipping, used_coupon, status, receiver, created_at, order_note) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);',[
+          dbOrder.id, dbOrder.user_id, dbOrder.total_price, "取貨付款", dbOrder.shipping, dbOrder.usingCoupon, dbOrder.status, dbOrder.receiver, , datetimeNow ,dbOrder.order_note
         ]
       ).then(([result]) => {
         if (result) {
@@ -272,8 +273,8 @@ function getOrder(orderId) {
     
     return new Promise((resolve, reject) => {
       db.execute(
-        'INSERT INTO `order`(id, user_id, total_price, payment, shipping, status, receiver, created_at, credit_card, order_note) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);',[
-          dbOrder.id, dbOrder.user_id, dbOrder.total_price, dbOrder.payment, dbOrder.shipping, dbOrder.status, dbOrder.receiver, datetimeNow, dbOrder.credit_card ,dbOrder.order_note
+        'INSERT INTO `order`(id, user_id, total_price, payment, shipping,used_coupon, status, receiver, created_at, credit_card, order_note) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);',[
+          dbOrder.id, dbOrder.user_id, dbOrder.total_price, "信用卡付款", dbOrder.shipping, dbOrder.usingCoupon, dbOrder.status, dbOrder.receiver, datetimeNow, dbOrder.credit_card ,dbOrder.order_note
         ]
       ).then(([result]) => {
         if (result) {

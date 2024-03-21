@@ -2,17 +2,7 @@ import React, { useEffect } from 'react'
 
 export default function CartStep({ step = 0 }) {
   useEffect(() => {
-    switch (step) {
-      case 1:
-        document.querySelector('.step1').classList.add('active')
-        break
-      case 2:
-        document.querySelector('.step2').classList.add('active')
-        break
-      case 3:
-        document.querySelector('.step3').classList.add('active')
-        break
-    }
+    document.querySelector(`.step${step}`).classList.add('active')
   })
 
   return (
