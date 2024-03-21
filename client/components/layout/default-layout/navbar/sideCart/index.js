@@ -77,7 +77,7 @@ export default function SideCart() {
 
         {/* <Link {{cartData} ? "./cart" : "./product" } href={'./cart'} className={`${styles.cartLink}`}> */}
         <Link
-          href={items.length > 0 ? '/cart' : './product'}
+          href={items.length > 0 ? '/cart' : '/product'}
           className={`${styles.cartLink}`}
         >
           {items.length > 0 ? '立即結帳' : '開始購物'}
