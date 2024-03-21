@@ -166,7 +166,7 @@ function getOrderDetail(orderId) {
   return new Promise(async (resolve, reject) => {
 
     const [result] = await db.execute(
-      'SELECT order_detail.*, COALESCE(product.name, lesson.title) AS name, COALESCE(product.price, lesson.price) AS price FROM order_detail LEFT JOIN product ON product.id = order_detail.product_id LEFT JOIN lesson ON lesson.id =order_detail.lesson_id WHERE order_detail.order_id = ?',[orderId]
+      'SELECT order_detail.*, COALESCE(product.name, lesson.title) AS name, COALESCE(product.discount, product.price, lesson.price) AS price FROM order_detail LEFT JOIN product ON product.id = order_detail.product_id LEFT JOIN lesson ON lesson.id =order_detail.lesson_id WHERE order_detail.order_id = ?',[orderId]
     );
     if (result) {
       resolve(result)
