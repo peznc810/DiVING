@@ -18,6 +18,10 @@ export default function Home() {
   const { couponHas } = useCouponHas()
   const { usingCoupon, applyUsingCoupon, removeUsingCoupon } = useUsingCoupon()
 
+  const availableCoupon = couponHas.filter((i) => {
+    return i.valid === 1
+  })
+
   const [payment, setPayment] = useState(1)
   const [delivery, setDelivery] = useState(1)
   const [discount, setDiscount] = useState(0)
@@ -102,7 +106,7 @@ export default function Home() {
       </div>
       <CouponModal
         showCoupon={showCoupon}
-        couponHas={couponHas}
+        couponHas={availableCoupon}
         setShowCoupon={setShowCoupon}
         dataForParent={selectedCouponData}
       />
