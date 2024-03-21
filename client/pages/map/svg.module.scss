@@ -1,6 +1,7 @@
 .main {
   img {
     cursor: zoom-in;
+    animation: fadeinout 1s linear forwards;
   }
 }
 
@@ -8,6 +9,9 @@
   //整個地圖區塊
   padding: 5px;
   border-radius: 1%;
+  box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2),
+    -1px -1px 0.1px 0.1px #0000004f;
+  // box-shadow: 3px 3px #0000004f, -3px -3px 3px #0000004f;
   svg {
     //全部svg
     width: 100%;
@@ -19,7 +23,7 @@
     }
     circle {
       // fill: aquamarine;
-      animation: test 2s infinite ease;
+      // animation: test 2s infinite ease;
       transform-origin: center;
       transform-box: fill-box;
     }
@@ -28,74 +32,108 @@
       fill: none;
       stroke: var(--bs-gray);
     }
-  }
-}
-.test {
-  fill: red;
-}
-
-.district {
-  //本島跟外島
-  fill: #a8cd9f;
-  path {
-    //各個區
-    &:hover {
-      fill: rgba(148, 212, 241, 0.148);
-      transition: fill 0.3s linear;
-      stroke: #00000048;
+    .diveSvg {
+      cursor: pointer;
     }
   }
 }
-.ctaSvg {
-  cursor: pointer;
-  fill: rgb(60, 116, 138);
-  // animation: test 2s infinite linear;
+.district {
+  //本島跟外島
+  fill: #a8cd9f;
+  stroke: #000;
+  stroke-width: 0.5px;
+
+  //各個區
+  &:hover {
+    fill: rgba(148, 212, 241, 0.148);
+    transition: fill 0.3s linear;
+    stroke: #00000048;
+    stroke-width: 1px;
+  }
 }
-.diveSvg {
-  // 裡面的人
-  fill: #000;
-  // animation: swimming 2s infinite linear;
+
+// 點擊後的樣式
+.test {
+  animation: none;
+  circle {
+    fill: rgb(226, 46, 46);
+  }
+  .diveSvg {
+    fill: #000;
+    animation: swimming 5s infinite linear;
+  }
 }
-@keyframes test {
+
+.rp1 {
+  animation-delay: 10s;
+  circle {
+    animation: growAndFade 3s infinite ease-out;
+    fill: dodgerblue;
+    stroke: #fff;
+    opacity: 0;
+    cursor: pointer;
+  }
+  // use {
+  //   fill: dodgerblue;
+  // }
+
+  .rp2 {
+    animation-delay: 5s;
+    animation: growAndFade 10s infinite ease-out;
+  }
+  .rp3 {
+    animation-delay: 5s;
+    animation: growAndFade 3s infinite ease-out;
+  }
+}
+
+@keyframes growAndFade {
   0% {
-    transform: scale(1);
-    // transform: rotateZ(0deg);
+    opacity: 0.25;
+    transform: scale(0);
   }
   100% {
-    transform: scale(2);
-    // transform: rotate(90deg);
+    opacity: 0.1;
+    transform: scale(1.2);
   }
 }
+
 @keyframes swimming {
   0% {
-    transform: translateX(7%);
+    transform: translateX(5%);
   }
   /*可加50%給他loop*/
   50% {
-    transform: translateY(-1%);
+    transform: translateX(-4%);
   }
   75% {
-    transform: translateY(2%);
+    transform: rotateY(180deg);
+    transform: translateX(2%);
   }
   100% {
-    transform: translateX(-9%); /*最左邊*/
-  }
-}
-@keyframes jump {
-  0%,
-  100% {
-    transform: translate(2%, 0);
-  }
-  25%,
-  50% {
-    transform: translate(2%, 1.5%);
+    transform: translateX(5%); /*最左邊*/
   }
 }
 
 //氣象資訊區塊
 .weather {
+  font-size: 20px;
   .weather-detail {
-    font-size: 20px;
-    line-height: 30px;
+    background-color: aquamarine;
+    border-radius: 2%;
+    line-height: 50px;
+  }
+}
+
+// 圖片用的淡入
+@keyframes fadeinout {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 1;
   }
 }

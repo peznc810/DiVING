@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import loaderStyles from '@/styles/loader/loader_ripple.module.css'
+
 import {
   Container,
   Card,
@@ -15,11 +16,12 @@ import {
 import Caro from '@/components/post/caro'
 import TagButton from '@/components/post/tagButton'
 import { PiUserCircleDuotone } from 'react-icons/pi'
+import Loading from '@/components/layout/loading/loading'
 
 export default function List() {
   const [postList, setPostList] = useState([])
   const [isLoading, setIsLoading] = useState(true)
-  const [sortBy, setSortBy] = useState('desc')
+  const [sortBy, setSortBy] = useState('DESC')
   const [searchText, setSearchText] = useState('')
 
   const getTagsArray = (tagsString) => {
@@ -62,11 +64,12 @@ export default function List() {
   }, [sortBy, searchText]) // 當sortBy 變化時重新取得數據
 
   const loader = (
-    <div className={loaderStyles['lds-ripple']}>
-      <div></div>
-      <div></div>
-      <div></div>
-    </div>
+    <Loading />
+    // <div className={loaderStyles['lds-ripple']}>
+    //   <div></div>
+    //   <div></div>
+    //   <div></div>
+    // </div>
   )
 
   const display = (
@@ -160,10 +163,10 @@ export default function List() {
           <Row className=" text-end">
             <Col>
               <ButtonGroup aria-label="Basic example">
-                <Button variant="secondary" onClick={() => setSortBy('desc')}>
+                <Button variant="secondary" onClick={() => setSortBy('DESC')}>
                   發布日期 -新到舊
                 </Button>
-                <Button variant="secondary" onClick={() => setSortBy('asc')}>
+                <Button variant="secondary" onClick={() => setSortBy('ASC')}>
                   發布日期 -舊到新
                 </Button>
               </ButtonGroup>

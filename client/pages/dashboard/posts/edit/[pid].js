@@ -66,7 +66,7 @@ export default function Edit() {
   }, [router.isReady]) // 確保只在 component 首次渲染時執行
 
   useEffect(() => {
-    if (!selectedFile) {
+    if (!selectedFile && editFormData.image) {
       setPreview('')
       return
     }
@@ -185,7 +185,7 @@ export default function Edit() {
             >
               預覽圖片:{' '}
               <Image
-                src={preview}
+                src={preview || `${editFormData.image}`}
                 alt="images"
                 fill={true}
                 style={{ objectFit: 'contain' }}
@@ -195,10 +195,7 @@ export default function Edit() {
           )}
         </div>
 
-        <div className="board">
-          {editFormData.image}
-          <ImageUpload />
-        </div>
+        <div className="board">{editFormData.image}</div>
         <TagGenerator
           onTagsChange={(newTags) => {
             handleFormDataChange('tags')(newTags.join(','))

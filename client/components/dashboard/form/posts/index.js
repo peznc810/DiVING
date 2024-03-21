@@ -130,6 +130,7 @@ export default function Index() {
                         <Link
                           href={`/post/${v.id}`}
                           className={`text-black ${styles['text-hover']}`}
+                          target="_blank"
                         >
                           {v.title}
                         </Link>

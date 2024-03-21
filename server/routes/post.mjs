@@ -12,17 +12,10 @@ const app = express();
   router.get('/', async (req, res) => {
   const { sort, searchText } = req.query; 
   // 排序用
-  const orderDirection = sort === 'desc' ? 'DESC' : 'ASC'; // 根據排序方式設置排序方向
-    try {
-      let queryString = `SELECT * FROM post ORDER BY published_at ${orderDirection}`;
-      let queryParams = [];
-  
-      if (searchText) {
-        queryString += ` WHERE title LIKE ? OR content LIKE ?`;
-        queryParams = [`%${searchText}%`, `%${searchText}%`];
-      }
+   // 檢查 sort 參數的值，如果是 'asc' 則改變排序方式為升冪
 
-      const [result, field] = await db.execute('SELECT post.id as post_id, post.*, users.id as user_id, users.name FROM post JOIN users ON post.user_id = users.id WHERE title LIKE ? OR content LIKE ? ORDER BY published_at DESC', ['%' + searchText + '%', '%' + searchText + '%']);
+    try {
+      const [result, field] = await db.execute(`SELECT post.id as post_id, post.*, users.id as user_id, users.name FROM post JOIN users ON post.user_id = users.id WHERE title LIKE ? OR content LIKE ? ORDER BY published_at DESC`, ['%' + searchText + '%', '%' + searchText + '%']);
 
       res.json(result);
     } catch (error) {
@@ -64,7 +57,6 @@ const app = express();
     }
 });
 
-
 //圖片上傳
 app.use(fileUpload({
   createParentPath: true,
@@ -76,7 +68,7 @@ app.use(express.json());
  // 4.16.0 或以上body-parser已被內建
 
 // 當瀏覽器請求/upload時 Express查找對應文件 提供給client端靜態引用
-app.use('/upload', express.static('upload'));
+// app.use('/upload', express.static('upload'));
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -148,6 +140,5 @@ router.post("/disable/:postId", async(req,res) =>{
     res.status(500).json({ error: 'Internal Server Error' });
   }
 })
-
 
 export default router;

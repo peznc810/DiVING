@@ -7,7 +7,6 @@ import { LuWaves } from 'react-icons/lu'
 import ImageViewModal from '@/components/map/imageViewModal'
 import styles from './svg.module.scss'
 import TaiwanSvg from '@/components/map/taiwanSvg'
-import ScrollToTop from '@/components/post/scrollToTop'
 
 // const AUTHORIZATION_KEY = process.env.AUTHORIZATION_KEY
 const AUTHORIZATION_KEY = 'CWA-12A9C569-394E-4169-AD84-A7592FBBEAF1'
@@ -22,6 +21,9 @@ export default function Test() {
   const [disData, setDisData] = useState([]) //單個區的資料
   const [selectPoint, setSelectPointData] = useState([]) //被選的潛點的id
   const [selectedPointData, setSelectedPointData] = useState(null) //單潛點的資料
+
+  //改變潛點樣式用
+  const [pointStyle, setPointStyle] = useState('')
 
   // 圖片放大及關閉
   const [showModal, setShowModal] = useState(false)
@@ -53,7 +55,6 @@ export default function Test() {
   }, [])
 
   useEffect(() => {
-    // 根據選中的地圖id篩選about.json的數據
     if (selectedDis) {
       //有區的id的話 改變單區的資料
       const filteredMapData = mapData.filter((item) => item.id === selectedDis)
@@ -68,28 +69,18 @@ export default function Test() {
   // 點擊地圖
   const handleMapClick = (e) => {
     const clickedMapId = e.target.getAttribute('data-id')
+    console.log(clickedMapId)
 
-    //做效果用
-    if (clickedMapId) {
-      // 清除所有path的active狀態 //之後改成狀態=false或true
-      document.querySelectorAll('path').forEach((path) => {
-        path.classList.remove('same')
-        // console.log(path)
-      })
-    }
-    // 將點擊的path設置為active
-    e.target.classList.add('same')
-    // console.log(e.target)
+    setPointStyle(clickedMapId)
 
     const clickedMap = mapData.find(
-      //   //對照被點選的區id以及資料庫裡的區的id
+      //對照被點選的區id以及資料庫裡的區的id
       (item) => item.id === parseInt(clickedMapId)
     )
 
     // 更新選定的地圖
     setSelectedDis(clickedMap.id) //改變被選的區的id
     setSelectedDisName(clickedMap.name) //改變被選的區的名字
-    // const newData = e.target.value
     setCurrentWeather({ ...currentWeather, StationID: clickedMap.station_id })
     console.log(clickedMap.station_id)
   }
@@ -116,7 +107,7 @@ export default function Test() {
     SeaTemperature: '',
     WindSpeed: '',
     WindDirection: '',
-    WindDirectionDescription: 'N',
+    WindDirectionDescription: '',
     DateTime: '',
   })
 
@@ -187,55 +178,58 @@ export default function Test() {
 
   return (
     <>
-      <ScrollToTop />
       <main className={styles['main']}>
         <ImageViewModal
           showModal={showModal}
           handleClose={closeModal}
           imageSrc={selectedImage}
-          fullscreen={'xxl-down'}
+          fullscreen={'md-up'}
         />
         {/* Modal↑ */}
         <Container className="my-5 p-3 border ">
-          <button className={styles['tttest']}>test</button>
           <Row>
             <Col xs={12} md={6} lg={6} className="border-end">
               <div className={styles['box']}>
-                <TaiwanSvg handleMapClick={handleMapClick} />
+                <TaiwanSvg
+                  handleMapClick={handleMapClick}
+                  pointStyle={pointStyle}
+                />
               </div>
             </Col>
             <Col className={styles['weather']}>
-              <h3>{selectedDisName}</h3>
-              <h4>{currentWeather.StationName}</h4>
-              {/* <button onClick={handleWeatherClick}>取得氣象API</button> */}
-              <div>
-                {/* 時間 */}觀測時間: {currentWeather.DateTime}
+              <div className={styles['111']}>
+                <h2>{selectedDisName}</h2>
+
+                <h4>{currentWeather.StationName}</h4>
+                <div>
+                  {/* 時間 */}觀測時間: {currentWeather.DateTime}
+                </div>
+                <Stack
+                  direction="horizontal"
+                  gap={4}
+                  className={styles['weather-detail']}
+                >
+                  <div>
+                    {/* 風向 */}風向
+                    <FaWind />
+                    {currentWeather.WindDirection}
+                  </div>
+                  <div>
+                    {/* 浪高 */}浪高
+                    <LuWaves />
+                    {currentWeather.WaveHeight}
+                  </div>
+                  <div>
+                    {/* 海溫 */}海溫
+                    <TiWeatherCloudy />
+                    {currentWeather.SeaTemperature}
+                  </div>
+                  <div>
+                    {/* 風速 */}風速
+                    {currentWeather.WindSpeed}
+                  </div>
+                </Stack>
               </div>
-              <Stack
-                direction="horizontal"
-                gap={4}
-                className={styles['weather-detail']}
-              >
-                <div>
-                  {/* 風向 */}風向
-                  <FaWind />
-                  {currentWeather.WindDirection}
-                </div>
-                <div>
-                  {/* 浪高 */}浪高
-                  <LuWaves />
-                  {currentWeather.WaveHeight}
-                </div>
-                <div>
-                  {/* 海溫 */}海溫
-                  <TiWeatherCloudy />
-                  {Math.round(currentWeather.SeaTemperature)}
-                </div>
-                <div>
-                  {/* 風速 */}風速
-                  {currentWeather.WindSpeed}
-                </div>
-              </Stack>
               <div>
                 <Container>
                   {disData.map((v) => {
@@ -262,14 +256,9 @@ export default function Test() {
                 </Container>
               </div>
             </Col>
-            {/* 試動畫區塊 */}
-            <div style={{ backgroundColor: 'yellow', height: '10px' }}>
-              <div className={styles['eclipse']}></div>
-            </div>
-            {/* 試動畫區塊^^^ */}
           </Row>
           <hr />
-          <div className="bg-light text-center">
+          <div className=" text-center">
             {selectedPointData &&
               selectedPointData.map((v) => (
                 <DiButton
@@ -283,7 +272,6 @@ export default function Test() {
           <Container>
             <Stack direction="horizontal" gap={3}>
               <div className="p-2">
-                <Button variant="secondary">相關課程</Button> <div></div>
                 <div>
                   {' '}
                   {selectedPointData &&
