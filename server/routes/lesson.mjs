@@ -110,4 +110,18 @@ router.get('/orderdate', function (req, res, next) {
   })()
 });
 
+router.post("/order-time", async function (req, res, next) {
+  const { lesson_id, order_time } = req.body;
+  try {
+    const result = await db.execute(
+      'INSERT INTO order_time (lesson_id, preorder_date, preorder_time) VALUES (?, ?, ?)',
+      [parseInt(lesson_id), order_time, 1],
+    );
+    res.json(result);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
 export default router

@@ -61,7 +61,6 @@ export default function Cart() {
                 product_detail,
                 order_time,
                 category,
-                pid,
                 pimg,
               } = item
               const id = product_id || lesson_id
@@ -76,7 +75,7 @@ export default function Cart() {
                   <td>
                     <div className="d-flex">
                       <Image
-                        src={`/images/product/images/${category}/${pid}/${pimg}`}
+                        src={`/images/product/images/${category}/${product_id}/${pimg}`}
                         alt="t"
                         width={100}
                         height={100}

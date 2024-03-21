@@ -31,12 +31,11 @@ export default function OrderInfo({ cart, finalPrice, discount }) {
                 order_time,
                 subtotal,
                 category,
-                pid,
+                product_id,
                 pimg,
               } = item
-              console.log(cart.items)
               const detail = product_detail || order_time
-              const url = `/images/product/images/${category}/${pid}/${pimg}`
+              const url = `/images/product/images/${category}/${product_id}/${pimg}`
               return (
                 <tr key={i}>
                   <td>

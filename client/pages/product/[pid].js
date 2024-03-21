@@ -13,7 +13,7 @@ import { TbHeartX } from 'react-icons/tb'
 import { FaCartPlus } from 'react-icons/fa'
 import { GiClothes } from 'react-icons/gi'
 import { FaShuttleVan } from 'react-icons/fa'
-import { Toaster } from 'react-hot-toast'
+import toast, { Toaster } from 'react-hot-toast'
 import useCollect from '@/hooks/use-collect'
 import { useCart } from '@/hooks/cart'
 
@@ -101,6 +101,13 @@ export default function Detail() {
     }
   }, [pid])
 
+  useEffect(() => {
+    if (product) {
+      setSelectColor(product.color.split(',')[0])
+      setSelectSize(product.size.split(',')[0])
+    }
+  }, [product])
+
   // if (product) {
   //   const [newproduct] = product.filter((o) => {
   //     return o.id == pid
@@ -141,7 +148,9 @@ export default function Detail() {
     name,
     price,
     discount_price,
-    num
+    num,
+    category,
+    pimg
   ) => {
     const item = {
       product_id,
@@ -150,8 +159,11 @@ export default function Detail() {
       price,
       discount_price,
       num,
+      category,
+      pimg,
     }
     addItem(item)
+    toast.success('已加入購物車')
   }
 
   if (!product) return null
@@ -175,6 +187,7 @@ export default function Detail() {
         <div className="row mt-5 mx-2 my-5">
           <div className="col-sm-7">
             <div className="position-sticky" style={{ top: '2rem' }}>
+              {console.log(product)}
               <Carousel
                 imgFileNames={product.img.split(',')}
                 id={product.id}
@@ -288,16 +301,21 @@ export default function Detail() {
             </button>
 
             {/* 加入購物車 */}
-            <button className="btn btn-outline-primary w-100" onClick={() => {
+            <button
+              className="btn btn-outline-primary w-100"
+              onClick={() => {
                 addProduct(
                   product.id,
                   `${selectColor}/${selectSize}`,
                   product.name,
                   product.price,
                   product.discount,
-                  productCount
+                  productCount,
+                  product.category,
+                  product.img_top
                 )
-              }}>
+              }}
+            >
               加入購物車 <FaCartPlus className="detail-FaCartPlus" />
             </button>
 

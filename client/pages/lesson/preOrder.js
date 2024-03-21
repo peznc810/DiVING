@@ -1,15 +1,24 @@
 import React, { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
+import { useCart } from '@/hooks/cart'
 import DatePicker from '@/components/cart/date-picker'
+import toast, { Toaster } from 'react-hot-toast'
 export default function PreOrder() {
-  const [selectedDate, setSelectedDate] = useState(null)
+  const date = new Date().getDate()
+  const month = new Date().getMonth() + 1
+  const year = new Date().getFullYear()
+  const today = `${year}/${month}/${date}`
+  const [selectedDate, setSelectedDate] = useState(today)
   const handleDateChange = (date) => {
     setSelectedDate(date)
     console.log(selectedDate)
   }
   const router = useRouter()
+  const { addItem } = useCart()
   const lid = router.query.lessonId
   const [perorder, setPerOrder] = useState({})
+
+  console.log(console.log(typeof selectedDate))
   const getOrderDetail = async () => {
     const res = await fetch(`http://localhost:3005/api/lesson/getlist/${lid}`)
     const data = await res.json()
@@ -23,6 +32,18 @@ export default function PreOrder() {
       getOrderDetail(lid)
     }
   }, [router.isReady])
+
+  const addLesson = (lesson_id, order_time, name, price, num) => {
+    const item = {
+      lesson_id,
+      order_time,
+      name,
+      price,
+      num,
+    }
+    addItem(item)
+    toast.success('已加入購物車')
+  }
 
   return (
     <>
@@ -78,8 +99,21 @@ export default function PreOrder() {
                 <p className="fs14">價格: {perorder.price}</p>
               </div>
               <hr />
-              <button type="button" className="btn cart-btn w-100">
+              <button
+                type="button"
+                className="btn cart-btn w-100"
+                onClick={() => {
+                  addLesson(
+                    lid,
+                    selectedDate,
+                    perorder.title,
+                    perorder.price,
+                    1
+                  )
+                }}
+              >
                 <h5 className="fw-bold py-1">加入購物車</h5>
+                <Toaster />
               </button>
             </div>
           </div>

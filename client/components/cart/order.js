@@ -19,8 +19,6 @@ export default function Order({ orderId }) {
 
   const [coupon, setCoupon] = useState(null)
 
-  console.log(coupon)
-
   useEffect(() => {
     const fetchOrderDetail = async () => {
       try {
@@ -44,6 +42,22 @@ export default function Order({ orderId }) {
         setCoupon(JSON.parse(result.used_coupon))
       } catch (error) {
         console.error('Error fetching order:', error)
+      }
+    }
+
+    const addOrderTime = async () => {
+      for (const i of cart.items) {
+        try {
+          await fetch('http://localhost:3005/api/lesson/order-time', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(i),
+          })
+        } catch (error) {
+          console.error('Error fetching order:', error)
+        }
       }
     }
 
@@ -72,6 +86,7 @@ export default function Order({ orderId }) {
 
     fetchOrderDetail()
     fetchOrder()
+    addOrderTime()
     couponUsed()
     clearCart()
     removeUsingCoupon()
