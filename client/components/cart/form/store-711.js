@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { useShip711StoreOpener } from '@/hooks/use-711-store'
 
+import styles from '../cart.module.scss'
+
 export default function Store711({
   handleInputChange,
   userInputs,
@@ -21,10 +23,7 @@ export default function Store711({
     }))
   }
 
-  const [store, setStore] = useState(store711)
-
   useEffect(() => {
-    setStore(store711)
     setUserInputs((s) => ({
       ...s,
       store_name: store711.storename,
@@ -35,8 +34,8 @@ export default function Store711({
   return (
     <>
       <div className="container">
-        <div className="w-100 section-name text-center">
-          <h5 className="span">送貨資料</h5>
+        <div className={`w-100 ${styles.sectionName} text-center"`}>
+          <h5 className={`${styles.span}`}>送貨資料</h5>
         </div>
         <div className="container">
           <div className="d-flex mt-3">
@@ -47,7 +46,7 @@ export default function Store711({
             />
             <h6 className="fw-bold">收貨人資料與會員資料相同</h6>
           </div>
-          <div className="row justify-content-between spacing">
+          <div className={`row justify-content-between ${styles.spacing}`}>
             <div className="col-6">
               <p className="fw-bold">收件人名稱</p>
               <input
@@ -73,7 +72,7 @@ export default function Store711({
                 type="text"
                 className="w-100 form-control user_name"
                 name="store_name"
-                defaultValue={store.storename}
+                defaultValue={store711.storename}
                 onChange={handleInputChange}
                 disabled
               />
@@ -84,7 +83,7 @@ export default function Store711({
                 type="text"
                 className="w-100 form-control user_phone"
                 name="store_address"
-                defaultValue={store.storeaddress}
+                defaultValue={store711.storeaddress}
                 onChange={handleInputChange}
                 disabled
               />
@@ -116,23 +115,10 @@ export default function Store711({
           margin: 0;
         }
 
-        .span {
-          color: #013c64;
-          font-weight: bold;
+        .row div {
+          margin-bottom: 1.5rem;
         }
 
-        .spacing {
-          margin-top: 1rem;
-          margin-bottom: 1rem;
-          div {
-            margin-top: 1rem;
-          }
-        }
-
-        .section-name {
-          background-color: #f5f5f5;
-          padding: 0.5rem;
-        }
         .next-step-btn {
           background-color: #ff9720;
         }
