@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import Image from 'next/image'
+import Link from 'next/link'
 import styles from './myProduct.module.scss'
 
 import { useCart } from '@/hooks/cart'
@@ -16,16 +17,21 @@ export default function MyProduct({
   category,
 }) {
   const { increment, decrement, removeItem } = useCart()
-  let url = isProduct ? `/images/product/images/${category}/${id}/${img}` : ''
+  const imgUrl = isProduct
+    ? `/images/product/images/${category}/${id}/${img}`
+    : `/images/lesson/${img}`
+  const url = isProduct ? `/product/${id}` : `/lesson/${id}`
 
   return (
     <>
       <div className={`d-flex p-3 ${styles.myProduct}`}>
         <div className={`me-3 ${styles.productImg}`}>
-          <Image src={url} alt="t" width={75} height={75} />
+          <Image src={imgUrl} alt="t" width={75} height={75} />
         </div>
         <div className={`${styles.info}`}>
-          <h6 className="m-0">{name}</h6>
+          <Link href={url}>
+            <h6 className="m-0">{name}</h6>
+          </Link>
           <span>{detail}</span>
           <div className={`d-flex my-2 align-items-center`}>
             {discountPrice ? (

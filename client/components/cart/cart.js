@@ -4,6 +4,7 @@ import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
 import styles from './cart.module.scss'
 import Image from 'next/image'
+import Link from 'next/link'
 
 import { useCart } from '@/hooks/cart'
 
@@ -62,26 +63,28 @@ export default function Cart() {
                 order_time,
                 category,
                 pimg,
+                limg,
               } = item
               const id = product_id || lesson_id
               const detail = product_detail || order_time
+              const img = pimg || limg
               const isProduct = !!item.product_id
               const totalPrice = discount_price
                 ? discount_price * num
                 : price * num
-
+              const imgUrl = isProduct
+                ? `/images/product/images/${category}/${id}/${img}`
+                : `/images/lesson/${img}`
+              const url = isProduct ? `/product/${id}` : `/lesson/${id}`
               return (
                 <tr key={i}>
                   <td>
                     <div className="d-flex">
-                      <Image
-                        src={`/images/product/images/${category}/${product_id}/${pimg}`}
-                        alt="t"
-                        width={100}
-                        height={100}
-                      />
+                      <Image src={imgUrl} alt="t" width={100} height={100} />
                       <div className="ms-2">
-                        <h5 className="fw-bold text-start">{name}</h5>
+                        <Link href={url}>
+                          <h5 className="fw-bold text-start">{name}</h5>
+                        </Link>
                         <p className={`${styles.imperceptible} text-start`}>
                           {detail}
                         </p>
