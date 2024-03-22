@@ -6,6 +6,9 @@ import { useAuth } from '@/hooks/auth'
 import { FaTrashCan } from 'react-icons/fa6'
 import { MdOutlineLibraryAdd } from 'react-icons/md'
 import { FaEdit } from 'react-icons/fa'
+
+import usePagination from '@/hooks/use-pagination'
+import Pagination from '../pagination'
 import { useRouter } from 'next/router'
 import Swal from 'sweetalert2'
 import CancelAlert from '@/components/post/cancelAlert'
@@ -13,6 +16,11 @@ import { Stack } from 'react-bootstrap'
 
 export default function Index() {
   const [postList, setPostList] = useState([])
+  // 控制分頁
+  const { currentPage, pageItem, handlePage, getPageNumbers } = usePagination(
+    postList,
+    3
+  )
   const { auth } = useAuth()
   const router = useRouter()
   // const token = localStorage.getItem('token')
@@ -33,21 +41,11 @@ export default function Index() {
     }
   }
 
-  // useEffect(() => {
-  //   if (auth.id !== '' && auth.id !== prevAuthId.current) {
-  //     getPost(auth.id)
-  //   }
-  //   console.log(auth.id)
-  // }, [auth])
   useEffect(() => {
-    if (auth.id !== '') {
-      getPost(auth.id)
-      console.log(auth.id)
-    }
-  }, [auth])
+    getPost()
+  }, [])
 
-  //刪除動作
-  const handleDisablePost = async (postId) => {
+  const handleDisablePost = async (e, postId) => {
     try {
       const res = await fetch(
         `http://localhost:3005/api/post/disable/${postId}`,
@@ -96,6 +94,9 @@ export default function Index() {
     }
   }
 
+  useEffect(() => {
+    getPost()
+  }, [])
   return (
     <>
       <div className={`col-sm-8 p-0 rounded-end ${styles['form-container']}`}>
@@ -123,7 +124,7 @@ export default function Index() {
                   </tr>
                 </thead>
                 <tbody>
-                  {postList.map((v, i) => (
+                  {pageItem.map((v, i) => (
                     <tr className="align-middle" key={v.id + i}>
                       {/* map()加上i 避免跟user_id的id重複 */}
                       <td>{i + 1}</td>
@@ -163,40 +164,13 @@ export default function Index() {
                   ))}
                 </tbody>
               </table>
-              {/* <div className="d-flex justify-content-center">
-                 page要做成component 
-                <div
-                  className="btn-group"
-                  role="group"
-                  aria-label="First group"
-                >
-                  要map 
-                  <button
-                    type="button"
-                    className={`btn btn-outline-secondary btn-sm ${styles['hover-style']}`}
-                  >
-                    1
-                  </button>
-                  <button
-                    type="button"
-                    className={`btn btn-outline-secondary btn-sm ${styles['hover-style']}`}
-                  >
-                    2
-                  </button>
-                  <button
-                    type="button"
-                    className={`btn btn-outline-secondary btn-sm ${styles['hover-style']}`}
-                  >
-                    3
-                  </button>
-                  <button
-                    type="button"
-                    className={`btn btn-outline-secondary btn-sm ${styles['hover-style']}`}
-                  >
-                    4
-                  </button>
-                </div>
-              </div> */}
+              {/* 頁數按鈕 */}
+
+              <Pagination
+                currentPage={currentPage}
+                handlePage={handlePage}
+                getPageNumbers={getPageNumbers}
+              />
             </div>
           </div>
         </div>

@@ -85,7 +85,6 @@ export function AuthProvider({ children }) {
           const userData = parseJwt(token)
           // 把會員的資料放到狀態中，之後可以共享到其他頁面
           setAuth({ ...userData, isAuth: true })
-          console.log(userData)
           // 把token存入localStorage，後續要重新抓登入狀態時會需要
           localStorage.setItem('token', token)
           router.push('/')
@@ -154,34 +153,6 @@ export function AuthProvider({ children }) {
         console.log(err)
       })
   }
-
-  // // Google註冊
-  // const signUpGoogle = (providerData) => {
-  //   const userData = JSON.stringify(providerData)
-  //   // 把表單資料傳給後台
-  //   let url = 'http://localhost:3005/api/users/google-register'
-  //   fetch(url, {
-  //     method: 'POST',
-  //     headers: {
-  //       'Content-Type': 'application/json',
-  //     },
-  //     body: userData,
-  //     credentials: 'include',
-  //   })
-  //     .then((response) => response.json())
-  //     .then((result) => {
-  //       const { status, msg } = result
-  //       if (result.status !== 'error') {
-  //         notify(msg, status)
-  //         router.push('/users/login')
-  //       } else {
-  //         setMsg(msg)
-  //       }
-  //     })
-  //     .catch((err) => {
-  //       console.log(err)
-  //     })
-  // }
 
   // 登入頁路由
   const loginRoute = '/users'

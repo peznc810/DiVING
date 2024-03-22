@@ -48,7 +48,7 @@ export default function List() {
   //   setLoading(true)
   //   setTimeout(() => {
   //     setLoading(false)
-  //   }, 1500)
+  //   }, 800)
   // }, [])
 
   const [filterSettings, setFilterSettings] = useState({
@@ -154,7 +154,7 @@ export default function List() {
             return res.json()
           })
           .then((data) => {
-            console.log(data)
+            // console.log(data)
             setProduct(data ? data : [])
           })
       } catch {
@@ -264,6 +264,16 @@ export default function List() {
           .width-1200 {
             width: 380px;
           }
+        }
+        ::-webkit-scrollbar {
+          -webkit-appearance: none;
+          width: 7px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+          border-radius: 4px;
+          background-color: rgba(0, 0, 0, 0.241);
+          box-shadow: 0 0 1px rgba(255, 255, 255, 0.5);
         }
       `}</style>
     </>

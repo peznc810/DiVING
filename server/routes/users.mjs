@@ -36,7 +36,7 @@ router.post('/login', upload.none(), async (req, res) => {
       userName: userData.name,
       avatar: userData.avatar,
       isGoogle: false,
-    }, secretKey, { expiresIn: '1h' })
+    }, secretKey, { expiresIn: '1d' })
     res.status(200).json({ status: 'success', msg: '登入成功', token })
   } else {
     res.status(401).json({
@@ -60,7 +60,7 @@ router.post('/logout', checkToken, (req, res) => {
     userEmail: '',
     userName: '',
     avatar: '',
-  }, secretKey, { expiresIn: '-10s' })
+  }, secretKey, { expiresIn: '-1d' })
   res.status(200).json({
     status: 'success',
     msg: '登出成功',
@@ -89,7 +89,7 @@ router.post('/status', checkToken, async (req, res) => {
       userName: userData.name,
       avatar: userData.avatar,
       isGoogle: true
-    }, secretKey, { expiresIn: '1h' })
+    }, secretKey, { expiresIn: '1d' })
     res.status(200).json({
       status: 'success',
       msg: '使用者已登入',
@@ -102,7 +102,7 @@ router.post('/status', checkToken, async (req, res) => {
       userName: userData.name,
       avatar: userData.avatar,
       isGoogle: false
-    }, secretKey, { expiresIn: '1h' })
+    }, secretKey, { expiresIn: '1d' })
     res.status(200).json({
       status: 'success',
       msg: '使用者已登入',
@@ -162,7 +162,7 @@ router.post('/google-login', async (req, res) => {
       userName: userData.name,
       avatar: userData.avatar,
       isGoogle: true,
-    }, secretKey, { expiresIn: '1h' })
+    }, secretKey, { expiresIn: '1d' })
     res.status(200).json({ status: 'success', msg: '登入成功', token })
   } else {
     // 如果沒有資料則進行註冊後登入
@@ -175,7 +175,8 @@ router.post('/google-login', async (req, res) => {
           userEmail: email,
           userName: displayName,
           avatar: photoURL,
-        }, secretKey, { expiresIn: '1h' })
+          isGoogle: true,
+        }, secretKey, { expiresIn: '1d' })
         res.status(200).json({ status: 'success', msg: '登入成功', token })
       })
       .catch(err => {
@@ -328,7 +329,7 @@ router.get('/:id/common', checkToken, async (req, res) => {
   )
 
   console.log(userData)
-  
+
   const data = formatDate(userData)
   
   if (userData) {
@@ -349,10 +350,15 @@ router.get('/:id/favorite', checkToken, async (req, res) => {
   }
 
   const [userData] = await db.execute(
-    'SELECT fav.*, CASE WHEN fav.lesson_id IS NOT NULL THEN lesson.title ELSE product.name END AS name, CASE WHEN fav.lesson_id IS NOT NULL THEN lesson.price ELSE product.price END AS price, CASE WHEN fav.lesson_id IS NOT NULL THEN lesson.img ELSE product.img_top END AS img, product.id AS product_id, product.category AS product_category FROM fav LEFT JOIN product ON product.id = fav.product_id LEFT JOIN lesson ON lesson.id = fav.lesson_id WHERE fav.user_id = ?', [uid]
+    'SELECT collect.*, CASE WHEN collect.lesson_id IS NOT NULL THEN lesson.title ELSE product.name END AS name, CASE WHEN collect.lesson_id IS NOT NULL THEN lesson.price ELSE product.price END AS price, CASE WHEN collect.lesson_id IS NOT NULL THEN lesson.img ELSE product.img_top END AS img, product.id AS product_id, product.category AS product_category FROM collect LEFT JOIN product ON product.id = collect.product_id LEFT JOIN lesson ON lesson.id = collect.lesson_id WHERE collect.user_id = ? AND state = 1', [uid]
   )
 
   const data = formatDate(userData)
+
+  console.log("---");
+  console.log(data);
+  console.log("---");
+
   
   if (userData) {
     res.status(200).json({ status: 'success', data })
@@ -372,12 +378,12 @@ router.delete('/:id/delete-fav:pid', checkToken, async(req,res) => {
   }
 
   const [userData] = await db.execute(
-    'SELECT * FROM `fav` WHERE `id` = ? AND `user_id` = ?',
+    'SELECT * FROM `collect` WHERE `id` = ? AND `user_id` = ?',
     [pid, id]
   )
   if (userData) {
     await db.execute(
-      'DELETE FROM `fav` WHERE `id` = ? AND `user_id` = ?', [pid,id]
+      'DELETE FROM `collect` WHERE `id` = ? AND `user_id` = ?', [pid,id]
     )
     res.status(200).json({ status: 'success', msg: '取消收藏成功' })
   } else {

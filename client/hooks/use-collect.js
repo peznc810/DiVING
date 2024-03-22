@@ -8,10 +8,9 @@ const useCollect = (pid) => {
     auth: { id },
   } = useAuth()
   //   console.log('id', id)
-  const notify = (text, isSuccess = true) =>
-    toast(text, {
-      icon: isSuccess ? '✅' : '  ⚠️',
-    })
+  const notify = (text, isSuccess = true) => toast.success(text)
+  const notNotify = (text, isSuccess = false) => toast.error(text)
+
   const fetchIsCollect = async () => {
     try {
       return await fetch(
@@ -72,7 +71,7 @@ const useCollect = (pid) => {
       notify('商品已加入收藏！')
     } catch (error) {
       console.log(error)
-      notify('請先註冊/登入會員！', false) //加入收藏失败
+      notNotify('請先註冊/登入會員！', false) //加入收藏失败
     }
   }
 
