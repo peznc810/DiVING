@@ -7,17 +7,6 @@ import Image from 'next/image'
 import { FaTrashCan } from 'react-icons/fa6'
 
 export default function Form({ fav = {}, auth = {}, delUserFav = () => {} }) {
-  // 點擊顯示可使用的優惠券
-  const handleCouponValid = () => {
-    const validFav = couponHas.filter((coupon) => coupon.valid === 1)
-    setCoupon(validCoupon)
-  }
-
-  // 點擊顯示已失效的優惠券
-  const handleCouponUnValid = () => {
-    const unValidCoupon = couponHas.filter((coupon) => coupon.valid === 0)
-    setCoupon(unValidCoupon)
-  }
   return (
     <>
       <div className={`col-sm-8 p-0 rounded-end ${styles['form-container']}`}>
@@ -27,22 +16,6 @@ export default function Form({ fav = {}, auth = {}, delUserFav = () => {} }) {
               <h2 className="fw-medium fs-5 d-flex py-3 m-0">我的收藏</h2>
             </div>
             <div className="accordion-body overflow-auto">
-              {/* 篩選＆搜尋，要再調整 */}
-              <div className="d-flex justify-content-between align-items-center mb-3">
-                <div className="d-flex align-items-center">
-                  <button type="button" className="btn btn-sm text-secondary">
-                    全部
-                  </button>
-                  |
-                  <button type="button" className="btn btn-sm">
-                    商品
-                  </button>
-                  |
-                  <button type="button" className="btn btn-sm">
-                    課程
-                  </button>
-                </div>
-              </div>
               <table className="table mb-5">
                 <thead className="fs-6">
                   <tr>

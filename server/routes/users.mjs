@@ -252,7 +252,6 @@ router.put('/:id/profile', checkToken, upload.none(), async (req, res) => {
     [name, birth, email, tel, address, id]
   )
     .then(result => {
-      console.log(result)
       res.status(200).json({ status: 'success', msg: '會員資料更新成功' })
     })
     .catch(err => {
@@ -328,6 +327,8 @@ router.get('/:id/common', checkToken, async (req, res) => {
     'SELECT star.*, CASE WHEN star.lesson_id IS NOT NULL THEN lesson.title ELSE product.name END AS name, CASE WHEN star.lesson_id IS NOT NULL THEN lesson.img ELSE product.img_top END AS img,product.id AS product_id,product.category AS product_category FROM star LEFT JOIN product ON product.id = star.product_id LEFT JOIN lesson ON lesson.id = star.lesson_id WHERE star.user_id = ?', [uid]
   )
 
+  console.log(userData)
+  
   const data = formatDate(userData)
   
   if (userData) {
@@ -348,7 +349,7 @@ router.get('/:id/favorite', checkToken, async (req, res) => {
   }
 
   const [userData] = await db.execute(
-    'SELECT fav.*, CASE WHEN fav.lesson_id IS NOT NULL THEN lesson.title ELSE product.name END AS name, CASE WHEN fav.lesson_id IS NOT NULL THEN lesson.price ELSE product.price END AS price, CASE WHEN fav.lesson_id IS NOT NULL THEN lesson.img ELSE product.img_top END AS img,product.id AS product_id,product.category AS product_category FROM fav LEFT JOIN product ON product.id = fav.product_id LEFT JOIN lesson ON lesson.id = fav.lesson_id WHERE fav.user_id = ?', [uid]
+    'SELECT fav.*, CASE WHEN fav.lesson_id IS NOT NULL THEN lesson.title ELSE product.name END AS name, CASE WHEN fav.lesson_id IS NOT NULL THEN lesson.price ELSE product.price END AS price, CASE WHEN fav.lesson_id IS NOT NULL THEN lesson.img ELSE product.img_top END AS img, product.id AS product_id, product.category AS product_category FROM fav LEFT JOIN product ON product.id = fav.product_id LEFT JOIN lesson ON lesson.id = fav.lesson_id WHERE fav.user_id = ?', [uid]
   )
 
   const data = formatDate(userData)
@@ -366,9 +367,9 @@ router.delete('/:id/delete-fav:pid', checkToken, async(req,res) => {
   const checkId = req.decode.id
 
   // 確認授權會員與請求取得的會員資料是否為同一人
-  // if (checkId !== id) {
-  //   return res.json({ status: 'error', message: '會員資料存取失敗' })
-  // }
+  if (checkId !== id) {
+    return res.json({ status: 'error', message: '會員資料存取失敗' })
+  }
 
   const [userData] = await db.execute(
     'SELECT * FROM `fav` WHERE `id` = ? AND `user_id` = ?',

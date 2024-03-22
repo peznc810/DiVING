@@ -7,11 +7,8 @@ import Image from 'next/image'
 import { FaStar } from 'react-icons/fa'
 
 export default function Form({ common = [] }) {
-  const [category, setCategory] = useState([])
-
-  useEffect(() => {
-    setCategory(common)
-  }, [common])
+  const maxCount = [0, 1, 2, 3, 4]
+  const [rating, setRating] = useState(0)
   return (
     <>
       <div className={`col-sm-8 p-0 rounded-end ${styles['form-container']}`}>
@@ -21,22 +18,6 @@ export default function Form({ common = [] }) {
               <h2 className="fw-medium fs-5 d-flex py-3 m-0">我的評論</h2>
             </div>
             <div className="accordion-body overflow-auto">
-              {/* 篩選＆搜尋，要再調整 */}
-              <div className="d-flex justify-content-between align-items-center mb-3">
-                <div className="d-flex align-items-center">
-                  <button type="button" className="btn btn-sm text-secondary">
-                    全部
-                  </button>
-                  |
-                  <button type="button" className="btn btn-sm">
-                    商品
-                  </button>
-                  |
-                  <button type="button" className="btn btn-sm">
-                    課程
-                  </button>
-                </div>
-              </div>
               <table className="table mb-5">
                 <thead className="fs-6">
                   <tr>
@@ -52,7 +33,7 @@ export default function Form({ common = [] }) {
                   {common.map((item) => {
                     return (
                       <tr className="align-middle" key={item.id}>
-                        <td className="d-flex justify-content-center">
+                        <td className="col-2 d-flex justify-content-center">
                           <div
                             className={`rounded ${styles.avatar} flex-shrink-0`}
                           >
@@ -71,18 +52,22 @@ export default function Form({ common = [] }) {
                             )}
                           </div>
                         </td>
-                        <td>{item.name}</td>
-                        <td>
-                          {/* 改成map */}
-                          <FaStar className="text-secondary" />
-                          <FaStar className="text-secondary" />
-                          <FaStar className="text-secondary" />
-                          <FaStar className="text-secondary" />
-                          <FaStar className="text-secondary" />
+                        <td className="col-2">{item.name}</td>
+                        <td className="col-2">
+                          {maxCount.map((index) => {
+                            return (
+                              <FaStar
+                                key={`${item.id}${index}`}
+                                color={
+                                  index + 1 <= item.score ? 'gold' : 'gray'
+                                }
+                              />
+                            )
+                          })}
                         </td>
-                        <td>{item.comment}</td>
-                        <td>{item.created_at}</td>
-                        <td>
+                        <td className="col-2">{item.comment}</td>
+                        <td className="col-2">{item.created_at}</td>
+                        <td className="col-2">
                           <Link
                             href="#"
                             className="btn btn-secondary btn-sm text-white"
