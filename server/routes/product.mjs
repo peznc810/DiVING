@@ -310,7 +310,7 @@ function getIsCollect(mid, pid) {
 function insertCollect(data) {
   return new Promise(async (resolve, reject) => {
     const [result] = await db.execute(
-      'INSERT INTO `collect` (user_id, product_id) VALUES (?, ?);',
+      'INSERT INTO `collect` (user_id, product_id, state) VALUES (?, ?, 1);',
       [data.user_id, data.product_id],
     )
     if (result) {
