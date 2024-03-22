@@ -101,7 +101,7 @@ router.get('/getfav/:id',async function (req, res, next) {
 router.get('/orderdate', async function (req, res, next) {
   (async () => {
     try {
-      let [date] = await db.execute('SELECT preorder_date FROM `order_time`')
+      let [date] = await db.execute("SELECT preorder_date FROM order_time WHERE preorder_time LIKE '%AM%' AND preorder_time LIKE '%PM%' GROUP BY preorder_date")
       res.json(date)
     } catch (err) {
       console.error(err)

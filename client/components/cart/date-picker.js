@@ -20,10 +20,10 @@ export default function DatePicker({ getDate }) {
 
       const data = await response.json()
       const arrdate = data.map((v, i) => {
-        return v.preorder_date.split('T')[0]
+        return new Date(v.preorder_date).toLocaleDateString()
       })
       setBookedDates(arrdate)
-      console.log(arrdate)
+      console.log(data)
       return data
     } catch (error) {
       console.error(
@@ -66,6 +66,7 @@ export default function DatePicker({ getDate }) {
   }
 
   useEffect(() => {
+    getperoder()
     const daysInMonth = new Date(
       currentDate.getFullYear(),
       currentDate.getMonth() + 1,
@@ -85,14 +86,6 @@ export default function DatePicker({ getDate }) {
       ...Array.from({ length: daysInMonth }, (_, i) => i + 1),
     ])
   }, [currentDate])
-  useEffect(() => {
-    getperoder()
-    console.log(bookedDates)
-  }, [])
-  useEffect(() => {
-    // getperoder()
-    console.log(bookedDates)
-  }, [bookedDates])
 
   function handleKeyDown(event) {
     if (event.key === 'Enter' || event.key === ' ') {
@@ -133,14 +126,24 @@ export default function DatePicker({ getDate }) {
                 <div
                   className={`${Style['date']} ${
                     day === selectedDate ? Style['currentDate'] : ''
-                  } ${date < today ? Style['disabled'] : ''} ${
-                    bookedDates.includes(date) ? Style['disabled'] : ''
+                  } ${date < today ? Style['disabled'] : ''} 
+                  ${
+                    bookedDates.includes(date.toLocaleDateString())
+                      ? Style['disabled']
+                      : ''
                   }`}
                   key={index}
                   onKeyDown={handleKeyDown}
                   role="button"
                   tabIndex="0"
-                  onClick={() => day && handleDateChange(day)}
+                  onClick={() => {
+                    if (
+                      !bookedDates.includes(date.toLocaleDateString()) &&
+                      date > today
+                    ) {
+                      handleDateChange(day)
+                    }
+                  }}
                 >
                   {day || ''}
                 </div>

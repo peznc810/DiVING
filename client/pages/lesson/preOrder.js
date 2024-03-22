@@ -3,11 +3,38 @@ import { useRouter } from 'next/router'
 import { useCart } from '@/hooks/cart'
 import DatePicker from '@/components/cart/date-picker'
 import toast, { Toaster } from 'react-hot-toast'
+import { IoIosAdd } from 'react-icons/io'
+import { LuMinus } from 'react-icons/lu'
+
 import Style from '@/styles/lessonStyle/lesson.module.scss'
 export default function PreOrder() {
   const [selectedDate, setSelectedDate] = useState(null)
   const [time, setTime] = useState(null)
   const [count, setCount] = useState(0)
+  const api = 'http://localhost:3005/api/lesson'
+
+  const getordertime = async () => {
+    try {
+      const response = await fetch(`${api}/orderdate`)
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`)
+      }
+
+      const data = await response.json()
+      const arrdate = data.map((v, i) => {
+        return new Date(v.preorder_date).toLocaleDateString()
+      })
+      setTime(arrdate)
+      console.log(data)
+      return data
+    } catch (error) {
+      console.error(
+        `Failed to fetch data from ${api + '/' + 'orderdate'}: ${error.message}`
+      )
+      return null
+    }
+  }
   const amclick = () => {
     const am = '9:00'
     setTime(am)
@@ -16,7 +43,7 @@ export default function PreOrder() {
     const pm = '15:00'
     setTime(pm)
   }
-  console.log(time)
+
   const handleDateChange = (date) => {
     setSelectedDate(date)
     console.log(selectedDate)
@@ -27,18 +54,17 @@ export default function PreOrder() {
   const [perorder, setPerOrder] = useState({})
 
   const getOrderDetail = async () => {
-    const res = await fetch(`http://localhost:3005/api/lesson/getlist/${lid}`)
+    const res = await fetch(`${api}/getlist/${lid}`)
     const data = await res.json()
     const [newData] = data
     setPerOrder(newData)
   }
-  useEffect(() => {
-    console.log(time)
-  }, [time])
+
   useEffect(() => {
     if (router.isReady) {
       const { lid } = router.query
       getOrderDetail(lid)
+      getordertime()
     }
   }, [router.isReady])
 
@@ -119,14 +145,14 @@ export default function PreOrder() {
                     className={`${Style['btn-none']}`}
                     onClick={() => setCount(count + 1)}
                   >
-                    +
+                    <IoIosAdd className="fs-4" />
                   </button>
                   <p>{count}</p>
                   <button
                     className={`${Style['btn-none']} `}
                     onClick={() => count > 0 && setCount(count - 1)}
                   >
-                    <span className="fs-4">-</span>
+                    <LuMinus className="fs-4" />
                   </button>
                 </div>
               </div>
