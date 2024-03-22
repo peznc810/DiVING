@@ -12,6 +12,7 @@ import { Toaster } from 'react-hot-toast'
 import useCollect from '@/hooks/use-collect'
 
 export default function Card({ value, rating, setRating }) {
+  console.log(value)
   const [isHovered, setIsHovered] = useState(false)
 
   const { handleAddToFavorites, handleRemoveFavorites, favorites } = useCollect(
