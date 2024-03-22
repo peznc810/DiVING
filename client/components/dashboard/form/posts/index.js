@@ -7,8 +7,16 @@ import { FaTrashCan } from 'react-icons/fa6'
 import { MdOutlineLibraryAdd } from 'react-icons/md'
 import { FaEdit } from 'react-icons/fa'
 
+import usePagination from '@/hooks/use-pagination'
+import Pagination from '../pagination'
+
 export default function Index() {
   const [postList, setPostList] = useState([])
+  // 控制分頁
+  const { currentPage, pageItem, handlePage, getPageNumbers } = usePagination(
+    postList,
+    3
+  )
 
   const getPost = async () => {
     try {
@@ -22,10 +30,6 @@ export default function Index() {
       console.error('Error fetching data from the server:', e)
     }
   }
-
-  useEffect(() => {
-    getPost()
-  }, [])
 
   const handleDisablePost = async (e, postId) => {
     try {
@@ -49,6 +53,9 @@ export default function Index() {
     }
   }
 
+  useEffect(() => {
+    getPost()
+  }, [])
   return (
     <>
       <div className={`col-sm-8 p-0 rounded-end ${styles['form-container']}`}>
@@ -77,7 +84,7 @@ export default function Index() {
                 </thead>
                 <tbody>
                   {/* 之後改用map */}
-                  {postList.map((v, i) => (
+                  {pageItem.map((v, i) => (
                     <tr className="align-middle" key={v.id}>
                       <td>{i + 1}</td>
                       <td>
@@ -114,40 +121,13 @@ export default function Index() {
                   ))}
                 </tbody>
               </table>
-              <div className="d-flex justify-content-center">
-                {/* page要做成component */}
-                <div
-                  className="btn-group"
-                  role="group"
-                  aria-label="First group"
-                >
-                  {/* 要map */}
-                  <button
-                    type="button"
-                    className={`btn btn-outline-secondary btn-sm ${styles['hover-style']}`}
-                  >
-                    1
-                  </button>
-                  <button
-                    type="button"
-                    className={`btn btn-outline-secondary btn-sm ${styles['hover-style']}`}
-                  >
-                    2
-                  </button>
-                  <button
-                    type="button"
-                    className={`btn btn-outline-secondary btn-sm ${styles['hover-style']}`}
-                  >
-                    3
-                  </button>
-                  <button
-                    type="button"
-                    className={`btn btn-outline-secondary btn-sm ${styles['hover-style']}`}
-                  >
-                    4
-                  </button>
-                </div>
-              </div>
+              {/* 頁數按鈕 */}
+
+              <Pagination
+                currentPage={currentPage}
+                handlePage={handlePage}
+                getPageNumbers={getPageNumbers}
+              />
             </div>
           </div>
         </div>

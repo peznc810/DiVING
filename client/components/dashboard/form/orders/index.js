@@ -1,10 +1,14 @@
 import React from 'react'
 import styles from '../styles.module.scss'
 import Link from 'next/link'
-import { useRouter } from 'next/router'
+import usePagination from '@/hooks/use-pagination'
+import Pagination from '../pagination'
 
 export default function Form({ order = [] }) {
-  const router = useRouter()
+  const { currentPage, pageItem, handlePage, getPageNumbers } = usePagination(
+    order,
+    5
+  )
   return (
     <>
       <div className={`col-sm-8 p-0 rounded-end ${styles['form-container']}`}>
@@ -26,7 +30,7 @@ export default function Form({ order = [] }) {
                 </thead>
                 <tbody>
                   {/* 之後改用map */}
-                  {order.map((item) => {
+                  {pageItem.map((item) => {
                     return (
                       <tr className="align-middle" key={item.id}>
                         <td>{item.id}</td>
@@ -46,39 +50,13 @@ export default function Form({ order = [] }) {
                   })}
                 </tbody>
               </table>
-              <div className="d-flex justify-content-center">
-                <div
-                  className="btn-group"
-                  role="group"
-                  aria-label="First group"
-                >
-                  {/* 要map */}
-                  <button
-                    type="button"
-                    className={`btn btn-outline-secondary btn-sm ${styles['hover-style']}`}
-                  >
-                    1
-                  </button>
-                  <button
-                    type="button"
-                    className={`btn btn-outline-secondary btn-sm ${styles['hover-style']}`}
-                  >
-                    2
-                  </button>
-                  <button
-                    type="button"
-                    className={`btn btn-outline-secondary btn-sm ${styles['hover-style']}`}
-                  >
-                    3
-                  </button>
-                  <button
-                    type="button"
-                    className={`btn btn-outline-secondary btn-sm ${styles['hover-style']}`}
-                  >
-                    4
-                  </button>
-                </div>
-              </div>
+              {/* 頁數按鈕 */}
+
+              <Pagination
+                currentPage={currentPage}
+                handlePage={handlePage}
+                getPageNumbers={getPageNumbers}
+              />
             </div>
           </div>
         </div>
