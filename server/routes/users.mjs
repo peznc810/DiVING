@@ -364,7 +364,6 @@ router.get('/:id/favorite', checkToken, async (req, res) => {
 router.delete('/:id/delete-fav:pid', checkToken, async(req,res) => {
   const {id, pid} = req.params
   const checkId = req.decode.id
-  console.log(id, pid);
 
   // 確認授權會員與請求取得的會員資料是否為同一人
   // if (checkId !== id) {
@@ -375,7 +374,6 @@ router.delete('/:id/delete-fav:pid', checkToken, async(req,res) => {
     'SELECT * FROM `fav` WHERE `id` = ? AND `user_id` = ?',
     [pid, id]
   )
-  res.status(200).json({ status: 'success', msg: '取消收藏成功' })
   if (userData) {
     await db.execute(
       'DELETE FROM `fav` WHERE `id` = ? AND `user_id` = ?', [pid,id]

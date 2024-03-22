@@ -55,7 +55,7 @@ export default function Favorites() {
     if (auth.id !== '') {
       getUserFav(auth.id)
     }
-  }, [auth, fav])
+  }, [auth])
 
   return (
     <>

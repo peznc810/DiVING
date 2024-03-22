@@ -7,7 +7,17 @@ import Image from 'next/image'
 import { FaTrashCan } from 'react-icons/fa6'
 
 export default function Form({ fav = {}, auth = {}, delUserFav = () => {} }) {
-  // console.log(fav)
+  // 點擊顯示可使用的優惠券
+  const handleCouponValid = () => {
+    const validFav = couponHas.filter((coupon) => coupon.valid === 1)
+    setCoupon(validCoupon)
+  }
+
+  // 點擊顯示已失效的優惠券
+  const handleCouponUnValid = () => {
+    const unValidCoupon = couponHas.filter((coupon) => coupon.valid === 0)
+    setCoupon(unValidCoupon)
+  }
   return (
     <>
       <div className={`col-sm-8 p-0 rounded-end ${styles['form-container']}`}>
