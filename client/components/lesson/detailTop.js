@@ -6,10 +6,13 @@ import { FaHeart } from 'react-icons/fa'
 import { GiRoundStar } from 'react-icons/gi'
 import Style from '@/styles/lessonStyle/star.module.css'
 import derailTopStyle from '@/styles/lessonStyle/detailTop.module.scss'
+import { useAuth } from '@/hooks/auth'
+import { auth } from '@/config/firebase'
 
 export default function DetailTop({ selectData }) {
+  const { auth } = useAuth()
   // 取得uesr 狀態
-  const userState = 5
+  const userState = auth.id
   const pid = selectData.id
   const api = `http://localhost:3005/api/lesson`
   //---get fav API

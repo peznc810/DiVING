@@ -2,12 +2,19 @@ import React from 'react'
 import styles from '../styles.module.scss'
 import Link from 'next/link'
 import Image from 'next/image'
+import usePagination from '@/hooks/use-pagination'
+import Pagination from '../pagination'
 
 // React icon
 import { FaTrashCan } from 'react-icons/fa6'
 
 export default function Form({ fav = {}, auth = {}, delUserFav = () => {} }) {
-  const imgSrc = fav.map((item) => {
+  // 控制分頁
+  const { currentPage, pageItem, handlePage, getPageNumbers } = usePagination(
+    fav,
+    2
+  )
+  const imgSrc = pageItem.map((item) => {
     if (item.product_id) {
       const template = `/images/product/images/${item.product_category}/${item.product_id}/${item.img}`
       return template
@@ -38,7 +45,7 @@ export default function Form({ fav = {}, auth = {}, delUserFav = () => {} }) {
                 </thead>
                 <tbody>
                   {/* 之後改用map */}
-                  {fav.map((item, index) => {
+                  {pageItem.map((item, index) => {
                     return (
                       <tr className="align-middle" key={item.id}>
                         <td className="d-flex justify-content-center">
@@ -74,40 +81,12 @@ export default function Form({ fav = {}, auth = {}, delUserFav = () => {} }) {
                   })}
                 </tbody>
               </table>
-              <div className="d-flex justify-content-center">
-                {/* page要做成component */}
-                <div
-                  className="btn-group"
-                  role="group"
-                  aria-label="First group"
-                >
-                  {/* 要map */}
-                  <button
-                    type="button"
-                    className={`btn btn-outline-secondary btn-sm ${styles['hover-style']}`}
-                  >
-                    1
-                  </button>
-                  <button
-                    type="button"
-                    className={`btn btn-outline-secondary btn-sm ${styles['hover-style']}`}
-                  >
-                    2
-                  </button>
-                  <button
-                    type="button"
-                    className={`btn btn-outline-secondary btn-sm ${styles['hover-style']}`}
-                  >
-                    3
-                  </button>
-                  <button
-                    type="button"
-                    className={`btn btn-outline-secondary btn-sm ${styles['hover-style']}`}
-                  >
-                    4
-                  </button>
-                </div>
-              </div>
+              {/* 頁數按鈕 */}
+              <Pagination
+                currentPage={currentPage}
+                handlePage={handlePage}
+                getPageNumbers={getPageNumbers}
+              />
             </div>
           </div>
         </div>
