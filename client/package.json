@@ -40,10 +40,6 @@
     "slick-carousel": "^1.8.1",
     "sweetalert2": "^11.10.6",
     "sweetalert2-react-content": "^5.0.7",
-<<<<<<< HEAD
-    "slick-carousel": "^1.8.1",
-=======
->>>>>>> main
     "swiper": "^11.0.7",
     "swr": "^2.2.4",
     "validator": "^13.9.0",

@@ -42,6 +42,7 @@ export default function Index() {
   useEffect(() => {
     if (auth.id !== '') {
       getPost(auth.id)
+      console.log(auth.id)
     }
   }, [auth])
 

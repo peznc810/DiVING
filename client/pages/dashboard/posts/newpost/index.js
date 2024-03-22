@@ -149,6 +149,7 @@ export default function Index() {
               id="file"
               accept="image/*"
               onChange={changeHandler}
+              required
             />
           </label>
           {selectedFile && (

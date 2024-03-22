@@ -19,6 +19,7 @@ export default function Quill({ initialContent, onChange }) {
       ['link'],
       [{ align: [] }],
       [{ color: [] }],
+      [{ background: [] }],
       ['code-block'],
       ['clean'],
     ],
@@ -38,6 +39,7 @@ export default function Quill({ initialContent, onChange }) {
     'align',
     'color',
     'code-block',
+    'background',
   ]
 
   const handleContentChange = (newContent) => {

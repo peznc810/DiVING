@@ -13,7 +13,7 @@ const app = express();
   const { searchText } = req.query; 
 
     try {
-      const [result] = await db.execute(`SELECT post.id as post_id, post.*, users.id as user_id, users.name FROM post JOIN users ON post.user_id = users.id WHERE title LIKE ? OR content LIKE ? ORDER BY published_at DESC`, ['%' + searchText + '%', '%' + searchText + '%']);
+      const [result] = await db.execute(`SELECT post.id as post_id, post.*, users.uid as user_id, users.name FROM post JOIN users ON post.user_id = users.uid WHERE title LIKE ? OR content LIKE ? AND post.valid = ? ORDER BY published_at DESC`, ['%' + searchText + '%', '%' + searchText + '%', 1]);
 
       res.json(result);
     } catch (error) {
@@ -29,7 +29,7 @@ const app = express();
     
     try {
       //抓出post.id 避免被userId覆寫 
-      const [result] = await db.execute( 'SELECT post.id as post_id, post.*, users.id as user_id, users.name FROM post JOIN users ON post.user_id = users.id WHERE post.user_id = ? ORDER BY published_at DESC AND post.valid = ?',[userId, 1]);
+      const [result] = await db.execute( 'SELECT post.id as post_id, post.*, users.uid as user_id, users.name FROM post JOIN users ON post.user_id = users.uid WHERE post.user_id = ? AND post.valid = ? ORDER BY published_at DESC ',[userId, 1]);
       
       if (result.length === 0) {
         // 如果结果為空，返回一个[]
@@ -48,7 +48,7 @@ const app = express();
   router.get('/:pid', async (req, res) => {
     const postId = req.params.pid;
     try {
-      const [result] = await db.execute('SELECT post.id as post_id, post.*, users.id as user_id, users.name FROM post JOIN users ON post.user_id = users.id WHERE post.id = ? ', [postId]);
+      const [result] = await db.execute('SELECT post.id as post_id, post.*, users.uid as user_id, users.name FROM post JOIN users ON post.user_id = users.uid WHERE post.id = ? ', [postId]);
 
       if(result.length === 1) {
           res.json(result[0]); //回傳單篇文章的數據
@@ -61,12 +61,11 @@ const app = express();
     }
 });
 
-
   //文章標籤 導頁
   router.get('/tags/:tags', async (req, res) => {
     const tags = req.params.tags;
     try {
-      const [result] = await db.execute(' SELECT post.id as post_id, post.*, users.id as user_id, users.name FROM post JOIN users ON post.user_id = users.id WHERE tags LIKE ?', [`%${tags}%`]);
+      const [result] = await db.execute(' SELECT post.id as post_id, post.*, users.uid as user_id, users.name FROM post JOIN users ON post.user_id = users.uid WHERE tags LIKE ?', [`%${tags}%`]);
 
       if(result.length >= 1) {
           res.json(result); //回傳單篇文章的數據
@@ -108,7 +107,7 @@ const upload = multer({ storage: storage });
 
 //dashboard 新增文章
 router.post('/new', upload.single('images') , async (req, res) => {
-  const {user_id,title, content, tags} = req.body;
+  const {user_id, title, content, tags} = req.body;
   const id = uuidv4();
   const now = new Date();
   const image = req.file.filename; 
