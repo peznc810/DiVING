@@ -44,7 +44,7 @@
   color: red;
 }
 
-.star-btn {
+.btn-none {
   background-color: transparent;
   border: none;
   outline: none;
@@ -69,4 +69,9 @@
   .hover-none {
     pointer-events: none;
   }
+}
+.text-area {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }

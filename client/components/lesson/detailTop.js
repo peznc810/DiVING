@@ -5,6 +5,8 @@ import { Row, Col } from 'react-bootstrap'
 import { FaHeart } from 'react-icons/fa'
 import { GiRoundStar } from 'react-icons/gi'
 import Style from '@/styles/lessonStyle/star.module.css'
+import derailTopStyle from '@/styles/lessonStyle/detailTop.module.scss'
+import { FaV } from 'react-icons/fa6'
 
 export default function DetailTop({ selectData }) {
   // 取得uesr 狀態
@@ -30,6 +32,7 @@ export default function DetailTop({ selectData }) {
         .catch((error) => {
           console.error('Error:', error)
         })
+      console.log(fav)
       return newFav
     })
   }
@@ -106,6 +109,7 @@ export default function DetailTop({ selectData }) {
       getStar(pid)
       getFav(pid)
     }
+    console.log()
   }, [router.isReady, pid, fav])
   return (
     <>
@@ -118,22 +122,25 @@ export default function DetailTop({ selectData }) {
         </Col>
         <Col lg={5}>
           <Row>
-            <Col lg={12}>
-              <div className="fs-4 fw-bold">課程說明</div>
-              <p className="fs-5 mt-3 lh-lg" style={{ height: '10rem' }}>
-                {lesson.info}
-              </p>
-              {}
+            <Col lg={12} className="">
+              <div className={`fs-4 fw-bold ${derailTopStyle['detailbox']}`}>
+                課程說明
+              </div>
+              <p className={`fs-5 lh-lg`}>{lesson.info}</p>
+            </Col>
+            <div className="d-flex justify-content-between mt-3">
               <div
-                className={`btn border rounded-pill me-1 text-white ${
+                className={`text-center btn border rounded-pill me-1 text-white ${
                   buttonStyle == '專業科目' ? 'bg-danger' : 'bg-success'
                 } `}
                 style={{ buttonStyle }}
               >
                 {lesson.tag}
               </div>
-              <div className="fs-5 text-danger mt-3">NT$ {lesson.price}</div>
-            </Col>
+              <div className="fs-5 text-end text-danger ">
+                NT$ {lesson.price}
+              </div>
+            </div>
             <Col lg={12}>
               <div className="d-flex justify-content-between mt-3">
                 <div className="fs-4 d-flex align-items-center">
@@ -153,13 +160,17 @@ export default function DetailTop({ selectData }) {
                 </div>
               </div>
             </Col>
-            <button
-              className="btn btn-warning mt-3"
-              type="button"
-              onClick={goToPreOrder}
+            <div
+              className={`d-grid gap-2 col-12 mx-auto mt-4 ${derailTopStyle['phone-mt']}`}
             >
-              立即預約
-            </button>
+              <button
+                className={`btn ${derailTopStyle['btn-color']} fs-5 fw-bold`}
+                type="button"
+                onClick={goToPreOrder}
+              >
+                立即預約
+              </button>
+            </div>
           </Row>
         </Col>
       </Row>

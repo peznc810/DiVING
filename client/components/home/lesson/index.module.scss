@@ -1,18 +1,18 @@
 @import '@/styles/variable.scss';
 
 .LessonSection {
-  // background-color: $info;
+  background-image: linear-gradient(to bottom, #265778de 10%, #26577800 100%);
   box-sizing: border-box;
   padding-top: 70px;
-  padding-bottom: 120px;
+  padding-bottom: 50px;
   letter-spacing: 1px;
-  background-image: linear-gradient(
-    to top,
-    rgba(1, 60, 100, 0) 0%,
-    #265475bc 3%,
-    #2654756f 97%,
-    rgba(1, 60, 100, 0) 100%
-  );
+  // background-image: linear-gradient(
+  //   to top,
+  //   rgba(1, 60, 100, 0) 0%,
+  //   #265475bc 3%,
+  //   #2654756f 97%,
+  //   rgba(1, 60, 100, 0) 100%
+  // );
   filter: blur(10);
   .titleBlock {
     position: relative;
@@ -52,48 +52,69 @@
   }
 
   .lessonScroll {
+    overflow-x: scroll;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: thin; /* "auto" or "thin" */
+    scrollbar-color: #ffffff4e transparent;
+    margin-top: 60px;
     .lessonItem {
       position: relative;
-      overflow: hidden; //隱藏超出去content
-      width: 320px;
-      height: 320px;
-      .lessonLink {
-        color: #fff;
-        .info {
-          width: 150px;
-          height: 56px;
-          position: absolute;
-          top: calc(50% - 28px);
-          left: calc(50% - 75px);
-          z-index: 4;
-        }
-        .imgDiv {
-          position: relative;
-          width: 320px;
-          height: 320px;
-        }
-      }
-    }
-    .lessonItem:hover {
+      width: 450px;
+      height: 310px;
+      margin-inline: 4px;
       overflow: hidden;
-      .info {
-        display: none;
+      .videoDiv {
+        width: 100%;
+        height: 300px;
+        border-radius: 4px;
+        overflow: hidden;
+        video {
+          height: 100%;
+          object-fit: cover;
+        }
       }
-      .divHover {
+      .block {
+        width: 100%;
+        height: 300px;
         position: absolute;
         top: 0;
         left: 0;
-        z-index: 10;
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(#ff9720c6, #ff97203d);
-        animation: itemHoverAni 1s linear;
+        background: linear-gradient(to top, #253948c4 10%, #daebf90f 100%);
+        transition-duration: 2s;
+        animation: hoverAni 1s linear;
+      }
+
+      .play {
+        position: absolute;
+        top: 20px;
+        left: 20px;
+        width: 30px;
+        height: 30px;
+        border-radius: 25px;
+        background-color: #fff;
+        text-align: center;
+        line-height: 30px;
+        color: $info;
+        animation: hoverAni 2s ease-out;
+      }
+      .info {
+        position: absolute;
+        bottom: 35px;
+        left: 20px;
+        color: #fff;
+        animation: hoverAni 1s linear;
+        .enName {
+          h5 {
+            font-size: 24px;
+            margin-bottom: 6px;
+          }
+        }
       }
     }
   }
 }
 
-@keyframes itemHoverAni {
+@keyframes hoverAni {
   from {
     opacity: 0;
   }
@@ -102,18 +123,31 @@
   }
 }
 
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 390px) {
   .LessonSection {
     .titleBlock {
       .title {
         margin-left: 10px;
       }
     }
-  }
 
-  .LessonSection {
     .lessonScroll {
-      flex-wrap: wrap;
+      .lessonItem {
+        width: 360px;
+        height: 280px;
+        margin-inline: 10px;
+        .videoDiv {
+          width: 100%;
+          height: 280px;
+          border-radius: 4px;
+          video {
+            object-fit: contain;
+          }
+        }
+      }
+    }
+    .block {
+      height: 280px;
     }
   }
 }

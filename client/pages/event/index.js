@@ -8,6 +8,7 @@ import { useEvent } from '@/hooks/use-eventData'
 export default function Event() {
   const [loading, setLoading] = useState(false)
   const eventList = useEvent()
+  console.log(eventList)
 
   useEffect(() => {
     setLoading(true)

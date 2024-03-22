@@ -15,15 +15,15 @@ import { useAuth } from '@/hooks/auth'
 // Alert
 import { Toaster } from 'react-hot-toast'
 
+// loading
+import Loading from '@/components/layout/loading/loading'
+
 export default function Login() {
   const { login, loginGoogle, auth, setMsg, errorMsg } = useAuth()
   const { loginGoogleRedirect, logoutFirebase, initGoogle } = useFirebase()
   const { type, icon, handleToggle } = useShow()
-
-  // 初次渲染時監聽firebase的google登入狀態
-  useEffect(() => {
-    initGoogle(callbackGoogleLogin)
-  }, [])
+  const [isChecked, setIsChecked] = useState(Boolean)
+  const [loading, setLoading] = useState(true)
 
   // 將拿到的google資料進行處理
   const callbackGoogleLogin = (providerData) => {
@@ -41,10 +41,6 @@ export default function Login() {
     emailVal: '',
     passwordVal: '',
   })
-
-  useEffect(() => {
-    setMsg('')
-  }, [inputVal])
 
   const handleLogin = (e) => {
     e.preventDefault()
@@ -71,22 +67,6 @@ export default function Login() {
         login(e)
     }
   }
-  // 表單驗證 END
-
-  // 記住我 START
-  const [isChecked, setIsChecked] = useState(Boolean)
-
-  useEffect(() => {
-    // 初始化取得先前存放的localStorage
-    const checkedValue = localStorage.getItem('checked') === 'true'
-    setIsChecked(checkedValue)
-    // 先前未勾選並進入頁面時時 input 為 null
-    const input = localStorage.getItem('email')
-    // 如果input是null的話，表單驗證無法判斷
-    input === null
-      ? setVal({ ...inputVal, emailVal: '' })
-      : setVal({ ...inputVal, emailVal: input })
-  }, [])
 
   const handleChecked = (e) => {
     // 抓取被勾選
@@ -112,122 +92,155 @@ export default function Login() {
       localStorage.setItem('email', emailVal)
     }
   }
-  // 記住我 END
+
+  // 初次渲染時監聽firebase的google登入狀態
+  useEffect(() => {
+    initGoogle(callbackGoogleLogin)
+    setTimeout(() => {
+      setLoading(false)
+    }, 2000)
+  }, [])
+
+  useEffect(() => {
+    setMsg('')
+  }, [inputVal])
+
+  useEffect(() => {
+    // 初始化取得先前存放的localStorage
+    const checkedValue = localStorage.getItem('checked') === 'true'
+    setIsChecked(checkedValue)
+    // 先前未勾選並進入頁面時時 input 為 null
+    const input = localStorage.getItem('email')
+    // 如果input是null的話，表單驗證無法判斷
+    input === null
+      ? setVal({ ...inputVal, emailVal: '' })
+      : setVal({ ...inputVal, emailVal: input })
+  }, [])
+
   return (
     <>
       <Head>
         <title>會員登入</title>
       </Head>
-      <main className={`${styles['main-style']}`}>
-        <div className="d-flex justify-content-center">
-          <div className={`${styles['card-style']}`}>
-            <form onSubmit={handleLogin}>
-              <h2 className="fs-3 mb-4 text-center">會員登入</h2>
-              <div className={`mb-3 ${styles['input-style']}`}>
-                <input
-                  type="text"
-                  name="userEmail"
-                  id="userEmail"
-                  placeholder="請輸入"
-                  onChange={handleInputVal}
-                  value={inputVal.emailVal}
-                />
-                <label htmlFor="userEmail">電子郵件</label>
-              </div>
-              <div className={`position-relative ${styles['input-style']}`}>
-                <input
-                  type={type}
-                  name="userPWD"
-                  id="userPWD"
-                  placeholder="請輸入8-12位(含大小寫英文字母)"
-                  maxLength={12}
-                  onChange={(e) =>
-                    setVal({ ...inputVal, passwordVal: e.target.value })
-                  }
-                />
-                <button
-                  type="button"
-                  className="fs-4 position-absolute pb-3"
-                  style={{
-                    transform: 'translateY(-50%)',
-                    top: '50%',
-                    right: '8px',
-                    border: 'none',
-                    background: 'none',
-                  }}
-                  onClick={handleToggle}
-                >
-                  {icon}
-                </button>
-                <label htmlFor="userPWD">密碼</label>
-              </div>
-              {/* 記住我＆忘記密碼 */}
-              <div className={`row justify-content-between ${styles.space}`}>
-                <div className="col-auto">
-                  <div className="form-check">
+      {loading ? (
+        <Loading />
+      ) : (
+        <>
+          <main className={`${styles['main-style']}`}>
+            <div className="d-flex justify-content-center">
+              <div className={`${styles['card-style']}`}>
+                <form onSubmit={handleLogin}>
+                  <h2 className="fs-3 mb-4 text-center">會員登入</h2>
+                  <div className={`mb-3 ${styles['input-style']}`}>
                     <input
-                      type="checkbox"
-                      name="remember"
-                      id="remember"
-                      className="form-check-input"
-                      onChange={handleChecked}
-                      checked={isChecked}
+                      type="text"
+                      name="userEmail"
+                      id="userEmail"
+                      placeholder="請輸入"
+                      onChange={handleInputVal}
+                      value={inputVal.emailVal}
                     />
-                    <label
-                      htmlFor="remember"
-                      className="form-check-label small"
+                    <label htmlFor="userEmail">電子郵件</label>
+                  </div>
+                  <div className={`position-relative ${styles['input-style']}`}>
+                    <input
+                      type={type}
+                      name="userPWD"
+                      id="userPWD"
+                      placeholder="請輸入8-12位(含大小寫英文字母)"
+                      maxLength={12}
+                      onChange={(e) =>
+                        setVal({ ...inputVal, passwordVal: e.target.value })
+                      }
+                    />
+                    <button
+                      type="button"
+                      className="fs-4 position-absolute pb-3"
+                      style={{
+                        transform: 'translateY(-50%)',
+                        top: '50%',
+                        right: '8px',
+                        border: 'none',
+                        background: 'none',
+                      }}
+                      onClick={handleToggle}
                     >
-                      記住我
-                    </label>
+                      {icon}
+                    </button>
+                    <label htmlFor="userPWD">密碼</label>
                   </div>
-                </div>
-                <div className="col-auto">
-                  <Link href="/users/forget-password" className="small">
-                    忘記密碼？
-                  </Link>
-                </div>
-              </div>
-              {/* END */}
-              {/* 警示標語 */}
-              <div
-                className={`fw-medium text-center text-danger mb-0 ${styles.notify}`}
-              >
-                {errorMsg}
-              </div>
-              {/* END */}
-              <button className={`fw-medium ${styles.btn}`}>登入</button>
-              <div className="row justify-content-center align-items-center">
-                <div className="col-10">
+                  {/* 記住我＆忘記密碼 */}
                   <div
-                    className={`d-flex justify-content-center align-items-center mt-2 small ${styles.title}`}
+                    className={`row justify-content-between ${styles.space}`}
                   >
-                    或
+                    <div className="col-auto">
+                      <div className="form-check">
+                        <input
+                          type="checkbox"
+                          name="remember"
+                          id="remember"
+                          className="form-check-input"
+                          onChange={handleChecked}
+                          checked={isChecked}
+                        />
+                        <label
+                          htmlFor="remember"
+                          className="form-check-label small"
+                        >
+                          記住我
+                        </label>
+                      </div>
+                    </div>
+                    <div className="col-auto">
+                      <Link href="/users/forget-password" className="small">
+                        忘記密碼？
+                      </Link>
+                    </div>
                   </div>
-                </div>
-                <div className="col-10 mt-3 text-center">
-                  <button
-                    type="button"
-                    className={`small ${styles.btn} w-100`}
-                    onClick={loginGoogleRedirect}
+                  {/* END */}
+                  {/* 警示標語 */}
+                  <div
+                    className={`fw-medium text-center text-danger mb-0 ${styles.notify}`}
                   >
-                    <FcGoogle className="me-2" />
-                    使用 Google 帳號登入
-                  </button>
-                </div>
+                    {errorMsg}
+                  </div>
+                  {/* END */}
+                  <button className={`fw-medium ${styles.btn}`}>登入</button>
+                  <div className="row justify-content-center align-items-center">
+                    <div className="col-10">
+                      <div
+                        className={`d-flex justify-content-center align-items-center mt-2 small ${styles.title}`}
+                      >
+                        快速登入
+                      </div>
+                    </div>
+                    <div className="col-10 mt-3 text-center">
+                      <button
+                        type="button"
+                        className={`small ${styles.btn} w-100`}
+                        onClick={loginGoogleRedirect}
+                      >
+                        <FcGoogle className="me-2" />
+                        使用 Google 帳號繼續
+                      </button>
+                    </div>
+                  </div>
+                  <p className="text-center mb-0 small">
+                    還沒有帳號嗎？
+                    <Link
+                      href="/users/register"
+                      className="text-secondary fw-medium"
+                    >
+                      立即註冊
+                    </Link>
+                  </p>
+                </form>
               </div>
-              <p className="text-center mb-0 small">
-                還沒有帳號嗎？
-                <Link
-                  href="/users/register"
-                  className="text-secondary fw-medium"
-                >
-                  立即註冊
-                </Link>
-              </p>
-            </form>
-          </div>
-        </div>
-      </main>
+            </div>
+          </main>
+        </>
+      )}
+
       <Toaster />
     </>
   )

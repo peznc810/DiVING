@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
 import styles from './coupon.module.scss'
+import { motion } from 'framer-motion'
 // 會員登入狀態
 import { useAuth } from '@/hooks/auth'
 import toast, { Toaster } from 'react-hot-toast'
@@ -99,7 +100,16 @@ export default function Coupon() {
 
   return (
     <>
-      <div
+      <motion.div
+        initial={{ opacity: 0, y: 100 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{
+          type: 'tween',
+          delay: 2,
+          duration: 0.5,
+          ease: 'easeIn',
+        }}
+        viewport={{ once: true }}
         className={`p-4  ${styles.couponBlock} ${
           showCoupon ? 'd-block' : 'd-none'
         }`}
@@ -177,7 +187,7 @@ export default function Coupon() {
                       領取優惠碼
                     </button>
                   ) : (
-                    <Link href={'/users/register'} className={`mt-0`}>
+                    <Link href={'/users/login'} className={`mt-0`}>
                       領取優惠碼
                     </Link>
                   )}
@@ -214,7 +224,7 @@ export default function Coupon() {
             </p>
           </div>
         )}
-      </div>
+      </motion.div>
       <Toaster position="bottom-right" reverseOrder={false} />
     </>
   )

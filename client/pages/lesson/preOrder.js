@@ -3,12 +3,24 @@ import { useRouter } from 'next/router'
 import { useCart } from '@/hooks/cart'
 import DatePicker from '@/components/cart/date-picker'
 import toast, { Toaster } from 'react-hot-toast'
+import Style from '@/styles/lessonStyle/lesson.module.scss'
 export default function PreOrder() {
   const date = new Date().getDate()
   const month = new Date().getMonth() + 1
   const year = new Date().getFullYear()
   const today = `${year}/${month}/${date}`
   const [selectedDate, setSelectedDate] = useState(today)
+  const [time, setTime] = useState('9:00')
+  const [count, setCount] = useState(1)
+  const amclick = () => {
+    const am = '9:00'
+    setTime(am)
+  }
+  const pmclick = () => {
+    const pm = '15:00'
+    setTime(pm)
+  }
+  console.log(time)
   const handleDateChange = (date) => {
     setSelectedDate(date)
     console.log(selectedDate)
@@ -18,14 +30,15 @@ export default function PreOrder() {
   const lid = router.query.lessonId
   const [perorder, setPerOrder] = useState({})
 
-  console.log(console.log(typeof selectedDate))
   const getOrderDetail = async () => {
     const res = await fetch(`http://localhost:3005/api/lesson/getlist/${lid}`)
     const data = await res.json()
     const [newData] = data
     setPerOrder(newData)
   }
-
+  useEffect(() => {
+    console.log(time)
+  }, [time])
   useEffect(() => {
     if (router.isReady) {
       const { lid } = router.query
@@ -33,13 +46,15 @@ export default function PreOrder() {
     }
   }, [router.isReady])
 
-  const addLesson = (lesson_id, order_time, name, price, num) => {
+  const addLesson = (lesson_id, order_time, name, price, limg) => {
     const item = {
       lesson_id,
       order_time,
+      time,
       name,
       price,
-      num,
+      num: count,
+      limg,
     }
     addItem(item)
     toast.success('已加入購物車')
@@ -72,14 +87,20 @@ export default function PreOrder() {
                   <button
                     type="button"
                     className="btn time-period-btn w-75 active"
+                    onClick={amclick}
                   >
                     <h5 className="fw-bold py-1">AM</h5>
                   </button>
                   <div className="w-25"></div>
-                  <button type="button" className="btn time-period-btn w-75">
+                  <button
+                    type="button"
+                    className="btn time-period-btn w-75"
+                    onClick={pmclick}
+                  >
                     <h5 className="fw-bold py-1">PM</h5>
                   </button>
                 </div>
+                {time}
               </div>
             </div>
           </div>
@@ -94,9 +115,26 @@ export default function PreOrder() {
                     ? perorder.date.split('T')[0]
                     : ''}
                 </p>
-                <p>課程時段:</p>
+                <p>課程時段: {time}</p>
                 <p className="fs14">上課地點: {perorder.locationDetail}</p>
                 <p className="fs14">價格: {perorder.price}</p>
+                <div className="d-flex align-items-center">
+                  <p>人數：</p>
+
+                  <button
+                    className={`${Style['btn-none']}`}
+                    onClick={() => setCount(count + 1)}
+                  >
+                    +
+                  </button>
+                  <p>{count}</p>
+                  <button
+                    className={`${Style['btn-none']} `}
+                    onClick={() => count > 0 && setCount(count - 1)}
+                  >
+                    <span className="fs-4">-</span>
+                  </button>
+                </div>
               </div>
               <hr />
               <button
@@ -108,7 +146,7 @@ export default function PreOrder() {
                     selectedDate,
                     perorder.title,
                     perorder.price,
-                    1
+                    `${perorder.img.split(',')[0]}.jpg`
                   )
                 }}
               >
