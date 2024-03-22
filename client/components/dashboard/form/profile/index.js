@@ -98,6 +98,7 @@ export default function Form({
                           className="form-control"
                           name="tel"
                           placeholder="0987654321"
+                          pattern="[0-9]{10}"
                           maxLength={10}
                           value={userProfile.tel}
                           onChange={handleChangeProfile}
