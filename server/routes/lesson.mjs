@@ -1,7 +1,7 @@
 import express from 'express'
 import multer from 'multer'
 import db from '../db.mjs'
-import jwt from 'jsonwebtoken'
+
 const router = express.Router()
 
 // 引入.env檔
@@ -14,7 +14,7 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
 // get list
-router.get('/getlist', function (req, res, next) {
+router.get('/getlist', async function (req, res, next) {
   (async () => {
     let [lesson] = await db
       .execute('SELECT * FROM `lesson`')
@@ -24,7 +24,7 @@ router.get('/getlist', function (req, res, next) {
 })
 
 // get id
-router.get('/getlist/:id', function (req, res, next) {
+router.get('/getlist/:id',async function (req, res, next) {
   (async () => {
     const lid = req.params.id
     let [lesson] = await db
@@ -39,7 +39,7 @@ router.get('/getlist/:id', function (req, res, next) {
 
 //get star
 
-router.get('/getstar/:id', function (req, res, next) {
+router.get('/getstar/:id', async function (req, res, next) {
   (async () => {
     const Sid = req.params.id
     let [star] = await db
@@ -73,7 +73,7 @@ router.post('/fav/:id', async (req, res) => {
 })
 
 // get fav
-router.get('/getfav/:id', function (req, res, next) {
+router.get('/getfav/:id',async function (req, res, next) {
     (async () => {
         const Sid = req.params.id
         const userState = req.query.userState
@@ -98,7 +98,7 @@ router.get('/getfav/:id', function (req, res, next) {
 });
 
 //get preoder_date
-router.get('/orderdate', function (req, res, next) {
+router.get('/orderdate', async function (req, res, next) {
   (async () => {
     try {
       let [date] = await db.execute('SELECT preorder_date FROM `order_time`')
