@@ -3,11 +3,11 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
-import styles from '@/styles/loader/loader_ripple.module.css'
 import postData from '@/data/post/post.json'
 import TagButton from '@/components/post/tagButton'
 import { Container, Card, Col, Row, Stack } from 'react-bootstrap'
 import DOMPurify from 'dompurify'
+import LoaderPing from '@/components/post/loaderPing'
 
 export default function Detail() {
   const router = useRouter()
@@ -57,15 +57,7 @@ export default function Detail() {
     }
   }, [router.isReady]) //Eddy說just警告
 
-  const loader = (
-    <>
-      <div className={styles['lds-ripple']}>
-        <div></div>
-        <div></div>
-        <div></div>
-      </div>{' '}
-    </>
-  )
+  const loader = <LoaderPing />
   const getTagsArray = (tagsString) => {
     // 檢查 tagsString 是否存在
     if (tagsString) {
@@ -87,7 +79,11 @@ export default function Detail() {
                       href={`/post/${v.id}`}
                       style={{ textDecoration: 'none' }}
                     >
-                      <Card.Img variant="top" src={`/images/post/${v.image}`} />
+                      <Card.Img
+                        variant="top"
+                        // src={`/images/post/${v.image}`}
+                        src={`http://localhost:3005/upload/${v.image}`}
+                      />
                     </Link>
                     <Card.Body className="bg-light">
                       <Card.Text>{v.title}</Card.Text>
@@ -95,7 +91,11 @@ export default function Detail() {
                       <Stack direction="horizontal" gap={1}>
                         <div>
                           {getTagsArray(v.tags).map((tag, index) => (
-                            <Link key={index} href="/post" target="_blank">
+                            <Link
+                              key={index}
+                              href={`/post/tagPost/${tag}`}
+                              target="_blank"
+                            >
                               <TagButton text={`# ${tag}`} />
                             </Link>
                           ))}
@@ -113,16 +113,20 @@ export default function Detail() {
           <Col md={8} className="bg-light p-4 mb-3">
             <p>{post.published}</p>
             <h3>{post.title}</h3>
-            作者：{post.user_id}
+            作者：{post.name}
             <div className="my-2">
               {' '}
               {getTagsArray(post.tags).map((tag, index) => (
-                <Link key={index} href="/post" target="_blank">
+                <Link key={index} href={`/post/tagPost/${tag}`} target="_blank">
                   <TagButton text={`# ${tag}`} />
                 </Link>
               ))}
             </div>
-            <Card.Img variant="top" src={`/images/post/${post.image}`} />
+            <Card.Img
+              variant="top"
+              // src={`/images/post/${post.image}`}
+              src={`http://localhost:3005/upload/${post.image}`}
+            />
             <div
               className="m-4"
               // dangerouslySetInnerHTML={{
