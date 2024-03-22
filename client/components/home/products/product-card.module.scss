@@ -1,9 +1,9 @@
 @import '@/styles/variable.scss';
 
 .cardItem {
-  width: 200px;
+  width: 280px;
   position: relative;
-  margin-inline: 30px;
+  margin-inline: 10px;
   margin-bottom: 20px;
   .tag {
     background-color: $danger;
@@ -15,24 +15,34 @@
     top: 0;
     left: 0;
     z-index: 2;
-    margin: 8px;
+    margin: 10px;
+    text-shadow: 0 0 5px #fff;
   }
   .imgDiv {
     border-radius: 4px;
     overflow: hidden;
     position: relative;
     width: 100%;
-    height: 250px;
+    height: 300px;
   }
 
   .cardBody {
     text-align: center;
     h5 {
-      font-size: 16px;
+      font-size: 17px;
     }
 
     p {
       color: $danger;
+    }
+  }
+}
+
+.cardItem:hover {
+  .imgDiv {
+    img {
+      transform: scale(1.2);
+      transition: transform 0.3s linear;
     }
   }
 }

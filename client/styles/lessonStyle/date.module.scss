@@ -1,0 +1,41 @@
+.calendarContainer {
+  display: flex;
+  justify-content: center;
+  .calendar {
+    width: calc(100% - 20px);
+    .nav {
+      display: flex;
+      justify-content: space-between;
+    }
+    .week {
+      font-weight: bold;
+    }
+    .dates {
+      .date {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        user-select: none;
+        cursor: pointer;
+        height: 3rem;
+        &:hover {
+          background-color: orange;
+        }
+      }
+      .disabled {
+        color: white;
+        background-color: #d9d9d9;
+        cursor: not-allowed;
+      }
+      .currentDate {
+        background-color: orange;
+        color: white;
+      }
+    }
+    .unit1 {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      text-align: center;
+    }
+  }
+}

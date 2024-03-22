@@ -51,13 +51,23 @@ export const findOneById = (items, id, isProduct) => {
  */
 export const updateOne = (items, updateItem) => {
   return items.map((item) => {
+    // if(item.product_id){
+
+    // }
     console.log(updateItem)
     if (
-      (String(item.product_id) || String(item.lesson_id)) ===
-      (String(updateItem.product_id) || String(updateItem.lesson_id))
+      item.product_id &&
+      String(item.product_id) === String(updateItem.product_id) &&
+      String(item.product_detail) === String(updateItem.product_detail)
     )
       return updateItem
-    else return item
+    else if (
+      item.lesson_id &&
+      String(item.lesson_id) === String(updateItem.lesson_id) &&
+      String(item.order_time) === String(updateItem.order_time)
+    ) {
+      return updateItem
+    } else return item
   })
 }
 /**
@@ -123,7 +133,10 @@ export const addOne = (items, newItem) => {
         item.product_detail === newItem.product_detail
       )
     } else if (item.lesson_id !== undefined) {
-      return String(item.lesson_id) === String(newItem.lesson_id)
+      return (
+        String(item.lesson_id) === String(newItem.lesson_id) &&
+        item.order_time === newItem.order_time
+      )
     } else {
       return false // 若兩者皆不存在，返回 false
     }

@@ -6,7 +6,7 @@ import Col from 'react-bootstrap/Col'
 import Head from 'next/head'
 // ----引入元件----
 import BsCard from '@/components/lesson/Bs-card'
-import AddrCheck from '@/components/lesson/Addrcheck'
+import InputCheck from '@/components/lesson/inputCheck'
 // import Difflayout from '@/components/lesson/Diffcheck'
 import List from '@/components/lesson/List'
 import Star from '@/components/lesson/star'
@@ -37,7 +37,6 @@ export default function Test() {
               <hr />
               <div className="mb-3">
                 <div className="fs-4 mb-1">商品評價</div>
-                {/* ---插入star--- */}
                 <Star></Star>
               </div>
               <div className="mb-3">
@@ -66,7 +65,7 @@ export default function Test() {
                   </div>
                 </div>
               </div>
-              <AddrCheck />
+              <InputCheck />
             </Col>
             <Col
               lg="9"
@@ -115,11 +114,6 @@ export default function Test() {
           style={{ paddingTop: '5rem' }}
         >
           <BsCard></BsCard>
-          {/* <Row className="">
-            <Col xs={6}>
-              
-            </Col>
-          </Row> */}
         </Container>
       </DiffCheck.Provider>
     </>

@@ -115,9 +115,20 @@ div.scroll {
 //   height: 15px;
 // }
 
+<<<<<<< HEAD
 // ::-webkit-scrollbar-thumb {
 //   border-radius: 5px;
 //   background-color: rgba(0, 0, 0, 0.241);
+=======
+// ::-webkit-scrollbar {
+//   -webkit-appearance: none;
+//   width: 7px;
+// }
+
+// ::-webkit-scrollbar-thumb {
+//   border-radius: 4px;
+//   background-color: rgba(0, 0, 0, 0.5);
+>>>>>>> main
 //   box-shadow: 0 0 1px rgba(255, 255, 255, 0.5);
 // }
 
@@ -236,14 +247,13 @@ div.scroll {
 }
 .brand-css,
 .category-css,
-.price-filter-css
-{
+.price-filter-css {
   font-size: 15px;
   color: #303132;
 }
 
 //product-list
-.viewmore-css{
+.viewmore-css {
   font-size: 16px;
   font-weight: 500;
 }
@@ -251,17 +261,17 @@ div.scroll {
 //product-detail
 .detail-TbHeartX,
 .detail-GoHeartFill,
-.detail-FaCartPlus{
+.detail-FaCartPlus {
   padding-bottom: 1.8px;
 }
 
 .GiClothes,
-.FaShuttleVan{
+.FaShuttleVan {
   padding-right: 2px;
 }
 
 //common
-.product-Breadcrumb{
+.product-Breadcrumb {
   font-size: 16.5px;
   font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
 }
