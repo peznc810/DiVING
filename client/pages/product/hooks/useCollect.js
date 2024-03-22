@@ -66,10 +66,7 @@ const useCollect = (pid) => {
     }
   }
 
-  const notify = (text, isSuccess = true) =>
-    toast(text, {
-      icon: isSuccess ? '✅' : 'X',
-    })
+  const notify = (text, isSuccess = true) => toast.success(text)
 
   return {
     handleAddToFavorites,
