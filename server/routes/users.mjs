@@ -350,10 +350,15 @@ router.get('/:id/favorite', checkToken, async (req, res) => {
   }
 
   const [userData] = await db.execute(
-    'SELECT collect.*, CASE WHEN collect.lesson_id IS NOT NULL THEN lesson.title ELSE product.name END AS name, CASE WHEN collect.lesson_id IS NOT NULL THEN lesson.price ELSE product.price END AS price, CASE WHEN collect.lesson_id IS NOT NULL THEN lesson.img ELSE product.img_top END AS img, product.id AS product_id, product.category AS product_category FROM collect LEFT JOIN product ON product.id = collect.product_id LEFT JOIN lesson ON lesson.id = collect.lesson_id WHERE collect.user_id = ?', [uid]
+    'SELECT collect.*, CASE WHEN collect.lesson_id IS NOT NULL THEN lesson.title ELSE product.name END AS name, CASE WHEN collect.lesson_id IS NOT NULL THEN lesson.price ELSE product.price END AS price, CASE WHEN collect.lesson_id IS NOT NULL THEN lesson.img ELSE product.img_top END AS img, product.id AS product_id, product.category AS product_category FROM collect LEFT JOIN product ON product.id = collect.product_id LEFT JOIN lesson ON lesson.id = collect.lesson_id WHERE collect.user_id = ? AND state = 1', [uid]
   )
 
   const data = formatDate(userData)
+
+  console.log("---");
+  console.log(data);
+  console.log("---");
+
   
   if (userData) {
     res.status(200).json({ status: 'success', data })
