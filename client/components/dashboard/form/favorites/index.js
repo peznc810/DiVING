@@ -14,6 +14,8 @@ export default function Form({ fav = {}, auth = {}, delUserFav = () => {} }) {
     fav,
     2
   )
+
+  console.log(fav)
   const imgSrc = pageItem.map((item) => {
     if (item.product_id) {
       const template = `/images/product/images/${item.product_category}/${item.product_id}/${item.img}`
