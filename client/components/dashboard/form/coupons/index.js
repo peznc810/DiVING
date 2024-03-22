@@ -4,6 +4,7 @@ import Image from 'next/image'
 import Swal from 'sweetalert2'
 import { useCouponHas } from '@/hooks/use-couponHasData'
 import usePagination from '@/hooks/use-pagination'
+import Pagination from '../pagination'
 
 export default function Form() {
   const { couponHas, authID, setCouponHas } = useCouponHas()
@@ -13,6 +14,12 @@ export default function Form() {
   // 初始化可使用的優惠券
   const initCoupon = couponHas.filter((coupon) => coupon.valid === 1)
   const [coupon, setCoupon] = useState([])
+
+  // 控制分頁
+  const { currentPage, pageItem, handlePage, getPageNumbers } = usePagination(
+    coupon,
+    6
+  )
 
   const input = (e) => {
     e.preventDefault()
@@ -94,26 +101,6 @@ export default function Form() {
   const handleCouponValid = (validNum) => {
     const validCoupon = couponHas.filter((coupon) => coupon.valid === validNum)
     setCoupon(validCoupon)
-  }
-
-  // 頁籤
-  const maxCount = 6
-  //初始頁
-  const [currentPage, setCurrentPage] = useState(1)
-  //每頁最後一個項目的索引值
-  const lastIndex = maxCount * currentPage
-  // 每頁第一個項目的索引值
-  const firstIndex = lastIndex - maxCount
-  // 當頁的項目
-  const pageItem = coupon.slice(firstIndex, lastIndex)
-  // 總頁數
-  const totalPages = Math.ceil(coupon.length / maxCount)
-  // 取得頁數陣列
-  const page = [...Array(totalPages).keys()]
-
-  const handlePage = (v) => {
-    const pageNum = v + 1
-    setCurrentPage(pageNum)
   }
 
   // 抓到資料後把資料設定進去coupon
@@ -215,29 +202,11 @@ export default function Form() {
                 </div>
               </div>
               {/* 頁數按鈕 */}
-              <div className="d-flex justify-content-center">
-                <div
-                  className="btn-group"
-                  role="group"
-                  aria-label="First group"
-                >
-                  {/* 要map */}
-                  {page.map((v) => {
-                    return (
-                      <button
-                        key={v}
-                        type="button"
-                        className={`btn btn-outline-secondary btn-sm ${styles['hover-style']}`}
-                        onClick={() => {
-                          handlePage(v)
-                        }}
-                      >
-                        {v + 1}
-                      </button>
-                    )
-                  })}
-                </div>
-              </div>
+              <Pagination
+                currentPage={currentPage}
+                handlePage={handlePage}
+                getPageNumbers={getPageNumbers}
+              />
             </div>
           </div>
         </div>
