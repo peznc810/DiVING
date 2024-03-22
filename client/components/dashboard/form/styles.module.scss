@@ -1,6 +1,7 @@
 @import '@/styles/variable.scss';
 
 .form-container {
+  position: relative;
   background-color: $white;
   border: 1px solid rgba(1, 60, 100, 0.2);
   border-left: 0;
@@ -45,10 +46,13 @@
     height: 60px;
     overflow: hidden;
   }
-  .card > * {
+  .card-list > * {
     min-height: 120px;
   }
-  .card {
+  .card-list {
+    .card {
+      flex: 0 0 300px;
+    }
     .rule {
       font-size: 12px;
     }
