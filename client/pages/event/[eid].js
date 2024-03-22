@@ -62,7 +62,10 @@ export default function EventArticle() {
       <div className={`container my-5 ${styles.eventPage}`}>
         <div className={`my-5 text-center`}>
           <h2>{event.title}</h2>
-          <div></div>
+          <div>
+            <i className="bi bi-calendar"></i>
+            <p></p>
+          </div>
         </div>
         <div className={`${styles.banner}`}>
           <Image
