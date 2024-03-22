@@ -67,7 +67,7 @@
   fill: #a8cd9f;
   stroke: #000;
   stroke-width: 0.5px;
-  animation: fill-in 2s 10s forwards;
+  animation: fill-in 2s 2s forwards;
   fill-opacity: 0;
 
   //各個區
@@ -149,7 +149,7 @@
 .weather {
   font-size: 20px;
   .weather-detail {
-    background-color: aquamarine;
+    background-color: rgba(149, 178, 203, 0.575);
     border-radius: 2%;
     line-height: 50px;
     span {

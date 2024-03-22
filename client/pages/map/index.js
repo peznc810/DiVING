@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Container, Row, Col, Button, Stack, Image } from 'react-bootstrap'
 import DiButton from '@/components/post/defaultButton'
-import { FaWind } from 'react-icons/fa'
+import { FaWind, FaTemperatureHigh } from 'react-icons/fa'
 import { TiWeatherCloudy } from 'react-icons/ti'
 import { LuWaves } from 'react-icons/lu'
 import ImageViewModal from '@/components/map/imageViewModal'
@@ -104,9 +104,9 @@ export default function Test() {
     StationName: '',
     StationID: '',
     WaveHeight: '',
+    WindDirection: '',
     SeaTemperature: '',
     WindSpeed: '',
-    WindDirection: '',
     WindDirectionDescription: '',
     DateTime: '',
   })
@@ -222,12 +222,12 @@ export default function Test() {
                   <div>
                     {/* 海溫 */}
                     <span>海溫(&#8451;)</span>
-                    <TiWeatherCloudy />
+                    <FaTemperatureHigh />
                     {currentWeather.SeaTemperature}
                   </div>
                   <div>
                     {/* 風速 */}
-                    <span>風速</span>
+                    <span>風速(m/s)(級)</span>
                     {currentWeather.WindSpeed}
                   </div>
                 </Stack>

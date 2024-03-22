@@ -91,7 +91,11 @@ export default function Detail() {
                       <Stack direction="horizontal" gap={1}>
                         <div>
                           {getTagsArray(v.tags).map((tag, index) => (
-                            <Link key={index} href="/post" target="_blank">
+                            <Link
+                              key={index}
+                              href={`/post/tagPost/${tag}`}
+                              target="_blank"
+                            >
                               <TagButton text={`# ${tag}`} />
                             </Link>
                           ))}
@@ -113,7 +117,7 @@ export default function Detail() {
             <div className="my-2">
               {' '}
               {getTagsArray(post.tags).map((tag, index) => (
-                <Link key={index} href="/post" target="_blank">
+                <Link key={index} href={`/post/tagPost/${tag}`} target="_blank">
                   <TagButton text={`# ${tag}`} />
                 </Link>
               ))}

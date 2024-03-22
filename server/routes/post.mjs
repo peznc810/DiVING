@@ -29,9 +29,15 @@ const app = express();
     
     try {
       //抓出post.id 避免被userId覆寫 
-      const [result] = await db.execute( 'SELECT post.id as post_id, post.*, users.id as user_id, users.name FROM post JOIN users ON post.user_id = users.id WHERE post.user_id = ? AND post.valid = ?',[userId, 1]);
+      const [result] = await db.execute( 'SELECT post.id as post_id, post.*, users.id as user_id, users.name FROM post JOIN users ON post.user_id = users.id WHERE post.user_id = ? ORDER BY published_at DESC AND post.valid = ?',[userId, 1]);
       
-      res.json(result);
+      if (result.length === 0) {
+        // 如果结果為空，返回一个[]
+        res.json([]);
+      } else {
+        // 如果结果不為空，返回查詢结果
+        res.json(result);
+      }
     } catch (error) {
       console.error('Error executing database query:', error);
       res.status(500).json({ error: 'NOOOOOO' });  
@@ -55,6 +61,25 @@ const app = express();
     }
 });
 
+
+  //文章標籤 導頁
+  router.get('/tags/:tags', async (req, res) => {
+    const tags = req.params.tags;
+    try {
+      const [result] = await db.execute(' SELECT post.id as post_id, post.*, users.id as user_id, users.name FROM post JOIN users ON post.user_id = users.id WHERE tags LIKE ?', [`%${tags}%`]);
+
+      if(result.length >= 1) {
+          res.json(result); //回傳單篇文章的數據
+      }else{
+          res.status(404).json({ error: '沒這個標籤啦'})
+      }
+    } catch (error) {
+      console.error('Error executing database query:', error);
+      res.status(500).json({ error: 'NOOOOOO' });    
+    }
+});
+
+
 //圖片上傳
 app.use(fileUpload({
   createParentPath: true,
@@ -63,6 +88,8 @@ app.use(fileUpload({
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+
+// app.use('/upload', express.static('upload'));
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {

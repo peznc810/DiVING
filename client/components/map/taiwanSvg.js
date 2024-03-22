@@ -8,7 +8,6 @@ function TaiwanSvg({ handleMapClick, pointStyle }) {
           className={styles['district']}
           stroke="linear-gradient(to bottom left, #c5d5fa, #c3dc99)"
           fill="#000"
-          fill-rule="nonzero"
         >
           <g>
             <path
