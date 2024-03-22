@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import Image from 'next/image'
 import styles from './myProduct.module.scss'
 
 import { useCart } from '@/hooks/cart'
@@ -11,14 +12,17 @@ export default function MyProduct({
   num = 0,
   isProduct,
   id,
+  img,
+  category,
 }) {
   const { increment, decrement, removeItem } = useCart()
+  let url = isProduct ? `/images/product/images/${category}/${id}/${img}` : ''
 
   return (
     <>
       <div className={`d-flex p-3 ${styles.myProduct}`}>
         <div className={`me-3 ${styles.productImg}`}>
-          <img src="" alt="" />
+          <Image src={url} alt="t" width={75} height={75} />
         </div>
         <div className={`${styles.info}`}>
           <h6 className="m-0">{name}</h6>
