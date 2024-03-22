@@ -12,14 +12,14 @@ export default function Delivery({
   const [sections, setSections] = useState([])
 
   useEffect(() => {
-    // 根据选择的城市更新区域选项
+    const initCity = addressOption.find((city) => city.CityName === '臺北市')
     const selectedCity = addressOption.find(
       (city) => city.CityName === user_city
     )
     if (selectedCity) {
       setSections(selectedCity.AreaList)
     } else {
-      setSections([])
+      setSections(initCity.AreaList)
     }
   }, [user_city])
 
