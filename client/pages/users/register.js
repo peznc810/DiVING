@@ -13,17 +13,14 @@ import useFirebase from '@/hooks/use-firebase'
 import useShow from '@/hooks/use-password-visibility'
 // Alert
 import { Toaster } from 'react-hot-toast'
+// loading
+import Loading from '@/components/layout/loading/loading'
 
 export default function SignUp() {
-  const { signUp, signUpGoogle, auth, setMsg, errorMsg } = useAuth()
+  const { signUp, auth, setMsg, errorMsg } = useAuth()
   const { loginGoogleRedirect, initGoogle, logoutFirebase } = useFirebase()
   const { type, icon, handleToggle } = useShow()
-
-  // 初次渲染時監聽firebase的google登入狀態
-  useEffect(() => {
-    setMsg('')
-    initGoogle(callbackGoogleSign)
-  }, [])
+  const [loading, setLoading] = useState(true)
 
   const [inputVal, setVal] = useState({
     userName: '',
@@ -35,10 +32,6 @@ export default function SignUp() {
   const handleVal = (e) => {
     setVal({ ...inputVal, [e.target.name]: e.target.value })
   }
-
-  useEffect(() => {
-    setMsg('')
-  }, [inputVal])
 
   const handleSignUp = (e) => {
     e.preventDefault()
@@ -71,119 +64,110 @@ export default function SignUp() {
     }
   }
 
-  // 將拿到的google資料進行處理
-  const callbackGoogleSign = (providerData) => {
-    // 取得使用者的資料
-    // console.log(providerData)
-    // 判斷當前是否已經登入，如果已登入就結束function（因為init本意為檢查是否登入，未登入才會執行其他事情）
-    if (auth.isAuth) return
-    // initGoogle取得資料並同步給其他function後，此處先將資料登出，避免google資料仍留存
-    logoutFirebase()
-    // 如果尚未登入，則執行註冊流程
-    signUpGoogle(providerData)
-  }
+  // 初次渲染時監聽firebase的google登入狀態
+  useEffect(() => {
+    setMsg('')
+    setTimeout(() => {
+      setLoading(false)
+    }, 2000)
+  }, [])
+
+  useEffect(() => {
+    setMsg('')
+  }, [inputVal])
+
   return (
     <>
-      <main className={`${styles['main-style']}`}>
-        <div className="d-flex justify-content-center">
-          <div className={`${styles['card-style']} ${styles['card-layout']}`}>
-            <form onSubmit={handleSignUp}>
-              <h2 className="fs-3 mb-4 text-center">註冊會員</h2>
-              <div className={`mb-3 ${styles['input-style']}`}>
-                <input
-                  type="text"
-                  name="userName"
-                  id="userName"
-                  placeholder="姓名"
-                  onChange={handleVal}
-                />
-                <label htmlFor="userName">姓名</label>
-              </div>
-              <div className={`mb-3 ${styles['input-style']}`}>
-                <input
-                  type="text"
-                  name="userEmail"
-                  id="userEmail"
-                  placeholder="電子郵件"
-                  onChange={handleVal}
-                />
-                <label htmlFor="userEmail">電子郵件</label>
-              </div>
+      {loading ? (
+        <Loading />
+      ) : (
+        <>
+          <main className={`${styles['main-style']}`}>
+            <div className="d-flex justify-content-center">
               <div
-                className={`position-relative mb-3 ${styles['input-style']}`}
+                className={`${styles['card-style']} ${styles['card-layout']}`}
               >
-                <input
-                  type={type}
-                  name="userPWD"
-                  id="userPWD"
-                  placeholder="請輸入8-12位(含大小寫英文字母)"
-                  maxLength={12}
-                  onChange={handleVal}
-                />
-                <button
-                  type="button"
-                  className="fs-4 position-absolute pb-3"
-                  style={{
-                    transform: 'translateY(-50%)',
-                    top: '50%',
-                    right: '8px',
-                    border: 'none',
-                    background: 'none',
-                  }}
-                  onClick={handleToggle}
-                >
-                  {icon}
-                </button>
-                <label htmlFor="userPWD">密碼</label>
-              </div>
-              <div className={styles['input-style']}>
-                <input
-                  type="password"
-                  name="rePWD"
-                  id="rePWD"
-                  placeholder="請再輸入一次"
-                  maxLength={12}
-                  onChange={handleVal}
-                />
-                <label htmlFor="rePWD">確認密碼</label>
-              </div>
-              {/* 警示標語 */}
-              <p
-                className={`fw-medium small text-center text-danger mb-0 ${styles.notify}`}
-              >
-                {errorMsg}
-              </p>
-              {/* END */}
-              <button className={`fw-medium ${styles.btn}`}>註冊</button>
-              <div className="row justify-content-center align-items-center">
-                <div className="col-10">
-                  <div
-                    className={`d-flex justify-content-center align-items-center mt-2 small ${styles.title}`}
-                  >
-                    或
+                <form onSubmit={handleSignUp}>
+                  <h2 className="fs-3 mb-4 text-center">註冊會員</h2>
+                  <div className={`mb-3 ${styles['input-style']}`}>
+                    <input
+                      type="text"
+                      name="userName"
+                      id="userName"
+                      placeholder="姓名"
+                      onChange={handleVal}
+                    />
+                    <label htmlFor="userName">姓名</label>
                   </div>
-                </div>
-                <div className="col-10 mt-3 text-center">
-                  <button
-                    type="button"
-                    className={`small ${styles.btn} w-100`}
-                    onClick={loginGoogleRedirect}
+                  <div className={`mb-3 ${styles['input-style']}`}>
+                    <input
+                      type="text"
+                      name="userEmail"
+                      id="userEmail"
+                      placeholder="電子郵件"
+                      onChange={handleVal}
+                    />
+                    <label htmlFor="userEmail">電子郵件</label>
+                  </div>
+                  <div
+                    className={`position-relative mb-3 ${styles['input-style']}`}
                   >
-                    <FcGoogle className="me-2" />
-                    使用 Google 帳號註冊
-                  </button>
-                </div>
+                    <input
+                      type={type}
+                      name="userPWD"
+                      id="userPWD"
+                      placeholder="請輸入8-12位(含大小寫英文字母)"
+                      maxLength={12}
+                      onChange={handleVal}
+                    />
+                    <button
+                      type="button"
+                      className="fs-4 position-absolute pb-3"
+                      style={{
+                        transform: 'translateY(-50%)',
+                        top: '50%',
+                        right: '8px',
+                        border: 'none',
+                        background: 'none',
+                      }}
+                      onClick={handleToggle}
+                    >
+                      {icon}
+                    </button>
+                    <label htmlFor="userPWD">密碼</label>
+                  </div>
+                  <div className={styles['input-style']}>
+                    <input
+                      type="password"
+                      name="rePWD"
+                      id="rePWD"
+                      placeholder="請再輸入一次"
+                      maxLength={12}
+                      onChange={handleVal}
+                    />
+                    <label htmlFor="rePWD">確認密碼</label>
+                  </div>
+                  {/* 警示標語 */}
+                  <p
+                    className={`fw-medium small text-center text-danger mb-0 ${styles.notify}`}
+                  >
+                    {errorMsg}
+                  </p>
+                  {/* END */}
+                  <button className={`fw-medium ${styles.btn}`}>註冊</button>
+                  <p className="text-center mb-0">
+                    已經有帳號嗎?
+                    <Link href="/users" className="ps-1 text-secondary fw-bold">
+                      立即登入
+                    </Link>
+                  </p>
+                </form>
               </div>
-              <p className="text-center mb-0">
-                已經有帳號嗎?
-                <Link href="/users" className="ps-1 text-secondary fw-bold">
-                  立即登入
-                </Link>
-              </p>
-            </form>
-          </div>
-        </div>
-      </main>
+            </div>
+          </main>
+        </>
+      )}
+
       <Toaster />
     </>
   )

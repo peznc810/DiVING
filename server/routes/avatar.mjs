@@ -32,13 +32,13 @@ const upload = multer({ storage: storage })
 
 // 更新avatar
 router.post('/upload', checkToken, upload.single('avatar'), async (req, res) => {
-  const id = req.decode.id
+  const uid = req.decode.id
   const fileName = req.file.filename
   
   // 把檔案名稱上傳到db
   await db.execute(
-    'UPDATE `users` SET `avatar` = ? WHERE `id` = ?',
-    [fileName, id]
+    'UPDATE `users` SET `avatar` = ? WHERE `uid` = ?',
+    [fileName, uid]
   )
     .then(
       res.status(200).json({ status: 'success', msg: '更新成功', avatar: fileName })
