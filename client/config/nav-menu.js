@@ -33,5 +33,6 @@ export const menuItems = [
     id: '5',
     label: '潛點地圖',
     href: '/map',
+    children: [{ id: '51', label: '文章區', href: '/post' }],
   },
 ]

@@ -84,7 +84,7 @@ export default function Home() {
   }
 
   return (
-    <div className="container">
+    <div className="container my-5">
       <CartStep step={1} />
       <Cart />
       <div className="row mt-5 container justify-content-between order-detail">
