@@ -12,10 +12,11 @@ export default function Form({ fav = {}, auth = {}, delUserFav = () => {} }) {
   // 控制分頁
   const { currentPage, pageItem, handlePage, getPageNumbers } = usePagination(
     fav,
-    2
+    6
   )
-
+  console.log(pageItem)
   console.log(fav)
+
   const imgSrc = pageItem.map((item) => {
     if (item.product_id) {
       const template = `/images/product/images/${item.product_category}/${item.product_id}/${item.img}`

@@ -12,14 +12,15 @@ export default function Form({ common = [] }) {
   // 控制分頁
   const { currentPage, pageItem, handlePage, getPageNumbers } = usePagination(
     common,
-    2
+    6
   )
+  console.log(common)
   // 星星評分
   const maxCount = 5
   const defaultStar = [...Array(maxCount).keys()]
 
   // 課程和商品分圖片的路徑
-  const imgSrc = common.map((item) => {
+  const imgSrc = pageItem.map((item) => {
     if (item.product_id) {
       const template = `/images/product/images/${item.product_category}/${item.product_id}/${item.img}`
       return template
@@ -58,11 +59,12 @@ export default function Form({ common = [] }) {
                           <div
                             className={`rounded ${styles.avatar} flex-shrink-0`}
                           >
-                            {item.product_id ? (
+                            <Image src={imgSrc[index]} alt={item.name} fill />
+                            {/* {item.product_id ? (
                               <Image src={imgSrc[index]} alt={item.name} fill />
                             ) : (
-                              <Image src={imgSrc[index]} alt={item.name} fill />
-                            )}
+                              
+                            )} */}
                           </div>
                         </td>
                         <td className="col-2">{item.name}</td>
