@@ -19,7 +19,7 @@ export default function Index() {
   // 控制分頁
   const { currentPage, pageItem, handlePage, getPageNumbers } = usePagination(
     postList,
-    3
+    10
   )
   const { auth } = useAuth()
   const router = useRouter()
@@ -42,8 +42,11 @@ export default function Index() {
   }
 
   useEffect(() => {
-    getPost()
-  }, [])
+    if (auth.id !== '') {
+      getPost(auth.id)
+      console.log(auth.id)
+    }
+  }, [auth])
 
   const handleDisablePost = async (e, postId) => {
     try {
