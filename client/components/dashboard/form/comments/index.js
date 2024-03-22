@@ -7,8 +7,21 @@ import Image from 'next/image'
 import { FaStar } from 'react-icons/fa'
 
 export default function Form({ common = [] }) {
-  const maxCount = [0, 1, 2, 3, 4]
-  const [rating, setRating] = useState(0)
+  // 星星評分
+  const maxCount = 5
+  const defaultStar = [...Array(maxCount).keys()]
+
+  // 課程和商品分圖片的路徑
+  const imgSrc = common.map((item) => {
+    if (item.product_id) {
+      const template = `/images/product/images/${item.product_category}/${item.product_id}/${item.img}`
+      return template
+    } else {
+      const fileName = item.img.split(',', 1) + '.jpg'
+      const template = `/images/lesson/${fileName}`
+      return template
+    }
+  })
   return (
     <>
       <div className={`col-sm-8 p-0 rounded-end ${styles['form-container']}`}>
@@ -30,7 +43,7 @@ export default function Form({ common = [] }) {
                   </tr>
                 </thead>
                 <tbody>
-                  {common.map((item) => {
+                  {common.map((item, index) => {
                     return (
                       <tr className="align-middle" key={item.id}>
                         <td className="col-2 d-flex justify-content-center">
@@ -38,29 +51,19 @@ export default function Form({ common = [] }) {
                             className={`rounded ${styles.avatar} flex-shrink-0`}
                           >
                             {item.product_id ? (
-                              <Image
-                                src={`/images/product/images/${item.product_category}/${item.product_id}/${item.img}`}
-                                alt={item.name}
-                                fill
-                              />
+                              <Image src={imgSrc[index]} alt={item.name} fill />
                             ) : (
-                              <Image
-                                src={`/image/users/unKnow.jpg`}
-                                alt={item.name}
-                                fill
-                              />
+                              <Image src={imgSrc[index]} alt={item.name} fill />
                             )}
                           </div>
                         </td>
                         <td className="col-2">{item.name}</td>
                         <td className="col-2">
-                          {maxCount.map((index) => {
+                          {defaultStar.map((v) => {
                             return (
                               <FaStar
-                                key={`${item.id}${index}`}
-                                color={
-                                  index + 1 <= item.score ? 'gold' : 'gray'
-                                }
+                                key={v}
+                                color={v + 1 <= item.score ? 'gold' : 'gray'}
                               />
                             )
                           })}

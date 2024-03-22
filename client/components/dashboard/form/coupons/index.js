@@ -3,6 +3,7 @@ import styles from '../styles.module.scss'
 import Image from 'next/image'
 import Swal from 'sweetalert2'
 import { useCouponHas } from '@/hooks/use-couponHasData'
+import usePagination from '@/hooks/use-pagination'
 
 export default function Form() {
   const { couponHas, authID, setCouponHas } = useCouponHas()
@@ -90,15 +91,29 @@ export default function Form() {
   }
 
   // 點擊顯示可使用的優惠券
-  const handleCouponValid = () => {
-    const validCoupon = couponHas.filter((coupon) => coupon.valid === 1)
+  const handleCouponValid = (validNum) => {
+    const validCoupon = couponHas.filter((coupon) => coupon.valid === validNum)
     setCoupon(validCoupon)
   }
 
-  // 點擊顯示已失效的優惠券
-  const handleCouponUnValid = () => {
-    const unValidCoupon = couponHas.filter((coupon) => coupon.valid === 0)
-    setCoupon(unValidCoupon)
+  // 頁籤
+  const maxCount = 6
+  //初始頁
+  const [currentPage, setCurrentPage] = useState(1)
+  //每頁最後一個項目的索引值
+  const lastIndex = maxCount * currentPage
+  // 每頁第一個項目的索引值
+  const firstIndex = lastIndex - maxCount
+  // 當頁的項目
+  const pageItem = coupon.slice(firstIndex, lastIndex)
+  // 總頁數
+  const totalPages = Math.ceil(coupon.length / maxCount)
+  // 取得頁數陣列
+  const page = [...Array(totalPages).keys()]
+
+  const handlePage = (v) => {
+    const pageNum = v + 1
+    setCurrentPage(pageNum)
   }
 
   // 抓到資料後把資料設定進去coupon
@@ -130,7 +145,9 @@ export default function Form() {
                   <button
                     type="button"
                     className="btn btn-sm text-secondary"
-                    onClick={handleCouponValid}
+                    onClick={() => {
+                      handleCouponValid(1)
+                    }}
                   >
                     可使用
                   </button>
@@ -138,7 +155,9 @@ export default function Form() {
                   <button
                     type="button"
                     className="btn btn-sm"
-                    onClick={handleCouponUnValid}
+                    onClick={() => {
+                      handleCouponValid(0)
+                    }}
                   >
                     已失效
                   </button>
@@ -167,7 +186,7 @@ export default function Form() {
               <div className="mb-5">
                 <div className={`row g-3 ${styles['card-list']}`}>
                   {/* 卡片本體 */}
-                  {coupon.map((v) => {
+                  {pageItem.map((v) => {
                     return (
                       <div
                         className={`col-12 col-md-6 ${styles.card}`}
@@ -203,30 +222,20 @@ export default function Form() {
                   aria-label="First group"
                 >
                   {/* 要map */}
-                  <button
-                    type="button"
-                    className={`btn btn-outline-secondary btn-sm ${styles['hover-style']}`}
-                  >
-                    1
-                  </button>
-                  <button
-                    type="button"
-                    className={`btn btn-outline-secondary btn-sm ${styles['hover-style']}`}
-                  >
-                    2
-                  </button>
-                  <button
-                    type="button"
-                    className={`btn btn-outline-secondary btn-sm ${styles['hover-style']}`}
-                  >
-                    3
-                  </button>
-                  <button
-                    type="button"
-                    className={`btn btn-outline-secondary btn-sm ${styles['hover-style']}`}
-                  >
-                    4
-                  </button>
+                  {page.map((v) => {
+                    return (
+                      <button
+                        key={v}
+                        type="button"
+                        className={`btn btn-outline-secondary btn-sm ${styles['hover-style']}`}
+                        onClick={() => {
+                          handlePage(v)
+                        }}
+                      >
+                        {v + 1}
+                      </button>
+                    )
+                  })}
                 </div>
               </div>
             </div>

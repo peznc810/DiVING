@@ -7,6 +7,16 @@ import Image from 'next/image'
 import { FaTrashCan } from 'react-icons/fa6'
 
 export default function Form({ fav = {}, auth = {}, delUserFav = () => {} }) {
+  const imgSrc = fav.map((item) => {
+    if (item.product_id) {
+      const template = `/images/product/images/${item.product_category}/${item.product_id}/${item.img}`
+      return template
+    } else {
+      const fileName = item.img.split(',', 1) + '.jpg'
+      const template = `/images/lesson/${fileName}`
+      return template
+    }
+  })
   return (
     <>
       <div className={`col-sm-8 p-0 rounded-end ${styles['form-container']}`}>
@@ -28,18 +38,14 @@ export default function Form({ fav = {}, auth = {}, delUserFav = () => {} }) {
                 </thead>
                 <tbody>
                   {/* 之後改用map */}
-                  {fav.map((item) => {
+                  {fav.map((item, index) => {
                     return (
                       <tr className="align-middle" key={item.id}>
                         <td className="d-flex justify-content-center">
                           <div
                             className={`rounded ${styles.avatar} flex-shrink-0`}
                           >
-                            <Image
-                              src="/images/coupons/turtle.jpg"
-                              alt="turtle"
-                              fill
-                            />
+                            <Image src={imgSrc[index]} alt="turtle" fill />
                           </div>
                         </td>
                         <td>{item.name}</td>
