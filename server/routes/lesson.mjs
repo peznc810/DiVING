@@ -111,11 +111,11 @@ router.get('/orderdate', async function (req, res, next) {
 });
 
 router.post("/order-time", async function (req, res, next) {
-  const { lesson_id, order_time } = req.body;
+  const { lesson_id, order_time,time } = req.body;
   try {
     const result = await db.execute(
       'INSERT INTO order_time (lesson_id, preorder_date, preorder_time) VALUES (?, ?, ?)',
-      [parseInt(lesson_id), order_time, 1],
+      [parseInt(lesson_id), order_time, time],
     );
     res.json(result);
   } catch (err) {

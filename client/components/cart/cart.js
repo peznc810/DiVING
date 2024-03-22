@@ -4,6 +4,7 @@ import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
 import styles from './cart.module.scss'
 import Image from 'next/image'
+import Link from 'next/link'
 
 import { useCart } from '@/hooks/cart'
 
@@ -13,7 +14,8 @@ export default function Cart() {
   const MySwal = withReactContent(Swal)
 
   //刪除通知
-  const notifySA = (name, id, isProduct) => {
+  const notifySA = (name, id, detail, isProduct) => {
+    console.log(detail)
     MySwal.fire({
       icon: 'question',
       title: <>{`確認要刪除${name}嗎?`}</>,
@@ -27,7 +29,7 @@ export default function Cart() {
           title: '已成功刪除!',
           icon: 'success',
         })
-        removeItem(id, isProduct)
+        removeItem(id, detail, isProduct)
       }
     })
   }
@@ -62,26 +64,28 @@ export default function Cart() {
                 order_time,
                 category,
                 pimg,
+                limg,
               } = item
               const id = product_id || lesson_id
               const detail = product_detail || order_time
+              const img = pimg || limg
               const isProduct = !!item.product_id
               const totalPrice = discount_price
                 ? discount_price * num
                 : price * num
-
+              const imgUrl = isProduct
+                ? `/images/product/images/${category}/${id}/${img}`
+                : `/images/lesson/${img}`
+              const url = isProduct ? `/product/${id}` : `/lesson/${id}`
               return (
                 <tr key={i}>
                   <td>
                     <div className="d-flex">
-                      <Image
-                        src={`/images/product/images/${category}/${product_id}/${pimg}`}
-                        alt="t"
-                        width={100}
-                        height={100}
-                      />
+                      <Image src={imgUrl} alt="t" width={100} height={100} />
                       <div className="ms-2">
-                        <h5 className="fw-bold text-start">{name}</h5>
+                        <Link href={url}>
+                          <h5 className="fw-bold text-start">{name}</h5>
+                        </Link>
                         <p className={`${styles.imperceptible} text-start`}>
                           {detail}
                         </p>
@@ -111,7 +115,7 @@ export default function Cart() {
                       type="button"
                       className={`${styles.btnLight}`}
                       onClick={() => {
-                        decrement(id, isProduct)
+                        decrement(id, detail, isProduct)
                       }}
                     >
                       <i className="bi bi-dash-lg"></i>
@@ -121,14 +125,19 @@ export default function Cart() {
                       className={`w-25 text-center input${i}`}
                       value={num}
                       onChange={(e) => {
-                        updateItemQty(id, parseInt(e.target.value), isProduct)
+                        updateItemQty(
+                          id,
+                          detail,
+                          parseInt(e.target.value),
+                          isProduct
+                        )
                       }}
                     />
                     <button
                       type="button"
                       className={`${styles.btnLight}`}
                       onClick={() => {
-                        increment(id, isProduct)
+                        increment(id, detail, isProduct)
                       }}
                     >
                       <i className="bi bi-plus-lg"></i>
@@ -139,9 +148,9 @@ export default function Cart() {
                   </td>
                   <td>
                     <FaRegTrashAlt
-                      size={22}
-                      onClick={() => notifySA(name, id, isProduct)}
-                      style={{ cursor: 'pointer' }}
+                      size={20}
+                      onClick={() => notifySA(name, id, detail, isProduct)}
+                      style={{ cursor: 'pointer', color: '#aaa' }}
                     />
                   </td>
                 </tr>

@@ -78,8 +78,8 @@ export const CartProvider = ({
   /**
    * 給定一id值，將這商品移出陣列中
    */
-  const removeItem = (id, isProduct) => {
-    setCartItems(removeOne(cartItems, id, isProduct))
+  const removeItem = (id, detail, isProduct) => {
+    setCartItems(removeOne(cartItems, id, detail, isProduct))
   }
   /**
    * 給定一item物件，更新其中的屬性值(依照id為準)
@@ -90,8 +90,8 @@ export const CartProvider = ({
   /**
    * 給定一id與quantity，更新某個項目的數量
    */
-  const updateItemQty = (id, num, isProduct) => {
-    const item = findOneById(cartItems, id, isProduct)
+  const updateItemQty = (id, detail, num, isProduct) => {
+    const item = findOneById(cartItems, id, detail, isProduct)
     // 如果沒有id，則不更新
     if (!item.product_id && !item.lesson_id) return
     // 更新項目
@@ -114,14 +114,14 @@ export const CartProvider = ({
   /**
    * 給定一id值，有尋找到商品時，設定quantity: quantity + 1
    */
-  const increment = (id, isProduct) => {
-    setCartItems(incrementOne(cartItems, id, isProduct))
+  const increment = (id, detail, isProduct) => {
+    setCartItems(incrementOne(cartItems, id, detail, isProduct))
   }
   /**
    * 給定一id值，有尋找到商品時，設定quantity: quantity - 1，但 quantity 最小值為1
    */
-  const decrement = (id, isProduct) => {
-    setCartItems(decrementOne(cartItems, id, isProduct))
+  const decrement = (id, detail, isProduct) => {
+    setCartItems(decrementOne(cartItems, id, detail, isProduct))
   }
 
   return (

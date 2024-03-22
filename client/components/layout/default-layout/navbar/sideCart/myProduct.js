@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from 'react'
+import Image from 'next/image'
+import Link from 'next/link'
 import styles from './myProduct.module.scss'
 
 import { useCart } from '@/hooks/cart'
@@ -11,17 +13,25 @@ export default function MyProduct({
   num = 0,
   isProduct,
   id,
+  img,
+  category,
 }) {
   const { increment, decrement, removeItem } = useCart()
+  const imgUrl = isProduct
+    ? `/images/product/images/${category}/${id}/${img}`
+    : `/images/lesson/${img}`
+  const url = isProduct ? `/product/${id}` : `/lesson/${id}`
 
   return (
     <>
       <div className={`d-flex p-3 ${styles.myProduct}`}>
         <div className={`me-3 ${styles.productImg}`}>
-          <img src="" alt="" />
+          <Image src={imgUrl} alt="t" width={75} height={75} />
         </div>
         <div className={`${styles.info}`}>
-          <h6 className="m-0">{name}</h6>
+          <Link href={url}>
+            <h6 className="m-0">{name}</h6>
+          </Link>
           <span>{detail}</span>
           <div className={`d-flex my-2 align-items-center`}>
             {discountPrice ? (
@@ -52,7 +62,7 @@ export default function MyProduct({
                 type="button"
                 className="btn"
                 onClick={() => {
-                  decrement(id, isProduct)
+                  decrement(id, detail, isProduct)
                 }}
               >
                 <i className="bi bi-dash-lg"></i>
@@ -64,7 +74,7 @@ export default function MyProduct({
                 type="button"
                 className="btn"
                 onClick={() => {
-                  increment(id, isProduct)
+                  increment(id, detail, isProduct)
                 }}
               >
                 <i className="bi bi-plus-lg"></i>
@@ -73,7 +83,7 @@ export default function MyProduct({
             <button
               className={`btn ${styles.delete}`}
               onClick={() => {
-                removeItem(id, isProduct)
+                removeItem(id, detail, isProduct)
               }}
             >
               移除
