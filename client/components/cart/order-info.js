@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 
 import styles from './cart.module.scss'
 import Image from 'next/image'
+import Link from 'next/link'
 
 export default function OrderInfo({ cart, finalPrice, discount }) {
   const { totalPrice, deliveryFee } = cart
@@ -32,17 +33,27 @@ export default function OrderInfo({ cart, finalPrice, discount }) {
                 subtotal,
                 category,
                 product_id,
+                lesson_id,
                 pimg,
+                limg,
               } = item
               const detail = product_detail || order_time
-              const url = `/images/product/images/${category}/${product_id}/${pimg}`
+              const isProduct = !!item.product_id
+              const img = pimg || limg
+              const id = product_id || lesson_id
+              const imgUrl = isProduct
+                ? `/images/product/images/${category}/${id}/${img}`
+                : `/images/lesson/${img}`
+              const url = isProduct ? `/product/${id}` : `/lesson/${id}`
               return (
                 <tr key={i}>
                   <td>
                     <div className="d-flex">
-                      <Image src={`${url}`} alt="t" width={100} height={100} />
+                      <Image src={imgUrl} alt="t" width={100} height={100} />
                       <div className="ms-2">
-                        <h5 className="fw-bold text-start">{name}</h5>
+                        <Link href={url}>
+                          <h5 className="fw-bold text-start">{name}</h5>
+                        </Link>
                         <p className={`${styles.imperceptible}  text-start`}>
                           {detail}
                         </p>

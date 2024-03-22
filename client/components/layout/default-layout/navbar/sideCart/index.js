@@ -37,8 +37,12 @@ export default function SideCart() {
         <div className={`offcanvas-body ${styles.myProducts}`}>
           {/* 加入商品後會消失 */}
           <p className={`${styles.text}`}>{!cart && '你的購物車是空的'}</p>
+
           {items &&
             items.map((item, i) => {
+              {
+                console.log(item)
+              }
               const {
                 name,
                 price,
@@ -48,18 +52,26 @@ export default function SideCart() {
                 order_time,
                 product_id,
                 lesson_id,
+                pimg,
+                limg,
+                category,
               } = item
+              const img = pimg || limg
+              const id = product_id || lesson_id
+              const detail = product_detail || order_time
               return (
                 <MyProduct
                   key={i}
                   name={name}
-                  detail={product_detail || order_time}
+                  detail={detail}
                   price={price}
                   discountPrice={discount_price}
                   num={num}
                   index={i}
                   isProduct={item.product_id ? true : false}
-                  id={product_id || lesson_id}
+                  id={id}
+                  img={img}
+                  category={category}
                 />
               )
             })}

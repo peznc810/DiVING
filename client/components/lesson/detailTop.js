@@ -6,6 +6,7 @@ import { FaHeart } from 'react-icons/fa'
 import { GiRoundStar } from 'react-icons/gi'
 import Style from '@/styles/lessonStyle/star.module.css'
 import derailTopStyle from '@/styles/lessonStyle/detailTop.module.scss'
+import { FaV } from 'react-icons/fa6'
 
 export default function DetailTop({ selectData }) {
   // 取得uesr 狀態
@@ -31,6 +32,7 @@ export default function DetailTop({ selectData }) {
         .catch((error) => {
           console.error('Error:', error)
         })
+      console.log(fav)
       return newFav
     })
   }
@@ -107,6 +109,7 @@ export default function DetailTop({ selectData }) {
       getStar(pid)
       getFav(pid)
     }
+    console.log()
   }, [router.isReady, pid, fav])
   return (
     <>
@@ -158,10 +161,10 @@ export default function DetailTop({ selectData }) {
               </div>
             </Col>
             <div
-              class={`d-grid gap-2 col-12 mx-auto mt-4 ${derailTopStyle['phone-mt']}`}
+              className={`d-grid gap-2 col-12 mx-auto mt-4 ${derailTopStyle['phone-mt']}`}
             >
               <button
-                class={`btn ${derailTopStyle['btn-color']} fs-5 fw-bold`}
+                className={`btn ${derailTopStyle['btn-color']} fs-5 fw-bold`}
                 type="button"
                 onClick={goToPreOrder}
               >

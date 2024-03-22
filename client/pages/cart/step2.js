@@ -107,7 +107,7 @@ export default function Home() {
       {isDone ? (
         <Order orderId={orderId} />
       ) : (
-        <div className="container">
+        <div className="container my-5">
           <CartStep step={2} />
           <OrderInfo cart={cart} finalPrice={finalPrice} discount={discount} />
           <OrderForm
