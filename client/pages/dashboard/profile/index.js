@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import Head from 'next/head'
 import Menu from '@/components/dashboard/menu'
 import Form from '@/components/dashboard/form/profile'
@@ -149,6 +149,7 @@ export default function Profile() {
         handleChangePWD={handleChangePWD}
         handleUpdatePWD={handleUpdatePWD}
         errorMsg={errorMsg}
+        auth={auth}
       />
     </>
   )

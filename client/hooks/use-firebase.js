@@ -53,7 +53,6 @@ const initGoogle = (callback) => {
   // 將收到的google資料透過callback function送出去
   onAuthStateChanged(auth, (user) => {
     if (user) {
-      console.log('user', user)
       // callback the user data, be like:
       // displayName: "Ruby"
       // email: "ruby.test.0404@gmail.com"

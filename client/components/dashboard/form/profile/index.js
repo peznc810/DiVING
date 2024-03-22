@@ -10,6 +10,7 @@ export default function Form({
   handleChangePWD = () => {},
   handleUpdatePWD = () => {},
   errorMsg = {},
+  auth = {},
 }) {
   const { type, icon, handleToggle } = useShow()
   return (
@@ -136,130 +137,136 @@ export default function Form({
                 </form>
               </div>
             </div>
-            <div className="accordion-item">
-              <h2 className="accordion-header">
-                <button
-                  className="fw-medium fs-5 accordion-button collapsed"
-                  type="button"
-                  data-bs-toggle="collapse"
-                  data-bs-target="#flush-collapseTwo"
-                  aria-expanded="false"
-                  aria-controls="flush-collapseTwo"
-                >
-                  密碼管理
-                </button>
-              </h2>
-              <div
-                id="flush-collapseTwo"
-                className="accordion-collapse collapse"
-                data-bs-parent="#accordionFlushExample"
-              >
-                <form onSubmit={handleUpdatePWD}>
-                  <div className="accordion-body">
-                    <div className="row gy-1">
-                      <div className="col-md-6 col-12 me-1 pb-4 position-relative">
-                        <div className="d-flex justify-content-between">
-                          <label htmlFor="origin" className="form-label">
-                            舊密碼
-                          </label>
-                          {/* 警示訊息 */}
-                          {/* 還是改成紅色border + 叉叉icon？ */}
-                          <span className="form-text text-danger pe-1 m-0">
-                            {errorMsg.originErr !== '' && errorMsg.originErr}
-                          </span>
+            {!auth.isGoogle && (
+              <>
+                <div className="accordion-item">
+                  <h2 className="accordion-header">
+                    <button
+                      className="fw-medium fs-5 accordion-button collapsed"
+                      type="button"
+                      data-bs-toggle="collapse"
+                      data-bs-target="#flush-collapseTwo"
+                      aria-expanded="false"
+                      aria-controls="flush-collapseTwo"
+                    >
+                      密碼管理
+                    </button>
+                  </h2>
+                  <div
+                    id="flush-collapseTwo"
+                    className="accordion-collapse collapse"
+                    data-bs-parent="#accordionFlushExample"
+                  >
+                    <form onSubmit={handleUpdatePWD}>
+                      <div className="accordion-body">
+                        <div className="row gy-1">
+                          <div className="col-md-6 col-12 me-1 pb-4 position-relative">
+                            <div className="d-flex justify-content-between">
+                              <label htmlFor="origin" className="form-label">
+                                舊密碼
+                              </label>
+                              {/* 警示訊息 */}
+                              {/* 還是改成紅色border + 叉叉icon？ */}
+                              <span className="form-text text-danger pe-1 m-0">
+                                {errorMsg.originErr !== '' &&
+                                  errorMsg.originErr}
+                              </span>
+                            </div>
+                            {/* END */}
+                            <input
+                              type="password"
+                              id="origin"
+                              name="origin"
+                              className={`form-control pe-4 ${
+                                errorMsg.originErr !== '' && 'border-danger'
+                              }`}
+                              maxLength={12}
+                              onChange={handleChangePWD}
+                            />
+                          </div>
+                          <div className="col-md-6 col-12 me-1 pb-4 position-relative">
+                            <div className="d-flex justify-content-between">
+                              <label htmlFor="newPWD" className="form-label">
+                                新密碼
+                              </label>
+                              {/* 警示訊息 */}
+                              <span className="form-text text-danger pe-1 m-0">
+                                {errorMsg.newPWDErr !== '' &&
+                                  errorMsg.newPWDErr}
+                              </span>
+                            </div>
+                            {/* END */}
+                            <div className="position-relative">
+                              <input
+                                type={type}
+                                id="newPWD"
+                                name="newPWD"
+                                className={`form-control ${
+                                  errorMsg.newPWDErr !== '' && 'border-danger'
+                                }`}
+                                style={{ paddingRight: '32px' }}
+                                placeholder="請輸入8-12位(含大小寫英文字母)"
+                                maxLength={12}
+                                onChange={handleChangePWD}
+                              />
+                              <button
+                                type="button"
+                                className="fs-5 p-0 pe-1 pb-1 position-absolute"
+                                style={{
+                                  transform: 'translateY(-50%)',
+                                  top: '50%',
+                                  right: '4px',
+                                  border: 'none',
+                                  background: 'none',
+                                }}
+                                onClick={handleToggle}
+                              >
+                                {icon}
+                              </button>
+                            </div>
+                          </div>
+                          <div className="col-md-6 col-12 me-1 pb-4 position-relative">
+                            <div className="d-flex justify-content-between">
+                              <label htmlFor="rePWD" className="form-label">
+                                確認密碼
+                              </label>
+                              <span className="form-text text-danger pe-1 m-0 mb-1">
+                                {errorMsg.rePWDErr !== '' && errorMsg.rePWDErr}
+                              </span>
+                            </div>
+                            <input
+                              type="password"
+                              id="rePWD"
+                              name="rePWD"
+                              className={`form-control ${
+                                errorMsg.rePWDErr !== '' && 'border-danger'
+                              }`}
+                              placeholder="請輸入8-12位(含大小寫英文字母)"
+                              maxLength={12}
+                              onChange={handleChangePWD}
+                            />
+                            <div
+                              id="emailHelp"
+                              className="form-text text-danger ps-1 position-absolute bottom-0 d-none"
+                            >
+                              密碼錯誤
+                            </div>
+                          </div>
+                          <div className="col-12 text-end">
+                            <button
+                              type="submit"
+                              className="btn btn-secondary text-white"
+                            >
+                              儲存變更
+                            </button>
+                          </div>
                         </div>
-                        {/* END */}
-                        <input
-                          type="password"
-                          id="origin"
-                          name="origin"
-                          className={`form-control pe-4 ${
-                            errorMsg.originErr !== '' && 'border-danger'
-                          }`}
-                          maxLength={12}
-                          onChange={handleChangePWD}
-                        />
                       </div>
-                      <div className="col-md-6 col-12 me-1 pb-4 position-relative">
-                        <div className="d-flex justify-content-between">
-                          <label htmlFor="newPWD" className="form-label">
-                            新密碼
-                          </label>
-                          {/* 警示訊息 */}
-                          <span className="form-text text-danger pe-1 m-0">
-                            {errorMsg.newPWDErr !== '' && errorMsg.newPWDErr}
-                          </span>
-                        </div>
-                        {/* END */}
-                        <div className="position-relative">
-                          <input
-                            type={type}
-                            id="newPWD"
-                            name="newPWD"
-                            className={`form-control ${
-                              errorMsg.newPWDErr !== '' && 'border-danger'
-                            }`}
-                            style={{ paddingRight: '32px' }}
-                            placeholder="請輸入8-12位(含大小寫英文字母)"
-                            maxLength={12}
-                            onChange={handleChangePWD}
-                          />
-                          <button
-                            type="button"
-                            className="fs-5 p-0 pe-1 pb-1 position-absolute"
-                            style={{
-                              transform: 'translateY(-50%)',
-                              top: '50%',
-                              right: '4px',
-                              border: 'none',
-                              background: 'none',
-                            }}
-                            onClick={handleToggle}
-                          >
-                            {icon}
-                          </button>
-                        </div>
-                      </div>
-                      <div className="col-md-6 col-12 me-1 pb-4 position-relative">
-                        <div className="d-flex justify-content-between">
-                          <label htmlFor="rePWD" className="form-label">
-                            確認密碼
-                          </label>
-                          <span className="form-text text-danger pe-1 m-0 mb-1">
-                            {errorMsg.rePWDErr !== '' && errorMsg.rePWDErr}
-                          </span>
-                        </div>
-                        <input
-                          type="password"
-                          id="rePWD"
-                          name="rePWD"
-                          className={`form-control ${
-                            errorMsg.rePWDErr !== '' && 'border-danger'
-                          }`}
-                          placeholder="請輸入8-12位(含大小寫英文字母)"
-                          maxLength={12}
-                          onChange={handleChangePWD}
-                        />
-                        <div
-                          id="emailHelp"
-                          className="form-text text-danger ps-1 position-absolute bottom-0 d-none"
-                        >
-                          密碼錯誤
-                        </div>
-                      </div>
-                      <div className="col-12 text-end">
-                        <button
-                          type="submit"
-                          className="btn btn-secondary text-white"
-                        >
-                          儲存變更
-                        </button>
-                      </div>
-                    </div>
+                    </form>
                   </div>
-                </form>
-              </div>
-            </div>
+                </div>
+              </>
+            )}
           </div>
         </div>
       </div>
