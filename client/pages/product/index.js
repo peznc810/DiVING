@@ -48,7 +48,7 @@ export default function List() {
   //   setLoading(true)
   //   setTimeout(() => {
   //     setLoading(false)
-  //   }, 1500)
+  //   }, 800)
   // }, [])
 
   const [filterSettings, setFilterSettings] = useState({
@@ -154,7 +154,7 @@ export default function List() {
             return res.json()
           })
           .then((data) => {
-            console.log(data)
+            // console.log(data)
             setProduct(data ? data : [])
           })
       } catch {
