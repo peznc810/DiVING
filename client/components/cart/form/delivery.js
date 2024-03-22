@@ -1,6 +1,7 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 
 import styles from '../cart.module.scss'
+import { addressOption } from '@/config/city'
 
 export default function Delivery({
   handleInputChange,
@@ -8,6 +9,20 @@ export default function Delivery({
   setUserInputs,
   cUser,
 }) {
+  const [sections, setSections] = useState([])
+
+  useEffect(() => {
+    const initCity = addressOption.find((city) => city.CityName === '臺北市')
+    const selectedCity = addressOption.find(
+      (city) => city.CityName === user_city
+    )
+    if (selectedCity) {
+      setSections(selectedCity.AreaList)
+    } else {
+      setSections(initCity.AreaList)
+    }
+  }, [user_city])
+
   //勾選資料相同 收貨人
   const deliveryChange = () => {
     const { name, tel, address } = cUser
@@ -72,9 +87,13 @@ export default function Delivery({
                 <option value="0" disabled>
                   縣/市
                 </option>
-                <option value="1市">1市</option>
-                <option value="2市">2市</option>
-                <option value="3市">3市</option>
+                {addressOption.map((v, i) => {
+                  return (
+                    <option key={i} value={v.CityName}>
+                      {v.CityName}
+                    </option>
+                  )
+                })}
               </select>
             </div>
             <div className="col-3">
@@ -87,9 +106,11 @@ export default function Delivery({
                 <option value="0" disabled>
                   區
                 </option>
-                <option value="1區">1區</option>
-                <option value="2區">2區</option>
-                <option value="3區">3區</option>
+                {sections.map((area, index) => (
+                  <option key={index} value={area.AreaName}>
+                    {area.AreaName}
+                  </option>
+                ))}
               </select>
             </div>
             <div className="col-6">
