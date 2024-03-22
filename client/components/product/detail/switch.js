@@ -110,6 +110,7 @@ export default function Switch({
         // console.log('response', response)
         if (response.ok) {
           const data = await response.json()
+          console.log(data)
           setAllComments(data)
           // console.log(data)
         }
