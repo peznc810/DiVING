@@ -40,9 +40,6 @@ export default function SideCart() {
 
           {items &&
             items.map((item, i) => {
-              {
-                console.log(item)
-              }
               const {
                 name,
                 price,

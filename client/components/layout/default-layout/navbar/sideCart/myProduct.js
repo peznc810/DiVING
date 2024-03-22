@@ -62,7 +62,7 @@ export default function MyProduct({
                 type="button"
                 className="btn"
                 onClick={() => {
-                  decrement(id, isProduct)
+                  decrement(id, detail, isProduct)
                 }}
               >
                 <i className="bi bi-dash-lg"></i>
@@ -74,7 +74,7 @@ export default function MyProduct({
                 type="button"
                 className="btn"
                 onClick={() => {
-                  increment(id, isProduct)
+                  increment(id, detail, isProduct)
                 }}
               >
                 <i className="bi bi-plus-lg"></i>
@@ -83,7 +83,7 @@ export default function MyProduct({
             <button
               className={`btn ${styles.delete}`}
               onClick={() => {
-                removeItem(id, isProduct)
+                removeItem(id, detail, isProduct)
               }}
             >
               移除

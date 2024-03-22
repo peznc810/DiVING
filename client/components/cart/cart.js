@@ -14,7 +14,8 @@ export default function Cart() {
   const MySwal = withReactContent(Swal)
 
   //刪除通知
-  const notifySA = (name, id, isProduct) => {
+  const notifySA = (name, id, detail, isProduct) => {
+    console.log(detail)
     MySwal.fire({
       icon: 'question',
       title: <>{`確認要刪除${name}嗎?`}</>,
@@ -28,7 +29,7 @@ export default function Cart() {
           title: '已成功刪除!',
           icon: 'success',
         })
-        removeItem(id, isProduct)
+        removeItem(id, detail, isProduct)
       }
     })
   }
@@ -114,7 +115,7 @@ export default function Cart() {
                       type="button"
                       className={`${styles.btnLight}`}
                       onClick={() => {
-                        decrement(id, isProduct)
+                        decrement(id, detail, isProduct)
                       }}
                     >
                       <i className="bi bi-dash-lg"></i>
@@ -124,14 +125,19 @@ export default function Cart() {
                       className={`w-25 text-center input${i}`}
                       value={num}
                       onChange={(e) => {
-                        updateItemQty(id, parseInt(e.target.value), isProduct)
+                        updateItemQty(
+                          id,
+                          detail,
+                          parseInt(e.target.value),
+                          isProduct
+                        )
                       }}
                     />
                     <button
                       type="button"
                       className={`${styles.btnLight}`}
                       onClick={() => {
-                        increment(id, isProduct)
+                        increment(id, detail, isProduct)
                       }}
                     >
                       <i className="bi bi-plus-lg"></i>
@@ -143,7 +149,7 @@ export default function Cart() {
                   <td>
                     <FaRegTrashAlt
                       size={20}
-                      onClick={() => notifySA(name, id, isProduct)}
+                      onClick={() => notifySA(name, id, detail, isProduct)}
                       style={{ cursor: 'pointer', color: '#aaa' }}
                     />
                   </td>
