@@ -26,21 +26,23 @@ export default function EventArticle() {
         return response.json()
       })
       .then((result) => {
-        // const eventData = result.map((v) => {
-        //   // 設定時間的格式
-        //   const option = {
-        //     day: 'numeric',
-        //     month: 'short',
-        //     year: 'numeric',
-        //   }
-        //   return {
-        //     ...v,
-        //     created_at: v.created_at.toLocaleString('en-US', option),
-        //   }
-        // })
+        const eventData = result.map((v) => {
+          // 將字串轉為Date
+          const createAtDate = new Date(v.created_at)
+          // 設定時間的格式
+          const option = {
+            day: 'numeric',
+            month: 'short',
+            year: 'numeric',
+          }
+          return {
+            ...v,
+            created_at: createAtDate.toLocaleString('en-US', option),
+          }
+        })
 
-        setEvent(result)
-        console.log(result)
+        setEvent(eventData)
+        console.log(eventData)
       })
       .catch((error) => {
         console.log('連線錯誤')
@@ -62,9 +64,9 @@ export default function EventArticle() {
       <div className={`container my-5 ${styles.eventPage}`}>
         <div className={`my-5 text-center`}>
           <h2>{event.title}</h2>
-          <div>
+          <div className={`d-flex`}>
             <i className="bi bi-calendar"></i>
-            <p></p>
+            <p>{event.created_at}</p>
           </div>
         </div>
         <div className={`${styles.banner}`}>
