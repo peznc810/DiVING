@@ -5,9 +5,13 @@ import DatePicker from '@/components/cart/date-picker'
 import toast, { Toaster } from 'react-hot-toast'
 import Style from '@/styles/lessonStyle/lesson.module.scss'
 export default function PreOrder() {
-  const [selectedDate, setSelectedDate] = useState(null)
-  const [time, setTime] = useState(null)
-  const [count, setCount] = useState(0)
+  const date = new Date().getDate()
+  const month = new Date().getMonth() + 1
+  const year = new Date().getFullYear()
+  const today = `${year}/${month}/${date}`
+  const [selectedDate, setSelectedDate] = useState(today)
+  const [time, setTime] = useState('9:00')
+  const [count, setCount] = useState(1)
   const amclick = () => {
     const am = '9:00'
     setTime(am)
@@ -42,13 +46,15 @@ export default function PreOrder() {
     }
   }, [router.isReady])
 
-  const addLesson = (lesson_id, order_time, name, price, num) => {
+  const addLesson = (lesson_id, order_time, name, price, limg) => {
     const item = {
       lesson_id,
       order_time,
+      time,
       name,
       price,
-      num,
+      num: count,
+      limg,
     }
     addItem(item)
     toast.success('已加入購物車')
@@ -140,7 +146,7 @@ export default function PreOrder() {
                     selectedDate,
                     perorder.title,
                     perorder.price,
-                    1
+                    `${perorder.img.split(',')[0]}.jpg`
                   )
                 }}
               >
