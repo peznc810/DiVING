@@ -5,7 +5,7 @@ import Form from '@/components/dashboard/form/comments'
 // 使用者狀態的hook
 import { useAuth } from '@/hooks/auth'
 
-export default function Orders() {
+export default function Comments() {
   const { auth } = useAuth()
   const [common, setCommon] = useState([])
 
@@ -21,7 +21,7 @@ export default function Orders() {
     })
       .then((res) => res.json())
       .then((result) => {
-        setCommon(result.commonData)
+        setCommon(result.data)
       })
       .catch((err) => console.log(err))
   }

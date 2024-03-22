@@ -1,8 +1,10 @@
 import React from 'react'
 import styles from '../styles.module.scss'
 import Link from 'next/link'
+import { useRouter } from 'next/router'
 
 export default function Form({ order = [] }) {
+  const router = useRouter()
   return (
     <>
       <div className={`col-sm-8 p-0 rounded-end ${styles['form-container']}`}>

@@ -6,7 +6,8 @@ import Image from 'next/image'
 // React icon
 import { FaTrashCan } from 'react-icons/fa6'
 
-export default function Form() {
+export default function Form({ fav = {}, auth = {}, delUserFav = () => {} }) {
+  // console.log(fav)
   return (
     <>
       <div className={`col-sm-8 p-0 rounded-end ${styles['form-container']}`}>
@@ -37,7 +38,6 @@ export default function Form() {
                   <tr>
                     <th scope="col">圖片</th>
                     <th scope="col">名稱</th>
-                    <th scope="col">顏色</th>
                     <th scope="col">價格</th>
                     <th scope="col">查看</th>
                     <th scope="col"></th>
@@ -45,33 +45,44 @@ export default function Form() {
                 </thead>
                 <tbody>
                   {/* 之後改用map */}
-                  <tr className="align-middle">
-                    <td className="d-flex justify-content-center">
-                      <div className={`rounded ${styles.avatar} flex-shrink-0`}>
-                        <Image
-                          src="/images/coupons/turtle.jpg"
-                          alt="turtle"
-                          fill
-                        />
-                      </div>
-                    </td>
-                    <td>烏龜</td>
-                    <td>綠色</td>
-                    <td>碰一下30萬</td>
-                    <td>
-                      <Link
-                        href="#"
-                        className="btn btn-secondary btn-sm text-white"
-                      >
-                        商品詳情
-                      </Link>
-                    </td>
-                    <td>
-                      <button type="button" className="btn">
-                        <FaTrashCan />
-                      </button>
-                    </td>
-                  </tr>
+                  {fav.map((item) => {
+                    return (
+                      <tr className="align-middle" key={item.id}>
+                        <td className="d-flex justify-content-center">
+                          <div
+                            className={`rounded ${styles.avatar} flex-shrink-0`}
+                          >
+                            <Image
+                              src="/images/coupons/turtle.jpg"
+                              alt="turtle"
+                              fill
+                            />
+                          </div>
+                        </td>
+                        <td>{item.name}</td>
+                        <td>{item.price}</td>
+                        <td>
+                          <Link
+                            href="http://localhost:3000/lesson/1"
+                            className="btn btn-secondary btn-sm text-white"
+                          >
+                            商品詳情
+                          </Link>
+                        </td>
+                        <td>
+                          <button
+                            type="button"
+                            className="btn"
+                            onClick={() => {
+                              delUserFav(auth.id, item.id)
+                            }}
+                          >
+                            <FaTrashCan />
+                          </button>
+                        </td>
+                      </tr>
+                    )
+                  })}
                 </tbody>
               </table>
               <div className="d-flex justify-content-center">

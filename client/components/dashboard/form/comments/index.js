@@ -7,33 +7,7 @@ import Image from 'next/image'
 import { FaStar } from 'react-icons/fa'
 
 export default function Form({ common = [] }) {
-  console.log(common)
   const [category, setCategory] = useState([])
-
-  const handleCategory = () => {
-    // 產品
-    const product = common.filter((v) => {
-      return v.product_id !== null
-    })
-
-    // 課程
-    const lesson = common.filter((v) => {
-      return v.lesson_id !== null
-    })
-
-    common.map((item) => {
-      switch (true) {
-        case item.product_id:
-          setCategory(product)
-          break
-        case item.lesson_id:
-          setCategory(lesson)
-          break
-        default:
-          setCategory(common)
-      }
-    })
-  }
 
   useEffect(() => {
     setCategory(common)
@@ -50,27 +24,15 @@ export default function Form({ common = [] }) {
               {/* 篩選＆搜尋，要再調整 */}
               <div className="d-flex justify-content-between align-items-center mb-3">
                 <div className="d-flex align-items-center">
-                  <button
-                    type="button"
-                    className="btn btn-sm text-secondary"
-                    onClick={handleCategory}
-                  >
+                  <button type="button" className="btn btn-sm text-secondary">
                     全部
                   </button>
                   |
-                  <button
-                    type="button"
-                    className="btn btn-sm"
-                    onClick={handleCategory}
-                  >
+                  <button type="button" className="btn btn-sm">
                     商品
                   </button>
                   |
-                  <button
-                    type="button"
-                    className="btn btn-sm"
-                    onClick={handleCategory}
-                  >
+                  <button type="button" className="btn btn-sm">
                     課程
                   </button>
                 </div>
@@ -87,8 +49,7 @@ export default function Form({ common = [] }) {
                   </tr>
                 </thead>
                 <tbody>
-                  {/* 之後改用map */}
-                  {category.map((item) => {
+                  {common.map((item) => {
                     return (
                       <tr className="align-middle" key={item.id}>
                         <td className="d-flex justify-content-center">
@@ -110,7 +71,7 @@ export default function Form({ common = [] }) {
                             )}
                           </div>
                         </td>
-                        <td>{item.product_name}</td>
+                        <td>{item.name}</td>
                         <td>
                           {/* 改成map */}
                           <FaStar className="text-secondary" />

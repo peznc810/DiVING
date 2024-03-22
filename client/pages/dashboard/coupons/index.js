@@ -3,7 +3,7 @@ import Head from 'next/head'
 import Menu from '@/components/dashboard/menu'
 import Form from '@/components/dashboard/form/coupons'
 
-export default function Orders() {
+export default function Coupons() {
   return (
     <>
       <Head>
