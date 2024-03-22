@@ -4,6 +4,7 @@ import Col from 'react-bootstrap/Col'
 import Button from 'react-bootstrap/Button'
 import Card from 'react-bootstrap/Card'
 import LessonData from '@/data/lesson/lesson'
+import Style from '@/styles/lessonStyle/lesson.module.scss'
 
 import { FaLocationDot } from 'react-icons/fa6'
 export default function BsCard() {
@@ -29,7 +30,9 @@ export default function BsCard() {
                   </Col>
                 </Row>
 
-                <Card.Text className="fs-6">{item.content}</Card.Text>
+                <Card.Text className={`${Style['text-area']} fs-6 `}>
+                  {item.content}
+                </Card.Text>
                 <Button variant="primary">立即預約</Button>
               </Card.Body>
             </Card>

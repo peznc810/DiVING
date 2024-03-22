@@ -1,200 +1,154 @@
-import React, { useEffect } from 'react'
-import { GoChevronLeft } from 'react-icons/go'
-import { GoChevronRight } from 'react-icons/go'
+import { useState, useEffect } from 'react'
+import { GoChevronLeft, GoChevronRight } from 'react-icons/go'
+import Style from '@/styles/lessonStyle/date.module.scss'
 
-export default function DatePicker() {
+export default function DatePicker({ getDate }) {
+  const api = 'http://localhost:3005/api/lesson'
+  const [currentDate, setCurrentDate] = useState(new Date())
+  const [days, setDays] = useState([])
+  const [selectedDate, setSelectedDate] = useState(new Date().getDate())
+  const [bookedDates, setBookedDates] = useState([])
+
+  //get perorder
+  const getperoder = async () => {
+    try {
+      const response = await fetch(`${api}/orderdate`)
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`)
+      }
+
+      const data = await response.json()
+      const arrdate = data.map((v, i) => {
+        return v.preorder_date.split('T')[0]
+      })
+      setBookedDates(arrdate)
+      console.log(arrdate)
+      return data
+    } catch (error) {
+      console.error(
+        `Failed to fetch data from ${api + '/' + 'orderdate'}: ${error.message}`
+      )
+      return null
+    }
+  }
+
+  const handleDateChange = (day) => {
+    const date = new Date(
+      currentDate.getFullYear(),
+      currentDate.getMonth(),
+      day
+    )
+    setSelectedDate(date.toLocaleDateString())
+    getDate(date.toLocaleDateString())
+    setSelectedDate(day)
+    const today = new Date()
+    today.setHours(0, 0, 0, 0) // 將今天的時間設定為午夜
+
+    // 如果選擇的日期在今天或之後，則更新狀態
+    if (date <= today && !bookedDates.includes(date.toLocaleDateString())) {
+      setSelectedDate(date.toLocaleDateString())
+      getDate(date.toLocaleDateString())
+      console.log(bookedDates)
+    }
+  }
+
+  const handlePreMonth = () => {
+    setCurrentDate(
+      (prevDate) => new Date(prevDate.getFullYear(), prevDate.getMonth() - 1)
+    )
+  }
+
+  const handleNextMonth = () => {
+    setCurrentDate(
+      (prevDate) => new Date(prevDate.getFullYear(), prevDate.getMonth() + 1)
+    )
+  }
+
   useEffect(() => {
-    const divMonth = document.querySelector('.month')
-    const btnLeft = document.querySelector('.leftBtn')
-    const btnRight = document.querySelector('.rightBtn')
-    const divDates = document.querySelector('.dates')
-    let selectDate
+    const daysInMonth = new Date(
+      currentDate.getFullYear(),
+      currentDate.getMonth() + 1,
+      0
+    ).getDate()
 
-    const wHeight = 60
+    const firstDayOfMonth = new Date(
+      currentDate.getFullYear(),
+      currentDate.getMonth(),
+      1
+    ).getDay()
 
-    const disabledAry = ['2024-02-11']
+    const leadingEmptyDays = Array(firstDayOfMonth).fill(null)
 
-    let currentDate = new Date()
+    setDays([
+      ...leadingEmptyDays,
+      ...Array.from({ length: daysInMonth }, (_, i) => i + 1),
+    ])
+  }, [currentDate])
+  useEffect(() => {
+    getperoder()
+    console.log(bookedDates)
+  }, [])
+  useEffect(() => {
+    // getperoder()
+    console.log(bookedDates)
+  }, [bookedDates])
 
-    btnLeft.addEventListener('click', () => {
-      currentDate.setMonth(currentDate.getMonth() - 1)
-      randerCalendar()
-    })
-    btnRight.addEventListener('click', () => {
-      currentDate.setMonth(currentDate.getMonth() + 1)
-      randerCalendar()
-    })
-
-    randerCalendar()
-
-    function randerCalendar() {
-      divDates.innerHTML = ''
-
-      let totalWeeks = weeksInMonth(
-        currentDate.getFullYear(),
-        currentDate.getMonth()
-      )
-      let dateHeight = Math.floor((wHeight - 60 - 30) / totalWeeks)
-
-      document.documentElement.style.setProperty(
-        '--date-height',
-        dateHeight + 'px'
-      )
-
-      let cY = currentDate.getFullYear()
-      let cM = currentDate.toLocaleString('zh-TW', { month: 'long' })
-      divMonth.innerHTML = `${cY}年${cM}`
-
-      let firstDate = new Date(
-        currentDate.getFullYear(),
-        currentDate.getMonth(),
-        1
-      )
-
-      let firstDay = firstDate.getDay()
-
-      for (let i = 0; i < firstDay; i++) {
-        const node = document.createElement('div')
-        divDates.append(node)
-      }
-
-      let totalDays = new Date(
-        currentDate.getFullYear(),
-        currentDate.getMonth() + 1,
-        0
-      ).getDate()
-
-      for (let i = 1; i <= totalDays; i++) {
-        const node = document.createElement('div')
-
-        const dd = i.toString().padStart(2, '0')
-        const mm = (currentDate.getMonth() + 1).toString().padStart(2, '0')
-        const yy = currentDate.getFullYear()
-
-        node.innerHTML = `<div class="jsx-6d5b15dfcc792ec0 date" y="${yy}" m="${mm}" d="${dd}">${i}</div>`
-
-        if (
-          i === new Date().getDate() &&
-          currentDate.getMonth() === new Date().getMonth() &&
-          currentDate.getFullYear() === new Date().getFullYear()
-        ) {
-          node.children[0].classList.add('currentDate')
-        }
-
-        disabledAry.map((dd) => {
-          let date1 = new Date(dd)
-          let date2 = new Date(
-            currentDate.getFullYear(),
-            currentDate.getMonth(),
-            i
-          )
-          if (
-            date1.getDate() === date2.getDate() &&
-            date1.getMonth() === date2.getMonth() &&
-            date1.getFullYear() === date2.getFullYear()
-          ) {
-            node.children[0].classList.add('disabled')
-          }
-        })
-
-        divDates.append(node.children[0])
-      }
-
-      const divDate = document.querySelectorAll('.date')
-
-      for (let i = 0; i < divDate.length; i++) {
-        divDate[i].addEventListener('click', () => {
-          let selectY = divDate[i].getAttribute('y')
-          let selectM = divDate[i].getAttribute('m')
-          let selectD = divDate[i].getAttribute('d')
-          selectDate = `${selectY}-${selectM}-${selectD}`
-          const divCurrentDate = document.querySelector('.currentDate')
-          if (divCurrentDate) {
-            divCurrentDate.classList.remove('currentDate')
-          }
-          divDate[i].classList.add('currentDate')
-        })
-      }
+  function handleKeyDown(event) {
+    if (event.key === 'Enter' || event.key === ' ') {
+      // handleClick(event)
     }
-
-    function weeksInMonth(year, month) {
-      const firstDateOfMonth = new Date(year, month)
-      const lastDateOfMonth = new Date(year, month + 1, 0)
-      const firstDayOfMonth = firstDateOfMonth.getDay()
-      const totalDays = lastDateOfMonth.getDate()
-      const daysInFirstweek = firstDayOfMonth === 0 ? 0 : 7 - firstDayOfMonth
-      const otherDays = totalDays - daysInFirstweek
-      const weeks = Math.ceil(otherDays / 7)
-      const totalWeeks = weeks + (daysInFirstweek > 0 ? 1 : 0)
-      return totalWeeks
-    }
-  })
+  }
 
   return (
     <>
       <div className="d-flex"></div>
-      <div className="calendarContainer">
-        <div className="calendar">
+      <div className={`${Style['calendarContainer']}`}>
+        <div className={`${Style['calendar']}`}>
           <div className="nav d-flex align-items-center justify-content-between">
-            <GoChevronLeft className="leftBtn" />
-            <div className="month">2024-02</div>
-            <GoChevronRight className="rightBtn" />
+            <GoChevronLeft className="leftBtn" onClick={handlePreMonth} />
+            <div className="month">{currentDate.getMonth() + 1}</div>
+            <GoChevronRight className="rightBtn" onClick={handleNextMonth} />
           </div>
-          <div className="week unit1">
-            <div className="weekday">S</div>
-            <div className="weekday">M</div>
-            <div className="weekday">T</div>
-            <div className="weekday">W</div>
-            <div className="weekday">T</div>
-            <div className="weekday">F</div>
-            <div className="weekday">S</div>
+          <div className={`${Style['week']} ${Style['unit1']} pt-3`}>
+            <div className={`${Style['weekday']}`}>S</div>
+            <div className={`${Style['weekday']}`}>M</div>
+            <div className={`${Style['weekday']}`}>T</div>
+            <div className={`${Style['weekday']}`}>W</div>
+            <div className={`${Style['weekday']}`}>T</div>
+            <div className={`${Style['weekday']}`}>F</div>
+            <div className={`${Style['weekday']}`}>S</div>
           </div>
-          <div className="dates unit1"></div>
+          <div className={`${Style['dates']} ${Style['unit1']} pt-3`}>
+            {days.map((day, index) => {
+              const date = new Date(
+                currentDate.getFullYear(),
+                currentDate.getMonth(),
+                day
+              )
+              const today = new Date()
+              today.setHours(0, 0, 0, 0) // 將今天的時間設定為午夜
+
+              return (
+                <div
+                  className={`${Style['date']} ${
+                    day === selectedDate ? Style['currentDate'] : ''
+                  } ${date < today ? Style['disabled'] : ''} ${
+                    bookedDates.includes(date) ? Style['disabled'] : ''
+                  }`}
+                  key={index}
+                  onKeyDown={handleKeyDown}
+                  role="button"
+                  tabIndex="0"
+                  onClick={() => day && handleDateChange(day)}
+                >
+                  {day || ''}
+                </div>
+              )
+            })}
+          </div>
         </div>
       </div>
-      <style jsx>{`
-        .calendarContainer {
-          display: flex;
-          justify-content: center;
-          .calendar {
-            width: calc(100% - 20px);
-            .nav {
-              display: flex;
-              justify-content: space-between;
-            }
-            .week {
-              font-weight: bold;
-            }
-            .dates {
-              .date {
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                user-select: none;
-                cursor: pointer;
-                height: 3rem;
-                &:hover {
-                  background-color: orange;
-                }
-              }
-              .disabled {
-                color: white;
-                background-color: #d9d9d9;
-                cursor: not-allowed;
-              }
-              .currentDate {
-                background-color: orange;
-                color: white;
-              }
-            }
-            .unit1 {
-              display: grid;
-              grid-template-columns: repeat(7, 1fr);
-              text-align: center;
-            }
-          }
-        }
-      `}</style>
     </>
   )
 }

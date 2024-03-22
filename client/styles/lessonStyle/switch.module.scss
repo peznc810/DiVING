@@ -1,0 +1,77 @@
+@import '../variable.scss';
+.switch {
+  position: relative;
+  width: 80px;
+  height: 30px;
+  line-height: 30px;
+}
+
+.switch-checkbox {
+  position: absolute;
+  display: none;
+}
+
+.switch-label {
+  display: block;
+  overflow: hidden;
+  cursor: pointer;
+  border-radius: 20px;
+}
+
+.switch-txt {
+  display: block;
+  width: 200%;
+  margin-left: -100%;
+  transition: margin 0.3s ease-in 0s;
+}
+
+.switch-txt::before,
+.switch-txt::after {
+  display: block;
+  float: right;
+  width: 50%;
+  font-size: 15px;
+  color: #ffffff;
+  font-weight: bold;
+  box-sizing: border-box;
+}
+
+.switch-txt::after {
+  content: '詳細';
+  padding-left: 10px;
+  background: #0e85d4;
+  color: $super-light-gray;
+  width: 50%;
+  text-align: left;
+}
+
+.switch-txt::before {
+  content: '評價';
+  padding-right: 10px;
+  background: $primary;
+  color: $super-light-gray;
+  width: 50%;
+  text-align: right;
+}
+
+.switch-Round-btn {
+  position: absolute;
+  display: block;
+  width: 26px;
+  height: 26px;
+  margin: 2px;
+  background: $super-light-gray;
+  top: 0;
+  bottom: 0;
+  right: 50px;
+  border-radius: 13px;
+  transition: all 0.3s ease-in 0s;
+}
+
+.switch-checkbox:checked + .switch-label .switch-txt {
+  margin-left: 0;
+}
+
+.switch-checkbox:checked + .switch-label .switch-Round-btn {
+  right: 0;
+}
