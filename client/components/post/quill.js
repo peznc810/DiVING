@@ -16,9 +16,10 @@ export default function Quill({ initialContent, onChange }) {
       [{ header: [1, 2, 3, false] }],
       ['bold', 'italic', 'underline', 'strike', 'blockquote'],
       [{ list: 'ordered' }, { list: 'bullet' }],
-      ['link', 'image'],
+      ['link'],
       [{ align: [] }],
       [{ color: [] }],
+      [{ background: [] }],
       ['code-block'],
       ['clean'],
     ],
@@ -38,6 +39,7 @@ export default function Quill({ initialContent, onChange }) {
     'align',
     'color',
     'code-block',
+    'background',
   ]
 
   const handleContentChange = (newContent) => {
