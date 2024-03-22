@@ -2,19 +2,20 @@ import React, { useEffect, useState } from 'react'
 import Head from 'next/head'
 import Menu from '@/components/dashboard/menu'
 import styles from '@/components/dashboard/form/styles.module.scss'
-import loaderStyles from '@/styles/loader/loader_ripple.module.css'
-
 import { Form, InputGroup, Stack } from 'react-bootstrap'
 import DiButton from '@/components/post/defaultButton'
 import QuillEditor from '@/components/post/quill'
-import ImageUpload from '@/components/post/imageUpload'
 import TagGenerator from '@/components/post/tagGenerator'
 import { useRouter } from 'next/router'
 import CancelAlert from '@/components/post/cancelAlert'
+import Swal from 'sweetalert2'
+import Image from 'next/image'
+import LoaderPing from '@/components/post/loaderPing'
 
 export default function Edit() {
   const router = useRouter()
   const [editorLoaded, setEditorLoaded] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
 
   const [editFormData, setEditFormData] = useState({
     user_id: '',
@@ -22,9 +23,15 @@ export default function Edit() {
     image: '',
     content: '',
     tags: '',
+    lastUpdate: '',
   })
 
-  const [isLoading, setIsLoading] = useState(true)
+  // 選擇的檔案
+  const [selectedFile, setSelectedFile] = useState(null)
+  // 預覽圖片
+  const [preview, setPreview] = useState('')
+  // 當選擇檔案更動時建立預覽圖
+
   const fetchPostData = async (pid) => {
     try {
       const res = await fetch(`http://localhost:3005/api/post/${pid}`)
@@ -38,6 +45,7 @@ export default function Edit() {
           image: data.image,
           content: data.content,
           tags: data.tags || '',
+          lastUpdate: data.updated_at,
         })
 
         setTimeout(() => {
@@ -52,14 +60,38 @@ export default function Edit() {
   useEffect(() => {
     if (router.isReady) {
       const { pid } = router.query
-      console.log(pid)
       fetchPostData(pid)
     }
   }, [router.isReady]) // 確保只在 component 首次渲染時執行
 
-  const handleFormDataChange = (fieldName) => (e) => {
-    const newData = e.target.value
-    setEditFormData({ ...editFormData, [fieldName]: newData })
+  useEffect(() => {
+    if (!selectedFile && editFormData.image) {
+      setPreview('')
+      return
+    }
+    // createObjectURL產生一個臨時性的URL 預覽用
+    const objectUrl = URL.createObjectURL(selectedFile)
+    setPreview(objectUrl)
+
+    // setEditFormData({ ...editFormData, images: selectedFile })
+    // 當元件unmounted時清除記憶體
+    return () => URL.revokeObjectURL(objectUrl)
+  }, [selectedFile])
+
+  const changeHandler = (e) => {
+    //有檔案上傳時
+    const file = e.target.files[0]
+    console.log(file)
+    // 表單上傳元素沒辦法完全由react可控
+    if (file) {
+      setSelectedFile(file)
+    } else {
+      setSelectedFile(null)
+    }
+  }
+
+  const handleFormDataChange = (fieldName) => (value) => {
+    setEditFormData({ ...editFormData, [fieldName]: value })
     console.log(editFormData)
   }
 
@@ -70,30 +102,51 @@ export default function Edit() {
 
     // 在這裡發送POST請求到後端保存數據
     try {
-      const response = await fetch('http://localhost:3005/api/post/edit', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(editFormData),
-        // body: JSON.stringify(postData),
-      })
+      const res = await fetch(
+        `http://localhost:3005/api/post/edit/${router.query.pid}`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(editFormData),
+        }
+      )
 
-      // 處理後端返回的響應
-      const result = await response.json()
-      console.log(result)
+      //成功的話跳alert
+      if (res.status === 201) {
+        Swal.fire({
+          title: '編輯成功',
+          showClass: {
+            popup: `
+              animate__animated
+              animate__fadeInUp
+              animate__faster
+            `,
+          },
+          hideClass: {
+            popup: `
+              animate__animated
+              animate__fadeOutDown
+              animate__faster
+            `,
+          },
+          backdrop: `
+          rgba(0,0,123,0.4)
+          url("/images/post/swimmingdog.gif")
+          top
+          no-repeat
+        `,
+        })
+        //跳轉
+        router.push('/dashboard/posts')
+      }
     } catch (error) {
       console.error('Error submitting data:', error)
     }
   }
 
-  const loader = (
-    <div className={loaderStyles['lds-ripple']}>
-      <div></div>
-      <div></div>
-      <div></div>
-    </div>
-  )
+  const loader = <LoaderPing />
 
   const display = (
     <>
@@ -105,26 +158,52 @@ export default function Edit() {
           <Form.Control
             aria-label="title"
             aria-describedby="inputGroup-sizing-default"
-            onChange={handleFormDataChange('title')}
+            onChange={(e) => {
+              handleFormDataChange('title')(e.target.value)
+            }}
             value={editFormData.title} // 設定預設值
+            required
           />
         </InputGroup>
-        <ImageUpload />
+        <div className="border">
+          <input
+            type="file"
+            name="file"
+            accept="image/*"
+            onChange={changeHandler}
+          />
+          {selectedFile && (
+            <div
+              style={{ width: '100%', height: '300px', position: 'relative' }}
+            >
+              預覽圖片:{' '}
+              <Image
+                src={preview || `${editFormData.image}`}
+                alt="images"
+                fill={true}
+                style={{ objectFit: 'contain' }}
+                priority={false}
+              ></Image>
+            </div>
+          )}
+        </div>
+
+        <div className="board">{editFormData.image}</div>
         <TagGenerator
-          onChange={handleFormDataChange('tags')}
-          value={editFormData.tags}
+          onTagsChange={(newTags) => {
+            handleFormDataChange('tags')(newTags.join(','))
+          }}
+          initialTags={editFormData.tags}
         />
         <br />
         <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
-          <QuillEditor
-            // value={editedContent || content}
-            onChange={(value) => {
-              setEditFormData({ ...editFormData, content: value })
-            }}
-            className="w-full h-[70%] mt-10 bg-white"
-            editorLoaded={editorLoaded}
-            initialContent={editFormData.content}
-          />{' '}
+          <div className="h-screen w-screen flex items-center flex-col">
+            <QuillEditor
+              editorLoaded={editorLoaded}
+              onChange={(value) => handleFormDataChange('content')(value)}
+              initialContent={editFormData.content}
+            />{' '}
+          </div>
         </Form.Group>
         <Stack direction="horizontal" gap={3}>
           <div className="p-2 mx-auto">

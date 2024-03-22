@@ -1,111 +1,172 @@
 .main {
+  //整頁
   img {
     cursor: zoom-in;
+    animation: fadeinout 1s linear forwards; //淡入
   }
 }
 
 .box {
-  //整個地圖區塊
+  //左半邊地圖區塊
+  color: rgb(98, 175, 219);
   padding: 5px;
   border-radius: 1%;
-  // .bg {
-  //   width: 100%;
-  //   height: 100%;
-  //   object-fit: cover;
-  //   opacity: 0.5;
-  // }
+  box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2),
+    -1px -1px 0.1px 0.1px #0000004f;
   svg {
     //全部svg
     width: 100%;
     height: 100%;
-    fill: #d9d9d9;
-    circle {
-      overflow: hidden;
-      stroke: antiquewhite;
-    }
+    fill: transparent;
+    transform-origin: center;
+    transform-box: fill-box;
+    // stroke: linear-gradient(to bottom left, #c5d5fa, #c3dc99);
     path {
       width: 100%;
       height: 100%;
+
+      animation: dash 5s infinite;
+      // transform-origin: center center;
+      // transform-box: fill-box;
     }
+    circle {
+      // fill: aquamarine;
+      // animation: test 2s infinite ease;
+      transform-origin: center;
+      transform-box: fill-box;
+    }
+    //東沙的方
     rect {
       fill: none;
       stroke: var(--bs-gray);
     }
-    .use {
-      //複製出來的svg
-      fill: #000000;
-    }
+    // .diveSvg {
+    // }
   }
 }
 
-.same {
-  //想要同時選取 圓形+區 的時候亮
-  &:hover {
-    fill: #74d8ff;
-    .diveSvg {
-      //潛水伕
-      fill: black;
-      animation: cloudAni 2s infinite linear;
-    }
+@keyframes dash {
+  0% {
+    stroke-dashoffset: 0;
+  }
+  50% {
+    stroke-dashoffset: 500;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes fill-in {
+  to {
+    fill-opacity: 1;
   }
 }
 
 .district {
-  //8大區域
-  cursor: pointer;
-  stroke: #b5b5b5;
-  path {
-    //各個區
-    &:hover {
-      // fill: rgba(148, 212, 241, 0.148);
-      transition: fill 0.3s linear;
-      stroke: #00000048;
+  //本島跟外島
+  fill: #a8cd9f;
+  stroke: #000;
+  stroke-width: 0.5px;
+  animation: fill-in 2s 2s forwards;
+  fill-opacity: 0;
+
+  //各個區
+  &:hover {
+    fill: rgba(148, 212, 241, 0.148);
+    transition: fill 0.3s linear;
+    stroke: #00000048;
+    stroke-width: 1px;
+  }
+}
+
+// 點擊後的樣式
+.test {
+  animation: none;
+  circle {
+    fill: rgb(226, 46, 46);
+  }
+  .diveSvg {
+    fill: #000;
+    animation: swimming 5s infinite linear;
+  }
+}
+
+.rp1 {
+  animation-delay: 10s;
+  circle {
+    animation: growAndFade 3s infinite ease-out;
+    fill: dodgerblue;
+    stroke: #fff;
+    opacity: 0;
+    cursor: pointer;
+  }
+  // use {
+  //   fill: dodgerblue;
+  // }
+
+  .rp2 {
+    animation-delay: 5s;
+    animation: growAndFade 10s infinite ease-out;
+  }
+  .rp3 {
+    animation-delay: 5s;
+    animation: growAndFade 3s infinite ease-out;
+  }
+}
+
+@keyframes growAndFade {
+  0% {
+    opacity: 0.25;
+    transform: scale(0);
+  }
+  100% {
+    opacity: 0.1;
+    transform: scale(1.2);
+  }
+}
+
+@keyframes swimming {
+  0% {
+    transform: translateX(3%);
+    // transform: rotateY(90deg);
+  }
+  /*可加50%給他loop*/
+  50% {
+    transform: translateY(2%);
+    // transform: rotateY(180deg) translateX(-1%);
+  }
+  75% {
+    // transform: rotateY(90deg);
+    transform: translateY(-2%);
+    // transform: rotateY(180deg) translateX(-1%);
+  }
+  100% {
+    transform: translateX(3%); /*最左邊*/
+  }
+}
+
+//氣象資訊區塊
+.weather {
+  font-size: 20px;
+  .weather-detail {
+    background-color: rgba(149, 178, 203, 0.575);
+    border-radius: 2%;
+    line-height: 50px;
+    span {
+      margin: 0px 6px 0px 20px;
     }
   }
 }
 
-.ctaSvg {
-  //圓形裡面所有東西
-  animation: jump 2s ease-in-out infinite;
-  // animation-delay: 200ms;
-  cursor: pointer;
-  fill: rgb(189, 199, 239);
-  .diveSvg {
-    // 裡面的人
-    fill: #000;
-  }
-}
-
-@keyframes cloudAni {
+// 圖片用的淡入
+@keyframes fadeinout {
   0% {
-    transform: translateX(6%);
+    opacity: 0;
   }
-  /*可加50%給他loop*/
   50% {
-    transform: translateY(-1%);
-  }
-  75% {
-    transform: translateY(0);
+    opacity: 0.5;
   }
   100% {
-    transform: translateX(-5%); /*最左邊*/
-  }
-}
-@keyframes jump {
-  0%,
-  100% {
-    transform: translate(2%, 0);
-  }
-  25%,
-  50% {
-    transform: translate(2%, 1.5%);
-  }
-}
-
-.weather {
-  //氣象資訊區塊
-  .weather-detail {
-    font-size: 20px;
-    line-height: 30px;
+    opacity: 1;
   }
 }
