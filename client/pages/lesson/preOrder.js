@@ -3,6 +3,15 @@ import { useRouter } from 'next/router'
 import DatePicker from '@/components/cart/date-picker'
 export default function PreOrder() {
   const [selectedDate, setSelectedDate] = useState(null)
+  const [time, setTime] = useState('')
+  const [num, serNum] = useState(0)
+  const amclick = () => {
+    return <p>9:00</p>
+  }
+  const pmclick = () => {
+    const pm = '15:00'
+    setTime(pm)
+  }
   const handleDateChange = (date) => {
     setSelectedDate(date)
     console.log(selectedDate)
@@ -18,10 +27,12 @@ export default function PreOrder() {
   }
 
   useEffect(() => {
+    amclick()
     if (router.isReady) {
       const { lid } = router.query
       getOrderDetail(lid)
     }
+    console.log(time)
   }, [router.isReady])
 
   return (
@@ -51,14 +62,24 @@ export default function PreOrder() {
                   <button
                     type="button"
                     className="btn time-period-btn w-75 active"
+                    onClick={() => {
+                      setTime(amclick)
+                    }}
                   >
                     <h5 className="fw-bold py-1">AM</h5>
                   </button>
                   <div className="w-25"></div>
-                  <button type="button" className="btn time-period-btn w-75">
+                  <button
+                    type="button"
+                    className="btn time-period-btn w-75"
+                    onClick={() => {
+                      setTime(pmclick)
+                    }}
+                  >
                     <h5 className="fw-bold py-1">PM</h5>
                   </button>
                 </div>
+                {time}
               </div>
             </div>
           </div>
