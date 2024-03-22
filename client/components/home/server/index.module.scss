@@ -2,7 +2,7 @@
 
 .server {
   letter-spacing: 1px;
-  margin-block: 120px;
+  margin-block: 80px;
   text-align: center;
   .title {
     border-left: 4px solid $secondary;
@@ -129,7 +129,7 @@
       padding-inline: 20px;
       padding-block: 0px;
       .imgDiv {
-        margin-top: 130px;
+        margin-block: 50px;
         width: 95%;
         height: 280px;
         img {

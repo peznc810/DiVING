@@ -139,9 +139,9 @@ export default function Cart() {
                   </td>
                   <td>
                     <FaRegTrashAlt
-                      size={22}
+                      size={20}
                       onClick={() => notifySA(name, id, isProduct)}
-                      style={{ cursor: 'pointer' }}
+                      style={{ cursor: 'pointer', color: '#aaa' }}
                     />
                   </td>
                 </tr>

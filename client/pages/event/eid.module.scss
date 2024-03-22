@@ -1,0 +1,14 @@
+@import '@/styles/variable.scss';
+
+.eventPage {
+  padding-inline: 160px;
+}
+.banner {
+  position: relative;
+  width: 100%;
+  height: 450px;
+  margin: auto;
+  border-radius: 4px;
+  overflow: hidden;
+  filter: brightness(1.2);
+}
