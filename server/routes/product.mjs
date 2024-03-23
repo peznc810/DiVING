@@ -69,6 +69,7 @@ router.post('/comment', async (req, res) => {
       'SELECT * FROM `order` JOIN `order_detail` ON `order_detail`.order_id = `order`.id WHERE `order_detail`.product_id= ? AND `order`.user_id=?;',
       [payload.product_id, payload.user_id],
     )
+    console.log(hasPurchased)
     if (!hasPurchased || hasPurchased.length === 0) {
       return res
         .status(400)
@@ -138,7 +139,7 @@ router.post('/collect', async (req, res) => {
     const { product_id, user_id } = req.body
 
     // Step1. 身份驗證 -> user_id 是否存在 ?
-    const [result] = await db.execute('SELECT * FROM `users` WHERE id = ?', [
+    const [result] = await db.execute('SELECT * FROM `users` WHERE uid = ?', [
       user_id,
     ])
 
@@ -235,11 +236,12 @@ function getIsUserCommented(mid, pid) {
 function getComment(pid) {
   return new Promise(async (resolve, reject) => {
     const [result] = await db.execute(
-      'SELECT * FROM `star` JOIN `users` ON `users`.id = `star`.user_id  WHERE `star`.product_id = ?',
+      'SELECT * FROM `star` JOIN `users` ON `users`.uid = `star`.user_id  WHERE `star`.product_id = ?',
       [pid],
     )
     if (result) {
       resolve(result)
+      console.log(result)
     } else {
       reject({ status: 'error', msg: 'err' })
     }
@@ -308,7 +310,7 @@ function getIsCollect(mid, pid) {
 function insertCollect(data) {
   return new Promise(async (resolve, reject) => {
     const [result] = await db.execute(
-      'INSERT INTO `collect` (user_id, product_id) VALUES (?, ?);',
+      'INSERT INTO `collect` (user_id, product_id, state) VALUES (?, ?, 1);',
       [data.user_id, data.product_id],
     )
     if (result) {

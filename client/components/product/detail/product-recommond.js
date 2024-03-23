@@ -7,7 +7,7 @@ import Stack from 'react-bootstrap/Stack'
 
 import { GoHeartFill } from 'react-icons/go'
 import { TbHeartX } from 'react-icons/tb'
-import { FaCartPlus } from 'react-icons/fa'
+// import { FaCartPlus } from 'react-icons/fa'
 import Link from 'next/link'
 
 import { Toaster } from 'react-hot-toast'
@@ -160,10 +160,11 @@ const RecommendCard = ({ productItem }) => {
                     {favorites ? <TbHeartX /> : <GoHeartFill />}
                     <Toaster />
                   </Button>
-                  <Button className="color-btn" variant="light">
-                    <FaCartPlus />
-                  </Button>
                 </div>
+
+                {/* <Button className="color-btn" variant="light">
+                    <FaCartPlus />
+                  </Button> */}
               </div>
             </Card.Body>
           </Card>
@@ -217,9 +218,9 @@ const RecommendCard = ({ productItem }) => {
                   {favorites ? <TbHeartX /> : <GoHeartFill />}
                   <Toaster />
                 </Button>
-                <Button className="color-btn" variant="light">
+                {/* <Button className="color-btn" variant="light">
                   <FaCartPlus />
-                </Button>
+                </Button> */}
               </div>
             </div>
           </Card.Body>

@@ -35,13 +35,18 @@ export const initState = {
 //     {}
 //   )
 // }
-export const findOneById = (items, id, isProduct) => {
+export const findOneById = (items, id, detail, isProduct) => {
   return (
     items.find((item) => {
       if (isProduct) {
-        return String(item.product_id) === String(id)
+        return (
+          String(item.product_id) === String(id) &&
+          item.product_detail === detail
+        )
       } else {
-        return String(item.lesson_id) === String(id)
+        return (
+          String(item.lesson_id) === String(id) && item.order_time === detail
+        )
       }
     }) || {}
   )
@@ -73,11 +78,19 @@ export const updateOne = (items, updateItem) => {
 /**
  * `incrementOne(items, id)` 依照某id更新項目的數量+1
  */
-export const incrementOne = (items, id, isProduct) => {
+export const incrementOne = (items, id, detail, isProduct) => {
   return items.map((item) => {
-    if (isProduct && item.product_id === String(id)) {
+    if (
+      isProduct &&
+      String(item.product_id) === String(id) &&
+      item.product_detail === detail
+    ) {
       return { ...item, num: item.num + 1 }
-    } else if (!isProduct && item.lesson_id === String(id)) {
+    } else if (
+      !isProduct &&
+      String(item.lesson_id) === String(id) &&
+      item.order_time === detail
+    ) {
       return { ...item, num: item.num + 1 }
     } else return item
   })
@@ -85,14 +98,22 @@ export const incrementOne = (items, id, isProduct) => {
 /**
  * `decrementOne(items, id)` 依照某id更新項目的數量-1。最小為1。
  */
-export const decrementOne = (items, id, isProduct) => {
+export const decrementOne = (items, id, detail, isProduct) => {
   return items.map((item) => {
-    if (isProduct && item.product_id === String(id)) {
+    if (
+      isProduct &&
+      String(item.product_id) === String(id) &&
+      item.product_detail === detail
+    ) {
       return {
         ...item,
         num: item.num - 1 > 0 ? item.num - 1 : 1,
       }
-    } else if (!isProduct && item.lesson_id === String(id)) {
+    } else if (
+      !isProduct &&
+      String(item.lesson_id) === String(id) &&
+      item.order_time === detail
+    ) {
       return {
         ...item,
         num: item.num - 1 > 0 ? item.num - 1 : 1,
@@ -164,12 +185,20 @@ export const addOne = (items, newItem) => {
 //     (item) => (String(item.product_id) || String(item.lesson_id)) !== String(id)
 //   )
 // }
-export const removeOne = (items, id, isProduct) => {
+export const removeOne = (items, id, detail, isProduct) => {
   return items.filter((item) => {
     if (isProduct) {
-      return String(item.product_id) !== String(id)
+      if (String(item.product_id) === String(id)) {
+        return item.product_detail !== detail
+      } else {
+        return String(item.product_id) !== String(id)
+      }
     } else {
-      return String(item.lesson_id) !== String(id)
+      if (String(item.lesson_id) === String(id)) {
+        return item.order_time !== detail
+      } else {
+        return String(item.lesson_id) !== String(id)
+      }
     }
   })
 }

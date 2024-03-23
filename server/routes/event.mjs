@@ -17,8 +17,16 @@ router.get('/', async (req, res) => {
 
 
 // 讀取資料
-// router.get('/:id',(req,res)=>{
-
-// })
+router.get('/:id',async (req,res)=>{
+  const eid = req.params.id
+  const [[result]] = await connection.execute(
+    "SELECT * FROM `event` WHERE id =?",
+    [eid]
+  ) .catch(() => {
+    return [undefined]
+  })
+  res.status(200).json(result)
+  console.log(result);
+})
 
 export default router

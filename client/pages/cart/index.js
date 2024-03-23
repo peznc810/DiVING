@@ -71,7 +71,7 @@ export default function Home() {
       applyUsingCoupon({
         id: coupon_id,
         name: coupon_name,
-        discount: coupon_discount,
+        discount: updateDiscount,
         finalPrice: updateTotalPrice,
         rule: coupon_rule,
       })
@@ -84,7 +84,7 @@ export default function Home() {
   }
 
   return (
-    <div className="container">
+    <div className="container my-5">
       <CartStep step={1} />
       <Cart />
       <div className="row mt-5 container justify-content-between order-detail">

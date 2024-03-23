@@ -5,4 +5,55 @@
   height: 100vh;
   background-color: $primary;
   letter-spacing: 1px;
+
+  .svgBlock {
+    width: 350px;
+    svg {
+      width: 100%;
+    }
+  }
+
+  .fish1 {
+    animation: fish1Ani 1s linear infinite;
+  }
+  .fish2 {
+    animation: fish1Ani 1s linear infinite;
+  }
+  .fish3 {
+    animation: fish3Ani 1s linear infinite;
+  }
+}
+
+@keyframes fish1Ani {
+  0% {
+    transform: translateY(-2px) translateX(2px);
+  }
+  50% {
+    transform: translateY(0px) translateX(0px);
+  }
+  100% {
+    transform: translateY(-1px) translateX(3px);
+  }
+}
+@keyframes fish2Ani {
+  0% {
+    transform: translateY(2px) translateX(1px);
+  }
+  50% {
+    transform: translateY(-1px) translateX(0px);
+  }
+  100% {
+    transform: translateY(0px) translateX(3px);
+  }
+}
+@keyframes fish3Ani {
+  0% {
+    transform: translateY(-3px) translateX(1px);
+  }
+  50% {
+    transform: translateY(-1px) translateX(2px);
+  }
+  100% {
+    transform: translateY(-2px) translateX(1px);
+  }
 }

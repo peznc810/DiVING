@@ -61,7 +61,7 @@ router.post('/fav/:id', async (req, res) => {
   try {
     // 使用 SQL 語法來更新資料庫中的狀態
     const result = await db.execute(
-      'UPDATE fav SET state = ? WHERE lesson_id = ?',
+      'UPDATE collect SET state = ? WHERE lesson_id = ?',
       [newFav, id],
     )
     res.json({ state: newFav })
@@ -78,7 +78,7 @@ router.get('/getfav/:id',async function (req, res, next) {
         const Sid = req.params.id
         const userState = req.query.userState
         let [star] = await db
-        .execute('SELECT fav.state FROM fav WHERE fav.user_id = ? AND fav.lesson_id = ?', [userState, Sid])
+        .execute('SELECT collect.state FROM collect WHERE collect.user_id = ? AND collect.lesson_id = ?', [userState, Sid])
         .catch((err) => {
             console.error(err)
             return [undefined]
@@ -111,11 +111,11 @@ router.get('/orderdate', async function (req, res, next) {
 });
 
 router.post("/order-time", async function (req, res, next) {
-  const { lesson_id, order_time } = req.body;
+  const { lesson_id, order_time,time } = req.body;
   try {
     const result = await db.execute(
       'INSERT INTO order_time (lesson_id, preorder_date, preorder_time) VALUES (?, ?, ?)',
-      [parseInt(lesson_id), order_time, 1],
+      [parseInt(lesson_id), order_time, time],
     );
     res.json(result);
   } catch (err) {

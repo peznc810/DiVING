@@ -2,11 +2,34 @@ import React from 'react'
 import styles from '../styles.module.scss'
 import Link from 'next/link'
 import Image from 'next/image'
+import usePagination from '@/hooks/use-pagination'
+import Pagination from '../pagination'
 
 // React icon
 import { FaStar } from 'react-icons/fa'
 
-export default function Form() {
+export default function Form({ common = [] }) {
+  // 控制分頁
+  const { currentPage, pageItem, handlePage, getPageNumbers } = usePagination(
+    common,
+    2
+  )
+  // 星星評分
+  const maxCount = 5
+  const defaultStar = [...Array(maxCount).keys()]
+
+  // 課程和商品分圖片的路徑
+  const imgSrc = common.map((item) => {
+    if (item.product_id) {
+      const template = `/images/product/images/${item.product_category}/${item.product_id}/${item.img}`
+      return template
+    } else {
+      const fileName = item.img.split(',', 1) + '.jpg'
+      const template = `/images/lesson/${fileName}`
+      return template
+    }
+  })
+
   return (
     <>
       <div className={`col-sm-8 p-0 rounded-end ${styles['form-container']}`}>
@@ -16,22 +39,6 @@ export default function Form() {
               <h2 className="fw-medium fs-5 d-flex py-3 m-0">我的評論</h2>
             </div>
             <div className="accordion-body overflow-auto">
-              {/* 篩選＆搜尋，要再調整 */}
-              <div className="d-flex justify-content-between align-items-center mb-3">
-                <div className="d-flex align-items-center">
-                  <button type="button" className="btn btn-sm text-secondary">
-                    全部
-                  </button>
-                  |
-                  <button type="button" className="btn btn-sm">
-                    商品
-                  </button>
-                  |
-                  <button type="button" className="btn btn-sm">
-                    課程
-                  </button>
-                </div>
-              </div>
               <table className="table mb-5">
                 <thead className="fs-6">
                   <tr>
@@ -39,75 +46,58 @@ export default function Form() {
                     <th scope="col">名稱</th>
                     <th scope="col">評價</th>
                     <th scope="col">內容</th>
+                    <th scope="col">建立時間</th>
                     <th scope="col"></th>
                   </tr>
                 </thead>
                 <tbody>
-                  {/* 之後改用map */}
-                  <tr className="align-middle">
-                    <td className="d-flex justify-content-center">
-                      <div className={`rounded ${styles.avatar} flex-shrink-0`}>
-                        <Image
-                          src="/images/coupons/turtle.jpg"
-                          alt="turtle"
-                          fill
-                        />
-                      </div>
-                    </td>
-                    <td>烏龜</td>
-                    <td>
-                      <FaStar className="text-secondary" />
-                      <FaStar className="text-secondary" />
-                      <FaStar className="text-secondary" />
-                      <FaStar className="text-secondary" />
-                      <FaStar className="text-secondary" />
-                    </td>
-                    <td>碰一下30萬</td>
-                    <td>
-                      <Link
-                        href="#"
-                        className="btn btn-secondary btn-sm text-white"
-                      >
-                        前往評論
-                      </Link>
-                    </td>
-                  </tr>
+                  {pageItem.map((item, index) => {
+                    return (
+                      <tr className="align-middle" key={item.id}>
+                        <td className="col-2 d-flex justify-content-center">
+                          <div
+                            className={`rounded ${styles.avatar} flex-shrink-0`}
+                          >
+                            {item.product_id ? (
+                              <Image src={imgSrc[index]} alt={item.name} fill />
+                            ) : (
+                              <Image src={imgSrc[index]} alt={item.name} fill />
+                            )}
+                          </div>
+                        </td>
+                        <td className="col-2">{item.name}</td>
+                        <td className="col-2">
+                          {defaultStar.map((v) => {
+                            return (
+                              <FaStar
+                                key={v}
+                                color={v + 1 <= item.score ? 'gold' : 'gray'}
+                              />
+                            )
+                          })}
+                        </td>
+                        <td className="col-2">{item.comment}</td>
+                        <td className="col-2">{item.created_at}</td>
+                        <td className="col-2">
+                          <Link
+                            href="#"
+                            className="btn btn-secondary btn-sm text-white"
+                          >
+                            前往評論
+                          </Link>
+                        </td>
+                      </tr>
+                    )
+                  })}
                 </tbody>
               </table>
-              <div className="d-flex justify-content-center">
-                {/* page要做成component */}
-                <div
-                  className="btn-group"
-                  role="group"
-                  aria-label="First group"
-                >
-                  {/* 要map */}
-                  <button
-                    type="button"
-                    className={`btn btn-outline-secondary btn-sm ${styles['hover-style']}`}
-                  >
-                    1
-                  </button>
-                  <button
-                    type="button"
-                    className={`btn btn-outline-secondary btn-sm ${styles['hover-style']}`}
-                  >
-                    2
-                  </button>
-                  <button
-                    type="button"
-                    className={`btn btn-outline-secondary btn-sm ${styles['hover-style']}`}
-                  >
-                    3
-                  </button>
-                  <button
-                    type="button"
-                    className={`btn btn-outline-secondary btn-sm ${styles['hover-style']}`}
-                  >
-                    4
-                  </button>
-                </div>
-              </div>
+              {/* 頁數按鈕 */}
+
+              <Pagination
+                currentPage={currentPage}
+                handlePage={handlePage}
+                getPageNumbers={getPageNumbers}
+              />
             </div>
           </div>
         </div>

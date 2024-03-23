@@ -14,13 +14,11 @@ const router = express.Router();
         const [aboutResult] = await db.execute('SELECT * FROM map_about');
         const aboutData = aboutResult;
 
-    //   res.json(result);
     res.json({ mapData, aboutData });
     } catch (error) {
       console.error('Error executing database query:', );
       res.status(500).json({ error: error });  
     }
   });
-
 
 export default router;

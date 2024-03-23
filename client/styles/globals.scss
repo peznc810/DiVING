@@ -35,6 +35,9 @@ body {
   // letter-spacing: 1px;
   box-sizing: border-box;
 }
+body::-webkit-scrollbar {
+  display: none;
+}
 ul {
   list-style: none;
 }

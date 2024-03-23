@@ -110,7 +110,7 @@ export default function Order({ orderId }) {
         </div>
         {orderDetail &&
           orderDetail.map((item, i) => {
-            const { name, num, price, discount_price } = item
+            const { name, num, price } = item
             const singleItemsPrice = price * num
             return (
               <div className={`row ${styles.row}`} key={i}>

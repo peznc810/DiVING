@@ -20,7 +20,11 @@ export default function EventCard({ eventList = [] }) {
             const date = v.created_at.toLocaleString('en-US', option)
 
             return (
-              <Link href={'/'} className={`${styles.eventCard}`} key={v.id}>
+              <Link
+                href={`/event/${v.id}`}
+                className={`${styles.eventCard}`}
+                key={v.id}
+              >
                 <div className={`${styles.imgDiv} position-relative`}>
                   <Image
                     src={v.banner}

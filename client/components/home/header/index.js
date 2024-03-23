@@ -1,5 +1,6 @@
 import { useRef, useEffect } from 'react'
 import styles from './index.module.scss'
+import { motion } from 'framer-motion'
 
 export default function HomeHeader() {
   const videoRef = useRef(null)
@@ -24,10 +25,29 @@ export default function HomeHeader() {
         </div>
 
         <div className={`${styles.homeContainer}`}>
-          <h2>
+          <motion.h2
+            initial={{ opacity: 0, y: 100 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{
+              type: 'tween',
+              delay: 0.5,
+              duration: 1,
+              ease: 'easeIn',
+            }}
+            viewport={{ once: true }}
+          >
             LET'S GO <br /> DiVING
-          </h2>
-          <ul
+          </motion.h2>
+          <motion.ul
+            initial={{ opacity: 0, y: -20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{
+              type: 'tween',
+              delay: 0.5,
+              duration: 1,
+              ease: 'easeIn',
+            }}
+            viewport={{ once: true }}
             className={`d-flex justify-content-center align-items-center p-0`}
           >
             <li>
@@ -39,7 +59,7 @@ export default function HomeHeader() {
             <li>
               <h4 className="">海洋環保</h4>
             </li>
-          </ul>
+          </motion.ul>
         </div>
       </header>
     </>

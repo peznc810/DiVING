@@ -60,7 +60,10 @@ export default function LatestNews({ eventList }) {
                         previewHandle(v.id)
                       }}
                     >
-                      <Link href={'/'} className={`d-flex align-items-center `}>
+                      <Link
+                        href={`/event/${v.id}`}
+                        className={`d-flex align-items-center `}
+                      >
                         <div className={`me-5 ${styles.postDay}`}>
                           <p className={`${styles.date}`}>{date}</p>
                           <p className={`${styles.month}`}>{month}</p>
@@ -100,7 +103,10 @@ export default function LatestNews({ eventList }) {
                   <p className="mb-5">{previewID.content}</p>
                 </div>
                 <div className={`d-flex flex-end`}>
-                  <Link href={'./'} className={`${styles.moreBtn} `}>
+                  <Link
+                    href={`/event/${previewID.id}`}
+                    className={`${styles.moreBtn} `}
+                  >
                     view more
                   </Link>
                 </div>

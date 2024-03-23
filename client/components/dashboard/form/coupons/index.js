@@ -3,11 +3,23 @@ import styles from '../styles.module.scss'
 import Image from 'next/image'
 import Swal from 'sweetalert2'
 import { useCouponHas } from '@/hooks/use-couponHasData'
+import usePagination from '@/hooks/use-pagination'
+import Pagination from '../pagination'
 
 export default function Form() {
-  const { couponHas, auth, authID, setCouponHas } = useCouponHas()
+  const { couponHas, authID, setCouponHas } = useCouponHas()
   const [inputCode, setInputCode] = useState('')
   const [errorText, setErrorText] = useState(false)
+
+  // 初始化可使用的優惠券
+  const initCoupon = couponHas.filter((coupon) => coupon.valid === 1)
+  const [coupon, setCoupon] = useState([])
+
+  // 控制分頁
+  const { currentPage, pageItem, handlePage, getPageNumbers } = usePagination(
+    coupon,
+    6
+  )
 
   const input = (e) => {
     e.preventDefault()
@@ -85,6 +97,17 @@ export default function Form() {
     }
   }
 
+  // 點擊顯示可使用的優惠券
+  const handleCouponValid = (validNum) => {
+    const validCoupon = couponHas.filter((coupon) => coupon.valid === validNum)
+    setCoupon(validCoupon)
+  }
+
+  // 抓到資料後把資料設定進去coupon
+  useEffect(() => {
+    setCoupon(initCoupon)
+  }, [couponHas])
+
   return (
     <>
       <div className={`col-sm-8 p-0 rounded-end ${styles['form-container']}`}>
@@ -106,11 +129,23 @@ export default function Form() {
               {/* 篩選＆搜尋，要再調整 */}
               <div className="d-flex justify-content-between align-items-center mb-3">
                 <div className="d-flex align-items-center">
-                  <button type="button" className="btn btn-sm text-secondary">
+                  <button
+                    type="button"
+                    className="btn btn-sm text-secondary"
+                    onClick={() => {
+                      handleCouponValid(1)
+                    }}
+                  >
                     可使用
                   </button>
                   |
-                  <button type="button" className="btn btn-sm">
+                  <button
+                    type="button"
+                    className="btn btn-sm"
+                    onClick={() => {
+                      handleCouponValid(0)
+                    }}
+                  >
                     已失效
                   </button>
                 </div>
@@ -120,8 +155,6 @@ export default function Form() {
                     className="form-control w-50 h-50 me-2"
                     value={inputCode}
                     onChange={(e) => {
-                      // e.preventDefault()
-                      // setInputCode(e.target.value.toLocaleUpperCase())
                       input(e)
                     }}
                     placeholder="輸入優惠碼..."
@@ -137,13 +170,15 @@ export default function Form() {
                   </button>
                 </div>
               </div>
-              {/* 這裡之後要再跟成List跟Item的component */}
               <div className="mb-5">
-                <div className={`row g-3 ${styles.card}`}>
+                <div className={`row g-3 ${styles['card-list']}`}>
                   {/* 卡片本體 */}
-                  {couponHas.map((v) => {
+                  {pageItem.map((v) => {
                     return (
-                      <div className="col-12 col-md-6" key={v.id}>
+                      <div
+                        className={`col-12 col-md-6 ${styles.card}`}
+                        key={v.id}
+                      >
                         <div className=" d-flex border border-info rounded p-3 h-100">
                           <div
                             className={`rounded ${styles.avatar} flex-shrink-0 me-3`}
@@ -167,39 +202,11 @@ export default function Form() {
                 </div>
               </div>
               {/* 頁數按鈕 */}
-              <div className="d-flex justify-content-center">
-                <div
-                  className="btn-group"
-                  role="group"
-                  aria-label="First group"
-                >
-                  {/* 要map */}
-                  <button
-                    type="button"
-                    className={`btn btn-outline-secondary btn-sm ${styles['hover-style']}`}
-                  >
-                    1
-                  </button>
-                  <button
-                    type="button"
-                    className={`btn btn-outline-secondary btn-sm ${styles['hover-style']}`}
-                  >
-                    2
-                  </button>
-                  <button
-                    type="button"
-                    className={`btn btn-outline-secondary btn-sm ${styles['hover-style']}`}
-                  >
-                    3
-                  </button>
-                  <button
-                    type="button"
-                    className={`btn btn-outline-secondary btn-sm ${styles['hover-style']}`}
-                  >
-                    4
-                  </button>
-                </div>
-              </div>
+              <Pagination
+                currentPage={currentPage}
+                handlePage={handlePage}
+                getPageNumbers={getPageNumbers}
+              />
             </div>
           </div>
         </div>

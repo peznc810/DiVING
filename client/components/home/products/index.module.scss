@@ -1,7 +1,10 @@
 @import '@/styles/variable.scss';
 
 .proMainBlock {
-  margin-block: 80px;
+  background-image: linear-gradient(to top, #265778de 0%, #26577800 100%);
+
+  margin-top: 80px;
+  padding-bottom: 200px;
   letter-spacing: 1px;
   text-align: center;
   .title {
@@ -15,13 +18,13 @@
       color: #fff;
     }
   }
-  a {
+  .more {
     padding: 8px 24px;
     color: #fff;
     border: 1px solid #fff;
     border-radius: 25px;
   }
-  a:hover {
+  .more:hover {
     color: #fff;
     border: 1px solid $secondary;
     background-color: $secondary;

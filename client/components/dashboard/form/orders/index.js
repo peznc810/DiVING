@@ -1,8 +1,14 @@
 import React from 'react'
 import styles from '../styles.module.scss'
 import Link from 'next/link'
+import usePagination from '@/hooks/use-pagination'
+import Pagination from '../pagination'
 
-export default function Form() {
+export default function Form({ order = [] }) {
+  const { currentPage, pageItem, handlePage, getPageNumbers } = usePagination(
+    order,
+    5
+  )
   return (
     <>
       <div className={`col-sm-8 p-0 rounded-end ${styles['form-container']}`}>
@@ -24,83 +30,33 @@ export default function Form() {
                 </thead>
                 <tbody>
                   {/* 之後改用map */}
-                  <tr className="align-middle">
-                    <td>20240101</td>
-                    <td>Mark</td>
-                    <td>Otto</td>
-                    <td>@mdo</td>
-                    <td>
-                      <Link
-                        href="/dashboard/orders/order"
-                        className="btn btn-secondary btn-sm text-white"
-                      >
-                        訂單詳情
-                      </Link>
-                    </td>
-                  </tr>
-                  <tr className="align-middle">
-                    <td>20240101</td>
-                    <td>Mark</td>
-                    <td>Otto</td>
-                    <td>@mdo</td>
-                    <td>
-                      <Link
-                        href="/dashboard/orders/order"
-                        className="btn btn-secondary btn-sm text-white"
-                      >
-                        訂單詳情
-                      </Link>
-                    </td>
-                  </tr>
-                  <tr className="align-middle">
-                    <td>20240101</td>
-                    <td>Mark</td>
-                    <td>Otto</td>
-                    <td>@mdo</td>
-                    <td>
-                      <Link
-                        href="/dashboard/orders/order"
-                        className="btn btn-secondary btn-sm text-white"
-                      >
-                        訂單詳情
-                      </Link>
-                    </td>
-                  </tr>
+                  {pageItem.map((item) => {
+                    return (
+                      <tr className="align-middle" key={item.id}>
+                        <td>{item.id}</td>
+                        <td>{item.created_at}</td>
+                        <td>{item.total_price}</td>
+                        <td>{item.status}</td>
+                        <td>
+                          <Link
+                            href="/dashboard/orders/order"
+                            className="btn btn-secondary btn-sm text-white"
+                          >
+                            訂單詳情
+                          </Link>
+                        </td>
+                      </tr>
+                    )
+                  })}
                 </tbody>
               </table>
-              <div className="d-flex justify-content-center">
-                <div
-                  className="btn-group"
-                  role="group"
-                  aria-label="First group"
-                >
-                  {/* 要map */}
-                  <button
-                    type="button"
-                    className={`btn btn-outline-secondary btn-sm ${styles['hover-style']}`}
-                  >
-                    1
-                  </button>
-                  <button
-                    type="button"
-                    className={`btn btn-outline-secondary btn-sm ${styles['hover-style']}`}
-                  >
-                    2
-                  </button>
-                  <button
-                    type="button"
-                    className={`btn btn-outline-secondary btn-sm ${styles['hover-style']}`}
-                  >
-                    3
-                  </button>
-                  <button
-                    type="button"
-                    className={`btn btn-outline-secondary btn-sm ${styles['hover-style']}`}
-                  >
-                    4
-                  </button>
-                </div>
-              </div>
+              {/* 頁數按鈕 */}
+
+              <Pagination
+                currentPage={currentPage}
+                handlePage={handlePage}
+                getPageNumbers={getPageNumbers}
+              />
             </div>
           </div>
         </div>
