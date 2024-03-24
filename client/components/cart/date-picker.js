@@ -13,17 +13,14 @@ export default function DatePicker({ getDate }) {
   const getperoder = async () => {
     try {
       const response = await fetch(`${api}/orderdate`)
-
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`)
       }
-
       const data = await response.json()
       const arrdate = data.map((v, i) => {
         return new Date(v.preorder_date).toLocaleDateString()
       })
       setBookedDates(arrdate)
-      console.log(data)
       return data
     } catch (error) {
       console.error(
@@ -39,26 +36,19 @@ export default function DatePicker({ getDate }) {
       currentDate.getMonth(),
       day
     )
-    setSelectedDate(date.toLocaleDateString())
-    getDate(date.toLocaleDateString())
-    setSelectedDate(day)
     const today = new Date()
     today.setHours(0, 0, 0, 0) // 將今天的時間設定為午夜
-
     // 如果選擇的日期在今天或之後，則更新狀態
-    if (date <= today && !bookedDates.includes(date.toLocaleDateString())) {
+    if (date >= today && !bookedDates.includes(date.toLocaleDateString())) {
       setSelectedDate(date.toLocaleDateString())
       getDate(date.toLocaleDateString())
-      console.log(bookedDates)
     }
   }
-
   const handlePreMonth = () => {
     setCurrentDate(
       (prevDate) => new Date(prevDate.getFullYear(), prevDate.getMonth() - 1)
     )
   }
-
   const handleNextMonth = () => {
     setCurrentDate(
       (prevDate) => new Date(prevDate.getFullYear(), prevDate.getMonth() + 1)
@@ -72,15 +62,12 @@ export default function DatePicker({ getDate }) {
       currentDate.getMonth() + 1,
       0
     ).getDate()
-
     const firstDayOfMonth = new Date(
       currentDate.getFullYear(),
       currentDate.getMonth(),
       1
     ).getDay()
-
     const leadingEmptyDays = Array(firstDayOfMonth).fill(null)
-
     setDays([
       ...leadingEmptyDays,
       ...Array.from({ length: daysInMonth }, (_, i) => i + 1),
@@ -92,15 +79,15 @@ export default function DatePicker({ getDate }) {
       // handleClick(event)
     }
   }
-
   return (
     <>
-      <div className="d-flex"></div>
-      <div className={`${Style['calendarContainer']}`}>
+      <div className={`${Style['calendarContainer']} mb-3`}>
         <div className={`${Style['calendar']}`}>
           <div className="nav d-flex align-items-center justify-content-between">
             <GoChevronLeft className="leftBtn" onClick={handlePreMonth} />
-            <div className="month">{currentDate.getMonth() + 1}</div>
+            <div className="month">
+              {currentDate.getFullYear()}年{currentDate.getMonth() + 1}
+            </div>
             <GoChevronRight className="rightBtn" onClick={handleNextMonth} />
           </div>
           <div className={`${Style['week']} ${Style['unit1']} pt-3`}>
@@ -119,13 +106,15 @@ export default function DatePicker({ getDate }) {
                 currentDate.getMonth(),
                 day
               )
+              const dateSt = date.toLocaleDateString()
+
               const today = new Date()
               today.setHours(0, 0, 0, 0) // 將今天的時間設定為午夜
 
               return (
                 <div
                   className={`${Style['date']} ${
-                    day === selectedDate ? Style['currentDate'] : ''
+                    dateSt === selectedDate ? Style['currentDate'] : ''
                   } ${date < today ? Style['disabled'] : ''} 
                   ${
                     bookedDates.includes(date.toLocaleDateString())
@@ -137,12 +126,7 @@ export default function DatePicker({ getDate }) {
                   role="button"
                   tabIndex="0"
                   onClick={() => {
-                    if (
-                      !bookedDates.includes(date.toLocaleDateString()) &&
-                      date > today
-                    ) {
-                      handleDateChange(day)
-                    }
+                    handleDateChange(day)
                   }}
                 >
                   {day || ''}

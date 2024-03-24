@@ -124,4 +124,17 @@ router.post("/order-time", async function (req, res, next) {
   }
 });
 
+router.get("/time", async function (req, res, next) {
+  // const { lesson_id, order_time,time } = req.body;
+  try {
+    const result = await db.execute(
+      "SELECT preorder_date,CASE WHEN SUM(preorder_time LIKE '%AM%') = 0 THEN 'AM' ELSE NULL END AS AM,CASE WHEN SUM(preorder_time LIKE '%PM%') = 0 THEN 'PM' ELSE NULL END AS PM FROM order_time GROUP BY preorder_date",
+      // [parseInt(lesson_id), order_time, time],
+    );
+    res.json(result);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
 export default router
