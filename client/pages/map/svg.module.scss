@@ -1,8 +1,9 @@
 .main {
   //整頁
+  animation: fadeinout 2s linear forwards; //淡入
   img {
-    cursor: zoom-in;
     animation: fadeinout 1s linear forwards; //淡入
+    cursor: zoom-in;
   }
 }
 
@@ -99,6 +100,9 @@
     stroke: #fff;
     opacity: 0;
     cursor: pointer;
+    :hover {
+      animation: none;
+    }
   }
   // use {
   //   fill: dodgerblue;
@@ -128,17 +132,13 @@
 @keyframes swimming {
   0% {
     transform: translateX(3%);
-    // transform: rotateY(90deg);
   }
-  /*可加50%給他loop*/
+
   50% {
     transform: translateY(2%);
-    // transform: rotateY(180deg) translateX(-1%);
   }
   75% {
-    // transform: rotateY(90deg);
     transform: translateY(-2%);
-    // transform: rotateY(180deg) translateX(-1%);
   }
   100% {
     transform: translateX(3%); /*最左邊*/
@@ -147,14 +147,14 @@
 
 //氣象資訊區塊
 .weather {
+  background-color: rgba(149, 178, 203, 0.575);
   font-size: 20px;
+  padding: 1rem;
+
   .weather-detail {
-    background-color: rgba(149, 178, 203, 0.575);
+    display: flex;
     border-radius: 2%;
     line-height: 50px;
-    span {
-      margin: 0px 6px 0px 20px;
-    }
   }
 }
 
@@ -168,5 +168,186 @@
   }
   100% {
     opacity: 1;
+  }
+}
+
+//氣象資訊區塊
+.weather-list ul {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 0px;
+}
+.weather-list li {
+  padding: 15px;
+  text-wrap: nowrap;
+  transition: 200ms ease;
+  border-radius: 10px;
+  margin: 0 5px;
+  // transform: scale(1.1);
+  background: #fff;
+  color: #222831;
+  box-shadow: 0 0 40px -5px rgba(0, 0, 0, 0.2);
+  .day-name {
+    display: block;
+    margin: 10px 0 0 0;
+    text-align: center;
+  }
+  .day-icon {
+    display: block;
+    height: 30px;
+    width: auto;
+    margin: 0 auto;
+  }
+  .day-info {
+    display: block;
+    text-align: center;
+    margin: 10px 0 0 0;
+    font-weight: 700;
+  }
+}
+
+//test
+@keyframes pulsate {
+  0% {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+  45% {
+    transform: scale(1.75);
+    opacity: 0;
+  }
+}
+@keyframes stop-pulsate {
+  from {
+    opacity: 0.4;
+  }
+  to {
+    transform: scale(2);
+    opacity: 0;
+  }
+}
+
+/* Button */
+.btn-pulse {
+  display: flex;
+  // width: 100%;
+  // height: 100%;
+  justify-content: center;
+  position: relative;
+  .circle {
+    position: relative;
+    top: 50%;
+    // left: 0;
+    width: 32px;
+    height: 32px;
+    // margin: -0.666em auto auto -0.666em;
+    background: rgba(237, 0, 72, 1);
+    border-radius: 50%;
+    opacity: 0.6;
+    transform-origin: 50% 50%;
+    transition: opacity 0.2s ease-in, transform 0.1s ease-out;
+    color: white;
+    font-size: 1.5em;
+    // padding: 0;
+    // text-align: center;
+    line-height: 32px;
+    overflow: hidden;
+    &:hover {
+      opacity: 0.8;
+      cursor: pointer;
+    }
+    &:active {
+      transform: scale(0.875);
+    }
+  }
+
+  .ring {
+    // display: block;
+    position: relative;
+    // left: 0;
+    width: 2em;
+    height: 2em;
+    // margin: -1em auto auto -1em;
+    transform-origin: 50% 50%;
+    border-radius: 50%;
+    border: 1px solid rgba(237, 0, 72, 1);
+    opacity: 0;
+    animation: pulsate 3s ease-out infinite;
+  }
+
+  &:hover .ring {
+    animation: none;
+  }
+
+  &:active .ring {
+    animation: stop-pulsate 0.3s;
+  }
+}
+
+//BS
+.highlight-spot {
+  position: absolute;
+
+  display: block;
+
+  width: 10px;
+  height: 10px;
+
+  border-radius: 50%;
+  background-color: crimson;
+}
+.highlight-spot:hover {
+  cursor: pointer;
+}
+.highlight-spot:after {
+  position: absolute;
+  top: -10px;
+  left: -10px;
+
+  width: 30px;
+  height: 30px;
+
+  content: '';
+  -webkit-animation: pulsate 1s ease-out;
+  -webkit-animation-iteration-count: infinite;
+
+  opacity: 0;
+  border: 3px solid crimson;
+  -webkit-border-radius: 30px;
+}
+
+.top {
+  top: 0;
+}
+.left {
+  left: 0;
+}
+.right {
+  right: 0;
+}
+.bottom {
+  bottom: 0;
+}
+.center-y {
+  top: 50%;
+  transform: translateY(-50%);
+}
+.center-x {
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+}
+
+@-webkit-keyframes pulsate {
+  0% {
+    -webkit-transform: scale(0.1, 0.1);
+    opacity: 0;
+  }
+  50% {
+    opacity: 0.5;
+  }
+  100% {
+    -webkit-transform: scale(1.2, 1.2);
+    opacity: 0;
   }
 }

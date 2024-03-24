@@ -5,21 +5,20 @@ import { useAuth } from '@/hooks/auth'
 // React icon
 import { FaTrashCan } from 'react-icons/fa6'
 import { MdOutlineLibraryAdd } from 'react-icons/md'
-import { FaEdit } from 'react-icons/fa'
+// import { FaEdit } from 'react-icons/fa'
 
 import usePagination from '@/hooks/use-pagination'
 import Pagination from '../pagination'
 import { useRouter } from 'next/router'
 import Swal from 'sweetalert2'
 import CancelAlert from '@/components/post/cancelAlert'
-import { Stack } from 'react-bootstrap'
 
 export default function Index() {
   const [postList, setPostList] = useState([])
   // 控制分頁
   const { currentPage, pageItem, handlePage, getPageNumbers } = usePagination(
     postList,
-    10
+    5
   )
   const { auth } = useAuth()
   const router = useRouter()
@@ -44,11 +43,10 @@ export default function Index() {
   useEffect(() => {
     if (auth.id !== '') {
       getPost(auth.id)
-      console.log(auth.id)
     }
   }, [auth])
 
-  const handleDisablePost = async (e, postId) => {
+  const handleDisablePost = async (postId) => {
     try {
       const res = await fetch(
         `http://localhost:3005/api/post/disable/${postId}`,
@@ -87,9 +85,9 @@ export default function Index() {
       `,
         })
         //跳轉
-        router.push('/dashboard/posts')
+        // router.push('/dashboard/posts')
+        window.location.reload()
       } else {
-        // 修改失敗
         console.error('Failed to disable post')
       }
     } catch (error) {
@@ -97,9 +95,6 @@ export default function Index() {
     }
   }
 
-  useEffect(() => {
-    getPost()
-  }, [])
   return (
     <>
       <div className={`col-sm-8 p-0 rounded-end ${styles['form-container']}`}>
@@ -147,13 +142,12 @@ export default function Index() {
                           .replace(/\//g, '-')}
                       </td>
                       <td>
-                        <Link
+                        {/* <Link
                           href={`/dashboard/posts/edit/${v.id}`}
                           className="btn"
                         >
                           <FaEdit />
-                        </Link>
-
+                        </Link> */}
                         <button
                           type="button"
                           className="btn"

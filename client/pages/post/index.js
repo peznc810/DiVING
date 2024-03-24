@@ -10,9 +10,9 @@ import {
   Carousel,
   Image,
 } from 'react-bootstrap'
-import styles from '@/components/post/post-list.module.scss'
-import LoaderPing from '@/components/post/loaderPing'
+import styles from '@/components/post/post.module.scss'
 import PostCard from '@/components/post/postCard'
+import Loading from '@/components/layout/loading/loading'
 
 export default function List() {
   const [postList, setPostList] = useState([])
@@ -50,7 +50,7 @@ export default function List() {
     getPost()
   }, [searchText]) // searchText 變化時重新取得數據
 
-  const loader = <LoaderPing />
+  const loader = <Loading />
 
   const handleTagClick = async (tag) => {
     try {
@@ -65,78 +65,78 @@ export default function List() {
 
   return (
     <>
-      <Container className="mt-3">
-        <div className="my-1">
-          {' '}
-          <h4>熱門文章</h4>
-          <div>
-            <Carousel
-              interval={5000}
-              fade={true}
-              slide={true}
-              className={styles['carousel']}
-            >
-              {postList.map(
-                (v, index) =>
-                  desiredIndexes.includes(index) && (
-                    <Carousel.Item
-                      key={v.id}
-                      className={styles['carousel-item']}
-                    >
-                      <Link
-                        href={`/post/${v.id}`}
-                        style={{ textDecoration: 'none' }}
+      {isLoading ? (
+        loader
+      ) : (
+        <Container className="mt-3">
+          <div className="my-1">
+            {' '}
+            <h4>熱門文章</h4>
+            <div>
+              <Carousel
+                interval={5000}
+                fade={true}
+                slide={true}
+                className={styles['carousel']}
+              >
+                {postList.map(
+                  (v, index) =>
+                    desiredIndexes.includes(index) && (
+                      <Carousel.Item
+                        key={v.id}
+                        className={styles['carousel-item']}
                       >
-                        <Image
-                          rounded
-                          variant="top"
-                          src={`/images/post/${v.image}`}
-                          alt={v.image}
-                        />
-                      </Link>
-                      <Carousel.Caption>
-                        <h3>{v.title}</h3>
-                      </Carousel.Caption>
-                    </Carousel.Item>
-                  )
-              )}
-            </Carousel>
+                        <Link
+                          href={`/post/${v.id}`}
+                          style={{ textDecoration: 'none' }}
+                        >
+                          <Image
+                            rounded
+                            variant="top"
+                            src={`/images/post/${v.image}`}
+                            alt={v.image}
+                          />
+                        </Link>
+                        <Carousel.Caption>
+                          <h3>{v.title}</h3>
+                        </Carousel.Caption>
+                      </Carousel.Item>
+                    )
+                )}
+              </Carousel>
+            </div>
           </div>
-        </div>
-        <hr />
-        <div className="my-4">
-          {' '}
-          <h4>所有文章</h4>
-          <Row>
-            <Col xs={4} className="ms-auto">
-              <InputGroup className="mb-3">
-                <Form.Control
-                  placeholder="Search"
-                  type="text"
-                  id="searchInput"
-                  className="w-50"
-                />
-                <Button
-                  variant="outline-secondary"
-                  onClick={() => {
-                    const inputValue =
-                      document.getElementById('searchInput').value // 取輸入的值
-                    setSearchText(inputValue)
-                  }}
-                >
-                  查詢
-                </Button>
-              </InputGroup>
-            </Col>
-          </Row>
-        </div>
+          <hr />
+          <div className="my-4">
+            {' '}
+            <h4>所有文章</h4>
+            <Row>
+              <Col xs={4} className="ms-auto">
+                <InputGroup className="mb-3">
+                  <Form.Control
+                    placeholder="Search"
+                    type="text"
+                    id="searchInput"
+                    className="w-50"
+                  />
+                  <Button
+                    variant="outline-secondary"
+                    onClick={() => {
+                      const inputValue =
+                        document.getElementById('searchInput').value // 取輸入的值
+                      setSearchText(inputValue)
+                    }}
+                  >
+                    查詢
+                  </Button>
+                </InputGroup>
+              </Col>
+            </Row>
+          </div>
 
-        {isLoading ? (
-          loader
-        ) : (
           <PostCard postList={postList} handleTagClick={handleTagClick} />
-        )}
-      </Container>
+        </Container>
+      )}
     </>
   )
 }

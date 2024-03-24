@@ -21,10 +21,8 @@ export default function DefaultButton({ type, text, onClick, color }) {
           border: 1.5px solid ${color};
           color: ${color};
           font-size: 16px;
-          text-transform: uppercase;
           font-weight: bold;
           text-align: center;
-          text-decoration: none;
           overflow: hidden;
           transition: 0.5s;
           padding: 10px 20px;
@@ -62,24 +60,6 @@ export default function DefaultButton({ type, text, onClick, color }) {
         }
         .special span:nth-child(4) {
           --n: 4;
-        }
-         {
-          /* button {
-          font-size: 16px;
-          background-color: white;
-          color: ${color};
-          margin: 2px;
-          margin-right: 15px;
-          border-radius: 50px;
-          border: 1.5px solid ${color};
-          padding: 6px 12px 6px 12px;
-          position: relative;
-          overflow: hidden;
-        }
-        button:hover {
-          background-color: ${color};
-          color: white;
-        } */
         }
       `}</style>
     </>
