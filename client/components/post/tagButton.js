@@ -1,7 +1,9 @@
 export default function TagButton({ type, text, onClick, color }) {
   return (
-    <button type={type} onClick={onClick}>
-      {text}
+    <>
+      <button type={type} onClick={onClick}>
+        {text}
+      </button>
       <style jsx>{`
         button {
           margin: 4px 6px;
@@ -23,8 +25,8 @@ export default function TagButton({ type, text, onClick, color }) {
           color: #013c64;
           background-color: #0000;
           border: 1px solid #0003;
-        }
-      `}</style>
-    </button>
+        } 
+        `}</style>
+    </>
   )
 }

@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import React, { useState, useEffect } from 'react'
 
 export default function ImageUpload() {
@@ -16,10 +17,9 @@ export default function ImageUpload() {
       setPreview('')
       return
     }
-
-    // createObjectURL產生一個臨時性的URL
+    handleSubmission()
+    // createObjectURL產生一個臨時性的URL 預覽用
     const objectUrl = URL.createObjectURL(selectedFile)
-    console.log(objectUrl)
     setPreview(objectUrl)
 
     // 當元件unmounted時清除記憶體
@@ -27,14 +27,15 @@ export default function ImageUpload() {
   }, [selectedFile])
 
   const changeHandler = (e) => {
+    //有檔案上傳時
     const file = e.target.files[0]
-
+    console.log(file)
     // 表單上傳元素沒辦法完全由react可控
     if (file) {
       setIsFilePicked(true)
       setSelectedFile(file)
       setImgServerUrl('')
-      handleSubmission()
+      // handleSubmission()
     } else {
       setIsFilePicked(false)
       setSelectedFile(null)
@@ -46,31 +47,43 @@ export default function ImageUpload() {
     const formData = new FormData()
 
     // 對照server上的檔案名稱 req.files.avatar
-    formData.append('avatar', selectedFile)
+    formData.append('images', selectedFile)
 
-    fetch('http://localhost:3005/post/upload', {
+    fetch('http://localhost:3005/api/post/upload-images', {
       method: 'POST',
       body: formData,
     })
-      .then((response) => response.json())
+      .then((response) => {
+        console.log('Server Response:', response)
+        return response.json()
+      })
       .then((result) => {
         console.log('Success:', result)
-        setImgServerUrl(
-          'http://localhost:3005/public/upload/' + result.data.name
-        )
+        setImgServerUrl('http://localhost:3005/upload/' + result.data.name)
       })
       .catch((error) => {
         console.error('Error:', error)
       })
-    console.log(formData)
   }
 
   return (
     <>
-      <input type="file" name="file" onChange={changeHandler} />
+      <input
+        type="file"
+        name="file"
+        accept="image/*"
+        onChange={changeHandler}
+      />
       {selectedFile && (
-        <div>
-          預覽圖片: <img src={preview} alt="" />
+        <div style={{ width: '100%', height: '300px', position: 'relative' }}>
+          預覽圖片:{' '}
+          <Image
+            src={preview}
+            alt="images"
+            fill={true}
+            style={{ objectFit: 'contain' }}
+            priority={false}
+          ></Image>
         </div>
       )}
       {isFilePicked ? (
@@ -80,7 +93,7 @@ export default function ImageUpload() {
           <p>Size in bytes: {selectedFile.size}</p>
         </>
       ) : (
-        <p>選擇檔案觀看詳細資料</p>
+        <p>選擇檔案以預覽</p>
       )}
       {/* <div>
         <button onClick={handleSubmission}>送出</button>
