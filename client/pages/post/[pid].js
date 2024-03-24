@@ -6,8 +6,9 @@ import Link from 'next/link'
 import TagButton from '@/components/post/tagButton'
 import { Container, Card, Col, Row } from 'react-bootstrap'
 import DOMPurify from 'dompurify'
-import LoaderPing from '@/components/post/loaderPing'
 import postStyle from '@/components/post/post-pid.module.scss'
+import BackButton from '@/components/post/backButton'
+import Loading from '@/components/layout/loading/loading'
 
 export default function Detail() {
   const router = useRouter()
@@ -54,7 +55,6 @@ export default function Detail() {
     }
   }, [router.isReady])
 
-  const loader = <LoaderPing />
   const getTagsArray = (tagsString) => {
     // 檢查 tagsString 是否存在
     if (tagsString) {
@@ -62,42 +62,10 @@ export default function Detail() {
     }
     return []
   }
+
+  const loader = <Loading />
+
   const display = (
-    <>
-      <Container>
-        <Row>
-          <Col md={8} className="bg-light p-4 mb-3">
-            <p>{post.published}</p>
-            <h3>{post.title}</h3>
-            作者：{post.name}
-            <div className="my-2">
-              {' '}
-              {getTagsArray(post.tags).map((tag, index) => (
-                <Link key={index} href={`/post/tagPost/${tag}`} target="_blank">
-                  <TagButton text={`# ${tag}`} />
-                </Link>
-              ))}
-            </div>
-            <Card.Img
-              variant="top"
-              // src={`/images/post/${post.image}`}
-              src={`http://localhost:3005/upload/${post.image}`}
-            />
-            <div
-              className="m-4"
-              // dangerouslySetInnerHTML={{
-              //   __html: DOMPurify.sanitize(post.content),
-              // }}
-              dangerouslySetInnerHTML={{
-                __html: post.content,
-              }}
-            ></div>
-          </Col>
-        </Row>
-      </Container>
-    </>
-  )
-  return (
     <>
       <div className={postStyle['main']}>
         <div className={postStyle['right']}>
@@ -142,11 +110,47 @@ export default function Detail() {
           </div>
         </div>
 
-        <div className="p-3">
-          <Link href="/post">回列表頁</Link>
-        </div>
-        {isLoading ? loader : display}
+        <Container className="pt-3">
+          <div className={'btn-back'}>
+            <Link href="/post">
+              <BackButton />
+            </Link>
+          </div>
+          <Col xs={10} className="bg-light p-4 mb-4">
+            <p>{post.published}</p>
+            <h3>{post.title}</h3>
+            作者：{post.name}
+            <div className="my-2">
+              {' '}
+              {getTagsArray(post.tags).map((tag, index) => (
+                <Link key={index} href={`/post/tagPost/${tag}`} target="_blank">
+                  <TagButton text={`# ${tag}`} />
+                </Link>
+              ))}
+            </div>
+            <Card.Img
+              variant="top"
+              // src={`/images/post/${post.image}`}
+              src={`http://localhost:3005/upload/${post.image}`}
+            />
+            <div
+              className="m-4"
+              // dangerouslySetInnerHTML={{
+              //   __html: DOMPurify.sanitize(post.content),
+              // }}
+              dangerouslySetInnerHTML={{
+                __html: post.content,
+              }}
+            ></div>
+          </Col>
+        </Container>
       </div>
+      <style jsx>{`
+        .btn-back {
+          margin: 0 0 30px 0px;
+        }
+      `}</style>
     </>
   )
+  return <>{isLoading ? loader : display}</>
 }

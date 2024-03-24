@@ -3,6 +3,7 @@ import { Container, Row, Col, Stack, Image } from 'react-bootstrap'
 import DiButton from '@/components/post/defaultButton'
 import { FaWind, FaTemperatureHigh } from 'react-icons/fa'
 import { LuWaves } from 'react-icons/lu'
+import { GiWindsock } from 'react-icons/gi'
 import ImageViewModal from '@/components/map/imageViewModal'
 import styles from './svg.module.scss'
 import TaiwanSvg from '@/components/map/taiwanSvg'
@@ -11,7 +12,7 @@ import Loading from '@/components/layout/loading/loading'
 // const AUTHORIZATION_KEY = process.env.AUTHORIZATION_KEY
 const AUTHORIZATION_KEY = 'CWA-12A9C569-394E-4169-AD84-A7592FBBEAF1'
 
-export default function Test() {
+export default function Index() {
   const [mapData, setMapData] = useState([])
   const [aboutData, setAboutData] = useState([])
   const [isLoading, setIsLoading] = useState(true)
@@ -83,9 +84,12 @@ export default function Test() {
       setSelectedDis(clickedMap.id) //改變被選的區的id
     }
 
-    setSelectedDisName(clickedMap.name) //改變被選的區的名字
+    if (clickedMap.name) {
+      //改變被選的區的名字
+      setSelectedDisName(clickedMap.name)
+    }
+
     setCurrentWeather({ ...currentWeather, StationID: clickedMap.station_id })
-    // console.log(clickedMap.station_id)
   }
 
   // 點擊潛點
@@ -215,7 +219,7 @@ export default function Test() {
                   <ul>
                     <li>
                       <i className={styles['day-icon']}>
-                        <FaWind />
+                        <GiWindsock />
                       </i>
                       <span className={styles['day-name']}> 風向</span>
                       <span className={styles['day-info']}>
@@ -242,7 +246,9 @@ export default function Test() {
                       </span>
                     </li>
                     <li>
-                      <i className={styles['day-icon']}></i>
+                      <i className={styles['day-icon']}>
+                        <FaWind />
+                      </i>
                       <span className={styles['day-name']}>風速(m/s)</span>
                       <span className={styles['day-info']}>
                         {currentWeather.WindSpeed}

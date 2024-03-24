@@ -9,7 +9,15 @@
 
 .box {
   //左半邊地圖區塊
-  color: rgb(98, 175, 219);
+  background: linear-gradient(
+    -45deg,
+    #c7dbdc1b,
+    #aeedefd6,
+    rgba(232, 249, 255, 0.334),
+    #908fd0a4
+  );
+  background-size: 400% 400%;
+  animation: gradient 15s ease infinite;
   padding: 5px;
   border-radius: 1%;
   box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2),
@@ -21,18 +29,12 @@
     fill: transparent;
     transform-origin: center;
     transform-box: fill-box;
-    // stroke: linear-gradient(to bottom left, #c5d5fa, #c3dc99);
     path {
       width: 100%;
       height: 100%;
-
       animation: dash 5s infinite;
-      // transform-origin: center center;
-      // transform-box: fill-box;
     }
     circle {
-      // fill: aquamarine;
-      // animation: test 2s infinite ease;
       transform-origin: center;
       transform-box: fill-box;
     }
@@ -40,23 +42,11 @@
     rect {
       fill: none;
       stroke: var(--bs-gray);
+      opacity: 0.5;
     }
-    // .diveSvg {
-    // }
   }
 }
 
-@keyframes dash {
-  0% {
-    stroke-dashoffset: 0;
-  }
-  50% {
-    stroke-dashoffset: 500;
-  }
-  100% {
-    stroke-dashoffset: 0;
-  }
-}
 @keyframes fill-in {
   to {
     fill-opacity: 1;
@@ -72,19 +62,42 @@
   fill-opacity: 0;
 
   //各個區
-  &:hover {
-    fill: rgba(148, 212, 241, 0.148);
-    transition: fill 0.3s linear;
-    stroke: #00000048;
-    stroke-width: 1px;
-  }
+  // &:hover {
+  // fill: rgba(148, 212, 241, 0.148);
+  // transition: fill 0.3s linear;
+  // stroke: #00000048;
+  // stroke-width: 2px;
+  // }
+  //可以做漸層動畫?
+  // &:active {
+  //   fill: #000;
+  // }
 }
 
+.rp1 {
+  //尚未被點擊時的樣式
+  circle {
+    animation: growAndFade 3s infinite ease-out;
+    stroke: rgb(30, 144, 255);
+    stroke-width: 3px;
+    opacity: 0.3;
+    cursor: pointer;
+    &:hover {
+      animation: none;
+      transition: 1s;
+      stroke: #fff;
+      fill: rgb(30, 144, 255);
+    }
+  }
+}
 // 點擊後的樣式
 .test {
-  animation: none;
   circle {
-    fill: rgb(226, 46, 46);
+    animation: shrinkAndAppear 0.2s ease-out;
+    fill: rgb(30, 144, 255);
+    stroke-width: 2px;
+    stroke: #000;
+    opacity: 0.2;
   }
   .diveSvg {
     fill: #000;
@@ -92,62 +105,36 @@
   }
 }
 
-.rp1 {
-  animation-delay: 10s;
-  circle {
-    animation: growAndFade 3s infinite ease-out;
-    fill: dodgerblue;
-    stroke: #fff;
-    opacity: 0;
-    cursor: pointer;
-    :hover {
-      animation: none;
-    }
-  }
-  // use {
-  //   fill: dodgerblue;
-  // }
-
-  .rp2 {
-    animation-delay: 5s;
-    animation: growAndFade 10s infinite ease-out;
-  }
-  .rp3 {
-    animation-delay: 5s;
-    animation: growAndFade 3s infinite ease-out;
-  }
-}
-
+//未點選動畫
 @keyframes growAndFade {
   0% {
     opacity: 0.25;
     transform: scale(0);
   }
+  // 50%{}
   100% {
     opacity: 0.1;
     transform: scale(1.2);
   }
 }
-
-@keyframes swimming {
+//點選時動畫
+@keyframes shrinkAndAppear {
   0% {
-    transform: translateX(3%);
+    opacity: 0.1;
+    transform: scale(1.2);
   }
-
   50% {
-    transform: translateY(2%);
-  }
-  75% {
-    transform: translateY(-2%);
+    opacity: 0.25;
+    transform: scale(0);
   }
   100% {
-    transform: translateX(3%); /*最左邊*/
+    transform: scale(1);
   }
 }
 
 //氣象資訊區塊
 .weather {
-  background-color: rgba(149, 178, 203, 0.575);
+  background-color: rgba(198, 199, 203, 0.156);
   font-size: 20px;
   padding: 1rem;
 
@@ -155,19 +142,6 @@
     display: flex;
     border-radius: 2%;
     line-height: 50px;
-  }
-}
-
-// 圖片用的淡入
-@keyframes fadeinout {
-  0% {
-    opacity: 0;
-  }
-  50% {
-    opacity: 0.5;
-  }
-  100% {
-    opacity: 1;
   }
 }
 
@@ -183,7 +157,6 @@
   transition: 200ms ease;
   border-radius: 10px;
   margin: 0 5px;
-  // transform: scale(1.1);
   background: #fff;
   color: #222831;
   box-shadow: 0 0 40px -5px rgba(0, 0, 0, 0.2);
@@ -206,14 +179,14 @@
   }
 }
 
-//test
+//test 擴張
 @keyframes pulsate {
   0% {
     transform: scale(1);
     opacity: 0.8;
   }
   45% {
-    transform: scale(1.75);
+    transform: scale(1.5);
     opacity: 0;
   }
 }
@@ -227,127 +200,43 @@
   }
 }
 
-/* Button */
-.btn-pulse {
-  display: flex;
-  // width: 100%;
-  // height: 100%;
-  justify-content: center;
-  position: relative;
-  .circle {
-    position: relative;
-    top: 50%;
-    // left: 0;
-    width: 32px;
-    height: 32px;
-    // margin: -0.666em auto auto -0.666em;
-    background: rgba(237, 0, 72, 1);
-    border-radius: 50%;
-    opacity: 0.6;
-    transform-origin: 50% 50%;
-    transition: opacity 0.2s ease-in, transform 0.1s ease-out;
-    color: white;
-    font-size: 1.5em;
-    // padding: 0;
-    // text-align: center;
-    line-height: 32px;
-    overflow: hidden;
-    &:hover {
-      opacity: 0.8;
-      cursor: pointer;
-    }
-    &:active {
-      transform: scale(0.875);
-    }
-  }
-
-  .ring {
-    // display: block;
-    position: relative;
-    // left: 0;
-    width: 2em;
-    height: 2em;
-    // margin: -1em auto auto -1em;
-    transform-origin: 50% 50%;
-    border-radius: 50%;
-    border: 1px solid rgba(237, 0, 72, 1);
-    opacity: 0;
-    animation: pulsate 3s ease-out infinite;
-  }
-
-  &:hover .ring {
-    animation: none;
-  }
-
-  &:active .ring {
-    animation: stop-pulsate 0.3s;
-  }
-}
-
-//BS
-.highlight-spot {
-  position: absolute;
-
-  display: block;
-
-  width: 10px;
-  height: 10px;
-
-  border-radius: 50%;
-  background-color: crimson;
-}
-.highlight-spot:hover {
-  cursor: pointer;
-}
-.highlight-spot:after {
-  position: absolute;
-  top: -10px;
-  left: -10px;
-
-  width: 30px;
-  height: 30px;
-
-  content: '';
-  -webkit-animation: pulsate 1s ease-out;
-  -webkit-animation-iteration-count: infinite;
-
-  opacity: 0;
-  border: 3px solid crimson;
-  -webkit-border-radius: 30px;
-}
-
-.top {
-  top: 0;
-}
-.left {
-  left: 0;
-}
-.right {
-  right: 0;
-}
-.bottom {
-  bottom: 0;
-}
-.center-y {
-  top: 50%;
-  transform: translateY(-50%);
-}
-.center-x {
-  left: 0;
-  right: 0;
-  margin: 0 auto;
-}
-
-@-webkit-keyframes pulsate {
+//潛水員
+@keyframes swimming {
   0% {
-    -webkit-transform: scale(0.1, 0.1);
+    transform: translateX(3%);
+  }
+  50% {
+    transform: translateY(2%);
+  }
+  75% {
+    transform: translateY(-2%);
+  }
+  100% {
+    transform: translateX(3%); /*最左邊*/
+  }
+}
+// 圖片用的淡入
+@keyframes fadeinout {
+  0% {
     opacity: 0;
   }
   50% {
     opacity: 0.5;
   }
   100% {
-    -webkit-transform: scale(1.2, 1.2);
-    opacity: 0;
+    opacity: 1;
+  }
+}
+
+//背景動畫
+@keyframes gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
   }
 }

@@ -145,6 +145,7 @@ export default function Index() {
           <InputGroup.Text>文章標題</InputGroup.Text>
           <Form.Control
             onChange={(e) => handleFormDataChange('title')(e.target.value)}
+            placeholder="請輸入標題"
             required
           />
         </InputGroup>

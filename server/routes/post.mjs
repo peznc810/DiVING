@@ -13,7 +13,7 @@ const app = express();
   const { searchText } = req.query; 
 
     try {
-      const [result] = await db.execute(`SELECT post.id as post_id, post.*, users.uid as user_id, users.name FROM post JOIN users ON post.user_id = users.uid WHERE title LIKE ? OR content LIKE ? AND post.valid = ? ORDER BY published_at DESC`, ['%' + searchText + '%', '%' + searchText + '%', 1]);
+      const [result] = await db.execute(`SELECT post.id as post_id, post.*, users.uid as user_id, users.name FROM post JOIN users ON post.user_id = users.uid WHERE (title LIKE ? OR content LIKE ?) AND post.valid = ? ORDER BY published_at DESC`, ['%' + searchText + '%', '%' + searchText + '%', 1]);
 
       res.json(result);
     } catch (error) {
@@ -30,13 +30,12 @@ const app = express();
       //抓出post.id 避免被userId覆寫 
       const [result] = await db.execute( 'SELECT post.id as post_id, post.*, users.uid as user_id, users.name FROM post JOIN users ON post.user_id = users.uid WHERE post.user_id = ? AND post.valid = ? ORDER BY published_at DESC ',[userId, 1]);
       
-      // if (result.length === 0) {
-      //   // 如果结果為空，返回一个[]
-      //   res.json([]);
-      // } else {
-      //   // 如果结果不為空，返回查詢结果
+      if (result.length === 0) {
+        // 如果结果為空，返回[]
+        res.json([]);
+      } else {
         res.json(result);
-      // }
+      }
     } catch (error) {
       console.error('Error executing database query:', error);
       res.status(500).json({ error: 'NOOOOOO' });  

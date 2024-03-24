@@ -19,6 +19,7 @@ export default function List() {
   const [isLoading, setIsLoading] = useState(true)
   const [searchText, setSearchText] = useState('')
   const desiredIndexes = [4, 6, 8] // 指定要顯示在輪播的的三個index
+  const [carouselData, setCarouselData] = useState([]) // 新增狀態來保存輪播資料 避免執行搜尋後消失
 
   const getPost = async () => {
     try {
@@ -36,6 +37,14 @@ export default function List() {
       if (Array.isArray(data)) {
         // 設定到狀態
         setPostList(data)
+
+        // 如果輪播資料是空的，則設定輪播資料
+        if (carouselData.length === 0) {
+          const carouselData = data.filter((_, index) =>
+            desiredIndexes.includes(index)
+          )
+          setCarouselData(carouselData)
+        }
 
         setTimeout(() => {
           setIsLoading(false)
@@ -79,30 +88,24 @@ export default function List() {
                 slide={true}
                 className={styles['carousel']}
               >
-                {postList.map(
-                  (v, index) =>
-                    desiredIndexes.includes(index) && (
-                      <Carousel.Item
-                        key={v.id}
-                        className={styles['carousel-item']}
-                      >
-                        <Link
-                          href={`/post/${v.id}`}
-                          style={{ textDecoration: 'none' }}
-                        >
-                          <Image
-                            rounded
-                            variant="top"
-                            src={`/images/post/${v.image}`}
-                            alt={v.image}
-                          />
-                        </Link>
-                        <Carousel.Caption>
-                          <h3>{v.title}</h3>
-                        </Carousel.Caption>
-                      </Carousel.Item>
-                    )
-                )}
+                {carouselData.map((v) => (
+                  <Carousel.Item key={v.id} className={styles['carousel-item']}>
+                    <Link
+                      href={`/post/${v.id}`}
+                      style={{ textDecoration: 'none' }}
+                    >
+                      <Image
+                        rounded
+                        variant="top"
+                        src={`/images/post/${v.image}`}
+                        alt={v.image}
+                      />
+                    </Link>
+                    <Carousel.Caption>
+                      <h3>{v.title}</h3>
+                    </Carousel.Caption>
+                  </Carousel.Item>
+                ))}
               </Carousel>
             </div>
           </div>

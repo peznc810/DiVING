@@ -69,7 +69,6 @@ export default function PostCard({ postList }) {
                           <Link
                             // key={`${v.id} + ${index}`.toString()}
                             key={index}
-                            target="_blank"
                             href={`/post/tagPost/${tag}`}
                           >
                             {' '}
