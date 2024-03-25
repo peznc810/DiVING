@@ -8,6 +8,10 @@ export default function Loading() {
       <div
         className={`${styles.loading} d-flex flex-column justify-content-center align-items-center text-center`}
       >
+        <div className={`${styles.circle}`}></div>
+        <div className={`${styles.circle}`}></div>
+        <div className={`${styles.circle}`}></div>
+
         <div className={`${styles.svgBlock}`}>
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 462.38 202.44">
             <g className={`${styles.fish1}`} fill="#f8bc6e">
@@ -23,7 +27,8 @@ export default function Loading() {
               <path d="M378.91 72.32c-11.39-8.24-24.98-8.8-34.1-6.95-7.39 1.5-13.81 5.21-19.83 9.44-.97.68-.91 2.14.11 2.76 10.32 6.23 23.85 7.44 35.63 6.75 6.1-.36 12.44-1.8 18.25-5.48 0 0 5.72 3 14.68.77-1.51-3.09-5.47-4.43-8.19-5.72.77 0 5.93-3.25 4.86-6.82-4.73 1.38-8.64.62-11.41 5.25zM228.57 137.17c-6.61-4.78-14.49-5.1-19.78-4.03-4.29.87-8.01 3.02-11.5 5.48-.56.4-.53 1.24.06 1.6 5.99 3.62 13.84 4.32 20.67 3.92 3.54-.21 7.22-1.04 10.59-3.18 0 0 3.32 1.74 8.51.45-.88-1.79-3.18-2.57-4.75-3.32.45 0 3.44-1.88 2.82-3.96-2.74.8-5.01.36-6.62 3.04z"></path>
             </g>
           </svg>
-          <p className={`${styles.text} text-light`}>loading...</p>
+
+          <span className={`${styles.text}`}>loading</span>
         </div>
 
         {/* <div className={`${styles.loadingInner}`}>

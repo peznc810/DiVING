@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import Head from 'next/head'
 import Menu from '@/components/dashboard/menu'
 import styles from '@/components/dashboard/form/styles.module.scss'
-import postStyle from '@/components/post/post-list.module.scss'
+import postStyle from '@/components/post/post.module.scss'
 import { Form, InputGroup, Stack, Container } from 'react-bootstrap'
 import DiButton from '@/components/post/defaultButton'
 import QuillEditor from '@/components/post/quill'
@@ -66,7 +66,7 @@ export default function Index() {
     setEditorLoaded(true)
     setTimeout(() => {
       setIsLoading(false)
-    }, 2000)
+    }, 1000)
   }, [])
 
   //formData內容 onChange隨時更新
@@ -78,6 +78,17 @@ export default function Index() {
   //提交數據
   const handleSubmit = async (e) => {
     e.preventDefault()
+
+    // 检查表单字段是否有未填写的
+    const { title, content, images } = postFormData
+    if (!title || !content || !images) {
+      Swal.fire({
+        title: '請填寫所有欄位',
+        icon: 'warning',
+        text: '請確保所有欄位都已填寫',
+      })
+      return // 防止继续执行表单提交
+    }
 
     const formData = new FormData()
     formData.append('user_id', postFormData.user_id)
@@ -116,6 +127,7 @@ export default function Index() {
           top
           no-repeat
         `,
+          showConfirmButton: false,
         })
         //跳轉
         router.push('/dashboard/posts')
@@ -130,10 +142,11 @@ export default function Index() {
   const display = (
     <Container>
       <Form className="my-3" onSubmit={handleSubmit}>
-        <InputGroup className="mb-3">
+        <InputGroup className="my-2">
           <InputGroup.Text>文章標題</InputGroup.Text>
           <Form.Control
             onChange={(e) => handleFormDataChange('title')(e.target.value)}
+            placeholder="請輸入標題"
             required
           />
         </InputGroup>
@@ -149,23 +162,25 @@ export default function Index() {
               id="file"
               accept="image/*"
               onChange={changeHandler}
-              required
             />
           </label>
           {selectedFile && (
-            <div
-              className="my-2"
-              style={{ width: '100%', height: '400px', position: 'relative' }}
-            >
+            <>
               <div>預覽圖片:</div>
-              <Image
-                src={preview}
-                alt="images"
-                fill={true}
-                style={{ objectFit: 'contain' }}
-                priority={false}
-              ></Image>
-            </div>
+              <div
+                className="my-2"
+                style={{ width: '100%', height: '400px', position: 'relative' }}
+              >
+                <br />
+                <Image
+                  src={preview}
+                  alt="images"
+                  fill={true}
+                  style={{ objectFit: 'contain' }}
+                  priority={false}
+                ></Image>
+              </div>
+            </>
           )}
         </div>
         <TagGenerator
@@ -174,11 +189,7 @@ export default function Index() {
           }}
         />
         <br />
-        <Form.Group
-          className="mb-3"
-          controlId="exampleForm.ControlTextarea1"
-          required
-        >
+        <Form.Group className="mb-3" required>
           <div className="h-screen w-screen flex items-center flex-col">
             <QuillEditor
               editorLoaded={editorLoaded}
