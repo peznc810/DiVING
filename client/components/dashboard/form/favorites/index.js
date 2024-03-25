@@ -12,10 +12,8 @@ export default function Form({ fav = {}, auth = {}, delUserFav = () => {} }) {
   // 控制分頁
   const { currentPage, pageItem, handlePage, getPageNumbers } = usePagination(
     fav,
-    6
+    10
   )
-  console.log(pageItem)
-  console.log(fav)
 
   const imgSrc = pageItem.map((item) => {
     if (item.product_id) {
@@ -46,42 +44,51 @@ export default function Form({ fav = {}, auth = {}, delUserFav = () => {} }) {
                     <th scope="col"></th>
                   </tr>
                 </thead>
-                <tbody>
+                <tbody className="position-relative">
                   {/* 之後改用map */}
-                  {pageItem.map((item, index) => {
-                    return (
-                      <tr className="align-middle" key={item.id}>
-                        <td className="d-flex justify-content-center">
-                          <div
-                            className={`rounded ${styles.avatar} flex-shrink-0`}
-                          >
-                            <Image src={imgSrc[index]} alt="turtle" fill />
-                          </div>
-                        </td>
-                        <td>{item.name}</td>
-                        <td>{item.price}</td>
-                        <td>
-                          <Link
-                            href="http://localhost:3000/lesson/1"
-                            className="btn btn-secondary btn-sm text-white"
-                          >
-                            商品詳情
-                          </Link>
-                        </td>
-                        <td>
-                          <button
-                            type="button"
-                            className="btn"
-                            onClick={() => {
-                              delUserFav(auth.id, item.id)
-                            }}
-                          >
-                            <FaTrashCan />
-                          </button>
-                        </td>
-                      </tr>
-                    )
-                  })}
+                  {pageItem.length <= 0 ? (
+                    <div
+                      className={`fs-4 position-absolute end-50 mt-4 ms-4`}
+                      style={{ color: '#b4b4b4' }}
+                    >
+                      尚無資料
+                    </div>
+                  ) : (
+                    pageItem.map((item, index) => {
+                      return (
+                        <tr className="align-middle" key={item.id}>
+                          <td className="d-flex justify-content-center">
+                            <div
+                              className={`rounded ${styles.avatar} flex-shrink-0`}
+                            >
+                              <Image src={imgSrc[index]} alt="turtle" fill />
+                            </div>
+                          </td>
+                          <td>{item.name}</td>
+                          <td>{item.price}</td>
+                          <td>
+                            <Link
+                              href="http://localhost:3000/lesson/1"
+                              className="btn btn-secondary btn-sm text-white"
+                            >
+                              商品詳情
+                            </Link>
+                          </td>
+                          <td>
+                            <button
+                              type="button"
+                              className="btn"
+                              onClick={() => {
+                                delUserFav(auth.id, item.id)
+                              }}
+                            >
+                              <FaTrashCan />
+                            </button>
+                          </td>
+                        </tr>
+                      )
+                    })
+                  )}
                 </tbody>
               </table>
               {/* 頁數按鈕 */}

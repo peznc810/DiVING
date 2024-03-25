@@ -67,6 +67,12 @@
     border-radius: 10px;
     line-height: 70px;
   }
+
+  .none {
+    position: absolute;
+    top: 50px;
+    left: 200px;
+  }
 }
 
 @media screen and (max-width: 576px) {

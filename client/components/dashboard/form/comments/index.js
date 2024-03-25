@@ -14,7 +14,7 @@ export default function Form({ common = [] }) {
     common,
     6
   )
-  console.log(common)
+
   // 星星評分
   const maxCount = 5
   const defaultStar = [...Array(maxCount).keys()]
@@ -51,46 +51,50 @@ export default function Form({ common = [] }) {
                     <th scope="col"></th>
                   </tr>
                 </thead>
-                <tbody>
-                  {pageItem.map((item, index) => {
-                    return (
-                      <tr className="align-middle" key={item.id}>
-                        <td className="col-2 d-flex justify-content-center">
-                          <div
-                            className={`rounded ${styles.avatar} flex-shrink-0`}
-                          >
-                            <Image src={imgSrc[index]} alt={item.name} fill />
-                            {/* {item.product_id ? (
+                <tbody className="position-relative">
+                  {pageItem.length <= 0 ? (
+                    <div
+                      className={`fs-4 position-absolute end-50 mt-4 ms-4`}
+                      style={{ color: '#b4b4b4' }}
+                    >
+                      尚無資料
+                    </div>
+                  ) : (
+                    pageItem.map((item, index) => {
+                      return (
+                        <tr className="align-middle" key={item.id}>
+                          <td className="col-2 ps-4">
+                            <div
+                              className={`rounded ${styles.avatar} flex-shrink-0`}
+                            >
                               <Image src={imgSrc[index]} alt={item.name} fill />
-                            ) : (
-                              
-                            )} */}
-                          </div>
-                        </td>
-                        <td className="col-2">{item.name}</td>
-                        <td className="col-2">
-                          {defaultStar.map((v) => {
-                            return (
-                              <FaStar
-                                key={v}
-                                color={v + 1 <= item.score ? 'gold' : 'gray'}
-                              />
-                            )
-                          })}
-                        </td>
-                        <td className="col-2">{item.comment}</td>
-                        <td className="col-2">{item.created_at}</td>
-                        <td className="col-2">
-                          <Link
-                            href="#"
-                            className="btn btn-secondary btn-sm text-white"
-                          >
-                            前往評論
-                          </Link>
-                        </td>
-                      </tr>
-                    )
-                  })}
+                            </div>
+                          </td>
+                          <td className="col-2">{item.name}</td>
+                          <td className="col-2">
+                            {defaultStar.map((v) => {
+                              return (
+                                <FaStar
+                                  key={v}
+                                  color={v + 1 <= item.score ? 'gold' : 'gray'}
+                                />
+                              )
+                            })}
+                          </td>
+                          <td className="col-2">{item.comment}</td>
+                          <td className="col-2">{item.created_at}</td>
+                          <td className="col-2">
+                            <Link
+                              href="http://localhost:3000/product/1"
+                              className="btn btn-secondary btn-sm text-white"
+                            >
+                              前往評論
+                            </Link>
+                          </td>
+                        </tr>
+                      )
+                    })
+                  )}
                 </tbody>
               </table>
               {/* 頁數按鈕 */}
