@@ -28,14 +28,9 @@ export default function EventArticle() {
       .then((result) => {
         // 將字串轉為Date
         const createAtDate = new Date(result.created_at)
-        // 設定時間的格式
-        const option = {
-          day: 'numeric',
-          month: 'short',
-          year: 'numeric',
-        }
-        const formDate = createAtDate.toLocaleString('en-US', option)
-        const eventData = { ...result, created_at: formDate }
+        console.log(createAtDate)
+
+        const eventData = { ...result, created_at: createAtDate }
 
         setEvent(eventData)
         console.log(eventData)
@@ -55,14 +50,28 @@ export default function EventArticle() {
     }
   }, [router.isReady])
 
+  // 設定時間的格式
+  const option = {
+    day: 'numeric',
+    month: 'short',
+    year: 'numeric',
+  }
+  const formDate = event.created_at.toLocaleString('en-US', option)
+
   return (
     <>
-      <div className={`container my-5 ${styles.eventPage}`}>
-        <div className={`my-5 text-center`}>
-          <h2>{event.title}</h2>
-          <div className={`d-flex`}>
-            <i className="bi bi-calendar"></i>
-            <p>--</p>
+      <div className={`container py-5 ${styles.eventPage}`}>
+        <div className={`my-5 d-flex justify-content-between align-items-top`}>
+          <div className=" d-flex flex-column align-items-start ">
+            <h2 className="mb-3">{event.title}</h2>
+            <div className={`${styles.tag}`}>
+              <p className={`m-0`}>{event.sort}</p>
+            </div>
+          </div>
+
+          <div className={`d-flex justify-content-center ${styles.date}`}>
+            <i className="bi bi-calendar me-2"></i>
+            <p>{formDate}</p>
           </div>
         </div>
         <div className={`${styles.banner}`}>
@@ -75,7 +84,7 @@ export default function EventArticle() {
           ></Image>
         </div>
 
-        <article className={`container my-5`}>
+        <article className={`container my-5 `}>
           <div>
             <p>{event.content}</p>
           </div>
