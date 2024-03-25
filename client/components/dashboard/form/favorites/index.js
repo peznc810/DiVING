@@ -68,7 +68,11 @@ export default function Form({ fav = {}, auth = {}, delUserFav = () => {} }) {
                           <td>{item.price}</td>
                           <td>
                             <Link
-                              href="http://localhost:3000/lesson/1"
+                              href={
+                                item.product_id !== null
+                                  ? `http://localhost:3000/product/${item.product_id}`
+                                  : `http://localhost:3000/lesson/${item.lesson_id}`
+                              }
                               className="btn btn-secondary btn-sm text-white"
                             >
                               商品詳情

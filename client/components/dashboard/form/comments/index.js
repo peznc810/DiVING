@@ -14,7 +14,7 @@ export default function Form({ common = [] }) {
     common,
     6
   )
-
+  console.log(pageItem)
   // 星星評分
   const maxCount = 5
   const defaultStar = [...Array(maxCount).keys()]
@@ -85,7 +85,11 @@ export default function Form({ common = [] }) {
                           <td className="col-2">{item.created_at}</td>
                           <td className="col-2">
                             <Link
-                              href="http://localhost:3000/product/1"
+                              href={
+                                item.product_id !== null
+                                  ? `http://localhost:3000/product/${item.product_id}`
+                                  : `http://localhost:3000/lesson/${item.lesson_id}`
+                              }
                               className="btn btn-secondary btn-sm text-white"
                             >
                               前往評論
