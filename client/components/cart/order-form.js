@@ -138,6 +138,7 @@ export default function OrderForm({ payment, delivery, order, setOrder }) {
         receiver,
         order_note,
         shipment,
+        usingCoupon,
       }
       const url = 'http://localhost:3005/api/line-pay/create-order'
       fetch(url, {

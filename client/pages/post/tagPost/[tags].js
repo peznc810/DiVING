@@ -2,6 +2,10 @@
 import React, { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
 import PostCard from '@/components/post/postCard'
+import Loading from '@/components/layout/loading/loading'
+import BackButton from '@/components/post/backButton'
+import Link from 'next/link'
+import { Container } from 'react-bootstrap'
 
 export default function TagPost() {
   const router = useRouter()
@@ -39,10 +43,20 @@ export default function TagPost() {
     }
   }, [router.isReady])
 
-  return (
+  const loader = <Loading />
+
+  const display = (
     <div>
-      <div className="box">
-        <h1>標籤 包含: {tag} 的文章</h1>
+      <Container className="mt-3">
+        <div className={'btn-back'}>
+          <Link href="/post">
+            <BackButton />
+          </Link>
+        </div>
+        <div className="mb-3">
+          <h3>標籤 包含: {tag} 的文章</h3>
+        </div>
+
         {Array.isArray(postList) && postList.length > 0 ? (
           <PostCard postList={postList} />
         ) : (
@@ -50,12 +64,11 @@ export default function TagPost() {
             <h1>= 沒有該標籤</h1>
           </div>
         )}
-      </div>
+      </Container>
       <style jsx>{`
-        .box {
-          margin: 50px;
+        .btn-back {
+          margin: 0 0 30px -80px;
         }
-
         .not-found {
           display: flex;
           justify-content: center;
@@ -64,4 +77,6 @@ export default function TagPost() {
       `}</style>
     </div>
   )
+
+  return <>{isLoading ? loader : display}</>
 }
