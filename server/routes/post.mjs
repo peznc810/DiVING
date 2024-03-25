@@ -13,7 +13,7 @@ const app = express();
   const { searchText } = req.query; 
 
     try {
-      const [result] = await db.execute(`SELECT post.id as post_id, post.*, users.uid as user_id, users.name FROM post JOIN users ON post.user_id = users.uid WHERE title LIKE ? OR content LIKE ? AND post.valid = ? ORDER BY published_at DESC`, ['%' + searchText + '%', '%' + searchText + '%', 1]);
+      const [result] = await db.execute(`SELECT post.id as post_id, post.*, users.uid as user_id, users.name FROM post JOIN users ON post.user_id = users.uid WHERE (title LIKE ? OR content LIKE ?) AND post.valid = ? ORDER BY published_at DESC`, ['%' + searchText + '%', '%' + searchText + '%', 1]);
 
       res.json(result);
     } catch (error) {
@@ -23,19 +23,17 @@ const app = express();
   });
 
    //讀取所有文章-dashboard
-  router.get('/posts/:userId', async (req, res) => {
+    router.get('/posts/:userId', async (req, res) => {
     const userId = req.query.userId
-    console.log(userId);
     
     try {
       //抓出post.id 避免被userId覆寫 
       const [result] = await db.execute( 'SELECT post.id as post_id, post.*, users.uid as user_id, users.name FROM post JOIN users ON post.user_id = users.uid WHERE post.user_id = ? AND post.valid = ? ORDER BY published_at DESC ',[userId, 1]);
       
       if (result.length === 0) {
-        // 如果结果為空，返回一个[]
+        // 如果结果為空，返回[]
         res.json([]);
       } else {
-        // 如果结果不為空，返回查詢结果
         res.json(result);
       }
     } catch (error) {
@@ -61,6 +59,20 @@ const app = express();
     }
 });
 
+// 讀取相關文章
+router.get('/related/:tag', async (req, res) => {
+  const tag = req.params.tag;
+  try {
+    const [result] = await db.execute('SELECT post.id as post_id, post.*, users.uid as user_id, users.name FROM post JOIN users ON post.user_id = users.uid WHERE FIND_IN_SET(?, post.tags) > 0', [tag]);
+
+    res.json(result); // 回傳相關文章的數據
+  } catch (error) {
+    console.error('Error executing database query:', error);
+    res.status(500).json({ error: 'NOOOOOO' });    
+  }
+});
+
+
   //文章標籤 導頁
   router.get('/tags/:tags', async (req, res) => {
     const tags = req.params.tags;
@@ -82,7 +94,7 @@ const app = express();
 //圖片上傳
 app.use(fileUpload({
   createParentPath: true,
-  // limits: { fileSize: 50 * 1024 * 1024 } 
+  limits: { fileSize: 50 * 1024 * 1024 } 
 }));
 
 app.use(express.urlencoded({ extended: true }));
