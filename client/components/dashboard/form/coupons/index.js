@@ -20,6 +20,7 @@ export default function Form() {
     coupon,
     6
   )
+  const [isSecondary, setIsSecondary] = useState(true)
 
   const input = (e) => {
     e.preventDefault()
@@ -101,6 +102,7 @@ export default function Form() {
   const handleCouponValid = (validNum) => {
     const validCoupon = couponHas.filter((coupon) => coupon.valid === validNum)
     setCoupon(validCoupon)
+    setIsSecondary(validNum === 1)
   }
 
   // 抓到資料後把資料設定進去coupon
@@ -131,7 +133,9 @@ export default function Form() {
                 <div className="d-flex align-items-center">
                   <button
                     type="button"
-                    className="btn btn-sm text-secondary"
+                    className={`btn btn-sm ${
+                      isSecondary ? 'text-secondary' : ''
+                    }`}
                     onClick={() => {
                       handleCouponValid(1)
                     }}
@@ -141,7 +145,9 @@ export default function Form() {
                   |
                   <button
                     type="button"
-                    className="btn btn-sm"
+                    className={`btn btn-sm ${
+                      !isSecondary ? 'text-secondary' : ''
+                    }`}
                     onClick={() => {
                       handleCouponValid(0)
                     }}
@@ -176,12 +182,12 @@ export default function Form() {
                 >
                   {/* 之後改用map */}
                   {pageItem.length <= 0 ? (
-                    <div
-                      className={`fs-4 ${styles.none}`}
+                    <span
+                      className={`fs-4 my-5 ${styles.none}`}
                       style={{ color: '#b4b4b4' }}
                     >
                       尚無資料
-                    </div>
+                    </span>
                   ) : (
                     pageItem.map((v) => {
                       return (

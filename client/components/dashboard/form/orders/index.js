@@ -8,7 +8,7 @@ export default function Form({ order = [] }) {
     order,
     10
   )
-  console.log(pageItem)
+
   return (
     <>
       <div className={`col-sm-8 p-0 rounded-end ${styles['form-container']}`}>
