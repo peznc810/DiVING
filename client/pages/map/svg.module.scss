@@ -1,111 +1,242 @@
 .main {
+  //整頁
+  animation: fadeinout 2s linear forwards; //淡入
   img {
+    animation: fadeinout 1s linear forwards; //淡入
     cursor: zoom-in;
   }
 }
 
 .box {
-  //整個地圖區塊
+  //左半邊地圖區塊
+  background: linear-gradient(
+    -45deg,
+    #c7dbdc1b,
+    #aeedefd6,
+    rgba(232, 249, 255, 0.334),
+    #908fd0a4
+  );
+  background-size: 400% 400%;
+  animation: gradient 15s ease infinite;
   padding: 5px;
   border-radius: 1%;
-  // .bg {
-  //   width: 100%;
-  //   height: 100%;
-  //   object-fit: cover;
-  //   opacity: 0.5;
-  // }
+  box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2),
+    -1px -1px 0.1px 0.1px #0000004f;
   svg {
     //全部svg
     width: 100%;
     height: 100%;
-    fill: #d9d9d9;
-    circle {
-      overflow: hidden;
-      stroke: antiquewhite;
-    }
+    fill: transparent;
+    transform-origin: center;
+    transform-box: fill-box;
     path {
       width: 100%;
       height: 100%;
+      animation: dash 5s infinite;
     }
+    circle {
+      transform-origin: center;
+      transform-box: fill-box;
+    }
+    //東沙的方
     rect {
       fill: none;
       stroke: var(--bs-gray);
-    }
-    .use {
-      //複製出來的svg
-      fill: #000000;
+      opacity: 0.5;
     }
   }
 }
 
-.same {
-  //想要同時選取 圓形+區 的時候亮
-  &:hover {
-    fill: #74d8ff;
-    .diveSvg {
-      //潛水伕
-      fill: black;
-      animation: cloudAni 2s infinite linear;
-    }
+@keyframes fill-in {
+  to {
+    fill-opacity: 1;
   }
 }
 
 .district {
-  //8大區域
-  cursor: pointer;
-  stroke: #b5b5b5;
-  path {
-    //各個區
+  //本島跟外島
+  fill: #a8cd9f;
+  stroke: #000;
+  stroke-width: 0.5px;
+  animation: fill-in 2s 2s forwards;
+  fill-opacity: 0;
+
+  //各個區
+  // &:hover {
+  // fill: rgba(148, 212, 241, 0.148);
+  // transition: fill 0.3s linear;
+  // stroke: #00000048;
+  // stroke-width: 2px;
+  // }
+  //可以做漸層動畫?
+  // &:active {
+  //   fill: #000;
+  // }
+}
+
+.rp1 {
+  //尚未被點擊時的樣式
+  circle {
+    animation: growAndFade 3s infinite ease-out;
+    stroke: rgb(30, 144, 255);
+    stroke-width: 3px;
+    opacity: 0.3;
+    cursor: pointer;
     &:hover {
-      // fill: rgba(148, 212, 241, 0.148);
-      transition: fill 0.3s linear;
-      stroke: #00000048;
+      animation: none;
+      transition: 1s;
+      stroke: #fff;
+      fill: rgb(30, 144, 255);
     }
   }
 }
-
-.ctaSvg {
-  //圓形裡面所有東西
-  animation: jump 2s ease-in-out infinite;
-  // animation-delay: 200ms;
-  cursor: pointer;
-  fill: rgb(189, 199, 239);
+// 點擊後的樣式
+.test {
+  circle {
+    animation: shrinkAndAppear 0.2s ease-out;
+    fill: rgb(30, 144, 255);
+    stroke-width: 2px;
+    stroke: #000;
+    opacity: 0.2;
+  }
   .diveSvg {
-    // 裡面的人
     fill: #000;
+    animation: swimming 5s infinite linear;
   }
 }
 
-@keyframes cloudAni {
+//未點選動畫
+@keyframes growAndFade {
   0% {
-    transform: translateX(6%);
+    opacity: 0.25;
+    transform: scale(0);
   }
-  /*可加50%給他loop*/
+  // 50%{}
+  100% {
+    opacity: 0.1;
+    transform: scale(1.2);
+  }
+}
+//點選時動畫
+@keyframes shrinkAndAppear {
+  0% {
+    opacity: 0.1;
+    transform: scale(1.2);
+  }
   50% {
-    transform: translateY(-1%);
+    opacity: 0.25;
+    transform: scale(0);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+//氣象資訊區塊
+.weather {
+  background-color: rgba(198, 199, 203, 0.156);
+  font-size: 20px;
+  padding: 1rem;
+
+  .weather-detail {
+    display: flex;
+    border-radius: 2%;
+    line-height: 50px;
+  }
+}
+
+//氣象資訊區塊
+.weather-list ul {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 0px;
+}
+.weather-list li {
+  padding: 15px;
+  text-wrap: nowrap;
+  transition: 200ms ease;
+  border-radius: 10px;
+  margin: 0 5px;
+  background: #fff;
+  color: #222831;
+  box-shadow: 0 0 40px -5px rgba(0, 0, 0, 0.2);
+  .day-name {
+    display: block;
+    margin: 10px 0 0 0;
+    text-align: center;
+  }
+  .day-icon {
+    display: block;
+    height: 30px;
+    width: auto;
+    margin: 0 auto;
+  }
+  .day-info {
+    display: block;
+    text-align: center;
+    margin: 10px 0 0 0;
+    font-weight: 700;
+  }
+}
+
+//test 擴張
+@keyframes pulsate {
+  0% {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+  45% {
+    transform: scale(1.5);
+    opacity: 0;
+  }
+}
+@keyframes stop-pulsate {
+  from {
+    opacity: 0.4;
+  }
+  to {
+    transform: scale(2);
+    opacity: 0;
+  }
+}
+
+//潛水員
+@keyframes swimming {
+  0% {
+    transform: translateX(3%);
+  }
+  50% {
+    transform: translateY(2%);
   }
   75% {
-    transform: translateY(0);
+    transform: translateY(-2%);
   }
   100% {
-    transform: translateX(-5%); /*最左邊*/
+    transform: translateX(3%); /*最左邊*/
   }
 }
-@keyframes jump {
-  0%,
-  100% {
-    transform: translate(2%, 0);
+// 圖片用的淡入
+@keyframes fadeinout {
+  0% {
+    opacity: 0;
   }
-  25%,
   50% {
-    transform: translate(2%, 1.5%);
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 1;
   }
 }
 
-.weather {
-  //氣象資訊區塊
-  .weather-detail {
-    font-size: 20px;
-    line-height: 30px;
+//背景動畫
+@keyframes gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
   }
 }

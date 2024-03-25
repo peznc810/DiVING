@@ -1,9 +1,8 @@
 import { Carousel, Image } from 'react-bootstrap'
-import postData from '@/data/post/post.json'
-import styles from './post-list.module.scss'
+import styles from './post.module.scss'
 import Link from 'next/link'
 
-export default function Caro() {
+export default function Caro(postList) {
   return (
     <Carousel
       interval={5000}
@@ -11,7 +10,7 @@ export default function Caro() {
       slide={true}
       className={styles['carousel']}
     >
-      {postData.map((v) => (
+      {postList.slice(0, 3).map((v) => (
         <Carousel.Item key={v.id} className={styles['carousel-item']}>
           <Link href={`/post/${v.id}`} style={{ textDecoration: 'none' }}>
             <Image
@@ -21,7 +20,6 @@ export default function Caro() {
               alt={v.image}
             />
           </Link>
-
           <Carousel.Caption>
             <h3>{v.title}</h3>
           </Carousel.Caption>
