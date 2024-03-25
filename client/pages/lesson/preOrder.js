@@ -20,19 +20,13 @@ export default function PreOrder() {
   const [pmbtn, setPmBtn] = useState(false)
   const [timedetail, setTimeDetail] = useState('') //選擇時段的值
 
-  const clickAM = (time) => {
-    let txt
-    if (!time.AM) {
-      txt = 'AM09:00'
-      return setTimeDetail(txt)
-    }
+  const clickAM = () => {
+    const txt = 'AM09:00'
+    setTimeDetail(txt)
   }
   const clickPM = () => {
-    let txt
-    if (!time.PM) {
-      txt = 'PM15:00'
-      return setTimeDetail(txt)
-    }
+    const txt = 'PM15:00'
+    setTimeDetail(txt)
   }
   const handleDateChange = (date) => {
     setSelectedDate(date)
@@ -41,7 +35,7 @@ export default function PreOrder() {
   const router = useRouter()
   const { addItem } = useCart()
   const lid = router.query.lessonId
-  const [perorder, setPerOrder] = useState({})
+  const [perorder, setPerOrder] = useState(() => {})
   const getOrderTime = async () => {
     try {
       const response = await fetch(`${api}/time`)
@@ -55,8 +49,8 @@ export default function PreOrder() {
       )
       const newTime = { AM: selectedDateData?.AM, PM: selectedDateData?.PM }
       setTime(newTime)
-      setAmBtn(!!newTime.AM)
-      setPmBtn(!!newTime.PM)
+      setAmBtn(!!newTime.PM)
+      setPmBtn(!!newTime.AM)
       return data
     } catch (error) {
       console.error(
@@ -89,7 +83,7 @@ export default function PreOrder() {
     const item = {
       lesson_id,
       order_time,
-      time,
+      timedetail,
       name,
       price,
       num: count,
@@ -98,7 +92,6 @@ export default function PreOrder() {
     addItem(item)
     toast.success('已加入購物車')
   }
-
   return (
     <>
       <div>
@@ -119,7 +112,7 @@ export default function PreOrder() {
             <hr />
             <div className="row">
               <div className="col-sm-6">
-                <DatePicker getDate={handleDateChange} />
+                <DatePicker getDate={handleDateChange} perorder={perorder} />
               </div>
               <div className="col-sm-6 time-section">
                 <div>你選擇的預約時間:</div>
@@ -143,7 +136,7 @@ export default function PreOrder() {
                     type="button"
                     className="btn time-period-btn w-75"
                     onClick={() => {
-                      clickPM()
+                      clickPM(time)
                     }}
                   >
                     <h5 className="fw-bold py-1">PM</h5>
