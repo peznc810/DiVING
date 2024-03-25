@@ -54,6 +54,8 @@ export default function Index() {
       confirmButtonText: '是的，刪除它！',
       cancelButtonText: '取消',
       reverseButtons: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
@@ -86,13 +88,8 @@ export default function Index() {
               animate__faster
             `,
               },
-              backdrop: `
-          rgba(0,0,123,0.4)
-          url("/images/post/swimmingdog.gif")
-          top
-          no-repeat
-        `,
-              showConfirmButton: false,
+              imageUrl: 'https://unsplash.it/400/200',
+              showConfirmButton: true,
             })
             //跳轉
             // router.push('/dashboard/posts')
