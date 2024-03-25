@@ -80,8 +80,8 @@ export default function Index() {
     e.preventDefault()
 
     // 检查表单字段是否有未填写的
-    const { title, content, tags, images } = postFormData
-    if (!title || !content || !tags || !images) {
+    const { title, content, images } = postFormData
+    if (!title || !content || !images) {
       Swal.fire({
         title: '請填寫所有欄位',
         icon: 'warning',
@@ -127,6 +127,7 @@ export default function Index() {
           top
           no-repeat
         `,
+          showConfirmButton: false,
         })
         //跳轉
         router.push('/dashboard/posts')

@@ -116,7 +116,7 @@ export default function Detail() {
               <BackButton />
             </Link>
           </div>
-          <Col xs={10} className="bg-light p-4 mb-4">
+          <Col xs={10} className="bg-light p-4">
             <p>{post.published}</p>
             <h3>{post.title}</h3>
             作者：{post.name}

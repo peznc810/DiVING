@@ -11,7 +11,6 @@ import usePagination from '@/hooks/use-pagination'
 import Pagination from '../pagination'
 import { useRouter } from 'next/router'
 import Swal from 'sweetalert2'
-import CancelAlert from '@/components/post/cancelAlert'
 
 export default function Index() {
   const [postList, setPostList] = useState([])
@@ -21,9 +20,9 @@ export default function Index() {
     5
   )
   const { auth } = useAuth()
-  const router = useRouter()
+  // const router = useRouter()
   // const token = localStorage.getItem('token')
-  const prevAuthId = useRef(auth.id) //防止相同id一直重複被查詢
+  // const prevAuthId = useRef(auth.id) //防止相同id一直重複被查詢
 
   const getPost = async (userId) => {
     try {
@@ -47,52 +46,65 @@ export default function Index() {
   }, [auth])
 
   const handleDisablePost = async (postId) => {
-    try {
-      const res = await fetch(
-        `http://localhost:3005/api/post/disable/${postId}`,
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            // Authorization: `Bearer ${token}`,
-            // 可以添加其他必要的Header，如授權令牌等
-          },
+    Swal.fire({
+      title: '確定要刪除嗎？',
+      text: '刪除後無法恢復！',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: '是的，刪除它！',
+      cancelButtonText: '取消',
+      reverseButtons: true,
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          const res = await fetch(
+            `http://localhost:3005/api/post/disable/${postId}`,
+            {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                // Authorization: `Bearer ${token}`,
+                // 可以添加其他必要的Header，如授權令牌等
+              },
+            }
+          )
+          //成功的話跳alert
+          if (res.status === 200) {
+            Swal.fire({
+              title: '刪除成功',
+              showClass: {
+                popup: `
+              animate__animated
+              animate__fadeInUp
+              animate__faster
+            `,
+              },
+              hideClass: {
+                popup: `
+              animate__animated
+              animate__fadeOutDown
+              animate__faster
+            `,
+              },
+              backdrop: `
+          rgba(0,0,123,0.4)
+          url("/images/post/swimmingdog.gif")
+          top
+          no-repeat
+        `,
+              showConfirmButton: false,
+            })
+            //跳轉
+            // router.push('/dashboard/posts')
+            window.location.reload()
+          } else {
+            console.error('Failed to disable post')
+          }
+        } catch (error) {
+          console.error('Error disabling post:', error)
         }
-      )
-      //成功的話跳alert
-      if (res.status === 200) {
-        Swal.fire({
-          title: '刪除成功',
-          showClass: {
-            popup: `
-            animate__animated
-            animate__fadeInUp
-            animate__faster
-          `,
-          },
-          hideClass: {
-            popup: `
-            animate__animated
-            animate__fadeOutDown
-            animate__faster
-          `,
-          },
-          backdrop: `
-        rgba(0,0,123,0.4)
-        url("/images/post/swimmingdog.gif")
-        top
-        no-repeat
-      `,
-        })
-        //跳轉
-        // router.push('/dashboard/posts')
-        window.location.reload()
-      } else {
-        console.error('Failed to disable post')
       }
-    } catch (error) {
-      console.error('Error disabling post:', error)
-    }
+    })
   }
 
   return (
