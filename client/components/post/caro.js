@@ -1,5 +1,5 @@
 import { Carousel, Image } from 'react-bootstrap'
-import styles from './post-list.module.scss'
+import styles from './post.module.scss'
 import Link from 'next/link'
 
 export default function Caro(postList) {
