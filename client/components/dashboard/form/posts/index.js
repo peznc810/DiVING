@@ -133,44 +133,54 @@ export default function Index() {
                     </th>
                   </tr>
                 </thead>
-                <tbody>
-                  {pageItem.map((v, i) => (
-                    <tr className="align-middle" key={v.id + i}>
-                      {/* map()加上i 避免跟user_id的id重複 */}
-                      <td>{i + 1}</td>
-                      <td>
-                        <Link
-                          href={`/post/${v.id}`}
-                          className={`text-black ${styles['text-hover']}`}
-                          target="_blank"
-                        >
-                          {v.title}
-                        </Link>
-                      </td>
-                      <td>
-                        {new Date(v.published_at)
-                          .toLocaleDateString()
-                          .toString()
-                          .replace(/\//g, '-')}
-                      </td>
-                      <td>
-                        {/* <Link
-                          href={`/dashboard/posts/edit/${v.id}`}
-                          className="btn"
-                        >
-                          <FaEdit />
-                        </Link> */}
-                        <button
-                          type="button"
-                          className="btn"
-                          value={v.id}
-                          onClick={() => handleDisablePost(v.id)}
-                        >
-                          <FaTrashCan />
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
+                <tbody className="position-relative">
+                  {pageItem.length <= 0 ? (
+                    <div
+                      className={`fs-4 position-absolute end-50 mt-4 ms-4`}
+                      style={{ color: '#b4b4b4' }}
+                    >
+                      尚無資料
+                    </div>
+                  ) : (
+                    pageItem.map((v, i) => (
+                      <tr className="align-middle" key={v.id + i}>
+                        {/* map()加上i 避免跟user_id的id重複 */}
+                        <td>{i + 1}</td>
+                        <td>
+                          <Link
+                            href={`/post/${v.id}`}
+                            className={`text-black ${styles['text-hover']}`}
+                            target="_blank"
+                          >
+                            {v.title}
+                          </Link>
+                        </td>
+                        <td>
+                          {new Date(v.published_at)
+                            .toLocaleDateString()
+                            .toString()
+                            .replace(/\//g, '-')}
+                        </td>
+                        <td>
+                          {/* <Link
+                            href={`/dashboard/posts/edit/${v.id}`}
+                            className="btn"
+                          >
+                            <FaEdit />
+                          </Link> */}
+
+                          <button
+                            type="button"
+                            className="btn"
+                            value={v.id}
+                            onClick={() => handleDisablePost(v.id)}
+                          >
+                            <FaTrashCan />
+                          </button>
+                        </td>
+                      </tr>
+                    ))
+                  )}
                 </tbody>
               </table>
               {/* 頁數按鈕 */}
