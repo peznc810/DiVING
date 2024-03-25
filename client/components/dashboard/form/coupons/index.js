@@ -189,54 +189,57 @@ export default function Form() {
                 {isLoading ? (
                   <LoaderPing />
                 ) : (
-                  <div
-                    className={`row g-3 position-relative ${styles['card-list']}`}
-                  >
-                    {/* 之後改用map */}
-                    {pageItem.length <= 0 ? (
-                      <span
-                        className={`fs-4 my-5 ${styles.none}`}
-                        style={{ color: '#b4b4b4' }}
-                      >
-                        尚無資料
-                      </span>
-                    ) : (
-                      pageItem.map((v) => {
-                        return (
-                          <div
-                            className={`col-12 col-md-6 ${styles.card}`}
-                            key={v.id}
-                          >
-                            <div className=" d-flex border border-info rounded p-3 h-100">
-                              <div
-                                className={`rounded ${styles.avatar} flex-shrink-0 me-3`}
-                              >
-                                <Image
-                                  src="/images/coupons/turtle.jpg"
-                                  alt="turtle"
-                                  fill
-                                />
-                              </div>
-                              <div className="right flex-grow-1">
-                                <h4 className="fs-6">{v.coupon_name}</h4>
-                                <p className={`${styles.rule}`}>
-                                  {v.coupon_rule_content}
-                                </p>
+                  <>
+                    <div
+                      className={`row g-3 position-relative ${styles['card-list']}`}
+                    >
+                      {/* 之後改用map */}
+                      {pageItem.length <= 0 ? (
+                        <span
+                          className={`fs-4 my-5 ${styles.none}`}
+                          style={{ color: '#b4b4b4' }}
+                        >
+                          尚無資料
+                        </span>
+                      ) : (
+                        pageItem.map((v) => {
+                          return (
+                            <div
+                              className={`col-12 col-md-6 ${styles.card}`}
+                              key={v.id}
+                            >
+                              <div className=" d-flex border border-info rounded p-3 h-100">
+                                <div
+                                  className={`rounded ${styles.avatar} flex-shrink-0 me-3`}
+                                >
+                                  <Image
+                                    src="/images/coupons/turtle.jpg"
+                                    alt="turtle"
+                                    fill
+                                  />
+                                </div>
+                                <div className="right flex-grow-1">
+                                  <h4 className="fs-6">{v.coupon_name}</h4>
+                                  <p className={`${styles.rule}`}>
+                                    {v.coupon_rule_content}
+                                  </p>
+                                </div>
                               </div>
                             </div>
-                          </div>
-                        )
-                      })
-                    )}
-                  </div>
+                          )
+                        })
+                      )}
+                    </div>
+                    <div className="mt-5">
+                      <Pagination
+                        currentPage={currentPage}
+                        handlePage={handlePage}
+                        getPageNumbers={getPageNumbers}
+                      />
+                    </div>
+                  </>
                 )}
               </div>
-              {/* 頁數按鈕 */}
-              <Pagination
-                currentPage={currentPage}
-                handlePage={handlePage}
-                getPageNumbers={getPageNumbers}
-              />
             </div>
           </div>
         </div>

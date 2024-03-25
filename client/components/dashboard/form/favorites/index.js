@@ -45,75 +45,81 @@ export default function Form({ fav = {}, auth = {}, delUserFav = () => {} }) {
               {isLoading ? (
                 <LoaderPing />
               ) : (
-                <table className="table mb-5">
-                  <thead className="fs-6">
-                    <tr>
-                      <th scope="col">圖片</th>
-                      <th scope="col">名稱</th>
-                      <th scope="col">價格</th>
-                      <th scope="col">查看</th>
-                      <th scope="col"></th>
-                    </tr>
-                  </thead>
-                  <tbody className="position-relative">
-                    {/* 之後改用map */}
-                    {pageItem.length <= 0 ? (
-                      <div
-                        className={`fs-4 position-absolute end-50 mt-4 ms-4`}
-                        style={{ color: '#b4b4b4' }}
-                      >
-                        尚無資料
-                      </div>
-                    ) : (
-                      pageItem.map((item, index) => {
-                        return (
-                          <tr className="align-middle" key={item.id}>
-                            <td className="d-flex justify-content-center">
-                              <div
-                                className={`rounded ${styles.avatar} flex-shrink-0`}
-                              >
-                                <Image src={imgSrc[index]} alt="turtle" fill />
-                              </div>
-                            </td>
-                            <td>{item.name}</td>
-                            <td>{item.price}</td>
-                            <td>
-                              <Link
-                                href={
-                                  item.product_id !== null
-                                    ? `http://localhost:3000/product/${item.product_id}`
-                                    : `http://localhost:3000/lesson/${item.lesson_id}`
-                                }
-                                className="btn btn-secondary btn-sm text-white"
-                              >
-                                商品詳情
-                              </Link>
-                            </td>
-                            <td>
-                              <button
-                                type="button"
-                                className="btn"
-                                onClick={() => {
-                                  delUserFav(auth.id, item.id)
-                                }}
-                              >
-                                <FaTrashCan />
-                              </button>
-                            </td>
-                          </tr>
-                        )
-                      })
-                    )}
-                  </tbody>
-                </table>
-              )}
+                <>
+                  <table className="table mb-5">
+                    <thead className="fs-6">
+                      <tr>
+                        <th scope="col">圖片</th>
+                        <th scope="col">名稱</th>
+                        <th scope="col">價格</th>
+                        <th scope="col">查看</th>
+                        <th scope="col"></th>
+                      </tr>
+                    </thead>
+                    <tbody className="position-relative">
+                      {/* 之後改用map */}
+                      {pageItem.length <= 0 ? (
+                        <div
+                          className={`fs-4 position-absolute end-50 mt-4 ms-4`}
+                          style={{ color: '#b4b4b4' }}
+                        >
+                          尚無資料
+                        </div>
+                      ) : (
+                        pageItem.map((item, index) => {
+                          return (
+                            <tr className="align-middle" key={item.id}>
+                              <td className="d-flex justify-content-center">
+                                <div
+                                  className={`rounded ${styles.avatar} flex-shrink-0`}
+                                >
+                                  <Image
+                                    src={imgSrc[index]}
+                                    alt="turtle"
+                                    fill
+                                  />
+                                </div>
+                              </td>
+                              <td>{item.name}</td>
+                              <td>{item.price}</td>
+                              <td>
+                                <Link
+                                  href={
+                                    item.product_id !== null
+                                      ? `http://localhost:3000/product/${item.product_id}`
+                                      : `http://localhost:3000/lesson/${item.lesson_id}`
+                                  }
+                                  className="btn btn-secondary btn-sm text-white"
+                                >
+                                  商品詳情
+                                </Link>
+                              </td>
+                              <td>
+                                <button
+                                  type="button"
+                                  className="btn"
+                                  onClick={() => {
+                                    delUserFav(auth.id, item.id)
+                                  }}
+                                >
+                                  <FaTrashCan />
+                                </button>
+                              </td>
+                            </tr>
+                          )
+                        })
+                      )}
+                    </tbody>
+                  </table>
 
-              {/* 頁數按鈕 */}
-              <Pagination
-                currentPage={currentPage}
-                handlePage={handlePage}
-                getPageNumbers={getPageNumbers}
-              />
+                  {/* 頁數按鈕 */}
+                  <Pagination
+                    currentPage={currentPage}
+                    handlePage={handlePage}
+                    getPageNumbers={getPageNumbers}
+                  />
+                </>
+              )}
             </div>
           </div>
         </div>
