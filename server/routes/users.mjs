@@ -306,6 +306,7 @@ router.get('/:id/order', checkToken, async (req, res) => {
   )
 
   const orderData = formatDate(data)
+  console.log(orderData);
 
   if (orderData) {
     res.status(200).json({ status: 'success', orderData })
@@ -355,10 +356,6 @@ router.get('/:id/favorite', checkToken, async (req, res) => {
 
   const data = formatDate(userData)
 
-  console.log("---");
-  console.log(data);
-  console.log("---");
-
   
   if (userData) {
     res.status(200).json({ status: 'success', data })
@@ -395,7 +392,9 @@ router.delete('/:id/delete-fav:pid', checkToken, async(req,res) => {
 function formatDate(data) {
   const formatData = []
   data.forEach((item) => {
-    const formatDate = moment(item.create_at).format("YYYY-MM-DD HH:MM:SS")
+    console.log(item.created_at);
+    const formatDate = moment(item.created_at).format("YYYY-MM-DD HH:mm:ss")
+    console.log(formatDate);
     const formatItem = { ...item, created_at: formatDate }
     formatData.push(formatItem)
   })
