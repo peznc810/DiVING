@@ -24,7 +24,7 @@ router.post("/create-order", async(req, res)=>{
   const orderId =Date.now()
   const packgeId = uuidv4()
 
-  const { totalPrice, lineProducts, products, receiver, order_note, shipment } = req.body;
+  const { totalPrice, lineProducts, products, receiver, order_note, shipment,usingCoupon } = req.body;
 
   //傳送給line pay的資料
   const order = {
@@ -51,6 +51,7 @@ router.post("/create-order", async(req, res)=>{
     status: "建立成功",
     receiver : JSON.stringify(receiver),
     order_info: JSON.stringify(order),
+    usingCoupon: JSON.stringify(usingCoupon),
     order_note,
   }
 
@@ -136,7 +137,7 @@ router.get("/confirm", async (req, res) => {
       },
     });
 
-    let status = linePayResponse.body.returnCode === '0000' ? 'paid' : 'fail';
+    let status = linePayResponse.body.returnCode === '0000' ? '付款成功' : 'fail';
 
     await updateOrderStatus(status, linePayResponse.body.returnCode, JSON.stringify(linePayResponse.body), dbOrder.id);
 
@@ -196,8 +197,8 @@ function addOrder(dbOrder){
   
   return new Promise((resolve, reject) => {
     db.execute(
-      'INSERT INTO `order`(id, user_id, total_price, payment, shipping, status, receiver, order_info, created_at, order_note) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);',[
-        dbOrder.id, dbOrder.user_id, dbOrder.total_price, dbOrder.payment, dbOrder.shipping, dbOrder.status, dbOrder.receiver, dbOrder.order_info, datetimeNow ,dbOrder.order_note
+      'INSERT INTO `order`(id, user_id, total_price, payment, shipping, used_coupon, status, receiver, order_info, created_at, order_note) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);',[
+        dbOrder.id, dbOrder.user_id, dbOrder.total_price, dbOrder.payment, dbOrder.shipping, dbOrder.usingCoupon, dbOrder.status, dbOrder.receiver, dbOrder.order_info, datetimeNow ,dbOrder.order_note
       ]
     ).then(([result]) => {
       if (result) {
@@ -207,6 +208,7 @@ function addOrder(dbOrder){
       }
     })
     .catch(error => {
+      console.error(error);
       reject({ status: "error", msg: error.message });
     });
     

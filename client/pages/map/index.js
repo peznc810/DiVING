@@ -1,17 +1,18 @@
 import React, { useState, useEffect } from 'react'
-import { Container, Row, Col, Button, Stack, Image } from 'react-bootstrap'
+import { Container, Row, Col, Stack, Image } from 'react-bootstrap'
 import DiButton from '@/components/post/defaultButton'
 import { FaWind, FaTemperatureHigh } from 'react-icons/fa'
-import { TiWeatherCloudy } from 'react-icons/ti'
 import { LuWaves } from 'react-icons/lu'
+import { GiWindsock } from 'react-icons/gi'
 import ImageViewModal from '@/components/map/imageViewModal'
 import styles from './svg.module.scss'
 import TaiwanSvg from '@/components/map/taiwanSvg'
+import Loading from '@/components/layout/loading/loading'
 
 // const AUTHORIZATION_KEY = process.env.AUTHORIZATION_KEY
 const AUTHORIZATION_KEY = 'CWA-12A9C569-394E-4169-AD84-A7592FBBEAF1'
 
-export default function Test() {
+export default function Index() {
   const [mapData, setMapData] = useState([])
   const [aboutData, setAboutData] = useState([])
   const [isLoading, setIsLoading] = useState(true)
@@ -69,7 +70,7 @@ export default function Test() {
   // 點擊地圖
   const handleMapClick = (e) => {
     const clickedMapId = e.target.getAttribute('data-id')
-    console.log(clickedMapId)
+    // console.log(clickedMapId)
 
     setPointStyle(clickedMapId)
 
@@ -78,11 +79,17 @@ export default function Test() {
       (item) => item.id === parseInt(clickedMapId)
     )
 
-    // 更新選定的地圖
-    setSelectedDis(clickedMap.id) //改變被選的區的id
-    setSelectedDisName(clickedMap.name) //改變被選的區的名字
+    if (clickedMap) {
+      // 更新選定的地圖
+      setSelectedDis(clickedMap.id) //改變被選的區的id
+    }
+
+    if (clickedMap.name) {
+      //改變被選的區的名字
+      setSelectedDisName(clickedMap.name)
+    }
+
     setCurrentWeather({ ...currentWeather, StationID: clickedMap.station_id })
-    console.log(clickedMap.station_id)
   }
 
   // 點擊潛點
@@ -176,135 +183,154 @@ export default function Test() {
     }
   }, [currentWeather.StationID])
 
+  const loader = <Loading />
+
   return (
     <>
-      <main className={styles['main']}>
-        <ImageViewModal
-          showModal={showModal}
-          handleClose={closeModal}
-          imageSrc={selectedImage}
-          fullscreen={'md-up'}
-        />
-        {/* Modal↑ */}
-        <Container className="my-5 p-3 border ">
-          <Row>
-            <Col xs={12} md={6} lg={6} className="border-end">
-              <div className={styles['box']}>
-                <TaiwanSvg
-                  handleMapClick={handleMapClick}
-                  pointStyle={pointStyle}
-                />
-              </div>
-            </Col>
-            <Col className={styles['weather']}>
-              <div className={styles['111']}>
+      {isLoading ? (
+        loader
+      ) : (
+        <main className={styles['main']}>
+          <ImageViewModal
+            showModal={showModal}
+            handleClose={closeModal}
+            imageSrc={selectedImage}
+            fullscreen={'md-up'}
+          />
+          {/* Modal↑ */}
+          <Container className="my-3 p-3 border rounded ">
+            <Row>
+              <Col xs={12} md={12} lg={6} className="border-end">
+                <div className={styles['box']}>
+                  <TaiwanSvg
+                    handleMapClick={handleMapClick}
+                    pointStyle={pointStyle}
+                  />
+                </div>
+              </Col>
+              <Col xs={12} md={12} lg={6} className={styles['weather']}>
                 <h2>{selectedDisName}</h2>
-
                 <h4>{currentWeather.StationName}</h4>
                 <div>
                   {/* 時間 */}觀測時間: {currentWeather.DateTime}
                 </div>
-                <Stack
-                  direction="horizontal"
-                  // gap={2}
-                  className={styles['weather-detail']}
-                >
-                  <div>
-                    {/* 風向 */} <span>風向</span>
-                    <FaWind />
-                    {currentWeather.WindDirection}
-                  </div>
-                  <div>
-                    {/* 浪高 */} <span>浪高(m)</span>
-                    <LuWaves />
-                    {currentWeather.WaveHeight}
-                  </div>
-                  <div>
-                    {/* 海溫 */}
-                    <span>海溫(&#8451;)</span>
-                    <FaTemperatureHigh />
-                    {currentWeather.SeaTemperature}
-                  </div>
-                  <div>
-                    {/* 風速 */}
-                    <span>風速(m/s)(級)</span>
-                    {currentWeather.WindSpeed}
-                  </div>
-                </Stack>
-              </div>
-              <div>
-                <Container>
-                  {disData.map((v) => {
-                    const fileNames = v.image.split(',')
-                    return (
-                      <React.Fragment key={v.id}>
-                        {fileNames.map((fileName, index) => (
-                          <Image
-                            thumbnail
-                            fluid
-                            key={index}
-                            src={`/images/map/${fileName.trim()}`}
-                            alt={v.image}
-                            onClick={() =>
-                              handleCardImageClick(
-                                `/images/map/${fileName.trim()}`
-                              )
-                            }
-                          />
-                        ))}
-                      </React.Fragment>
-                    )
-                  })}
-                </Container>
-              </div>
-            </Col>
-          </Row>
-          <hr />
-          <div className=" text-center">
-            {selectedPointData &&
-              selectedPointData.map((v) => (
-                <DiButton
-                  key={v.id}
-                  text={v.name}
-                  color={'#013c64'}
-                  onClick={() => handlePointButtonClick(v.id)}
-                />
-              ))}
-          </div>
-          <Container>
-            <Stack direction="horizontal" gap={3}>
-              <div className="p-2">
-                <div>
-                  {' '}
-                  {selectedPointData &&
-                    selectedPointData
-                      .filter((data) => data.id === selectPoint)
-                      .map((v) => {
-                        const fileNames = v.image.split(',')
-                        return (
-                          <React.Fragment key={v.id}>
-                            {fileNames.map((fileName, index) => (
-                              <Image
-                                fluid
-                                key={index}
-                                src={`/images/map/${fileName.trim()}`}
-                                alt={v.image}
-                                onClick={() =>
-                                  handleCardImageClick(
-                                    `/images/map/${fileName.trim()}`
-                                  )
-                                }
-                              />
-                            ))}
-                          </React.Fragment>
-                        )
-                      })}
+
+                <div className={styles['weather-list']}>
+                  <ul>
+                    <li>
+                      <i className={styles['day-icon']}>
+                        <GiWindsock />
+                      </i>
+                      <span className={styles['day-name']}> 風向</span>
+                      <span className={styles['day-info']}>
+                        {currentWeather.WindDirection}
+                      </span>
+                    </li>
+                    <li>
+                      <i className={styles['day-icon']}>
+                        <LuWaves />
+                      </i>
+                      <span className={styles['day-name']}>浪高(m)</span>
+                      <span className={styles['day-info']}>
+                        {currentWeather.WaveHeight}
+                      </span>
+                    </li>
+                    <li>
+                      <i className={styles['day-icon']}>
+                        {' '}
+                        <FaTemperatureHigh />
+                      </i>
+                      <span className={styles['day-name']}>海溫(&#8451;)</span>
+                      <span className={styles['day-info']}>
+                        {currentWeather.SeaTemperature}
+                      </span>
+                    </li>
+                    <li>
+                      <i className={styles['day-icon']}>
+                        <FaWind />
+                      </i>
+                      <span className={styles['day-name']}>風速(m/s)</span>
+                      <span className={styles['day-info']}>
+                        {currentWeather.WindSpeed}
+                      </span>
+                    </li>
+                  </ul>
                 </div>
-              </div>
-            </Stack>
+
+                <div>
+                  <Container>
+                    {disData.map((v) => {
+                      const fileNames = v.image.split(',')
+                      return (
+                        <React.Fragment key={v.id}>
+                          {fileNames.map((fileName, index) => (
+                            <Image
+                              thumbnail
+                              fluid
+                              key={index}
+                              src={`/images/map/${fileName.trim()}`}
+                              alt={v.image}
+                              onClick={() =>
+                                handleCardImageClick(
+                                  `/images/map/${fileName.trim()}`
+                                )
+                              }
+                            />
+                          ))}
+                        </React.Fragment>
+                      )
+                    })}
+                  </Container>
+                </div>
+              </Col>
+            </Row>
+            <hr />
+            <div className=" text-center">
+              {selectedPointData &&
+                selectedPointData.map((v) => (
+                  <DiButton
+                    key={v.id}
+                    text={v.name}
+                    color={'#013c64'}
+                    onClick={() => handlePointButtonClick(v.id)}
+                  />
+                ))}
+            </div>
+            <Container>
+              <Stack direction="horizontal" gap={3}>
+                <div className="p-2">
+                  <div>
+                    {' '}
+                    {selectedPointData &&
+                      selectedPointData
+                        .filter((data) => data.id === selectPoint)
+                        .map((v) => {
+                          const fileNames = v.image.split(',')
+                          return (
+                            <React.Fragment key={v.id}>
+                              {fileNames.map((fileName, index) => (
+                                <Image
+                                  fluid
+                                  key={index}
+                                  src={`/images/map/${fileName.trim()}`}
+                                  alt={v.image}
+                                  onClick={() =>
+                                    handleCardImageClick(
+                                      `/images/map/${fileName.trim()}`
+                                    )
+                                  }
+                                />
+                              ))}
+                            </React.Fragment>
+                          )
+                        })}
+                  </div>
+                </div>
+              </Stack>
+            </Container>
           </Container>
-        </Container>
-      </main>
+        </main>
+      )}
     </>
   )
 }

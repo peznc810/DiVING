@@ -50,7 +50,7 @@ export default function Edit() {
 
         setTimeout(() => {
           setIsLoading(false)
-        }, 2000)
+        }, 1000)
       }
     } catch (error) {
       console.error('Error fetching article data:', error)

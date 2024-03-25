@@ -12,14 +12,15 @@ export default function Form({ common = [] }) {
   // 控制分頁
   const { currentPage, pageItem, handlePage, getPageNumbers } = usePagination(
     common,
-    2
+    6
   )
+  console.log(pageItem)
   // 星星評分
   const maxCount = 5
   const defaultStar = [...Array(maxCount).keys()]
 
   // 課程和商品分圖片的路徑
-  const imgSrc = common.map((item) => {
+  const imgSrc = pageItem.map((item) => {
     if (item.product_id) {
       const template = `/images/product/images/${item.product_category}/${item.product_id}/${item.img}`
       return template
@@ -50,45 +51,54 @@ export default function Form({ common = [] }) {
                     <th scope="col"></th>
                   </tr>
                 </thead>
-                <tbody>
-                  {pageItem.map((item, index) => {
-                    return (
-                      <tr className="align-middle" key={item.id}>
-                        <td className="col-2 d-flex justify-content-center">
-                          <div
-                            className={`rounded ${styles.avatar} flex-shrink-0`}
-                          >
-                            {item.product_id ? (
+                <tbody className="position-relative">
+                  {pageItem.length <= 0 ? (
+                    <div
+                      className={`fs-4 position-absolute end-50 mt-4 ms-4`}
+                      style={{ color: '#b4b4b4' }}
+                    >
+                      尚無資料
+                    </div>
+                  ) : (
+                    pageItem.map((item, index) => {
+                      return (
+                        <tr className="align-middle" key={item.id}>
+                          <td className="col-2 ps-4">
+                            <div
+                              className={`rounded ${styles.avatar} flex-shrink-0`}
+                            >
                               <Image src={imgSrc[index]} alt={item.name} fill />
-                            ) : (
-                              <Image src={imgSrc[index]} alt={item.name} fill />
-                            )}
-                          </div>
-                        </td>
-                        <td className="col-2">{item.name}</td>
-                        <td className="col-2">
-                          {defaultStar.map((v) => {
-                            return (
-                              <FaStar
-                                key={v}
-                                color={v + 1 <= item.score ? 'gold' : 'gray'}
-                              />
-                            )
-                          })}
-                        </td>
-                        <td className="col-2">{item.comment}</td>
-                        <td className="col-2">{item.created_at}</td>
-                        <td className="col-2">
-                          <Link
-                            href="#"
-                            className="btn btn-secondary btn-sm text-white"
-                          >
-                            前往評論
-                          </Link>
-                        </td>
-                      </tr>
-                    )
-                  })}
+                            </div>
+                          </td>
+                          <td className="col-2">{item.name}</td>
+                          <td className="col-2">
+                            {defaultStar.map((v) => {
+                              return (
+                                <FaStar
+                                  key={v}
+                                  color={v + 1 <= item.score ? 'gold' : 'gray'}
+                                />
+                              )
+                            })}
+                          </td>
+                          <td className="col-2">{item.comment}</td>
+                          <td className="col-2">{item.created_at}</td>
+                          <td className="col-2">
+                            <Link
+                              href={
+                                item.product_id !== null
+                                  ? `http://localhost:3000/product/${item.product_id}`
+                                  : `http://localhost:3000/lesson/${item.lesson_id}`
+                              }
+                              className="btn btn-secondary btn-sm text-white"
+                            >
+                              前往評論
+                            </Link>
+                          </td>
+                        </tr>
+                      )
+                    })
+                  )}
                 </tbody>
               </table>
               {/* 頁數按鈕 */}

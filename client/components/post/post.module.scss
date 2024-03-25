@@ -1,4 +1,4 @@
-/* 在你的 React 組件檔案中，或者在全域樣式表中加入以下 CSS 代碼 */
+// post輪播
 .carousel {
   height: 300px; /* 修改為你想要的高度值 */
 }
@@ -14,6 +14,26 @@
   object-fit: cover; /* 可以保持圖片比例並填滿整個輪播區域 */
 }
 
+// post卡片
+
+.card {
+  padding: 10px;
+  overflow: hidden;
+  backface-visibility: hidden;
+  transform: perspective(25em);
+  background: #fff content-box;
+  filter: drop-shadow(2px 2px 6px);
+  animation: card 2s ease-out backwards;
+  color: var();
+}
+
+@keyframes card {
+  0% {
+    transform: perspective(25em) rotateY(0.5turn);
+  }
+}
+
+// 按鈕
 .myLabel {
   font-size: 18px;
   position: relative;
