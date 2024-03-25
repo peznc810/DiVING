@@ -53,10 +53,10 @@ export default function List() {
           <Row
             className={`m-2 g-0 shadow-sm rounded bg-white ${Style['bg-hover']}`}
           >
-            <Col lg={4} className={` ${Style['hover-none']}`}>
-              <div className="ratio ratio-4x3 h-100">
+            <Col lg={4} className={`rounded ${Style['hover-none']}`}>
+              <div className=" ratio ratio-4x3 h-100">
                 <img
-                  className="img-fluid mx-auto d-block"
+                  className="rounded img-fluid mx-auto d-block"
                   src={`/images/lesson/${Stag.img.split(',')[0] + '.jpg'}`}
                   alt="description"
                 />

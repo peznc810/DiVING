@@ -8,14 +8,12 @@ import Style from '@/styles/lessonStyle/star.module.css'
 export default function GetComment({ selectData }) {
   const router = useRouter()
   const [star, setStar] = useState(null)
-  const lesson = selectData
   const pid = selectData.id
 
   //取得資料庫 star內容
   const getStar = async (pid) => {
     const res = await fetch(`http://localhost:3005/api/lesson/getstar/${pid}`)
     const data = await res.json()
-    const [starcomment] = data
     setStar(data)
   }
   useEffect(() => {
