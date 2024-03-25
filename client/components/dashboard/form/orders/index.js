@@ -1,14 +1,14 @@
 import React from 'react'
 import styles from '../styles.module.scss'
-import Link from 'next/link'
 import usePagination from '@/hooks/use-pagination'
 import Pagination from '../pagination'
 
 export default function Form({ order = [] }) {
   const { currentPage, pageItem, handlePage, getPageNumbers } = usePagination(
     order,
-    5
+    10
   )
+  console.log(pageItem)
   return (
     <>
       <div className={`col-sm-8 p-0 rounded-end ${styles['form-container']}`}>
@@ -28,26 +28,27 @@ export default function Form({ order = [] }) {
                     <th scope="col"></th>
                   </tr>
                 </thead>
-                <tbody>
+                <tbody className="position-relative">
                   {/* 之後改用map */}
-                  {pageItem.map((item) => {
-                    return (
-                      <tr className="align-middle" key={item.id}>
-                        <td>{item.id}</td>
-                        <td>{item.created_at}</td>
-                        <td>{item.total_price}</td>
-                        <td>{item.status}</td>
-                        <td>
-                          <Link
-                            href="/dashboard/orders/order"
-                            className="btn btn-secondary btn-sm text-white"
-                          >
-                            訂單詳情
-                          </Link>
-                        </td>
-                      </tr>
-                    )
-                  })}
+                  {pageItem.length <= 0 ? (
+                    <div
+                      className="position-absolute end-50 top-50 mt-4 ms-4 fs-4"
+                      style={{ color: '#b4b4b4' }}
+                    >
+                      尚無資料
+                    </div>
+                  ) : (
+                    pageItem.map((item) => {
+                      return (
+                        <tr className="align-middle" key={item.id}>
+                          <td>{item.id}</td>
+                          <td>{item.created_at}</td>
+                          <td>{item.total_price}</td>
+                          <td>{item.status}</td>
+                        </tr>
+                      )
+                    })
+                  )}
                 </tbody>
               </table>
               {/* 頁數按鈕 */}

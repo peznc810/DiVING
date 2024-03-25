@@ -136,7 +136,7 @@ router.get("/confirm", async (req, res) => {
       },
     });
 
-    let status = linePayResponse.body.returnCode === '0000' ? 'paid' : 'fail';
+    let status = linePayResponse.body.returnCode === '0000' ? '付款成功' : 'fail';
 
     await updateOrderStatus(status, linePayResponse.body.returnCode, JSON.stringify(linePayResponse.body), dbOrder.id);
 
@@ -196,7 +196,7 @@ function addOrder(dbOrder){
   
   return new Promise((resolve, reject) => {
     db.execute(
-      'INSERT INTO `order`(id, user_id, total_price, payment, shipping, status, receiver, order_info, created_at, order_note) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);',[
+      'INSERT INTO `order` (id, user_id, total_price, payment, shipping, status, receiver, order_info, created_at, order_note) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);',[
         dbOrder.id, dbOrder.user_id, dbOrder.total_price, dbOrder.payment, dbOrder.shipping, dbOrder.status, dbOrder.receiver, dbOrder.order_info, datetimeNow ,dbOrder.order_note
       ]
     ).then(([result]) => {
@@ -207,6 +207,7 @@ function addOrder(dbOrder){
       }
     })
     .catch(error => {
+      console.error(error);
       reject({ status: "error", msg: error.message });
     });
     
