@@ -67,14 +67,13 @@ export default function Detail() {
 
   const display = (
     <>
-      <div className={`${postStyle.main} ${postStyle.ocean} `}>
-        <Container className={`${postStyle['centered']}`}>
-          <div className={'btn-back'}>
+      <div className="my-3">
+        <Container className={`${postStyle['centered']} `}>
+          <div className="my-3">
             <Link href="/post">
               <BackButton />
             </Link>
           </div>
-          {/* <Col className="bg-light p-4 border rounded"> */}
           <div className={`${postStyle['article']}`}>
             <Col className={`bg-light p-4 border rounded`}>
               <p>{post.published}</p>
@@ -83,11 +82,7 @@ export default function Detail() {
               <div className="my-2">
                 {' '}
                 {getTagsArray(post.tags).map((tag, index) => (
-                  <Link
-                    key={index}
-                    href={`/post/tagPost/${tag}`}
-                    target="_blank"
-                  >
+                  <Link key={index} href={`/post/tagPost/${tag}`}>
                     <TagButton text={`# ${tag}`} />
                   </Link>
                 ))}
@@ -145,7 +140,6 @@ export default function Detail() {
         <div
           className={`${postStyle['bubble']} ${postStyle['bubble--12']}`}
         ></div>
-        <div id={postStyle['octocat']}></div>
       </div>
 
       <style jsx>{`

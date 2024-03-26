@@ -20,7 +20,7 @@
   background: #fff;
   // transform-origin: center;
   // transition: all 0.4s ease-in-out;
-
+  backface-visibility: hidden;
   overflow: hidden;
   transform: perspective(25em);
   background: #fff content-box;

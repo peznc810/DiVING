@@ -187,8 +187,8 @@ export default function Index() {
               text={'您的更改將不會保存。'}
               icon={'warning'}
               showCancelButton={true}
-              confirmButtonColor={'#3085d6'}
-              cancelButtonColor={'#d33'}
+              confirmButtonColor={'#013c64'}
+              cancelButtonColor={'#ea4343'}
               href={'/dashboard/posts'}
             />
             <DiButton type={'submit'} text={'送出'} color={'#013c64'} />{' '}
