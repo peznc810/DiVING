@@ -21,5 +21,5 @@ DiVING是一個由6位夥伴一起建構的全方位潛水產品的電商網站
 - [Firebase](https://firebase.google.com/) - 構建和運行身分驗證功能
 - [JSON Web Token](https://jwt.io/) - 用於構建和運行應用程序，提供包括數據庫、身份驗證、存儲、分析等功能。
 - [Nodemailer](https://nodemailer.com/) - 用於 Node.js 的 Node 郵件發送模組，支援 SMTP 等多種郵件服務器
-- OtpAuth - 用於實現兩步驟驗證的標準
-- Cros - 用於處理跨域資源共享的機制
+- [OtpAuth](https://www.npmjs.com/package/otpauth) - 用於實現兩步驟驗證的標準
+- [Cors](https://www.npmjs.com/package/cors) - 用於處理跨域資源共享的機制
